@@ -1,0 +1,564 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>注册-GomeCellar</title> 
+		<meta name="keywords" content="GomeCellar">
+		<meta name="description" content="GomeCellar">
+	<!--meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/--> 
+	
+</meta>
+
+<!-- 判断IE，并使IE9以下支持html5标签 -->
+<!–[if lt IE 9]> <script  src="/gome-javamall/themes/b2b2cv2/js/html5.js"  ></script> <![endif]–>
+
+
+<script>
+var member = "";
+var loginDialog;
+var ctx="/gome-javamall";
+var app_path="/gome-javamall";
+</script>
+
+<!-- 公共样式 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/base.css" />
+<!-- 内含dialog.css样式，原来的dialog.css中无代码 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/default.css" />
+<!-- 商品详细、 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/shop.css" />
+
+<script>window._prompt = window.prompt;</script>
+
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/lhgdialog.js" ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/common.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/shop.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.ui.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/index.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.validate.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.form-3.51.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/CartBar.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.blockUI.js"   ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/LoginDialog.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.cookie.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/perfect-scrollbar.min.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.SuperSlide.2.1.1.js" ></script>
+<!-- jquery的布局插件 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script>
+<!-- 购物车移入滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.nicescroll.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.bigautocomplete.js"></script>
+<!-- 自定义滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.jscroll.js"></script>
+
+<script type="text/javascript">
+
+var ctx="/gome-javamall";
+
+
+
+$(function(){
+	
+	$(".common_member").load("/gome-javamall/common/member_bar.html?_="+new Date().getTime()	,function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"/gome-javamall/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,              
+				success:function(result){
+					if(result.result==1){
+						//$.alert(result.message);
+						location.href="/gome-javamall/index.html";
+					}else{
+						$.alert(result.message);
+					}	
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		});	
+	});
+	
+	$(".my_store").load("/gome-javamall/common/my_store.html?_="+new Date().getTime());
+	
+	$(".my_store").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+	
+	$(".title_menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+</script>
+
+
+</head>
+<body>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/backtotop.js"></script>
+	<a name="backtotop"></a>
+	<div class="website_top w">
+		<div class="topbar wrapper">
+        	<div class="area" style="width:50px;">
+                  <div class="title" style="overflow:hidden;">
+                      <div class="city"><a href="javascript:void(0)" id="button_show">
+                      <h3 id="show_area_name">全国</h3>
+                      <i class="arrow"></i></a></div>
+                      <div id="list" class="list" style="display: none;">
+                      <a id="button_close" class="close" href="javascript:void(0)">×</a>
+                      <ul>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(0,&#39;全国&#39;)">全国</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(1,&#39;北京&#39;)">北京</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(2,&#39;上海&#39;)">上海</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(3,&#39;天津&#39;)">天津</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(4,&#39;河北&#39;)">河北</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(5,&#39;江苏&#39;)">江苏</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(6,&#39;安徽&#39;)">安徽</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(7,&#39;浙江&#39;)">浙江</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(8,&#39;福建&#39;)">福建</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(9,&#39;辽宁&#39;)">辽宁</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(10,&#39;吉林&#39;)">吉林</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(11,&#39;黑龙江&#39;)">黑龙江</a></li>
+                       </ul>
+                       </div>
+                    </div>
+            </div> 
+			<div class="common_member" style="float:left;">
+			</div>
+			<div class="title_menu">
+                <!--dl style="width:90px;">
+					<dt>
+						手机端App<i></i>
+					</dt>
+					<dd style="width:90px;">
+						<ul>
+							<li>
+                            <img src="/gome-javamall/themes/b2b2cv2/app_download/images/QR_code_android.jpg" width="80" height="80" style="padding:5px; float:left;" />
+                            <a class="menu-app" href="/gome-javamall/app_download/index.html" target="_blank">Android版</a>
+                            </li>
+						</ul>
+					</dd>	
+				</dl-->
+				<dl>
+					<dt>
+						<a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" style="padding-left:5px;">商家中心</a>
+					</dt>
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/order.html">我的订单</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/order.html?status=0">待付款订单</a></li>
+							<li><a href="/gome-javamall/member/order.html?status=5">商品已发货</a></li>
+							<li><a href="/gome-javamall/member/waitcommont.html">待评价商品</a></li>
+						</ul>
+					</dd>	
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/favorite.html" title="我的收藏" target="_top">我的收藏</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/favorite.html" target="_top" title="收藏的商品">收藏的商品</a></li>
+							<li><a href="/gome-javamall/member/collect_store.html" target="_top" title="收藏的店铺">收藏的店铺</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						客户服务<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/help-81-83.html">帮助中心</a></li>
+							<li><a href="/gome-javamall/help-81-84.html">售后服务</a></li>
+							<li><a href="/gome-javamall/help-81-85.html">客服中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						站点导航<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a target="_blank" href="/gome-javamall/index.html">商城首页</a></li>
+                            <li><a href="/gome-javamall/member/member.html">会员中心</a></li>
+							<li><a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" >商家中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+<script type="text/javascript">
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+//选项卡样式
+function index_click(type,value){
+	$("#"+type+" li").removeClass("selected");
+	$("#"+type+" li a[type='"+value+"']").parents("li").addClass("selected");
+}
+function set_groupbuy_area(area_id,area_name){
+	$("#show_area_name").html(area_name);
+	$("input[name='area_id']").val(area_id);
+	$("#list").hide();
+	loadPage();
+}
+</script>
+	</div>
+<div id="goodsSelectDiv"></div>
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/login.css" />
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.poshytip.min.js" ></script>
+<div class="index_logo">
+	<a href="/gome-javamall/index.html"><img src="http://image.uatcellar.com/images/logo.gif" style="width:240px;height:60px;" class="pngFix" /></a>
+</div>
+<div class="reg">
+	<div class="reg_left">
+		<h1>注册以后您可以</h1>
+		<ul>
+			<li><i class="reg1"></i><span>购买商品支付订单</span></li>
+			<li><i class="reg2"></i><span>申请开店销售商品</span></li>
+			<li><i class="reg3"></i><span>空间好友推送分享</span></li>
+			<li><i class="reg4"></i><span>收藏商品关注店铺</span></li>
+			<li><i class="reg5"></i><span>商品咨询服务评价</span></li>
+			<li><i class="reg6"></i><span>安全交易诚信无忧</span></li>
+		</ul>
+		<h2>如果您是本站用户</h2>
+		<div class="reg_login">
+			我已经注册过账号，立即<a href="login.html" class="go_register">登录</a>或是<a href="/gome-javamall/findpasswordByEmail.html" class="findpassword">找回密码？</a>
+		</div>
+	</div>
+	<div class="reg_right">
+		<h1>用户注册</h1>
+	<input type="hidden" id="forward" value=""/>
+		<form action="register.html" method="post" id="register_form" class="validate">
+			<div class="regis_same">
+				<dl>
+          			<dt>用户名<font color="#FF0000">*</font></dt>
+          			<dd style="min-height:54px;">
+            			<input type="text" id="username" name="username" class="text tip" title="4-20个字符，可由中英文数字及‘_’、‘-’组成，注册后用户名不能更改" fun="checkUserName" />
+          			</dd>
+        		</dl>
+        		<dl>
+          			<dt>注册邮箱<font color="#FF0000">*</font></dt>
+          			<dd style="min-height:54px;">
+            			<input type="text" id="reg_email" name="email" class="text tip" title="邮箱将用于登录和取回密码，请输入小写" fun="checkEmail" />
+          			</dd>
+        		</dl>
+				<dl>
+          			<dt>密码<font color="#FF0000">*</font></dt>
+          			<dd style="min-height:54px;">
+            			<input type="password" id="password" name="password" class="text tip" title="6-16位字符，可由英文、数字及标点符号组成" fun="isPasswd" />
+          			</dd>
+        		</dl>
+        		<dl>
+          			<dt>确认密码<font color="#FF0000">*</font></dt>
+          			<dd style="min-height:54px;">
+            			<input type="password" id="reg_passwd_r" name="passwd_re" class="text tip" title="请再次输入您的密码" fun="checkpwd" />
+          			</dd>
+        		</dl>
+        		<dl>
+        			<dt>验证码<font color="#FF0000">*</font></dt>
+        			<dd style="min-height:54px;" id="verifyCodebox">
+        				<input type="text" id="iptlogin" name="validcode" isrequired="true" class="regis_small inputstyle _x_ipt" size="8" autocomplete="off" />
+	        			<img id="LoginimgVerifyCode" src="/gome-javamall/validcode.do?vtype=memberreg" alt="会员登录验证码" />
+	        			<a href="javascript:;">看不清楚？换个图片</a>
+        			</dd>
+        		</dl>
+        		<dl style="margin:0px 0px 30px 0px">
+        			<dt>&nbsp;</dt>
+        			<dd>
+        				<input type="button" class="regis_ent m_register" value="注册新用户" />
+        				<input type="checkbox" checked="checked" value="agree" fun="checkLicense" name="license" id="license" class="satisfied" />
+        				<span id="reg_agree">阅读并同意<a href="javascript:void(0);" target="_blank" class="agreement" title="阅读并同意">服务协议</a></span>
+        			</dd>
+        		</dl>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+
+<!--正文结束-->
+
+<script type="text/javascript">
+$(function(){
+	$('.tip').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'focus',
+		alignTo: 'target',
+		alignX: 'center',
+		alignY: 'top',
+		offsetX: 0,
+		offsetY: 5,
+		allowTipHover: false
+	});
+ 	$("#verifyCodebox a").click(function(){
+		$("#verifyCodebox img").attr("src","/gome-javamall/validcode.do?vtype=memberreg&r="+new Date().getTime());
+	});
+ 	var options = {
+			url : "/gome-javamall/api/shop/member!register.do?ajax=yes" ,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				var forward=$("#forward").val();
+ 				if(result.result==1){
+ 					if(forward=="checkout.html"){
+ 						location.href ="../cart.html";
+ 					}else{
+ 						location.href="/gome-javamall/index.html";
+ 					}
+	 			}else{
+	 				$.alert(result.message);
+	 				$.Loading.hide();
+		 		} 
+			},
+			error : function(e) {
+				$.Loading.show("出现错误 ，请重试");
+				$.Loading.hide();
+			}
+	};
+	//点击注册 	
+	$(".m_register").click(function(){
+		if(!$("#register_form").checkall())
+			return false;
+		if("false"!=$(this).attr("validate")){
+			$.Loading.show("正在提交您的信息，请稍候...");
+			$('#register_form').ajaxSubmit(options);	
+		}
+	})
+});
+ 
+//检测用户协议
+function checkLicense(){
+	if($("#license").is(':checked')){
+		return true;
+	}else{
+		return "请阅读用户协议并同意！";
+	}
+}
+
+/*
+
+//检测用户名
+function checkUserName(value,callback){
+	var input = $("#username");
+	var username  = input.val();
+	var patrn=/^([0-9A-Za-z一-龥]|-|_){4,20}$/;
+	if (!patrn.exec(username)) return "用户名格式不正确！"  
+	$.ajax({
+		url:"/gome-javamall/api/shop/member!checkname.do?ajax=yes",
+		type:"POST",
+		data:"username=" + username,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"重复的用户名！");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});	
+	return true;
+}
+
+//检测邮箱
+function checkEmail(value,callback){
+	var input = $("#reg_email");
+	var email  = input.val();
+	if($.trim(email)==''){
+		return "注册邮箱不能为空！";
+	}
+	var reg = /^([a-z0-9+_]|\-|\.|\-)+@([\w|\-]+\.)+[a-z]{2,4}$/i; 
+	if(!reg.test(email)){
+		return "注册邮箱格式不正确！";
+	}
+	$.ajax({
+		url:"/gome-javamall/api/shop/member!checkemail.do?ajax=yes",
+		type:"POST",
+		data:"email="+email,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"注册邮箱重复！");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});	
+	return true;
+}
+
+function isPasswd(s){  
+	var patrn=/^(\w){6,16}$/;  
+	if (!patrn.exec(s)) return "密码格式不正确！"  
+	return true  
+}
+
+function checkpwd(){
+	if( $("#reg_passwd_r").val()==$("#password").val() ){
+		return true;
+	}
+	else{ 
+		return "密码不一致";
+	}
+}
+
+*/
+</script>
+<div class="footer">
+	<div class="wrapper">
+	<!-- 
+	<div id="footer-top">
+		<ul>
+			<li class="one"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="two"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="three"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="four"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="five"><strong>正品行货<em>100%正品保证</em></strong></li>
+		</ul>
+	</div>
+	 -->
+	</div>
+	<!--帮助中心-->
+	  <div id="faq">
+	  <div class="wrapper">
+	    <ul>
+	        <li>
+		        <dl class="s1">
+		          	<dt>关于我们 </dt>
+		          			          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-7.html">公司简介</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-8.html">招商合作</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-9.html">联系我们</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-42.html">合作酒庄</a>
+		          		</dd>
+		       </dl>
+	      	</li>
+	        <li>
+	        	<dl class="s2">
+	          		<dt>新手上路</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-171.html">登录帮助</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-32.html">购物指南</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-31.html">常见问题</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <li>
+	    		<dl class="s3">
+			        <dt>配送说明</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-44.html">配送时间及范围</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-45.html">配送费收取标准</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-47.html">运输包装说明</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-23.html">签收与验货</a>
+		          		</dd>
+	          	</dl>
+	      </li>
+	      <li>
+	        	<dl class="s4">
+	          		<dt>支付方式</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-48.html">货到付款</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-49.html">在线支付</a>
+		          		</dd>
+	           </dl>
+	      </li>
+	      <li>
+	        	<dl class="s5">
+	          		<dt>售后服务</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-18.html">退换货政策</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-14.html">退换货流程</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-16.html">取消订单</a>
+		          		</dd>
+		        </dl>
+	      </li>
+	      <li>
+	        	<dl class="s6">
+	          		<dt>特殊服务 </dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-50.html">会员介绍</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-168.html">积分说明</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <div class="clear"></div>
+	    </ul>
+	  </div>
+	</div>
+	<!--底部版权，调用footer.php-->
+	<div id="footer" >
+		<div class="wrapper">
+		  <p><a href="/gome-javamall/index.html">首页</a>
+             | <a  href="/gome-javamall/member/member.html">会员中心</a>
+             | <a  href="/gome-javamall/store/business_center.html?menu=store_index">商家中心</a>
+             | <a  href="/gome-javamall/help-62-65.html">关于网站</a>
+             | <a  href="/gome-javamall/help-21-9.html">联系我们</a>
+             | <a  href="/gome-javamall/help-21-7.html">关于我们</a>
+          </p>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

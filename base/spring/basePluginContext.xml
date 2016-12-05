@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+	<!-- 定义此应用的组件扫描包 -->
+	<context:component-scan base-package="com.enation.app.base.component,com.enation.app.base.core.tag" />
+		
+	<bean id="jobExecutePluginsBundle" class="com.enation.app.base.core.plugin.job.JobExecutePluginsBundle"></bean>
+	 
+	<!-- sitemap插件桩 -->
+	<bean id="sitemapPluginBundle" class="com.enation.app.base.core.plugin.SitemapPluginBundle"></bean>
+	<!-- 设置插件桩-->
+	<bean id="settingPluginBundle" class="com.enation.app.base.core.plugin.setting.SettingPluginBundle"></bean>
+	<!-- 管理员插件桩-->
+	<bean id="adminUserPluginBundle" class="com.enation.app.base.core.plugin.user.AdminUserPluginBundle"></bean>
+
+	<!-- 短消息插件桩 -->
+	<bean id="shortMsgPluginBundle" class="com.enation.app.base.core.plugin.shortmsg.ShortMsgPluginBundle"></bean>
+	
+	
+	<!-- 数据导出插件桩 -->
+	<bean id="dataExportPluginBundle" class="com.enation.app.base.core.plugin.data.DataExportPluginBundle"></bean>
+	
+</beans>

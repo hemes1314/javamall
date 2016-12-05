@@ -1,0 +1,17 @@
+<div class="grid">
+<table style="height: auto;">
+
+<tbody>
+ 	<#if warnList?? >
+		<#list  warnList as warn >
+<tr>
+	<td>
+			<input type="hidden" name="warnid"  value="${warn.id}" />
+			报警数量:<input type="text" name="warn_num" size="12" dataType="int" value="${warn.warn_num}" autocomplete="off"/>
+	</td>
+</tr>
+		</#list>
+	</#if>	
+</tbody>
+</table>
+</div>

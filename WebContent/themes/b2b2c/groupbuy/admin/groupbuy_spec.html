@@ -1,0 +1,54 @@
+<#-- 商品规格标签 -->
+<#assign goodsSpecTag=newTag("goodsSpecTag")/>
+<#assign goodsSpec=goodsSpecTag("{'goods_id':${goods_id}}") />
+<div id="spec-input">
+	<dl class="spec-bg spec-table">
+		<dt>库存配置</dt>
+		<dd>
+			<table cellspacing="0" cellpadding="0" border="0" class="spec_table" width="98%">
+				<thead>
+					<tr>
+						<#if goodsSpec.have_spec?exists && goodsSpec.have_spec==1 && goodsSpec.specList?exists > 
+							<#list goodsSpec.specList as spec>
+								<th class="w1">${spec.spec_name}</th> 
+							</#list>
+						</#if>
+						<th class="w2">货号<span class="red">*</span></th>
+						<th class="w2">销售价</th>
+						<th class="w2">商品库存数</th>
+						<th class="w3">可用库存数</th>
+						<th class="w3">商品总数<span class="red">*</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if goodsSpec.have_spec?exists && goodsSpec.have_spec==1 && goodsSpec.productList?exists > 
+						<#list goodsSpec.productList as product> 
+							<#assign specids=''>
+							<#assign specvids=''> 
+							<#assign propid=''>
+							<tr>
+								<#list product.specList as spec> 
+									<td>
+										${spec.spec_value} 
+									</td>
+								</#list>
+								<td>
+									${(product.price!0)?c}
+								</td>
+								<td>
+									${(product.store!0)?c}
+								</td>
+								<td>
+									${(product.enable_store!0)?c}
+								</td>
+								<td>
+									<input type="text" size="8" class='ipt' class="input_text" style="width: 80px" />
+								</td>
+							</tr>
+						</#list>
+					</#if>
+				</tbody>
+			</table>
+		</dd>
+	</dl>
+</div>

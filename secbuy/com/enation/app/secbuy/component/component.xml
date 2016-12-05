@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="国美酒窖秒拍组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="秒拍活动插件" id="secBuyActPlugin">
+	 		<bundle id="jobExecutePluginsBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="秒拍商品插件" id="secBuyGoodsPlugin">
+	 		<bundle id="orderPluginBundle"></bundle>
+	 		<bundle id="goodsPluginBundle"></bundle>
+	 		<bundle id="secbuyPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="秒拍活动标签插件" id="secBuyActTagPlugin">
+	 		<bundle id="secbuyPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="秒拍购物车插件" id="secGoodsCartPlugin">
+	 		<bundle id="cartPluginBundle"></bundle>
+	 	</plugin>
+	</plugins>
+</component>

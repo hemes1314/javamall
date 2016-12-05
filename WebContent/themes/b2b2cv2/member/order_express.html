@@ -1,0 +1,36 @@
+<#assign  title="订单详细" />
+<#include 'member_header.html' />
+
+<!-- 获取会员订单详细快递信息 -->
+<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+<!-- 调用会员订单详细快递信息 -->
+<#assign orderDelivery = orderDeliveryListTag("{'orderid':${order_id}}")>
+<!-- 使用关键字"deliveryList"得到会员订单详细快递信息MAP集合 -->
+<#assign orderSend = orderDelivery.deliveryList>
+
+<script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+<style>
+.ui_content{min-width:100px;}
+</style>
+<div class="user_order">
+	<div class="order_detail" style="font-size: 18px;">
+		<br>
+		<h3>物流信息</h3><br>
+		<div id="store_content" style="margin-left: 40px;">
+			
+		</div>
+	</div>
+</div>
+<#include 'order_cancel.html'/>
+<!-- 浮动窗口 取消订单结束 -->
+<script>
+$(function(){
+	<#list orderSend as delivery>
+		<#if delivery.type ==1 && delivery.logi_no?exists >
+			$("#store_content").load("${ctx}/api/shop/order!orderKuaidi.do?ajax=yes&logino=${delivery.logi_no!''}&code=${delivery.logi_code!''}");
+		</#if>
+	</#list>
+})
+</script>
+</div>
+<#include '../common/footer.html'/>

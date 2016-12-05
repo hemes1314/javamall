@@ -1,0 +1,207 @@
+<#include '/store/store_header.html' />
+
+<!-- 店铺其他信息标签 test -->
+<#assign myStoreDetailOtherTag=newTag("myStoreDetailOtherTag")>
+<#assign myStoreDetailOther=myStoreDetailOtherTag()>
+<!-- 文章 -->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+
+<div class="store_center">
+	<#include 'left_menu.html'/>
+	<div class="sotre_right_content" id="sotre_right_content">
+		<div class="path">
+			<a href="${ctx}/store/business_center.html?menu=store_goods">商家中心</a> <span>></span> 账户概览
+		</div>
+		<div class="store_right_main">
+			<div class="intro">
+				<div class="intro_left">
+					<div class="store_intro_pic">
+						<div class="store_intro_up store_intro_upimg">
+						<span class="thumb">
+							<#if myStoreDetail.store_logo??>
+								<@image src="${myStoreDetail.store_logo!''}" id="logo"/>
+							<#else>
+								<img src="${ctx}/statics/images/default_store_logo.png" id="logo"> 
+							</#if>
+						</span>
+							<form id="storeLogoForm" style="display:none;">
+								<label class="storeLogo_outside">
+									<i>更改店标</i>
+									<span id="editStoreLogo"></span>
+									<input id="storeLogo" type="file" name="image">
+								</label>
+							</form>
+							
+						</div>
+					</div>
+		
+					<div class="store_name" style="margin:10px 0px 0px 220px">
+						<div class="store_name1"><h1>${myStoreDetail.store_name}</h1><h2>(用户名：${storeMember.name})</h2></div>
+						<!-- 认证图片 -->
+						<div class="store_name2">
+							<#if myStoreDetail.name_auth==1>
+								<img src="${ctx}/themes/b2b2cv2/images/cert_autonym.gif" />
+								<#else>
+								<img src="${ctx}/themes/b2b2cv2/images/cert_autonym_no.gif" alt="身份未认证或认证失败" title="身份未认证或认证失败" />
+							</#if>
+							<#if myStoreDetail.store_auth==1>
+								<img src="${ctx}/themes/b2b2cv2/images/cert_material.gif" />
+								<#else>
+								<img src="${ctx}/themes/b2b2cv2/images/cert_material_no.gif" alt="尚未认证或认证失败" title="尚未认证或认证失败" />
+							</#if>
+						</div>
+						<div class="store_name3">卖家信用：${myStoreDetail.store_credit!0}</div>
+						
+						<!-- 暂时取消此功能
+							<div class="store_name4">店铺等级：<span>系统默认</span></div>
+							<div class="store_name5">有效期：<span>不限制</span></div>
+							<div class="store_name6">可传商品：<span>不限制</span></div>
+							<div class="store_name7">可传图片：<span>不限制</span></div>
+						-->	
+							<div class="store_name8">店铺地址：${myStoreDetail.store_province}&nbsp;${myStoreDetail.store_city}&nbsp;${myStoreDetail.store_region}</div>
+					</div>
+				</div>
+			
+				<div class="store_intro_fraction">
+					<h2>店铺动态评分：</h2>
+					<dl>
+						<dt>描述</dt>
+						<dd>${myStoreDetail.store_desccredit!'5'}分</dd>
+					</dl>
+					<dl>
+						<dt>服务</dt>
+						<dd>${myStoreDetail.store_servicecredit!'5'}分</dd>
+					</dl>
+					<dl>
+						<dt>发货</dt>
+						<dd>${myStoreDetail.store_deliverycredit!'5'}分</dd>
+					</dl>
+				</div>
+			</div>
+				<div style="margin-top:-30px;">
+					店标尺寸设置：200px*80px
+				</div>
+			<div class="store_index">
+				<div class="store_index_goods store_index_same"">
+					<h1>店铺及商品提示</h1>
+					<h2>您需要关注的店铺信息以及待处理事项</h2>
+					<div class="store_index_content">
+						<div class="store_rompt"><a href="${ctx}/goods/store_goods_list.html?market_enable=1&menu=store_goods">出售中的商品：<span>${myStoreDetailOther.ingMarket!'0'}</span></a></div>
+						<ul class="store_index_list">
+							<li>
+								<a href="${ctx}/goods/store_goods_list.html?market_enable=0&menu=store_goods">
+									仓库待上架商品
+									<strong id="tj_goods_storage">${myStoreDetailOther.notMarket!'0'}</strong>
+								</a>
+							</li>
+							<li>
+								<a href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">
+									买家的留言
+									<strong id="tj_consult">${myStoreDetailOther.notReply!'0'}</strong>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- 公告 -->
+				<div class="store_index_same store_index_notice">
+					<h1>商城公告</h1>
+					<h2>您可以关注商城公告，以便您能更快的了解商城的信息</h2>
+					<ul class="store_index_cms">
+						<#assign webPage = dataSearchTag('{"modelid":2,"catid":26}') />
+						<#list webPage.result as articlea>
+							<#if articlea_index lt 5>
+								<li>》 <a target="_blank" title="${articlea.title!''}" href="${ctx}/help-26-${articlea.id}.html">${articlea.title!''}</a> </li>
+							</#if> 
+						</#list>
+					</ul>
+				</div>
+				<!-- 交易提醒 -->
+				<div class="store_index_goods store_index_same"">
+					<h1>交易提示</h1>
+					<h2>您需要立即处理的交易订单</h2>
+					<div class="store_index_content">
+						<div class="store_rompt">
+							<a href="${ctx}/store/order/StoreOrder.html?order_state=all&menu=transaction">
+								所有的订单  ：
+								<span>${myStoreDetailOther.storeAllOrder!'0'}</span>
+							</a>
+						</div>
+						<ul class="store_index_list">
+							<li>
+								<a
+									href="${ctx}/store/order/StoreOrder.html?order_state=0&menu=transaction">待付款
+										<strong id="tj_pending">${myStoreDetailOther.orderNotPay!'0'}</strong></a>
+							</li>
+							<li>
+								<a
+									href="${ctx}/store/order/StoreOrder.html?order_state=wait_ship&menu=transaction">待发货
+										<strong id="tj_shipped">${myStoreDetailOther.orderNotShip!'0'}</strong></a>
+							</li>
+							<li>
+								<a
+									href="${ctx}/store/order/StoreOrder.html?order_state=wait_rog&menu=transaction">待收货
+										<strong id="tj_shipping">${myStoreDetailOther.orderNotRog!'0'}</strong></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- 公告 -->
+				<div class="store_index_same store_index_mobile">
+					<h1>平台联系方式</h1>
+					<h2>可以致电平台联系电话或将建议、问题提交到平台邮箱中</h2>
+					<ul class="store_index_mobile">
+						<#assign webPage = dataSearchTag('{"modelid":3,"catid":28}') />
+						<#list webPage.result as articlea>
+							<li style="width: 100%;"><span>·</span>${articlea.name2!''}：${articlea.context!''}</li> 
+						</#list>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".store_intro_upimg").mouseover(function(){
+		$(this).find("#storeLogoForm").show();
+	})
+	$(".store_intro_upimg").mouseleave(function(){
+		$(this).find("#storeLogoForm").hide();
+	})
+	$("#storeLogo").change(function(){
+		var options = {
+			url : "${ctx}/api/base/upload-image.do?subFolder=storeLogo",
+			type : "POST",
+			dataType:"json",
+			success : function(data) {
+				if(data.fsimg!=null){
+					$.ajax({
+				    	type:"POST",
+				    	url:"${ctx}/api/b2b2c/storeApi!editStoreLogo.do?logo="+data.fsimg ,
+				        dataType: "json",
+				        success: function(result){
+				        	if(result.result==1){
+								$("#logo").attr("src",data.img);
+				        	}else{
+				        		alert(result.message);
+				        	}
+				        },error:function(e){
+							alert("出现错误请重试");        	
+				        }
+			    	});
+				}else{
+					alert(data.message);
+				}
+		 	},
+		 	error : function(e) {
+		 		alert('出现错误，请上传小于1M大小的图片');
+			}
+		};
+		$("#storeLogoForm").ajaxSubmit(options);	
+	});
+})
+</script>
+<#include '/common/footer.html' />
+
+

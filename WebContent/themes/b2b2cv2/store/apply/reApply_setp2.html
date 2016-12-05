@@ -1,0 +1,31 @@
+<dl>
+	<dt class="required"><em class="pngFix"></em>银行开户名：</dt>
+	<dd><input type="text" name="bank_account_name" class="text w200" value="${myStoreDetail.bank_account_name}"  id="bank_account_name" isrequired="true" /></dd>
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em>公司银行账号：</dt>
+	<dd><input type="text" name="bank_account_number" class="text w200" value="${myStoreDetail.bank_account_number}" id="bank_account_number" isrequired="true" /></dd>
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em>开户银行支行名称：</dt>
+	<dd><input type="text" name="bank_name" class="text w200" value="${myStoreDetail.bank_name}" id="bank_name" isrequired="true" /></dd>
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em>支行联行号：</dt>
+	<dd><input type="text" name="bank_code" class="text w200" value="${myStoreDetail.bank_code}" id="bank_code" isrequired="true" /></dd>
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em>开户银行地址：</dt>
+	<dd>
+		<@regionSelect province_id='${myStoreDetail.bank_provinceid}' city_id='${myStoreDetail.bank_cityid}' region_id='${myStoreDetail.bank_regionid}'  province_name='bank_province' city_name='bank_city' region_name='bank_region'/>
+	</dd>
+</dl>
+<dl class="bottom">
+	<dt>&nbsp;</dt>
+	<dd>  
+		<p class="mb10">
+			<input type="button" class="" value="上一步" id="return"/>
+			<input type="button" class="submit" value="立即开店" id="apply"/>
+		</p>
+	</dd>
+</dl>

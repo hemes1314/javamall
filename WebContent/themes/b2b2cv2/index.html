@@ -1,0 +1,579 @@
+<#include 'common/header.html' /> 
+<#include 'common/reception_header.html'/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/index.css" />
+<script src="${ctx}/themes/b2b2cv2/js/home_index.js"></script>
+<style type="text/css">
+.category { display: block !important;}
+</style>
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<!-- 文章 -->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+<div class="clear"></div>
+<#assign advListTag= newTag("advListTag")>
+<!-- 调用广告信息,传递参数acid:61 -->
+<#assign adv = advListTag("'acid':'61'")!'' >
+<!-- 获取广告列表 -->
+<#assign advList = adv.advList /> 
+<#assign n = 1 />
+<#--检测组件是否启用 -->
+<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+<#assign groupbuyIsOn =checkCmptIsOnTag("{'componentName':'多商户团购组件'}") />
+<#if groupbuyIsOn=="ON">
+	<!-- 团购活动 -->
+	<#assign groupBuyActTag=newTag("groupBuyActTag")>
+	<#assign groupBuyAct=groupBuyActTag()>
+	<#if groupBuyAct!="">
+		<!-- 获取商品列表标签 -->
+		<#assign groupBuyGoodsListTag = newTag("groupBuyGoodsListTag")>
+		<#assign goodsList=groupBuyGoodsListTag("'tagid':'${groupBuyAct.act_tag_id}','goodsnum':'5'")>
+		<!-- 团购时间 -->
+		<#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+		<#assign groupBuyActSurplus=groupBuyActSurplusTag("{'end_time':${groupBuyAct.end_time} }")>
+	</#if>
+</#if>
+<script language="javascript">
+$(document).ready(function(e){
+      $(".index_right .full-screen-slides-pagination").hide();    
+});
+</script>
+<div class="index_top">
+	<div class="index_right">
+    <ul id="fullScreenSlides" class="full_screen" style="height:350px;">
+      <#list advList as adv>
+        <li>
+        <a href="${adv.url!''}" target="_blank"><img src="${adv.atturl!''}" width="200" height="200" alt=""/></a>
+        <p>${adv.aname!''}</p>
+        </li>
+      </#list>
+    </ul>
+    </div>
+	<!-- 轮播广告 -->
+    <#assign advListTag= newTag("advListTag")>
+    <!-- 调用广告信息,传递参数acid:1 -->
+    <#assign adv = advListTag("'acid':'1'")!'' >
+    <!-- 获取广告列表 -->
+    <#assign advList = adv.advList /> 
+    <ul id="fullScreenSlides" class="full_screen">
+      <#list advList as adv>
+          <li style="background: url('${adv.atturl}') no-repeat center top">
+            <a target="_blank" title="${adv.aname!''}" href="${adv.url!''}" style="display:block;width:100%;height:100%;"></a>
+          </li>
+      </#list>  
+  </ul>
+</div>
+
+<!-- four black -->
+<div class="four-black">
+   <ul>
+     <li>
+     <#assign adv = advListTag("'acid':'62'")!'' >
+     <#list adv.advList as adv3>
+     <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+     </#list>
+     </li>
+     <li>
+     <#assign adv = advListTag("'acid':'63'")!'' >
+     <#list adv.advList as adv3>
+     <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+     </#list>
+     </li>
+     <li>
+     <#assign adv = advListTag("'acid':'64'")!'' >
+     <#list adv.advList as adv3>
+     <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+     </#list>
+     </li>
+     <li style="width:293px; text-align:right;">
+     <#assign adv = advListTag("'acid':'65'")!'' >
+     <#list adv.advList as adv3>
+     <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+     </#list>
+     </li>
+   </ul>
+</div>
+
+<!-- two black -->
+<div class="two-black">
+  <ul>
+     <li>
+     <#assign adv = advListTag("'acid':'66'")!'' >
+     <#list adv.advList as adv3>
+     <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+     </#list>
+     </li>
+     <li style="text-align:right;">
+     <#assign adv = advListTag("'acid':'67'")!'' >
+     <#list adv.advList as adv3>
+     <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+     </#list>
+     </li>
+   </ul>
+</div>
+
+<!-- 大牌盛宴 -->
+<div class="brand">
+	<div class="brand-left"><img src="${ctx}/themes/b2b2cv2/images/brand_left_img.jpg" width="290" height="260" alt=""/></div>
+    <script language="javascript" type="text/javascript" src="${ctx}/themes/b2b2cv2/js/brand.js"></script>
+    <div class="brand-right">
+    	<div class="mr_frbox">
+          <img class="mr_frBtnL prev" src="${ctx}/themes/b2b2cv2/images/mfrL.jpg" width="28" height="46" />
+          <div class="mr_frUl">
+          <#assign advListTag= newTag("advListTag")>
+          <!-- 调用广告信息,传递参数acid:1 -->
+          <#assign adv = advListTag("'acid':'68'")!'' >
+          <!-- 获取广告列表 -->
+          <#assign advList = adv.advList /> 
+          <ul>
+             <#list advList as adv>
+             <li><a title="${adv.aname!''}" href="${adv.url!''}" target="_blank"><@image src="${adv.atturl}" alt="${adv.aname!''}"/></a></li>
+             </#list>
+          </ul>
+          </div>
+          <img class="mr_frBtnR next" src="${ctx}/themes/b2b2cv2/images/mfrR.jpg" width="28" height="46" />
+        </div>
+		<script language="javascript">
+        $(".mr_frUl ul li img").hover(function(){$(this).css("border-color","#e10414");},function(){$(this).css("border-color","#ccc")});
+        jQuery(".mr_frbox").slide({titCell:"",mainCell:".mr_frUl ul",autoPage:true,effect:"leftLoop",autoPlay:true,vis:4});
+        </script>
+  </div>
+</div>
+
+<div class="clear"></div>
+<!-- 葡萄酒 -->
+<div class="index_foolsame wrapper">
+    <div class="f_title"><img src="${ctx}/themes/b2b2cv2/images/1F_title.jpg" width="1100" height="50" alt=""/>
+    <#assign goodsList=goodsListTag("'tagid':'111','goodsnum':'4'")>
+    <#if (goodsList?size > 0) >
+        <a target="_blank" href='${ctx}/goods_list.html?cat=13'>更多>>></a>
+    </#if>
+    </div>
+  <!-- 左侧商品广告及分类 -->
+	<div class="index_left">
+        <!-- 一楼左侧广告 -->
+		<div class="left_adv1"  >
+            <div class="left_bottom">
+                <!-- 创建商品分类标签-->
+                <#assign goodsCatTag= newTag("goodsCatTag")>
+                <!-- 调用商品分类信息-->
+                <#assign goodsCat = goodsCatTag("'catid':13,'catimage':'on'")!'' >
+                <ul>
+                <li>
+                <#list goodsCat.cat_tree as cat>
+                <#if cat.name = "葡萄酒">
+                <#if cat.hasChildren>
+                <#assign children2=cat.children /> 
+                <#list children2 as cat2>
+                <#if cat2.name = "类型">
+                <#if cat2.hasChildren >
+                <#assign children3=cat2.children />
+                <#list children3 as cat3>
+                <a href="${ctx}/goods_list.html?cat=${cat.cat_id}&prop=${cat2.name}_${cat3.name}">${cat3.name}</a>
+                </#list> 
+                </#if>
+                </#if>
+                </#list>
+                </#if>
+                </#if>
+                </#list>
+                </li>
+                </ul>
+            </div>
+			<#assign adv = advListTag("'acid':'71'")!'' >
+            <#list adv.advList as adv3>
+            <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+            </#list>
+	  </div>
+  </div>
+	<!-- end -->
+	<!-- 中部商品列表 -->
+	<div class="index_middle">
+		<div class="floor_list middle_goodslist tabs-panel">
+			<!-- tab1 -->
+			<ul>
+                <#assign goodsListTag= newTag("goodsListTag") >  
+				<#assign goodsList=goodsListTag("'tagid':'111','goodsnum':'4'")>
+				<#list goodsList as goods>
+			  <li>
+						<dl>
+							<dt class="goods_name">
+								<a target="_blank" href="goods-${goods.goods_id}.html">${goods.name!''}</a>
+							</dt>
+							<dd class="goods_img">
+								<a target="_blank" href="goods-${goods.goods_id}.html">
+									<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+								</a>
+							</dd>
+							<dd class="goods_price">
+								<em>${goods.price?string.currency}</em>
+								<span class="original">${goods.mktprice?string.currency}</span>
+							</dd>
+						</dl>
+					</li>
+				</#list>	
+			</ul>
+		</div>
+	</div>
+	<!-- end -->
+</div>
+<!-- 洋酒 -->
+<div class="index_foolsame wrapper">
+    <div class="f_title"><img src="${ctx}/themes/b2b2cv2/images/2F_title.jpg" width="1100" height="50" alt=""/>
+    <#assign goodsList=goodsListTag("'tagid':'112','goodsnum':'4'")>
+    <#if (goodsList?size > 0) >
+        <a href='${ctx}/goods_list.html?cat=144' target="_blank" >更多>>></a>
+    </#if>
+    </div>
+	<!-- 左侧商品广告及分类 -->
+	<div class="index_left">
+		<div class="left_adv1">
+           <div class="left_bottom">
+            <!-- 创建商品分类标签-->
+			<#assign goodsCatTag= newTag("goodsCatTag")>
+			<!-- 调用商品分类信息-->
+			<#assign goodsCat = goodsCatTag("'catid':144,'catimage':'on'")!'' >
+			<ul>
+            <li>
+            <#list goodsCat.cat_tree as cat>
+            <#if cat.name = "洋酒">
+            <#if cat.hasChildren>
+            <#assign children2=cat.children /> 
+            <#list children2 as cat2>
+            <#if cat2.name = "类型">
+            <#if cat2.hasChildren >
+            <#assign children3=cat2.children />
+            <#list children3 as cat3>
+            <a href="${ctx}/goods_list.html?cat=${cat.cat_id}&prop=${cat2.name}_${cat3.name}">${cat3.name}</a>
+            </#list> 
+            </#if>
+            </#if>
+            </#list>
+            </#if>
+            </#if>
+            </#list>
+            </li>
+            </ul>
+		    </div>
+			<#assign adv = advListTag("'acid':'72'")!'' >
+            <#list adv.advList as adv3>
+            <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+            </#list>
+	  </div>
+	</div>
+	<!-- end -->
+	<!-- 中部商品列表 -->
+	<div class="index_middle">
+		<div class="floor_list middle_goodslist tabs-panel">
+			<ul>
+				<#assign goodsList=goodsListTag("'tagid':'112','goodsnum':'4'")>
+				<#list goodsList as goods>
+			  <li>
+						<dl>
+							<dt class="goods_name">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">${goods.name!''}</a>
+							</dt>
+							<dd class="goods_img">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+									<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+								</a>
+							</dd>
+							<dd class="goods_price">
+								<em>${goods.price?string.currency}</em>
+								<span class="original">${goods.mktprice?string.currency}</span>
+							</dd>
+						</dl>
+					</li>
+				</#list>	
+			</ul>
+		</div>
+	</div>
+	<!-- end -->
+</div>
+<!-- 啤酒 -->
+<div class="index_foolsame wrapper">
+    <div class="f_title"><img src="${ctx}/themes/b2b2cv2/images/3F_title.jpg" width="1100" height="50" alt=""/>
+    <#assign goodsList=goodsListTag("'tagid':'113','goodsnum':'4'")>
+    <#if (goodsList?size > 0) >
+        <a href='${ctx}/goods_list.html?cat=202' target="_blank" >更多>>></a>
+    </#if>
+    </div>
+    <!-- 左侧商品广告及分类 -->
+	<div class="index_left">
+		<div class="left_adv1">
+            <div class="left_bottom">
+            <!-- 创建商品分类标签-->
+			<#assign goodsCatTag= newTag("goodsCatTag")>
+			<!-- 调用商品分类信息-->
+			<#assign goodsCat = goodsCatTag("'catid':202,'catimage':'on'")!'' >
+			<ul>
+            <li>
+            <#list goodsCat.cat_tree as cat>
+            <#if cat.name = "啤酒">
+            <#if cat.hasChildren>
+            <#assign children2=cat.children /> 
+            <#list children2 as cat2>
+            <#if cat2.name = "类型">
+            <#if cat2.hasChildren >
+            <#assign children3=cat2.children />
+            <#list children3 as cat3>
+            <a href="${ctx}/goods_list.html?cat=${cat.cat_id}&prop=${cat2.name}_${cat3.name}">${cat3.name}</a>
+            </#list> 
+            </#if>
+            </#if>
+            </#list>
+            </#if>
+            </#if>
+            </#list>
+            </li>
+            </ul>
+			</div>
+            <#assign adv = advListTag("'acid':'73'")!'' >
+            <#list adv.advList as adv3>
+            <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+            </#list>
+		</div>
+
+  </div>
+	<!-- end -->
+	<!-- 中部商品列表 -->
+	<div class="index_middle">
+	  <div class="floor_list middle_goodslist tabs-panel">
+			<ul>
+				<#assign goodsList=goodsListTag("'tagid':'113','goodsnum':'4'")>
+				<#list goodsList as goods>
+			  <li>
+						<dl>
+							<dt class="goods_name">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">${goods.name!''}</a>
+							</dt>
+							<dd class="goods_img">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+									<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+								</a>
+							</dd>
+							<dd class="goods_price">
+								<em>${goods.price?string.currency}</em>
+								<span class="original">${goods.mktprice?string.currency}</span>
+							</dd>
+						</dl>
+					</li>
+				</#list>	
+			</ul>
+		</div>
+	</div>
+	<!-- end -->
+</div>
+<!-- 通栏广告 -->
+<div class="middle-ad">
+	<#assign adv = advListTag("'acid':'69'")!'' >
+    <#list adv.advList as adv3>
+    <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}" width="1200" height="100"/></a>
+    </#list>
+</div>
+<!-- 白酒 -->
+<div class="index_foolsame wrapper">
+	<div class="f_title"><img src="${ctx}/themes/b2b2cv2/images/4F_title.jpg" width="1100" height="50" alt=""/>
+        <#assign goodsList=goodsListTag("'tagid':'114','goodsnum':'4'")>
+            <#if (goodsList?size > 0) >
+                <a href='${ctx}/goods_list.html?cat=85' target="_blank">更多>>></a>
+            </#if>
+    </div>
+	<!-- 左侧商品广告及分类 -->
+	<div class="index_left">
+		<div class="left_adv1">
+        	<div class="left_bottom">
+            <!-- 创建商品分类标签-->
+			<#assign goodsCatTag= newTag("goodsCatTag")>
+			<!-- 调用商品分类信息-->
+			<#assign goodsCat = goodsCatTag("'catid':85,'catimage':'on'")!'' >
+            <ul>
+            <li>
+            <#list goodsCat.cat_tree as cat>
+            <#if cat.name = "白酒">
+            <#if cat.hasChildren>
+            <#assign children2=cat.children /> 
+            <#list children2 as cat2>
+            <#if cat2.name = "香型">
+            <#if cat2.hasChildren >
+            <#assign children3=cat2.children />
+            <#list children3 as cat3>
+            <a href="${ctx}/goods_list.html?cat=${cat.cat_id}&prop=${cat2.name}_${cat3.name}">${cat3.name}</a>
+            </#list> 
+            </#if>
+            </#if>
+            </#list>
+            </#if>
+            </#if>
+            </#list>
+            </li>
+            </ul>
+			</div>
+			<#assign adv = advListTag("'acid':'74'")!'' >
+            <#list adv.advList as adv3>
+            <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+            </#list>
+		</div>
+	</div>
+	<!-- end -->
+	<!-- 中部商品列表 -->
+	<div class="index_middle">
+		<div class="floor_list middle_goodslist tabs-panel">
+			<ul>
+				<#assign goodsList=goodsListTag("'tagid':'114','goodsnum':'4'")>
+				<#list goodsList as goods>
+					<li>
+						<dl>
+							<dt class="goods_name">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">${goods.name!''}</a>
+							</dt>
+							<dd class="goods_img">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+									<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+								</a>
+							</dd>
+							<dd class="goods_price">
+								<em>${goods.price?string.currency}</em>
+								<span class="original">${goods.mktprice?string.currency}</span>
+							</dd>
+						</dl>
+					</li>
+				</#list>	
+			</ul>
+		</div>
+	</div>
+	<!-- end -->
+</div>
+<!-- 酒周边 -->
+<div class="index_foolsame wrapper">
+    <div class="f_title"><img src="${ctx}/themes/b2b2cv2/images/5F_title.jpg" width="1100" height="50" alt=""/>
+        <#assign goodsList=goodsListTag("'tagid':'115','goodsnum':'4'")>
+            <#if (goodsList?size > 0) >
+                <a href='${ctx}/goods_list.html?cat=293' target="_blank">更多>>></a>
+            </#if>
+    </div>
+
+	<!-- 左侧商品广告及分类 -->
+	<div class="index_left">
+		<div class="left_adv1">
+        	<div class="left_bottom">
+            <!-- 创建商品分类标签-->
+			<#assign goodsCatTag= newTag("goodsCatTag")>
+			<!-- 调用商品分类信息-->
+			<#assign goodsCat = goodsCatTag("'catid':293,'catimage':'on'")!'' >
+            <ul>
+            <li>
+            <#list goodsCat.cat_tree as cat>
+            <#if cat.name = "酒周边">
+            <#if cat.hasChildren>
+            <#assign children2=cat.children /> 
+            <#list children2 as cat2>
+            <#if cat2.name = "类型">
+            <#if cat2.hasChildren >
+            <#assign children3=cat2.children />
+            <#list children3 as cat3>
+            <a href="${ctx}/goods_list.html?cat=${cat.cat_id}&prop=${cat2.name}_${cat3.name}">${cat3.name}</a>
+            </#list> 
+            </#if>
+            </#if>
+            </#list>
+            </#if>
+            </#if>
+            </#list>
+            </li>
+            </ul>
+			</div>
+			<#assign adv = advListTag("'acid':'75'")!'' >
+            <#list adv.advList as adv3>
+            <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+            </#list>
+		</div>
+	</div>
+	<!-- end -->
+	<!-- 中部商品列表 -->
+	<div class="index_middle">
+		<div class="floor_list middle_goodslist tabs-panel">
+			<ul>
+				<#assign goodsList=goodsListTag("'tagid':'115','goodsnum':'4'")>
+				<#list goodsList as goods>
+					<li>
+						<dl>
+							<dt class="goods_name">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">${goods.name!''}</a>
+							</dt>
+							<dd class="goods_img">
+								<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+									<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+								</a>
+							</dd>
+							<dd class="goods_price">
+								<em>${goods.price?string.currency}</em>
+								<span class="original">${goods.mktprice?string.currency}</span>
+							</dd>
+						</dl>
+					</li>
+				</#list>	
+			</ul>
+		</div>
+	</div>
+	<!-- end -->
+</div>
+<!-- 通栏广告 -->
+<div class="middle-ad">
+	<#assign adv = advListTag("'acid':'70'")!'' >
+    <#list adv.advList as adv3>
+    <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}" width="1200" height="100"/></a>
+    </#list>
+</div>
+
+<script>
+  $(function(){
+	  if($(".pagination").children("span").length == 4){
+		 $(".pagination span").hide();
+	  }else{
+		 $(".pagination span").show();
+	  }
+  })
+</script>
+<!--底部广告位-->
+<div style="clear: both;"></div>
+<div id="web_chat_dialog" style="display: none; float: right;"></div>
+<a id="chat_login" href="javascript:void(0)" style="display: none;"></a>
+<div class="clear"></div>
+<script>
+$(function(){
+
+	//标签切换
+	$(".index_same .tabnav li").mouseover(function(){
+		$(".index_same .tabnav li").removeClass("tab_selected");
+		$(this).addClass("tab_selected");
+		var goodslistnum = $(this).attr("rel");
+		$(".index_goodlist").hide();
+		$("#goods"+ goodslistnum).show();
+	});
+    $(".mallinfo li").click(function(){
+    	var show=$(this).attr("show");
+    	$(".mallinfo li").removeClass("tab_selected");
+    	if(show=="index_news"){
+    		$(this).addClass("tab_selected");
+    		$(".index_news").show();
+	    	$(".index_tel").hide();
+    	}else{
+    		$(this).addClass("tab_selected");
+    		$(".index_tel").show();
+	    	$(".index_news").hide();
+    	}
+    });
+		
+  //标签切换
+	$(".index_middle .tabnav li").mouseover(function(){
+		$(".index_middle .tabnav li").removeClass("tab_selected");
+		$(this).addClass("tab_selected");
+		var goodslistnum = $(this).attr("rel");
+		$(".middle_goodlist").hide();
+		$("#goods"+ goodslistnum).show();
+	});
+})
+
+</script>
+<!-----footer------>
+<#include 'common/footer.html'/>

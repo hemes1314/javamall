@@ -1,0 +1,57 @@
+<#assign storeBonusDetailTag=newTag("storeBonusDetailTag")> 
+<#assign bonus=storeBonusDetailTag('"bonusid":${bonusid}')/>
+
+<div class="dialog_content" style="margin: 0px; padding: 0px;">
+	<div class="sotre_bonus">
+		<form id="edit_form"  method="post" class="validate" >
+				<input type="hidden" value="ok" name="form_submit"> 
+				<input type="hidden" value="add" name="type"> 
+				<input type="hidden" value="" name="coupon_id">
+			<dl>
+				<dt>优惠券名称：</dt>
+				<dd>
+					<input type="text" name="type_name" class="text" style="width:200px;" value="${bonus.type_name!''}" maxlength="6">
+					<span style="color:#999">请输入6个以内汉字</span>
+				</dd>
+			</dl>
+			
+			<dl>
+				<dt>优惠券面额：</dt>
+				<dd>
+					<input type="text" name="type_money" isrequired="true" dataType="int" maxlength="8" class="text" value="${bonus.type_money!''}">
+				</dd>
+			</dl>
+				
+			<dl>
+				<dt>买家消费满：</dt>
+				<dd>
+					<input type="text"  name="min_goods_amount" isrequired="true" dataType="int" maxlength="8" class="text w100 mr5" value="${bonus.min_goods_amount}" ><i>元使用</i>
+				</dd>
+			</dl>
+			<dl>
+				<dt>使用期限：</dt>
+				<dd><input class="Wdate" type="text"  name="useTimeStart" onClick="WdatePicker()" isrequired="true" value="<@dateformat time='${(bonus.use_start_date)?c}' pattern='yyyy-MM-dd'/>"  >
+					<i>至</i> 
+					<input class="Wdate" type="text" name="useTimeEnd" onClick="WdatePicker()" isrequired="true" value="<@dateformat time='${(bonus.use_end_date)?c}' pattern='yyyy-MM-dd'/>" >
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					发行量：
+				</dt>
+				<dd>
+					<input type="text" name="create_num" class="text w100 mr5" isrequired="true" dataType="int" value="${bonus.create_num}" >
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					每人限领：
+				</dt>
+				<dd>
+					<input type="text"  name="limit_num" class="text w100 mr5" isrequired="true" dataType="int"  value="${bonus.limit_num}">
+				</dd>
+			</dl>
+			<input type="hidden" name="type_id" value="${bonus.type_id}" >
+		</form>
+	</div>
+</div>

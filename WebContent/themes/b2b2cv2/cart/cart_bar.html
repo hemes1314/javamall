@@ -1,0 +1,54 @@
+<#assign cartTag= newTag("cartTag")> 
+<#assign itemList = cartTag() >
+
+<style>
+	.my_cartlist_all{overflow:hidden;position:relative;}
+</style>
+<#if (itemList?size>0) >
+		<div class="my_cartlist_all">
+		<#list itemList as item>
+			<dl itemid="${item.id}" class="item">
+				<dd class="goods_thumb">
+					<span class="thumb size40" >
+						<a target="_blank" href="${ctx}/goods-${item.goods_id}.html" title="${item.name}" >
+							<@image height="40" width="40" src="${item.image_default!''}" style="cursor: pointer;" />
+						</a>	
+					</span>
+				</dd>
+				<dt class="goods_name">
+					<a href="${ctx}/goods-${item.goods_id}.html">${item.name}
+					<#if item.others.specList?exists>
+								<span>
+									<#list item.others.specList as spec>
+										<#if spec_index!=0></#if><strong>${spec.name}:<em style="color:#ED7108">${spec.value}</em></strong>
+									</#list>
+								</span>
+							</#if>
+					</a>
+				</dt>
+				<dd class="goods_price"><p>￥${item.price}×${item.num}</p></dd>
+				<dd class="handle">
+					<a href="javascript:void(0)" itemid="${item.id}" class="delete">删除</a>
+				</dd>
+			</dl>
+			<!-- 暂时无内容，先取消 
+			<#if item_has_next>
+			</#if>
+			-->
+		</#list>
+		</div>
+		<div class="checkout">
+			<a  class="btn-cart" href="${ctx}/cart.html">查看我的购物车</a>
+		</div>
+<#else>
+	<p style="border:0px!important;" class="no_cartlist">您的购物车中还没有任何商品</p>
+</#if>
+<script>
+	$(function(){
+		if($(".my_cartlist_all dl").length > 2){
+			$(".my_cartlist_all").jscroll();
+			$(".my_cartlist_all").css("height","200px");
+		}
+		
+	})
+</script>

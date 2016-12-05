@@ -1,0 +1,355 @@
+<#include '/admin/header.html' > 
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<style type="text/CSS">
+.node {
+	float: left;
+	position: relative;
+}
+.node ul {
+	list-style: outside none none;
+}
+
+.roundedRectangle{
+	height: 40px; 
+	width: 120px;
+	background: #12a000;
+	border-radius: 15px;
+	border-color: #000 #000 #000 #000;
+	float: left;
+	position: relative;
+}
+
+.roundedRectangle p {
+	margin: 0px auto;
+	padding: 10px 5px 20px 5px;
+	text-align:center;
+	font-size: 15px;
+	color:white;
+	font-weight:bold;
+}
+
+.arrows {
+	padding: 10px 5px 20px 5px;
+	text-align:center;
+	float: left;
+	position: relative;
+}
+
+.finishNode {
+	width:40px; 
+	height:40px; 
+	background-color:#BEBEBE; 
+	border-radius:25px;
+	float: left;
+	position: relative;"
+}
+
+.finishNode span {
+	height:40px; 
+	line-height:40px; 
+	display:block; 
+	color:#FFF; 
+	text-align:center;
+	font-weight:bold;
+}
+
+
+
+ .showinfo{
+  display:none;
+  left:1px;
+  top:1px;
+  width:422px; 
+  min-height:53px; 
+  padding:10px;
+  color:#000000;
+  background:#d0d0d0; 
+  position:fixed; 
+  z-index:999999; 
+  border: 1px solid #5e4e3f;
+  
+ }
+
+
+a:link       { font-family: 宋体; font-size: 12px; color: #EA1B23;line-height:30px; }
+a:visited    { font-family: 宋体; font-size: 12px; color: #EA1B23;line-height:30px; }
+a:active     { font-family: 宋体; font-size: 12px; color: #EA1B23;line-height:30px; }
+
+
+a.e1:link       { font-family: 宋体; font-size: 16px; color: #EA1B23 }
+a.e1:visited    { font-family: 宋体; font-size: 16px; color: #EA1B23 }
+a.e1:active     { font-family: 宋体; font-size: 16px; color: #FF0000 }
+
+
+a.e3:link       { font-family: 宋体; font-size: 16px; color: #B50F0F; }
+a.e3:visited    { font-family: 宋体; font-size: 16px; color: #B50F0F; }
+a.e3:active     { font-family: 宋体; font-size: 16px; color: #FFFF00; }
+</style>
+
+<script>
+
+var MouseEvent = function(e){
+ this.x = e.pageX
+ this.y = e.pageY
+}
+
+var Mouse = function(e){
+ var kdheight =  jQuery(document).scrollTop();
+ mouse = new MouseEvent(e);
+ leftpos = mouse.x+10;
+ toppos = mouse.y-kdheight+10; 
+}
+
+/* jQuery(
+ function(){
+  jQuery("#usernode1,#usernode2").hover(
+   function(e){
+    Mouse(e);
+    jQuery(".showinfo").css({top:toppos,left:leftpos}).fadeIn(100);
+   },function(){
+    jQuery(".showinfo").hide();
+    }
+  )
+ }
+)
+ */
+
+</script>
+<div class="main" style="background-color: white;">
+	<form id="addForm">
+		<table cellspacing="1" cellpadding="3" width="100%" style="border-collapse:collapse;" border='1' bordercolor="#d7d7d7" >
+			<input type="hidden" name="business_id" value="${business_id}">
+			<input type="hidden" name="processInstanceId" value="${processInstanceId}">
+			<input type="hidden" name="appealFlow.appeal_flow_id" value="${appealFlow.appeal_flow_id}">
+			<tr>
+				<td colspan="4"> 
+					<div style="margin: 0 auto;">
+						<div class="node">
+							<ul>
+								<li>
+									<div class="roundedRectangle" 
+									<#if startTask =='0'>
+					       				style="background: #d0d0d0;"
+					       			</#if>
+					       			<#if startTask =='2'>
+					       				style="background: #AE0000;"
+					       			</#if>
+									id="usernode1">
+										<p>申诉申请</p>  
+									</div>
+								</li>
+								
+							</ul>
+						</div>
+						
+						<div class="showinfo">
+							 
+						</div >
+												
+						<div class="arrows">
+							<img src="${ctx}/b2b2c/admin/workflow/arrows.png" />
+						</div>
+						<div class="node">
+							<ul>
+								<li>
+									<div class="roundedRectangle" 
+										<#if kefuTask =='0'>
+						       				style="background: #d0d0d0;"
+						       			</#if>
+						       			<#if kefuTask =='2'>
+						       				style="background: #AE0000;"
+						       			</#if>
+						       			
+										id="usernode2">
+										<p>客服核对</p>  
+									</div>
+								</li>
+								
+							</ul>
+						</div>
+						<div class="arrows">
+							<img src="${ctx}/b2b2c/admin/workflow/arrows.png" />
+						</div>
+						<div class="node">
+							<ul>
+								<li>
+									<div class="roundedRectangle"
+										<#if deptTask =='0'>
+						       				style="background: #d0d0d0;"
+						       			</#if>
+						       			<#if deptTask =='2'>
+						       				style="background: #AE0000;"
+						       			</#if>
+										 id="usernode2">
+										<p>部门审核</p>  
+									</div>
+								</li>
+								
+							</ul>
+						</div>
+						<div class="arrows">
+							<img src="${ctx}/b2b2c/admin/workflow/arrows.png" />
+						</div>
+						<div class="node">
+							<ul>
+								<li>
+									<div class="roundedRectangle" 
+										<#if companyTask =='0'>
+						       				style="background: #d0d0d0;"
+						       			</#if>
+						       			<#if companyTask =='2'>
+						       				style="background: #AE0000;"
+						       			</#if>
+										 id="usernode4">
+										<p>公司审核</p>  
+									</div>
+								</li>
+								
+							</ul>
+						</div>
+						<div class="arrows">
+							<img src="${ctx}/b2b2c/admin/workflow/arrows.png" />
+						</div>
+						<div class="node">
+							<ul>
+								<li>
+									 <div class="finishNode"
+									  <#if endTask =='1'>
+										 style="background: #12a000"
+									  </#if>
+									 >
+										 <span>完成</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<!-- <tr>
+				<th width="150px">描述</th>
+				<td>
+				</td>
+			</tr>
+			 -->
+			<tr>
+				<th>申请人</th>
+				<td>${appealFlow.member_name}</input>
+				</td>
+			</tr>
+			<tr>
+				<th>订单号</th>
+				<td>
+				<a class="easyui-linkbutton" 
+				href="${ctx}/b2b2c/admin/storeOrder!detailBySN.do?sn=${appealFlow.business_id}" target="_blank">${appealFlow.business_id}</a>
+				</td>
+			</tr>
+			<tr>
+				<th>申诉相片</th>
+				<td>
+					<div id="sitelogo" style="float: none; position: static;">
+						<#list photoList as photoPath>
+							<img style="float: none;position: static;max-width:400px;height:auto;" src="${photoPath!''}" />&nbsp;
+						</#list>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>申请原因</th>
+				<td>
+					${appealFlow.reason}
+				</td>
+			</tr>
+			
+		</table>
+		</form>
+	
+	<script type="text/javascript">
+		function formatRegtime(value) {
+			return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+		}
+	</script>
+	
+	
+	<div style="margin-top:8px;">
+	 	<span>审批处理记录</span> 
+	  <table  cellspacing="1" cellpadding="3"  style="border-collapse:collapse;text-align:center;" border='1' bordercolor="#d7d7d7" >
+		<tr>
+			<th width="50px">序号</th>
+       		<th width="100px">任务节点</th>
+       		<th width="80px">处理人</th>
+       		<th width="120px">处理时间</th>
+       		<th width="80px">审批方式</th>
+       		<th width="600px">处理意见</th>
+       		
+       	</tr>
+		<#list opinionList as opinion>
+			<tr>
+				<td>${opinion_index+1}</td>
+        		<td>${opinion.task_name!''}</td>
+        		<td>${opinion.user_name!''}</td>
+        		<td>
+        			<script type="text/javascript">document.write(formatRegtime(${opinion.create_time!''}));</script>
+        		</td>
+       			<#if opinion.isagree =='1'>
+       				<td>同意</td>
+       			</#if>
+       			<#if opinion.isagree =='0'>
+       				<td>不同意</td>
+       			</#if>
+       			<#if opinion.isagree =='3'>
+       				<td>撤销流程</td>
+       			</#if>
+        		<td>${opinion.comments!''}</td>
+        	</tr>
+		</#list>
+		
+	  </table>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+</div>
+<script>
+
+function submitForm() {
+	var formflag = $("#addForm").form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在提交......");
+		$("#submitButton").linkbutton("disable");
+		var options = {
+			url : "appeal!approval.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success("单据已提交");
+					
+					newTab("待办任务",
+							"${ctx}/b2b2c/admin/appeal!todolist.do");
+					parent.CloseTabByTitle($("#taskId").val() + "-审批");
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				$("#submitButton").linkbutton("enable");
+				
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+				$("#submitButton").linkbutton("enable");
+				$.Loading.hide();
+			}
+		};
+		$("#addForm").ajaxSubmit(options);
+	} else {
+		$.Loading.hide();
+	}
+}
+</script>
+
+<#include '/admin/footer.html' >

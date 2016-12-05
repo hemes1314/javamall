@@ -1,0 +1,25 @@
+<#include '../common/header.html' /> 
+<#include '../common/reception_header.html'/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/index.css" />
+<script src="${ctx}/themes/b2b2cv2/js/home_index.js"></script>
+<style type="text/css">
+/*.category { display: block !important;}*/
+.center {width:100%; height:auto; margin:auto;}
+.center img {width:100%; height:auto;}
+</style>
+<#assign dataDetailTag = newTag("dataDetailTag") />
+<#assign detail= dataDetailTag() />
+
+<script>
+$(function(){
+	$("img").attr("style","0");
+	$("table").attr("width","auto");
+})
+</script>
+
+<div class="center">
+	${detail.page_description!''}
+</div>
+
+<!-----footer------>
+<#include '../common/footer.html'/>

@@ -1,0 +1,42 @@
+<!-- 商品规格 -->
+<!-- 创建商品规格标签 -->
+<#assign goodsSpecTag = newTag("goodsSpecTag") >
+<!-- 调用商品规格标签 -->
+<#assign goodsSpec = goodsSpecTag()!'' >
+<input type="hidden" name="productid" id="productid"  />
+<input type="hidden" value="1" name="havespec" />
+<!-- 规格列表 -->
+<dl class="spec-tip"></dl>
+<#list goodsSpec.specList as spec>	
+	<dl class="spec-item">
+		<dt><span><em>${spec.spec_name}</em>：</span></dt>
+		<dd>
+			<ul>
+				<#list spec.valueList as val  >
+					<li class="sp-txt">
+						<a name="goods_spec" specid="${spec.spec_id}" specvid="${val.spec_value_id}"  href="javascript:;"  title="${val.spec_value}" >
+							<span><nobr>${val.spec_value}</nobr></span><i>&nbsp;</i>
+						</a>
+					</li>
+				</#list>
+			</ul>
+		</dd>
+	</dl>		
+</#list>
+<script type="text/javascript">
+<!--
+var Products=
+	[
+	<#list goodsSpec.productList as product>	
+	  {'product_id':${product.product_id},'goods_id':${product.goods_id},'sn':'${product.sn}','store':${product.store!0},
+		'price':${product.price},
+	   'specs':${product.specsvIdJson}
+	  }
+	  <#if product_has_next >,</#if>
+	</#list>
+	];
+$(function(){
+	Eop.Spec.init(1);
+});
+//-->
+</script>	

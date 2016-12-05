@@ -1,0 +1,21 @@
+<#assign storeLogiCompanyListTag=newTag("storeLogiCompanyListTag")>
+<#assign storeLogiCompanyList=storeLogiCompanyListTag()>
+<h3>物流信息</h3>
+<table class="table-style">
+   	<thead>
+		<tr>
+			<th class="w150">公司名称</th>
+        		<th class="w150">物流单号</th>
+        		<th class="w150">操作</th>
+      		</tr>
+    	</thead>
+    	<tbody>
+    		<#list storeLogiCompanyList as logiCompany>
+    			<tr>
+      				<td>${logiCompany.name}</td>
+      				<td><input type="text" class="text" name="shipNo" logi_id="${logiCompany.id}" /></td>
+      				<td><input type="button"  name="ship" value="确定" logi_id="${logiCompany.id}"/></td>
+     			</tr>
+     		</#list>
+    	</tbody>
+</table>

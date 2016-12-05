@@ -1,0 +1,50 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<script type="text/javascript" src="js/Adv.js"></script>
+	<form id="advform">
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'bonus!listJson.do?typeid=${typeid}&send_type=${send_type}',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="bonusdata">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'bonus_id',width:200">编号</th>
+						<th data-options="field:'bonus_sn',width:200">红包序号</th>
+						<th data-options="field:'type_name',width:300">红包类型</th>
+						<th data-options="field:'order_sn',width:200">订单号</th>
+						<th data-options="field:'create_time',width:200" formatter="forCtime">创建时间</th>
+						<th data-options="field:'member_name',width:200">使用会员</th>
+						<th data-options="field:'used_time',width:200" formatter="fortime">使用时间</th>
+						<th data-options="field:'action',width:200,align:'center'">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+</div>
+
+<script>
+	function fortime(value,row,index){
+		var val;
+		if(value==0){
+			val = "";
+		}else{
+			val = getFormatDateByLong(value,"yyyy-MM-dd")
+		}
+		return val;
+	}
+	
+	function forCtime(value,row,index){
+		var val;
+		if(value==0){
+			val = "";
+		}else{
+			val = getFormatDateByLong(value,"yyyy-MM-dd")
+		}
+		return val;
+	}
+</script>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,200 @@
+<#include '/store/store_header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/uploadify.css" />
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/store_slide.js" charset="utf-8"></script>
+<!-- 引入幻灯片JS -->
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.flexslider-min.js"></script>
+
+<!-- 调用店铺幻灯片标签 -->
+<#assign storeSlideListTag=newTag("storeSlideListTag")> 
+<#assign storeSlideList=storeSlideListTag()>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<a href="${ctx}/store/business_center.html?menu=promotion">商家中心</a>商家中心</a>
+			<span>></span>
+			店铺管理<span>></span>幻灯片设置
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;">幻灯片设置</a>
+					</li>
+				</ul>
+			</div>
+			<!-- 说明 -->
+			<div class="slide_intro">
+
+				<ul>
+					<li>1. 最多可上传5张幻灯片图片。</li>
+					<li>2. 支持jpg、jpeg、gif、png格式上传，建议图片宽度1920px、高度770px、大小4.00M以内的图片。提交2~5张图片可以进行幻灯片播放，一张图片没有幻灯片播放效果。</li>
+					<li>3. 操作完成以后，按“提交”按钮，可以在当前页面进行幻灯片展示。</li>
+					<li>
+						4. 跳转链接必须以<b style="color:red;">“http://www.gomecellar.com/”</b>开头
+					</li>
+				</ul>
+			</div>
+			<!-- 设置 -->
+			<div class="slide_tool">
+				<div class="flexslider">
+					<ul class="slides">
+						<#list storeSlideList as storeSlide>
+							<#if storeSlide.img??>
+								<li>
+									<@image src="${storeSlide.img!''}" />
+								</li>
+							</#if>
+						</#list>
+					</ul>
+				</div>
+				<form method="post" id="slideForm" >
+					<!-- 图片上传部分 -->
+					<ul id="goods_images">
+						<#list storeSlideList as storeSlide>
+							<li >
+								<input type="hidden" name="silde_id" value="${storeSlide.silde_id}"/>
+								<input type="hidden" id="fs_img${storeSlide.silde_id}" name="store_fs" value="${storeSlide.img!''}"/>
+								<div class="picture">
+									<span class="thumb">
+										<#if storeSlide.img??>
+											<@image class="img" src="${storeSlide.img}" id="img${storeSlide.silde_id}" width="142" height="80"/>
+											<#else>
+											<img class="img" id="img${storeSlide.silde_id}" width="142" height="80" src="${ctx}/themes/b2b2c/images/default_sildeshow.gif" style="display: inline;"> 
+										</#if>
+										
+									</span>
+								</div>
+								<div class="url">
+									<label>跳转URL...</label> 
+									<input type="text" id="silde_url${storeSlide.silde_id}" value="${storeSlide.silde_url!''}" name="silde_url" class="text">
+								</div>
+								<div class="upload_btn">
+									<a href="javascript:void(0);"> 
+										<input type="file" id="slideFile${storeSlide.silde_id}" fs="${storeSlide.silde_id}">
+									</a>
+								</div>
+								<input type="button" name="clean" value="清除" fs="${storeSlide_index}" class="del_addslide"
+								 <#if storeSlide.img??>
+								 <#else>
+								 	style="display:none;"
+								 </#if>
+								/>
+							</li>
+						</#list>
+					</ul>
+
+					<!-- 图片上传部分 -->
+					<input type="button" id="saveSlide" style="margin: 20px;" value="提交" class="btn submit to_save">
+				</form>
+			</div>
+		</div>	
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		window.onload=function(){
+			<#list storeSlideList as storeSlide>
+			bindFileEvent($("#slideFile${storeSlide.silde_id}"));
+			</#list>
+		}
+		$("#saveSlide").click(function() {
+			
+			for(var i = 0; i < 5; i++) {
+				if($("input[name='store_fs']").eq(i).val() != "" && $("input[name='store_fs']").eq(i).val() != "fs:/images/s_side.jpg" && $("input[name='silde_url']").eq(i).val() == "") {
+					alert("第"+(i+1)+"张幻灯片的跳转URL不能为空！");
+					return false;
+				}
+				if($("input[name='store_fs']").eq(i).val() == "" && $("input[name='silde_url']").eq(i).val() != "") {
+					alert("第"+(i+1)+"张幻灯片未上传图片！");
+					return false;
+				}
+			}
+			
+			$("#saveSlide").attr({"disabled":"disabled"});
+			var options = {
+				url : "${ctx}/api/b2b2c/storeSilde!editStoreSilde.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {
+					$.Loading.message(data.message);
+					if (data.result == 1) {
+						location.href="business_center.html?menu=store";
+					}else{
+						$("#saveSlide").removeAttr("disabled");
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					$("#saveSlide").removeAttr("disabled");
+				}
+			};
+			$("#slideForm").ajaxSubmit(options);
+		});
+	})
+	var isTip = 0;
+	function bindFileEvent(obj) {
+		$(obj).uploadify({
+			'buttonText' : '上传', //显示文字
+			'fileObjName' : 'image', //文件对象名称
+			'fileSizeLimit':'4MB',//上传文件大小限制
+			'fileTypeDesc' : '请选择',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 
+			'fileTypeExts' : '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+			'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+			'swf' : '${ctx}/themes/b2b2cv2/uploadify.swf',
+			'height' : '30', //高度
+			'width' : '70',
+			'multi' : true, //是否支持多文件上传
+			'progressData' : 'percentage',//设置文件上传时显示的数据
+			'uploadLimit' : 5,
+			'onFallback' : function() { //falsh兼容
+				if(isTip==0){
+					$.alert("请安装flash插件，确保程序正常运行！");
+				}
+				isTip=1; 
+			},
+			'onUploadSuccess' : function(file, data, response) {
+				var img = jQuery.parseJSON(data);
+				var fs = $(obj).attr("fs");
+				$("#img" + fs).show();
+				$("#img" + fs).attr("src", img.img);
+				$("#fs_img" + fs).val(img.fsimg);
+			},
+			'onSelectError' : function(file, errorCode, errorMsg) {
+				if (errorCode == SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED) {
+					this.queueData.errorMsg = "最多只能上传五个";
+				}
+				if (errorCode == SWFUpload.QUEUE_ERROR.INVALID_FILETYPE) {
+					this.queueData.errorMsg = "请上传正确的格式";
+				}
+				if (errorCode == SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
+					this.queueData.errorMsg = "文件大小超过限制( " + this.settings.fileSizeLimit + " )";
+				}
+			}
+		});
+	}
+	$("input[name='clean']").click(function(){
+		var fs=new Number($(this).attr("fs"));
+		for(var i = fs; i < 5; i++) {
+			if(i < 4) {
+				$("input[name='store_fs']").eq(i).val($("input[name='store_fs']").eq(i+1).val());
+				$(".img").eq(i).attr("src", $(".img").eq(i+1).attr("src"));
+				$("input[name='silde_url']").eq(i).val($("input[name='silde_url']").eq(i+1).val());
+				$(".del_addslide").eq(i).css("display",$(".del_addslide").eq(i+1).css("display"));
+			} else {
+				$("input[name='store_fs']").eq(i).val("");
+				$(".img").eq(i).attr("src", "${ctx}/themes/b2b2c/images/default_sildeshow.gif")
+				$("input[name='silde_url']").eq(i).val("");
+				$(".del_addslide").eq(i).hide();
+			}
+		}
+	});
+</script>
+	<script>
+		$(function(){
+				selectMenu(3);
+		})
+	</script>
+<#include '/common/footer.html' />

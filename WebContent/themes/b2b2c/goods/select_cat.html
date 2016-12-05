@@ -1,0 +1,203 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+
+<#-- 创建商品分类标签 --> 
+<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+<#-- 查询商品分类列表 0表示查子分类 --> 
+<#assign storeGoodsCatList= storeGoodsCatListTag("{'type':1,'storeid':${storeid!0}}")!''>
+
+<script type="text/javascript">
+<#if storeGoodsCatList?size == 0 >
+	$.dialog({
+		lock: true,
+	    content: '请先添加商品分类',
+	    ok: function(){
+	        this.reload(null,"${ctx}/goods/goods_cat.html");
+	    },
+	    close:function(){
+	    	this.reload(null,"${ctx}/goods/goods_cat.html");
+	    }
+	}); 
+</#if>
+</script>
+
+<div class="layout">
+	<!-- S setp -->
+
+	<ul class="flow-chart">
+		<li title="选择商品所在分类" class="step a1"></li>
+		<li title="填写商品详细信息" class="step b2"></li>
+		<li title="商品发布成功" class="step c2"></li>
+	</ul>
+	<!--S 分类选择区域-->
+	<div class="wrapper_search">
+		<div style="display: none;" class="wp_search_result">
+			<div class="back_to_sort">
+				<a nc_type="return_choose_sort" href="JavaScript:void(0);">&lt;&lt;返回商品分类选择</a>
+			</div>
+			<div style="display: none;" id="searchNone" class="no_result">
+				<div class="cont">
+					<p>没有找到相关的商品分类。</p>
+					<p>
+						<a nc_type="return_choose_sort" href="JavaScript:void(0);">
+							<button>返回商品分类选择</button>
+						</a>
+					</p>
+					<p></p>
+				</div>
+			</div>
+			<div style="display: none;" id="searchLoad" class="has_result">
+				<div class="loading">
+					<img alt="loading..."
+						src="#"
+						style="display: block;"><span class="txt_searching">搜索中...</span>
+				</div>
+			</div>
+			<div style="display: none;" id="searchSome" class="has_result">
+				<div id="searchEnd"></div>
+				<div id="searchList" class="result_list">
+					<ul>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div style="position: relative;" class="wp_sort">
+			<!-- <div class="wp_data_loading" id="dataLoading" style="display: block;">
+				<div class="data_loading">加载中...</div>
+			</div> -->
+			<div class="wp_sort_block" id="class_div">
+				
+			</div>
+		</div>
+		<div style="display: block; clear: both;" class="tips_choice">
+			<span class="tips_zt"></span>
+			<dl class="hover_tips_cont">
+				<dt id="commodityspan" style="display: none;">
+					<span style="color: #F00;">请选择商品类别</span>
+				</dt>
+				<dt class="current_sort" style="" id="commoditydt">您当前选择的商品类别是：</dt>
+				<dd id="commoditydd"></dd>
+				<dd style="display: none;" id="commoditya">
+					&nbsp;&nbsp;<a href="JavaScript:void(0);">[添加到常用分类]</a>
+				</dd>
+			</dl>
+		</div>
+		<div class="wp_confirm">
+			<span class="btn_confirm">
+				<form method="get">
+					<input type="hidden" value="store_goods" name="act"> <input
+						type="hidden" value="add_goods" name="op"> <input
+						type="hidden" value="two" name="step"> <input
+						type="hidden" value="1132" id="class_id" name="class_id">
+					<input type="hidden" value="0" id="t_id" name="t_id">
+					
+					<input type="button" class="submit" value="下一步" id="nextBtn" disabled="disabled">
+				</form>
+			</span>
+		</div>
+	</div>
+</div>
+
+<script>
+	var CatLoader = {
+		init : function() {
+			var self = this;
+			this.loadChildren(0);
+
+			$("#nextBtn").click(function(){
+				var catid = self.getSelectedCatId();
+				if (!catid) {
+					alert("请选择商品的分类");
+				} else {
+					location.href = "add_goods.html?store_id=${member.store_id!0}&catid=" + catid;
+				}
+
+			});
+		},
+		loadChildren : function(catid) {
+			var self = this;
+			$.ajax({
+				type : 'GET',
+				url : '${ctx}/api/b2b2c/goodsCat!getStoreGoodsChildJson.do?ajax=yes&cat_id='+catid,
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						self.appendCatList(result.data, catid);
+						self.refreshPath();
+					} else {
+						alert("加载分类出错[" + result.message + "]");
+					}
+				},
+				error : function() {
+					
+				}
+
+			});
+		},
+		appendCatList : function(catJson, catid) {
+			if (catJson.length == 0)
+				return;
+			var self = this;
+			var selHtml = '<div class="sort_list cat_box" id="box_'+catid+'" >';
+			selHtml +='<div class="wp_category_list">'
+			selHtml +='<div class="category_list" id="class_div_1">'
+			selHtml +='<ul>'
+			$.each(catJson, function(i, cat) {
+				selHtml +='<li catid="'+cat.cat_id+'" class="" id="box_'+catid+'" >'
+				selHtml +='<a href="javascript:void(0)" catid="'+cat.cat_id+'" class=""><span class="has_leaf">'+cat.name+'</span></a>'	
+				selHtml += "</li>";
+			});
+			selHtml +='</ul></div></div></div>'
+			
+			$(selHtml).appendTo($("#class_div")).find("a").click(function() {
+				var $this = $(this);
+				self.removeChildBox($this.parent().attr("id"));
+				self.loadChildren($this.attr("catid"));
+
+				$this.parent().parent().find('a').removeClass("classDivClick");
+				$this.addClass("classDivClick");
+				
+				$("#nextBtn").attr("disabled", false);
+			});
+
+		},
+		removeChildBox : function(boxid) {
+			var flag = false;
+			$("#class_div .cat_box").each(function() {
+				var $this = $(this);
+				if (flag) {
+					$this.remove();
+				}
+				if ($this.attr("id") == boxid) {
+					flag = true;
+				}
+			});
+		},
+		refreshPath : function() {
+			var pathbox = $("#commoditydd").empty();
+			var html = "";
+			$("#class_div a.classDivClick").each(function(i, v) {
+				if (i != 0){
+					html += "&nbsp;&gt;&nbsp;";
+				}
+				var name = $(this).text();
+				html += name ;
+			});
+			pathbox.append(html);
+		},
+		getSelectedCatId : function() {
+			var catEl = $("#class_div a.classDivClick:last");
+			if (catEl.length == 0) {
+				return false;
+			} else {
+				return catEl.attr("catid");
+			}
+
+		}
+
+	};
+	$(function() {
+		CatLoader.init();
+	});
+</script>
+<#include '/common/footer.html' />

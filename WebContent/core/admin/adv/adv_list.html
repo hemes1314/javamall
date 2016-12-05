@@ -1,0 +1,251 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="js/Adv_New.js"></script>
+<div class="main">
+
+	<div style="display: block;" class="searchAdvanced" >
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="70" align="right">广告名称</td>
+				<td><input type="text" value="" id="advname" class="input_text" style="width: 95%;" ></td>
+
+				<td width="70" align="right">所属广告位</td>
+				<td colspan="2">
+					<select name="acid" id="acid">
+						<option value ="">全部</option>
+						<#list adColumnList as col>
+						<option value ="${col.acid}">${col.cname}</option>
+						</#list>
+					</select>
+				</td>
+
+			</tr>
+			<tr>
+				<td width="70" align="right">起始时间</td>
+				<td>
+					<input class="input_text easyui-datetimebox" style="width: 160px;height: 28px;" id="start_time1" /> <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+					<input class="input_text easyui-datetimebox" style="width: 160px;height: 28px;" id="end_time1" />
+				</td>
+				<td width="70" align="right">终止时间</td>
+				<td>
+					<input class="input_text easyui-datetimebox" style="width: 160px;height: 28px;" id="start_time2" /> <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+					<input class="input_text easyui-datetimebox" style="width: 160px;height: 28px;" id="end_time2" />
+				</td>
+
+				<td><a id="searchAdvance" class="button blueButton" onclick="searchAdv()" href="javascript:;">开始搜索</a></td>
+			</tr>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton"
+		   onclick="append()">添加</a> <a href="javascript:void(0)" class="button"
+										onclick="del()">删除</a>
+	</div>
+
+	<div class="shadowBoxWhite tableDiv">
+		<form id="advform">
+			<table class="easyui-datagrid"
+				data-options="url:'adv!listJson.do',pageList: [10,15,19,30],pageSize:10,fitColumns:'true',onLoadSuccess:inits"
+				pagination="true" id="advdata">
+				<thead>
+					<tr>
+						<th data-options="field:'aid',checkbox:true"></th>
+						<th data-options="field:'acid',width:70">ID</th>
+						<th data-options="field:'aname',width:200">广告名称</th>
+						<th data-options="field:'cname',width:200">所属广告位</th>
+						<th data-options="field:'company',width:300">单位名称</th>
+						<th data-options="field:'begintime',width:200" formatter="formatBegintime">开始时间</th>
+						<th data-options="field:'endtime',width:200" formatter="formatEndtime">截止时间</th>
+						<th data-options="field:'isclose',width:200"
+							formatter="formatIsclose">状态</th>
+						<th data-options="field:'clickcount',width:200">点击数</th>
+						<th data-options="field:'action',width:100,align:'center'"
+							formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+		<div id="divdia" style="display: none;"></div>
+	</div>
+</div>
+<script type="text/javascript">
+
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "adv!add.do";
+			map["formId"] = "#addForm";
+			map["url"] = "adv!addSave.do?ajax=yes";
+			map["title"] = "添加广告";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "adv!edit.do?advid=" + id;
+			map["formId"] = "#editForm";
+			map["url"] = "adv!editSave.do?ajax=yes";
+			map["title"] = "修改广告";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#advdata";
+
+		//需要验证的参数
+		//map["nameId"]="#name";
+
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 800,
+			height : 400,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+						submitForm(map,savebtn);
+					}
+				}
+			}, {
+				text : '清空',
+				handler : function() {
+					clearForm(map);
+				}
+			} ]
+		});
+	}
+	function submitForm(map,savebtn) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			savebtn.linkbutton("disable");
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append("
+				+ row.aid + ")' ></a>";
+
+		return val;
+	}
+
+	function formatIsclose(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = '已开启&nbsp;<input type="button" class="stop button" advid="'+row.aid+'" value="停用" />';
+		} else if (value == 1) {
+			val = '已停用&nbsp;<input type="button" class="start button" advid="'+row.aid+'" value="开启" />';
+		}
+		return val;
+		alert("123");
+	}
+
+	function formatBegintime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+
+	function formatEndtime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+	function del() {
+		var rows = $('#advdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择删除广告");
+			return;
+		}
+		if (!confirm("确认要删除广告吗？")) {
+			return;
+		}
+		$.Loading.show("正在删除......");
+		var options = {
+			url : "adv!delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				$("#advdata").datagrid('reload');
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#advform').ajaxSubmit(options);
+	}
+	
+	function inits(){
+		Adv.init();
+	}
+
+
+	//搜索
+	function searchAdv(){
+
+		var advname = $.trim($("#advname").val());
+		var acid = $.trim($("#acid").val());
+		//var status = $("#status").val();
+		var startTime1 = $("#start_time1").datebox("getValue");
+		var endTime1 = $("#end_time1").datebox("getValue");
+
+		var startTime2 = $("#start_time2").datebox("getValue");
+		var endTime2 = $("#end_time2").datebox("getValue");
+
+		if ((endTime1 != "") && (endTime1 < startTime1)) {
+			alert("结束时间不能小于开始时间");
+			return false;
+		}
+
+		if ((endTime2 != "") && (endTime1 < startTime2)) {
+			alert("结束时间不能小于开始时间");
+			return false;
+		}
+
+		$('#advdata').datagrid('load', {
+			advname: advname,
+			acid:acid,
+			//status: status,
+			startTime1: startTime1,
+			endTime1: endTime1,
+			startTime2: startTime2,
+			endTime2: endTime2,
+			page: 1
+		});
+	}
+
+</script>
+<#include '/admin/footer.html' >

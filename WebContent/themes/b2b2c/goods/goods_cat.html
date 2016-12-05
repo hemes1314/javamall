@@ -1,0 +1,311 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+
+<#assign checkB2b2cMemberTag=newTag("checkB2b2cMemberTag")>
+<#assign storeMember=checkB2b2cMemberTag()>
+
+<link href="${ctx}/themes/b2b2c/css/member.css"  rel="stylesheet" type="text/css">
+
+<style>
+.w30 {
+	width: 40px;
+}
+.collapsed{
+	display: none;
+}
+</style>
+<div class="layout">
+	<#include '../left_menu.html' />
+	<div class="right-content">
+		<div class="path">
+			<div>
+				<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span> 
+				<a href="#"> 分类管理 </a><span>&gt;</span>商品分类
+			</div>
+		</div>
+
+		<#-- 创建商品分类标签 --> 
+		<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+		<#-- 查询商品分类列表 0表示查子分类 --> 
+		<#assign storeGoodsCatList= storeGoodsCatListTag("{'type':0,'storeid':${storeid!0}}")!''>
+
+		<div class="main">
+			<div class="wrap" id="catlist">
+				<div class="tabmenu">
+					<ul class="tab pngFix">
+						<li class="active">
+							<a href="#">商品分类</a>
+						</li>
+					</ul>
+					<a title="新增分类" 
+						dialog_width="480" dialog_id="my_category_add" dialog_title="新增分类"
+						nc_type="dialog" class="user-btn3" href="javascript:void(0)" onclick="saveOrUpdate()" >新增分类</a>
+				</div>
+
+				<table width="100%" id="my_category" class="table-style" >
+					
+					<thead>
+					    <tr nc_type="table_header">
+					    	<th class="w30"></th>
+					        <th inputwidth="50%" checker="check_required" column="stc_name" coltype="editable">分类名称</th>
+					        <th inputwidth="30px" checker="check_max" column="stc_sort" coltype="editable" class="w60">排序</th>
+					        <th offclass="noshowclass-ico-btn" onclass="showclass-ico-btn" checker="" column="stc_state" coltype="switchable" class="w120">显示</th>
+					        <th class="w90">操作</th>
+					    </tr>
+				      <tr>
+				      		<td class="tc"><input type="checkbox" class="checkall" id="all"></td>
+				        	<td colspan="20"><label for="all">全选</label>
+				          		<a class="user-btn1 delAll" confirm="您确实要删除该分类吗?" name="class_id"  href="javascript:void(0)">
+				          			<span>删除</span>
+				          		</a>
+				          	</td>
+				      </tr>
+				    </thead>
+
+					<tbody>
+						<#list storeGoodsCatList as cat>
+							<#if cat.store_cat_pid==0>
+							<tr class="bd-line">
+							    <td class="tc">
+							    	<input type="checkbox" value="${cat.store_cat_id}" class="checkitem" catname="${cat.store_cat_name}" >
+							    </td>
+							    <td class="tl">
+							    	<@image src="${ctx}/themes/b2b2c/images/tv-collapsable.gif" style="display: inline;" class="parimg" idvalue="${cat.store_cat_id}" isimg="0"  />
+							    	<span nc_type="editobj" class="ml5" >${cat.store_cat_name!''}</span>
+							    	<span class="add_ico_a">
+							    		<a href="javascript:void(0)" onclick="add_children(${cat.store_cat_id})" >新增下级</a>
+							    	</span>
+							    </td>
+							    <td>
+							    	<span nc_type="editobj" idvalue="76">${cat.sort!''}</span>
+							    </td>
+							    <td>
+						    		<#if cat.disable==0>
+										<span status="on" class="noshowclass-ico-btn" nc_type="editobj" idvalue="${cat.store_cat_id}" ></span>
+										<#else>
+										<span status="on" class="showclass-ico-btn" nc_type="editobj" idvalue="${cat.store_cat_id}" ></span>
+									</#if>
+							    </td>
+							    <td>
+							    <p><a onclick="saveOrUpdate(${cat.store_cat_id})" href="javascript:void(0)">编辑分类</a></p>
+							    <p><a class="user-btn2 mt5" onclick="del(${cat.store_cat_id},'${cat.store_cat_name!''}');" href="javascript:void(0)">删&nbsp;除</a></p></td>
+							</tr>
+							</#if>
+							
+							<#list storeGoodsCatList as childCat>
+							<#if childCat.store_cat_pid==cat.store_cat_id>
+								<tr pidvalue="${cat.store_cat_id}" nc_type="table_item" class="bd-line ptr">
+							        <td class="tc">
+							        	<input type="checkbox" value="${childCat.store_cat_id}" class="checkitem" catname="${childCat.store_cat_name}"></td>
+							        <td class="tl">
+							        	<@image class="preimg" src="${ctx}/themes/b2b2c/images/vertline.gif" style="display: inline;" />
+							        	<@image id="treet12" class="ttimage" src="${ctx}/themes/b2b2c/images/tv-item-last.gif" style="display: inline;" />
+							        	<span nc_type="editobj" class="ml5" idvalue="${childCat.store_cat_id}">${childCat.store_cat_name!''}</span>
+							        </td>
+							        <td><span nc_type="editobj" idvalue="${childCat.store_cat_id}">${childCat.sort!''}</span></td>
+							        <td>
+								        <#if childCat.disable==0>
+											<span status="on" class="noshowclass-ico-btn" nc_type="editobj" idvalue="${childCat.store_cat_id}"></span>
+										<#else>
+											<span status="on" class="showclass-ico-btn" nc_type="editobj" idvalue="${childCat.store_cat_id}"></span>
+										</#if>
+							        </td>
+							        <td>
+							        <p><a onclick="saveOrUpdate(${childCat.store_cat_id})" href="javascript:void(0)">编辑分类</a></p>
+							        <p><a class="user-btn2 mt5" onclick="del(${childCat.store_cat_id},'${childCat.store_cat_name!''}')" href="javascript:void(0)">删&nbsp;除</a></p></td>
+							    </tr>
+							</#if>
+							</#list>
+						</#list>
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]") ; 
+
+$(function(){
+	$(".parimg").click(function(){
+		var idvalue = $(this).attr("idvalue");
+		var isimg = $(this).attr("isimg");
+		var $this = $(this);
+		$(this).parent().parent().parent().find(".ptr").each(function(){
+			if($(this).attr("pidvalue")==idvalue){
+				$(this).toggle();
+				if(isimg==0){
+					$this.attr("src","/themes/b2b2c/images/tv-expandable.gif");
+					$this.attr("isimg",1);
+				}else{
+					$this.attr("src","/themes/b2b2c/images/tv-collapsable.gif");
+					$this.attr("isimg",0);
+				}
+			}
+		});
+	})
+	
+	$(".checkall").click(function(){
+		
+		if($(this).attr("checked")=="checked"){
+			$(".checkitem").each(function(){
+				$(this).attr("checked",true);
+			})
+		}else{
+			$(".checkitem").each(function(){
+				$(this).attr("checked",false);
+			})
+		}
+		
+	});
+	
+	$(".delAll").click(function(){
+		if(window.confirm('确定要删除分类吗？')){
+			var catids="";
+			var catnames="";
+			$(".checkitem:checked").each(function(){
+				catids=catids+$(this).val()+",";
+				catnames = catnames+$(this).attr("catname")+",";
+			})
+			if(catids==""){
+				alert("未勾选分类！");
+				return false;
+			}
+			$.ajax({
+				url : "${ctx}/api/b2b2c/goodsCat!delAll.do?catids="+catids+"&catnames="+encodeURI(catnames),
+				type : "POST",
+				dataType : 'json',
+				cache : false,
+				success : function(result) {
+					if (result.result == 1) {
+						location.reload();
+					}
+					if (result.result == 0) {
+						alert(result.message);
+					}
+				},
+				error : function() {
+					alert("出现错误，请重试");
+				}
+			});
+		}
+	});
+	
+});
+
+	var dialog;
+	
+	function saveOrUpdate(catid){
+		var map = {}; 				// 相当于Map map = new HashMap();
+		if (!catid) {
+			map["title"] = "添加分类";
+			map["html"] = "goods_cat_add.html";
+			map["url"] = "${ctx}/api/b2b2c/goodsCat!addGoodsCat.do";
+			map["form"] = "#add_form";
+		} else {
+			map["title"] = "修改分类";
+			map["html"] = "goods_cat_edit.html?catid="+catid;
+			map["url"] = "${ctx}/api/b2b2c/goodsCat!editGoodsCat.do";
+			map["form"] = "#edit_form";
+		}
+		openDialog(map);
+	}
+	
+	function openDialog(map){
+		dialog = $.dialog({
+			title : map["title"],
+			width : 400,
+			height : 170,
+			lock : true,
+			min : false,
+			max : false
+		});
+
+		$.ajax({
+			url : map["html"],
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([{
+					name : '保存',
+					callback : function() {
+						
+						if(!$(map["form"]).validate()){
+							return false;
+						}
+				        if(!$(map["form"]).checkall()){
+							return false;
+						}
+				        
+						formSubmit(dialog,map);
+						return false;
+					}
+				}, {
+					name : '取消'
+				}]);
+			},
+			error : function() {
+				$.alert("出现错误,请重试！");
+			},
+			cache : false
+		});
+	}
+	
+	function formSubmit(dialog,map){
+		var options = {
+			url : map["url"],
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					dialog.title('保存成功，1秒后关闭此窗口。').time(2);
+					dialog.reload();
+				}
+				if (result.result == 0) {
+					alert(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误，请重试");
+			}
+		};
+		$(map["form"]).ajaxSubmit(options);
+		return false;
+	}
+	
+	function del(catid,catname){
+		if(window.confirm('确定要删除分类吗？')){
+			$.ajax({
+				url : "${ctx}/api/b2b2c/goodsCat!delete.do?cat_id="+catid+"&cat_name="+encodeURI(catname),
+				type : "POST",
+				dataType : 'json',
+				cache : false,
+				success : function(result) {
+					if (result.result == 1) {
+						location.reload();
+					}
+					if (result.result == 0) {
+						alert(result.message);
+					}
+				},
+				error : function() {
+					alert("出现错误，请重试");
+				}
+			});
+		}
+	}
+	
+	function add_children(catid){
+		var map = {};
+		map["title"] = "添加子分类";
+		map["html"] = "goods_cat_add.html?catid="+catid;
+		map["url"] = "${ctx}/api/b2b2c/goodsCat!addGoodsCat.do";
+		map["form"] = "#add_form";
+		
+		openDialog(map);
+	}
+	
+</script>
+<#include '../common/footer.html' />

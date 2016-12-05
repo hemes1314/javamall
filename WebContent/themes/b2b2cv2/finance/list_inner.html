@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>GOME Cellar - 金融</title>
+<#assign dataDetailTag = newTag("dataDetailTag") />
+<#assign detail= dataDetailTag() />
+<#assign cmsCatListTag = newTag("cmsCatListTag")/>
+<#assign cmslist = cmsCatListTag()/>
+<link href="${ctx}/themes/b2b2cv2/finance/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+
+
+<body>
+   <div class="Header">
+      <div class="Header-text">
+         <div class="Header-logo"><img src="${ctx}/themes/b2b2cv2/finance/images/logo.png" width="355" height="110" alt=""/></div>
+        <div class="Header-shop"></div>
+      </div>
+     <div class="Header-menu">
+        <ul>
+          <li class="left" style="letter-spacing:1px;">GOME Cellar邀您一起探讨金融理财 <!--<a href="#"> GOME Cellar</a> [ <a href="#">登录</a> ]--><span></span></li>
+          <li class="right">
+             <a href="index.html">首页</a>
+             <a href="list.html?cat_id=jiucaijing">酒财经</a>
+             <a href="list.html?cat_id=jiutouzi">酒投资</a>
+             <a href="list.html?cat_id=jiuyinhang">酒银行</a>
+          </li>
+        </ul>
+     </div>
+   </div> 
+   <div class="List-content">
+     
+      <ul>
+        <li class="left">
+           <h1>${detail.name!''}<p><a href="index.html">首页</a> > <a href="list.html?cat_id=${detail.cat_id}">${detail.name!''}</a><p></h1>
+
+          ${detail.page_description!''}
+        <li class="right">
+          <h2>栏目导航</h2>
+          <dl>
+            <dt><a  href="list.html?cat_id=jiucaijing">酒财经</a></dt>
+            <dt><a href="list.html?cat_id=jiutouzi">酒投资</a></dt>
+            <dt><a href="list.html?cat_id=jiuyinhang">酒银行</a></dt>
+          </dl>
+          <h2>热文推荐</h2>
+          <dl>
+             <#list cmslist.result as cmsCat>
+           <dt class="news-img"><img src="${cmsCat.image!''}" width="360" height="230" alt=""/></dt>
+            <dt class="news-text">
+              <a href="list_inner.html?cat_id=${cmsCat.cat_id}&id=${cmsCat.id}">${cmsCat.page_title}</a>
+              <p><@dateformat time="${cmsCat.add_time}" pattern="yyyy-MM-dd"/></p>
+            </dt>
+          	<#if cmsCat_index==2><#break></#if>
+          </#list >
+            
+          </dl>
+        </li>
+      </ul>
+   </div>
+<div class="Footer">Copyright © 2015-2016 GOME Cellar 版权所有</div> 
+</body>
+</html>

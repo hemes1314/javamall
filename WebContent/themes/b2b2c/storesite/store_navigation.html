@@ -1,0 +1,94 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<div class="layout">
+	<#include '../left_menu.html' />
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="path">
+					<div>
+						<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span> 导航管理
+					</div>
+				</div>
+				<#-- 创建店铺导航标签 --> 
+				<#assign storeNavigationTag= newTag("storeNavigationTag") > 
+				<#-- 查询店铺导航列表 --> 
+				<#assign storeNavigation= storeNavigationTag()!''>
+				<div class="tabmenu">
+					<ul class="tab pngFix">
+						<li class="active">
+							<a href="store_navigation.html">导航列表</a>
+						</li>
+						<li class="normal">
+							<a href="navigation_add.html">新增导航</a>
+						</li>
+					</ul>
+				</div>
+				<table class="table-style">
+					<thead>
+						<tr>
+							<th class="w30"></th>
+							<th class="w60">排序</th>
+							<th class="w10"></th>
+							<th class="tl">导航名称</th>
+							<th class="w120">是否显示</th>
+							<th class="w90">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list storeNavigation as sl> 
+						<tr class="bd-line">
+							<td><input type="checkbox" value="2" class="checkitem"></td>
+							<td>${sl.sort}</td>
+							<td></td>
+							<td class="tl">${sl.name}</td>
+							<td>
+								<#if sl.disable==1> 是 </#if>
+								<#if sl.disable==0> 否 </#if>
+							</td>
+							<td>
+								<p>
+									<a href="navigation_edit.html?nav_id=${sl.id}">编辑导航</a>
+								</p>
+								<p>
+									<a class="user-btn2 mt5" onclick="del(${sl.id});" href="javascript:;">删&nbsp;除</a>
+								</p>
+							</td>
+						</tr>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+function del(nav_id){
+	if(window.confirm('你确定要删除吗？')){
+		$.ajax({
+			url : "${ctx}/api/b2b2c/navigation!delete.do?nav_id="+nav_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.href="store_navigation.html";
+				}
+				if (result.result == 0) {
+					alert(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误，请重试！");
+			}
+		});
+	}else{
+		return false;
+	}
+	
+}
+
+</script>
+
+<#include '/common/footer.html' />

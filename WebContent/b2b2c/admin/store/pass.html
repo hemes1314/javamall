@@ -1,0 +1,135 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="storeInfoForm" method="post" class="validate" >
+		<input type="hidden" name="storeId" value="${store.store_id}"/>
+		<input type="hidden" name="member_id" value="${store.member_id}">
+		<table>
+			<#if type==1>
+			<tr>
+				<td>店铺名称：</td>
+				<td>${store.store_name}</td>
+			</tr>
+			<#if store.disabled==0>
+				<tr>
+					<td>店铺申请是否通过：</td>
+					<td>
+						<input type="radio" value="1" checked="checked" name="pass"/>是
+						<input type="radio" value="0" name="pass"/>否
+					</td>
+				</tr>
+				<!--<tr>-->
+					<!--<td>店铺佣金比例：</td>-->
+					<!--<td>-->
+						<!--<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="commission" data-options="required:true" isrequired="true" />-->
+						<!--如果输入10.平台佣金为订单价格的百分之10-->
+					<!--</td>-->
+				<!--</tr>-->
+
+				<input class="easyui-numberbox input_text" style="width: 80px;" type="hidden" value="0" name="commission" />
+
+				<tr>
+					<td>葡萄酒佣金比例：</td>
+					<td>
+						<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="wine_commission" data-options="required:true" isrequired="true" value="0" />
+						如果输入10.平台佣金为订单价格的百分之10
+					</td>
+				</tr>
+
+				<tr>
+					<td>白酒佣金比例：</td>
+					<td>
+						<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="chinese_spirits_commission" data-options="required:true" isrequired="true" value="0" />
+						如果输入10.平台佣金为订单价格的百分之10
+					</td>
+				</tr>
+
+
+				<tr>
+					<td>洋酒佣金比例：</td>
+					<td>
+						<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="foreign_spirits_commission" data-options="required:true" isrequired="true" value="0" />
+						如果输入10.平台佣金为订单价格的百分之10
+					</td>
+				</tr>
+
+
+				<tr>
+					<td>啤酒佣金比例：</td>
+					<td>
+						<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="beer_commission" data-options="required:true" isrequired="true" value="0"/>
+						如果输入10.平台佣金为订单价格的百分之10
+					</td>
+				</tr>
+
+				<tr>
+					<td>黄酒/养生酒佣金比例：</td>
+					<td>
+						<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="other_spirits_commission" data-options="required:true" isrequired="true" value="0"/>
+						如果输入10.平台佣金为订单价格的百分之10
+					</td>
+				</tr>
+				
+				<tr>
+					<td>酒周边佣金比例：</td>
+					<td>
+						<input class="easyui-numberbox input_text" style="width: 80px;" type="text" name="around_commission" data-options="required:true" isrequired="true" value="0"/>
+						如果输入10.平台佣金为订单价格的百分之10
+					</td>
+				</tr>
+			</#if>
+			<tr>
+				<td>身份证号：</td>
+				<td>${store.id_number}</td>
+			</tr>
+			</#if>
+			<#if store.name_auth==2|| store.name_auth==0>
+				<tr>
+					<td>店主身份认证：</td>
+					<td>
+						<img alt="" src="${store.id_img!''}" height="120px" width="150px;" onclick="openImageWindow(this)" style="cursor: pointer;">
+					</td>
+				</tr>
+				<tr>
+					<td>店主身份认证是否通过：</td>
+					<td>
+						<input type="radio" value="1" name="name_auth"/>是
+						<#if store.name_auth==2>
+						<input type="radio" value="0" name="name_auth" checked="checked"/>否
+						<#elseif store.name_auth==0>
+						<input type="radio" value="-1" name="name_auth" checked="checked"/>否
+						</#if>
+					</td>
+				</tr>
+			</#if>
+			<#if store.store_auth==2|| store.store_auth==0>
+				<tr>
+					<td>店铺认证</td>
+					<td>
+						<img alt="" src="${store.license_img!''}" height="120px" width="150px;" onclick="openImageWindow(this)" style="cursor: pointer;">
+					</td>
+				</tr>
+				<tr>
+					<td>店铺认证是否通过：</td>
+					<td>
+						<input type="radio" value="1" name="store_auth"/>是
+						<#if store.store_auth==2>
+						<input type="radio" value="0" name="store_auth" checked="checked"/>否
+						<#elseif store.store_auth==0>
+						<input type="radio" value="-1" name="store_auth" checked="checked"/>否
+						</#if>
+					</td>
+				</tr>
+			</#if>
+		</table>
+		</form>
+	</div>
+	<script type="text/javascript">
+		/**
+		 * 打开新窗口显示图片
+		 */
+		function openImageWindow(data)
+		{
+			window.open($(data).attr("src"),'_blank','height=650, width=900');
+		}
+	</script>
+</div>

@@ -1,0 +1,103 @@
+<style>
+.input_text {
+	width: 150px;
+}
+.title{font-weight:bold;font-style:italic;font-size:14px;}
+body,table{
+font-size:12px;
+}
+table{
+table-layout:fixed;
+empty-cells:show;
+border-collapse: collapse;
+}
+h1,h2,h3{
+font-size:12px;
+margin:0;
+padding:0;
+}
+.table{
+border:1px solid #cad9ea;
+color:#666;
+}
+.table th {
+background-repeat:repeat-x;
+height:30px;
+text-align:left;
+}
+.table td,.table th{
+border:1px solid #cad9ea;
+padding:0 1em 0;
+}
+.table tr.alter{
+background-color:#f5fafe;
+} 
+</style>
+<div class="main" style="background-color: white;clear:both">
+	<div style="float:left">
+			<table class="table" style="float:left; width:99%">
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">众筹名称</th>
+					<td>${cf.title!''}</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">价格</th>
+					<td>${cf.price!''}元
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">开始时间</th>
+					<td>${cf.release_time!''}</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">截止时间</th>
+					<td>${cf.time!''}</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">目标金额</th>
+					<td>${cf.target!''}元
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">已筹金额</th>
+					<td>${cf.already_get!''}元
+					</td>
+				</tr>
+			    <tr>
+					<th style="width:60px; height:40px; line-height:40px;">报名人数</th>
+					<td>${cf.length!''}人
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px;">众筹介绍</th>
+					<td style="line-height:30px;">${cf.content!''}
+					</td>
+				</tr>				
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">图片</th>
+					<td><img src="${cf.bimage!''}" width='150px' height='150px'>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="cf.id" value="${cf.id}">
+	  <table class="table" style="float:left; width:99%; margin:30px 0;">
+	    <tr>
+			<td colspan=4 style="font-weight:bold; font-size:14px;">报名详情</td>
+		</tr>
+		<tr>
+			<th>姓名</th>
+			<th>电话</th>
+			<th>邮箱</th>
+			<th>地址</th>
+		</tr>
+		<#list cfMemberList as member>
+		<tr>
+			<td>${member.name!''}</td>
+            <td>${member.tel!''}</td>
+            <td>${member.email!''}</td>
+            <td>${member.address!''}</td>
+		</tr>
+		</#list>
+		</table> 
+	</div>
+</div>

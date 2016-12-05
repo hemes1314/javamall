@@ -1,0 +1,1036 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>GomeCellar</title> 
+		<meta name="keywords" content="GomeCellar">
+		<meta name="description" content="GomeCellar">
+	<!--meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/--> 
+	
+</meta>
+
+<!-- 判断IE，并使IE9以下支持html5标签 -->
+<!–[if lt IE 9]> <script  src="/gome-javamall/themes/b2b2cv2/js/html5.js"  ></script> <![endif]–>
+
+
+<script>
+var member = "";
+var loginDialog;
+var ctx="/gome-javamall";
+var app_path="/gome-javamall";
+</script>
+
+<!-- 公共样式 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/base.css" />
+<!-- 内含dialog.css样式，原来的dialog.css中无代码 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/default.css" />
+<!-- 商品详细、 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/shop.css" />
+
+<script>window._prompt = window.prompt;</script>
+
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/lhgdialog.js" ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/common.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/shop.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.ui.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/index.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.validate.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.form-3.51.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/CartBar.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.blockUI.js"   ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/LoginDialog.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.cookie.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/perfect-scrollbar.min.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.SuperSlide.2.1.1.js" ></script>
+<!-- jquery的布局插件 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script>
+<!-- 购物车移入滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.nicescroll.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.bigautocomplete.js"></script>
+<!-- 自定义滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.jscroll.js"></script>
+
+<script type="text/javascript">
+
+var ctx="/gome-javamall";
+
+
+
+$(function(){
+	
+	$(".common_member").load("/gome-javamall/common/member_bar.html?_="+new Date().getTime()	,function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"/gome-javamall/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,              
+				success:function(result){
+					if(result.result==1){
+						//$.alert(result.message);
+						location.href="/gome-javamall/index.html";
+					}else{
+						$.alert(result.message);
+					}	
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		});	
+	});
+	
+	$(".my_store").load("/gome-javamall/common/my_store.html?_="+new Date().getTime());
+	
+	$(".my_store").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+	
+	$(".title_menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+</script>
+
+
+</head>
+<body>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/backtotop.js"></script>
+	<a name="backtotop"></a>
+	<div class="website_top w">
+		<div class="topbar wrapper">
+        	<div class="area" style="width:50px;">
+                  <div class="title" style="overflow:hidden;">
+                      <div class="city"><a href="javascript:void(0)" id="button_show">
+                      <h3 id="show_area_name">全国</h3>
+                      <i class="arrow"></i></a></div>
+                      <div id="list" class="list" style="display: none;">
+                      <a id="button_close" class="close" href="javascript:void(0)">×</a>
+                      <ul>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(0,&#39;全国&#39;)">全国</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(1,&#39;北京&#39;)">北京</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(2,&#39;上海&#39;)">上海</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(3,&#39;天津&#39;)">天津</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(4,&#39;河北&#39;)">河北</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(5,&#39;江苏&#39;)">江苏</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(6,&#39;安徽&#39;)">安徽</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(7,&#39;浙江&#39;)">浙江</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(8,&#39;福建&#39;)">福建</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(9,&#39;辽宁&#39;)">辽宁</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(10,&#39;吉林&#39;)">吉林</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(11,&#39;黑龙江&#39;)">黑龙江</a></li>
+                       </ul>
+                       </div>
+                    </div>
+            </div> 
+			<div class="common_member" style="float:left;">
+			</div>
+			<div class="title_menu">
+                <!--dl style="width:90px;">
+					<dt>
+						手机端App<i></i>
+					</dt>
+					<dd style="width:90px;">
+						<ul>
+							<li>
+                            <img src="/gome-javamall/themes/b2b2cv2/app_download/images/QR_code_android.jpg" width="80" height="80" style="padding:5px; float:left;" />
+                            <a class="menu-app" href="/gome-javamall/app_download/index.html" target="_blank">Android版</a>
+                            </li>
+						</ul>
+					</dd>	
+				</dl-->
+				<dl>
+					<dt>
+						<a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" style="padding-left:5px;">商家中心</a>
+					</dt>
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/order.html">我的订单</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/order.html?status=0">待付款订单</a></li>
+							<li><a href="/gome-javamall/member/order.html?status=5">商品已发货</a></li>
+							<li><a href="/gome-javamall/member/waitcommont.html">待评价商品</a></li>
+						</ul>
+					</dd>	
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/favorite.html" title="我的收藏" target="_top">我的收藏</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/favorite.html" target="_top" title="收藏的商品">收藏的商品</a></li>
+							<li><a href="/gome-javamall/member/collect_store.html" target="_top" title="收藏的店铺">收藏的店铺</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						客户服务<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/help-81-83.html">帮助中心</a></li>
+							<li><a href="/gome-javamall/help-81-84.html">售后服务</a></li>
+							<li><a href="/gome-javamall/help-81-85.html">客服中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						站点导航<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a target="_blank" href="/gome-javamall/index.html">商城首页</a></li>
+                            <li><a href="/gome-javamall/member/member.html">会员中心</a></li>
+							<li><a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" >商家中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+<script type="text/javascript">
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+//选项卡样式
+function index_click(type,value){
+	$("#"+type+" li").removeClass("selected");
+	$("#"+type+" li a[type='"+value+"']").parents("li").addClass("selected");
+}
+function set_groupbuy_area(area_id,area_name){
+	$("#show_area_name").html(area_name);
+	$("input[name='area_id']").val(area_id);
+	$("#list").hide();
+	loadPage();
+}
+</script>
+	</div>
+<div id="goodsSelectDiv"></div>
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/help.css" />
+<div class="content">
+	<!--帮助中心-->
+	<div class="besides">
+		<div class="help2_wh">
+			<div class="help_left">
+				<h1>关于网站</h1>
+				<ul>
+						<li >
+							<a href="help-21-7.html">公司简介</a>
+						</li>
+						<li >
+							<a href="help-21-8.html">招商合作</a>
+						</li>
+						<li >
+							<a href="help-21-9.html">联系我们</a>
+						</li>
+						<li class= "last">
+							<a href="help-21-42.html">合作酒庄</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>新手上路</h1>
+				<ul>
+						<li >
+							<a href="help-17-171.html">登录帮助</a>
+						</li>
+						<li >
+							<a href="help-17-32.html">购物指南</a>
+						</li>
+						<li class= "last">
+							<a href="help-17-31.html">常见问题</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>购物指南</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+			<div class="help_left">
+				<h1>支付方式</h1>
+				<ul>
+						<li >
+							<a href="help-19-48.html">货到付款</a>
+						</li>
+						<li class= "last">
+							<a href="help-19-49.html">在线支付</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>购物条款</h1>
+				<ul>
+						<li >
+							<a href="help-20-50.html">会员介绍</a>
+						</li>
+						<li class= "last">
+							<a href="help-20-168.html">积分说明</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>配送方式</h1>
+				<ul>
+						<li >
+							<a href="help-22-44.html">配送时间及范围</a>
+						</li>
+						<li >
+							<a href="help-22-45.html">配送费收取标准</a>
+						</li>
+						<li >
+							<a href="help-22-47.html">运输包装说明</a>
+						</li>
+						<li class= "last">
+							<a href="help-22-23.html">签收与验货</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>服务</h1>
+				<ul>
+						<li >
+							<a href="help-23-18.html">退换货政策</a>
+						</li>
+						<li >
+							<a href="help-23-14.html">退换货流程</a>
+						</li>
+						<li class= "last">
+							<a href="help-23-16.html">取消订单</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>优惠活动</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>我的订单</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+		</div>
+		<div class="client">
+			<!-- 调用CMS蚊香详细标签，并传递文章所在分类ID，及文章ID -->
+			<!-- 文章详细，所需的catid与articleid通过help.html?catid=XXX&articleid=XXX传递参数 -->
+			<h1 class="help_title">配送范围</h1>
+			<h2 class="help_time">2012-05-25 10:59</h2>
+			<ul class="help2_right_ul3" style=" margin-bottom:0px;">
+	<li class="help2_right_b">
+		<b>本商城配送范围：</b></li>
+	<li class="help2_right_bj2">
+		&nbsp;</li>
+	<li style="color: #333333">
+		本商城眼镜商城支持全国省、直辖市在内的2000多个城市的款到发货，1000多个城市的货到付款业务<br />
+		您可以使用下面的&ldquo;配送范围查询&rdquo;功能，查询您所在城市是否在我们的配送范围之内 如对配送范围有任何疑问，欢迎您致电本商城客户服务热线4001-234-567进行咨询</li>
+</ul>
+<ul class="help2_right_ul3" style=" margin-bottom:10px;">
+	<li class="help2_right_b">
+		<b>本商城配送范围查询</b></li>
+	<li class="help2_right_bj2">
+		&nbsp;</li>
+	<li style=" margin-bottom:0px;">
+		请选择您要查询的配送范围</li>
+</ul>
+<div class="line1">
+	<span class="text">地&nbsp;&nbsp;&nbsp;&nbsp;区：</span> <span class="province_city"> <span> <select id="province_id" name="province_id"><option value="0">请选择</option><option value="1">北京</option><option value="2">上海</option></select>&nbsp; <input id="province" name="province" type="hidden" value="" /> <select id="city_id" name="city_id"><option value="0">请选择</option></select>&nbsp; <input id="city" name="city" type="hidden" value="" /> <select id="region_id" name="region_id"><option value="0">请选择</option></select>&nbsp; <input id="region" name="region" type="hidden" value="" /> </span> <script>
+var RegionsSelect={
+	init:function(){
+		var self  = this;
+		$("#province_id").change(function(){
+				var province = $(this).val();
+				$("#province").val(  $("#province_id option:selected").text() );
+				if( "0"  ==  province ){
+					$("#city_id").html("<option value='0'>请选择</option>");
+					$("#region_id").html("<option value='0'>请选择</option>");
+					return }
+				$("#region_id").empty().html("<option value='0'>请选择</option>");
+				//$("#region_id").hide();
+				self.loadRegions(province,$("#city_id"));
+		});
+
+		$("#city_id").change(function(){
+			$("#city").val(  $("#city_id option:selected").text() );
+			var city = $(this).val();
+			if( "0"  ==  city ){
+				$("#region_id").html("<option value='0'>请选择</option>");
+				return }
+			//$("#region_id").show();
+			self.loadRegions(city,$("#region_id"));
+
+		});
+
+		$("#region_id").change(function(){
+			$("#region").val(  $("#region_id option:selected").text() );
+			$("#shipZip").val($("#region_id option:selected").attr("zipcode"));
+
+		});
+		
+	},
+	loadRegions:function(regionid,selectEl){
+		$.ajax({
+			url:"widget?type=regionsSelect&action=showJson®ionid="+regionid,
+			dataType:"json",
+			success:function(regionJson){
+				if(regionJson){
+					var html ="<option value='0'>请选择</option>";
+					$.each(regionJson,function(i,region){
+						html+="<option value='"+region.region_id+"'";
+						if(selectEl.attr("id") == "region_id"){
+							html += " zipcode='" + region.zipcode + "'";
+						}
+						html += ">"+ region.local_name +"</option>";
+					});
+					selectEl.empty().append(html);
+					
+				}
+			},
+			error:function(){
+				alert("非常抱歉,加载地区出错");
+			}
+		});
+	}
+	
+}
+$(function(){
+	RegionsSelect.init();
+});
+</script></span></div>
+<table align="left" border="1" cellpadding="0" cellspacing="0" style="border: #666666 1px solid; border-top: 0px; margin-top: 18px;" width="687">
+	<tbody>
+		<tr style=" background:#e1f3ff;">
+			<td align="center" style="border: #666666 1px solid; border-bottom: 0px; border-right: 0px; border-left: 0px; font-weight: bold;  vertical-align: middle;" width="92">
+				送货方式</td>
+			<td align="center" style="border: #666666 1px solid; border-bottom: 0px; border-right: 0px; font-weight: bold;  vertical-align: middle;" width="100">
+				配送区域</td>
+			<td align="center" style="border: #666666 1px solid; border-bottom: 0px; border-right: 0px; font-weight: bold;  vertical-align: middle;" width="82">
+				配送费</td>
+			<td align="center" style="border: #666666 1px solid; border-bottom: 0px; border-right: 0px; font-weight: bold;  vertical-align: middle;" width="153">
+				配送时限</td>
+			<td align="center" style="border: #666666 1px solid; border-bottom: 0px; border-right: 0px; font-weight: bold;" width="77">
+				是否支持<br />
+				货到付款</td>
+			<td align="center" style="border: #666666 1px solid; border-bottom: 0px; border-right: 0px; font-weight: bold;  vertical-align: middle;" width="159">
+				备注</td>
+		</tr>
+	</tbody>
+	<tbody id="liarray">
+	</tbody>
+</table>
+<ul style="width: 687px; float: left; overflow: hidden; display: block; margin-left: 47px; _margin-left: 23px; margin-bottom: 20px;">
+</ul>
+<div class="clear">
+	&nbsp;</div>
+<div class="help2_right_ul4">
+	<h3>
+		货到付款具体操作区域</h3>
+	<div class="clear">
+		&nbsp;</div>
+	<table align="left" border="1" cellpadding="0" cellspacing="0" width="688">
+		<tbody>
+			<tr class="help_tr1">
+				<td align="center" height="36" style="width:56px; height:36px;" valign="middle" width="56">
+					<div style="width:56px; height:30px">
+						省</div>
+				</td>
+				<td align="center" height="36" style="width:68px; height:36px;" valign="middle" width="68">
+					<div align="center" div="" height="36" style="width:56px; height:30px" td="" valign="middle" width="67">
+						县/区</div>
+				</td>
+				<td align="center" height="36" style="width:232px; height:36px;" valign="middle" width="232">
+					<div align="center" div="" height="36" style="width:210px; height:30px" td="" valign="middle" width="253">
+						不服务区域</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					昌平区</td>
+				<td>
+					全境服务(流村镇、兴寿、十三陵、南口、需加时2天）</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					朝阳区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					大兴区</td>
+				<td>
+					全境服务（安定全镇、礼贤全镇、榆垡全镇、需加时3天）</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					东城区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					房山区</td>
+				<td>
+					全境服务加时2天</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					丰台区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					海淀区</td>
+				<td>
+					全境服务（西北旺镇、温泉镇、上庄镇、苏家坨镇、需加时2天）</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					怀柔区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					门头沟区</td>
+				<td>
+					全境服务加时2天</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					密云县</td>
+				<td>
+					全境服务加时2天</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					平谷区</td>
+				<td>
+					全境服务加时2天</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					石景山区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					顺义区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					通州区</td>
+				<td>
+					全境服务（永乐店镇、漷县、西集镇、潞城镇、需加时3天）</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					西城区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					北京市</td>
+				<td>
+					北京市</td>
+				<td>
+					延庆县</td>
+				<td>
+					全境服务加时2天</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					宝山区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					长宁区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					崇明县</td>
+				<td>
+					除不服务区域外＋2</td>
+				<td>
+					横沙、长兴</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					奉贤区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					虹口区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					黄浦区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					嘉定区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					金山区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					静安区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					卢湾区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					闵行区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					南汇区</td>
+				<td>
+					除不可服务区域外</td>
+				<td>
+					洋山镇、洋山深水港</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					浦东新区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					普陀区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					青浦区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					松江区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					徐汇区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					杨浦区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+			<tr>
+				<td>
+					上海市</td>
+				<td>
+					上海市</td>
+				<td>
+					闸北区</td>
+				<td>
+					全境服务</td>
+				<td>
+					无</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+
+		</div>
+	</div>
+	<div style="width:100%;height:1px;overflow:hidden;display:block;clear:both;"></div>
+</div>
+<div class="footer">
+	<div class="wrapper">
+	<!-- 
+	<div id="footer-top">
+		<ul>
+			<li class="one"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="two"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="three"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="four"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="five"><strong>正品行货<em>100%正品保证</em></strong></li>
+		</ul>
+	</div>
+	 -->
+	</div>
+	<!--帮助中心-->
+	  <div id="faq">
+	  <div class="wrapper">
+	    <ul>
+	        <li>
+		        <dl class="s1">
+		          	<dt>关于我们 </dt>
+		          			          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-7.html">公司简介</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-8.html">招商合作</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-9.html">联系我们</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-42.html">合作酒庄</a>
+		          		</dd>
+		       </dl>
+	      	</li>
+	        <li>
+	        	<dl class="s2">
+	          		<dt>新手上路</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-171.html">登录帮助</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-32.html">购物指南</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-31.html">常见问题</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <li>
+	    		<dl class="s3">
+			        <dt>配送说明</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-44.html">配送时间及范围</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-45.html">配送费收取标准</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-47.html">运输包装说明</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-23.html">签收与验货</a>
+		          		</dd>
+	          	</dl>
+	      </li>
+	      <li>
+	        	<dl class="s4">
+	          		<dt>支付方式</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-48.html">货到付款</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-49.html">在线支付</a>
+		          		</dd>
+	           </dl>
+	      </li>
+	      <li>
+	        	<dl class="s5">
+	          		<dt>售后服务</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-18.html">退换货政策</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-14.html">退换货流程</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-16.html">取消订单</a>
+		          		</dd>
+		        </dl>
+	      </li>
+	      <li>
+	        	<dl class="s6">
+	          		<dt>特殊服务 </dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-50.html">会员介绍</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-168.html">积分说明</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <div class="clear"></div>
+	    </ul>
+	  </div>
+	</div>
+	<!--底部版权，调用footer.php-->
+	<div id="footer" >
+		<div class="wrapper">
+		  <p><a href="/gome-javamall/index.html">首页</a>
+             | <a  href="/gome-javamall/member/member.html">会员中心</a>
+             | <a  href="/gome-javamall/store/business_center.html?menu=store_index">商家中心</a>
+             | <a  href="/gome-javamall/help-62-65.html">关于网站</a>
+             | <a  href="/gome-javamall/help-21-9.html">联系我们</a>
+             | <a  href="/gome-javamall/help-21-7.html">关于我们</a>
+          </p>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

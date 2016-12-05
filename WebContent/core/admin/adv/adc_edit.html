@@ -1,0 +1,40 @@
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editForms" method="post" class="validate">
+			<table>
+				<tr>
+					<th>位置名称：</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="name" value="${adColumn.cname}" name="adColumn.cname"
+						data-options="required:true"></input></td>
+
+				</tr>
+				<tr>
+					<th>广告类型：</th>
+					<td><select class="easyui-validatebox" name="adColumn.atype">
+							<#if adColumn.atype==0>
+							<option value=0 selected="selected">图片</option>
+							<option value=1>Flash</option> <#else>
+							<option value=0>图片</option>
+							<option value=1 selected="selected">Flash</option> </#if>
+
+					</select></td>
+				</tr>
+				<tr>
+					<th>宽度：</th>
+					<td><input class="input_text" type="text" id="acwidth"
+						value="${adColumn.width!''}" name="adColumn.width"
+						data-options="required:true"></input></td>
+
+				</tr>
+				<tr>
+					<th>高度：</th>
+					<td><input class="input_text" type="text" id="acheight"
+						value="${adColumn.height!''}" name="adColumn.height"
+						data-options="required:true"></input></td>
+				</tr>
+			</table>
+			<input type="hidden" name="adColumn.acid" value="${adColumn.acid}">
+		</form>
+	</div>
+</div>

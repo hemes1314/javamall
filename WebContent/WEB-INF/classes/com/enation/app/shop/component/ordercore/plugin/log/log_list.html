@@ -1,0 +1,26 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<table width="100%"><tr><th class="title">订单日志</th> </tr></table>
+<div class="main">
+	<div class="detail" style="margin-left: 10px;">
+		<table cellspacing="0" cellpadding="0" border="0">
+			<thead>
+				<tr>
+					<th>序号</th>
+					<th>时间</th>
+					<th>操作人</th>
+					<th>操作内容</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list logList as log >
+				<tr>
+					<td>${log.log_id }</td>
+					<td><@dateformat pattern="yyyy-MM-dd HH:mm:ss" time="${log.op_time?c}" /></td>
+					<td>${log.op_name!'' }</td>
+					<td>${log.message!'' }</td>
+				</tr>
+				</#list>       
+			</tbody>
+		</table>
+	</div>
+</div>

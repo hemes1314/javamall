@@ -1,0 +1,29 @@
+<div class="store_outisde">
+	<div class="store_header">
+		<div class="sotre_name">${store.store_name}的店铺</div>
+		<div class="store_search">
+			<form method="get" name="formSearch" id="formSearch" action="home.html">
+				<input name="act" id="search_act" value="search" type="hidden">
+				<input type="hidden" name="store_id" value="${store_id}"/>
+				<input type="hidden" name="show_c" value="4" />
+				
+				<input name="keyword" id="keyword" type="text" value="想找什么商品？" onfocus="if (value =='想找什么商品？'){value =''}" onblur="if (value ==''){value='想找什么商品？'}"
+					class="ncs-search-input-text" value="${keyword!''}" x-webkit-speech=""
+					lang="zh-CN" onwebkitspeechchange="foo()"
+					x-webkit-grammar="builtin:search" style="color: rgb(153, 153, 153);"> <!--placeholder="${keyword!'想找什么商品？'}"-->
+				<a href="javascript:void(0)" class="ncs_search_mall" nctype="search_in_shop"><span>全站搜</span></a>
+				<a href="javascript:void(0)" class="ncs_search_shop" nctype="search_in_store"><span>店内搜</span></a>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			$('a[nctype="search_in_store"]').click(function() {
+				$('#search_act').val('show_store');
+				$('#formSearch').submit();
+			});
+			$('a[nctype="search_in_shop"]').click(function() {
+				location.href="goods_list.html?keyword="+$("#keyword").val()+"&search=goods";
+			});
+		});
+	</script>

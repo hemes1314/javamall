@@ -1,0 +1,48 @@
+<#assign  title="购物车" />
+<#include 'common/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/cart.css" />
+<script  src="${ctx}/themes/b2b2cv2/js/Cart.js" ></script>
+<div class="flow_path">
+	<div class="cart_logo">
+		<a href="${ctx}/index.html"><img src="${ctx}/adminthemes/new/images/logo.png" class="pngFix" style="width:240px;height:100px;"></a>
+	</div>
+	<div class="flow_pathlist">
+		<ul>
+			<li class="selected">
+				<i class="process1"></i>
+				<span></span>
+				<p>我的购物车</p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process2"></i>
+				<span></span>
+				<p>填写核对信息单</p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process3"></i>
+				<span></span>
+				<p>成功提交订单</p>
+				<strong></strong>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="">
+	<div class="cart_pointout" style="width:1000px; margin:0 auto;">
+		<h1>我的购物车</h1>
+		<h2>查看购物车商品清单，增加减少商品数量进入下一步操作。</h2>
+	</div>
+	<div class="">
+		<#include 'cart/cart_item.html' />
+	</div>
+	<div class="shop_rec">
+		<div class="shop_caption">
+			<h1>根据您的购物车中的商品，我们为您推荐</h1>
+		</div>
+		<#include 'cart/cart_recomm.html'/>
+	</div>
+</div>
+
+<#include 'common/footer.html'/>

@@ -1,0 +1,104 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<#assign logiCompanyListTag=newTag("logiCompanyListTag") />
+<#assign logiCompanyList=logiCompanyListTag() />
+<div class="layout">
+	<#include '/left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="path">
+					<div>
+						<a href="${ctx}/store.html">商家中心</a> <span>&gt;</span> 
+						<a href="javascript:void(0);">发货设置 </a> 
+					</div>
+				</div>
+				<div class="tabmenu">
+					<ul class="tab pngFix">
+						<li class="normal"><a href="${ctx}/ship/dlyCenter/dlyCenter_list.html">地址库</a></li>
+						<li class="normal"><a href="${ctx}/ship/transaction/transport.html">物流工具</a></li>
+						<li class="active"><a href="javascript:void(0);">物流公司</a></li>
+					</ul>
+				</div>
+				<div id="postage-tpl" style="padding: 20px 0;">
+					<table class="default-table">
+					    <thead>
+					      <tr>
+					        <th class="w20"></th>
+					        <th colspan="4" >物流公司</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					    	<#list logiCompanyList as logiCompany>
+					    		<#if logiCompany_index%4==0>
+					    			<tr class="bd-line">
+					    			<td></td>
+					    		</#if>
+					        		<td class="tl">
+					        			<label>
+						            		<input type="checkbox" name="rel_logi" logi_id="${logiCompany.id}"  
+												<#if logiCompany.store_id?? > 
+													checked="checked"
+													status="1" 
+												<#else> 
+													status="0"
+												</#if> /> ${logiCompany.name}
+										</label>
+									</td>
+								<#if logiCompany_index%4==0&&logiCompany_index!=0>
+					            	</tr>
+					        	</#if>
+					  		</#list>
+						</tbody>
+						<tfoot>
+					    	<tr>
+					        	<td colspan="20" class="bottom"></td>
+					      	</tr>
+					    </tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("input[name='rel_logi']").change(function(){
+		if($(this).attr("status")=="0"){
+			$.ajax({
+				url : "${ctx}/api/b2b2c/storeLogiCompany!saveReal.do",
+				dataType:"json",
+				type:"post",
+				data:"logi_id="+$(this).attr("logi_id"),
+				success : function(json) {
+					if(json.result==1){
+						$(this).attr("status","1");
+					}
+					$.Loading.message(json.message);
+				},
+				error : function() {
+					$.alert("出现错误，请重试");
+				}
+			});	
+		}else{
+			$.ajax({
+				url : "${ctx}/api/b2b2c/storeLogiCompany!delReal.do",
+				dataType:"json",
+				type:"post",
+				data:"logi_id="+$(this).attr("logi_id"),
+				success : function(json) {
+					if(json.result==1){
+						$(this).attr("status","0");
+					}
+					//成功提示信息
+					$.Loading.message(json.message);
+				},
+				error : function() {
+					$.alert("出现错误，请重试");
+				}
+			});	
+		}
+	});
+})
+
+</script>

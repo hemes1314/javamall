@@ -1,0 +1,14 @@
+<ul>
+<#list storeList as store >
+	<li store="${ store.store}" depotname="${ store.name}"> 			
+	<input type="checkbox" class="depotid" name="depot_idArray" value="${store.depotid }"/> ${ store.name}
+	&nbsp;&nbsp;库存：${ store.store}
+	&nbsp;&nbsp; 配货量: <input type="text" class="num"   name="numArray" value="1"  size="8" disabled="true" />
+	<input type="hidden" disabled="true" name="goods_idArray" value="${store.goodsid }"/>
+	<input type="hidden" disabled="true" name="product_idArray" value="${store.productid }"/>
+	<input type="hidden" disabled="true"  name="cat_idArray" value="${item.cat_id }"/>
+	<input type="hidden" disabled="true"  name="item_idArray" value='${item.item_id}'/>
+	</li>
+</#list>	
+	
+</ul> 

@@ -1,0 +1,63 @@
+<#assign paymentInfoTag = newTag("paymentInfoTag")>
+<!--调用“订单支付详细”标签，并传递参数-->
+<#assign paymentInfo = paymentInfoTag('{"ordersn":"${ordersn}"}')>
+
+<div id="orderPay">
+	<form id="payForm">
+		<table id="payinfo">
+			<tr>
+				<th>订单号：</th>
+				<td>${paymentInfo.payment.order_sn}</td>
+				
+				<th>支付方式：</th>
+				<td>${paymentInfo.payment.pay_method}</td>
+			</tr>
+			<tr>
+				<th>订单金额：</th>
+				<td>${paymentInfo.order.order_amount?string.currency}</td>
+				
+				<th>付款人：</th>
+				<td>${paymentInfo.payment.pay_user}</td>
+			</tr>
+			<tr>
+				<th>应付金额：</th>
+				<td>${paymentInfo.payment.money?string.currency}</td>
+				
+				<th>已结算金额：</th>
+				<td>${paymentInfo.payment.paymoney?string.currency}</td>
+			</tr>		
+		</table>
+		<div id="postage_tpl">
+			<div class="manage_list">
+				 <div class="tbl_head">
+	       			<table cellspacing="0" cellpadding="0" border="0"  width="100%">
+	       				<tbody>
+	       					<tr>
+			        			<th style="width:40%;">付款日期</th>
+								<th style="width:30%;">付款金额</th>
+								<th style="width:30%;">操作人</th>
+						  	</tr>
+						  	<#if paymentInfo.paymentList??>
+								<#list paymentInfo.paymentList as item>
+									<tr>
+										<td style="width:40%;"><@dateformat time="${item.pay_date?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+										<td style="width:30%;">${item.pay_money?string.currency}</td>
+										<td style="width:30%;">${item.admin_user}</td>
+									</tr>
+								</#list>
+							<#else>
+								<tr><td colspan="20"><p class="no_blank" style="margin:0px;width:160px;display:inline-block;">暂无付款记录明细</p></td></tr>	
+							</#if>
+						</tbody>
+					</table>
+	            </div>
+			</div>
+		</div>
+		<center>
+			<span>付款金额:</span><input type="text" value="${paymentInfo.showMoney}" name="payMoney">
+		</center>
+		<input type="hidden" value="${paymentInfo.payment_id}" name="paymentId" />
+		<input type="hidden" value="${paymentInfo.order.order_id}" name="orderId"/>
+	</form>
+
+</div>

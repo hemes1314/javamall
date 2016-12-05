@@ -1,0 +1,160 @@
+<!-- 获取商品评论标签 -->
+<#assign commentListTag = newTag("commentListTag")>
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign commentPage = commentListTag("{'goods_id':${goodsid},'type':1}")>
+<div id="discuss_list_wrapper">
+	<div class="grade">
+		<div class="grade_num">
+			<span>
+				<#-- 获取商品评论值标签 -->
+				<#assign storeGoodsCommentInfoTag = newTag("storeGoodsCommentInfoTag")>
+				<#-- 调用商品评论值-->
+				<#assign grade = storeGoodsCommentInfoTag("{'goods_id':${goodsid}}")>
+				<#if grade??&&grade gt 0 && grade lt 6>
+			   		<#list 1..grade as t>
+			   			<i></i>
+			   		</#list>
+			   		<#if 5-grade gt 0>
+				   		<#list 1..5-grade as t>
+				   			<i class="star_off"></i>
+				   		</#list>
+			   		</#if>
+			   		<b>${grade}</b>
+			   	<#else>
+			      <i></i><i></i><i></i><i></i><i></i>
+			      <b >5</b>
+			    </#if>   
+			</span>
+			<em>宝贝综合评分</em>
+		</div>	
+		<div class="btn_wrapper btn">
+			<p>您可对已购商品进行评价</p>
+			<a href="#discussForm" class="blue_btn"></a>
+		</div>
+	</div>
+	<!-- 评论分类tab -->
+	<div class="goods_common_nav">
+		<ul>
+			<li class="selected" type="all">
+				<a href="javascript:;">商品评价</a>
+			</li>
+			<li  type="great">
+				<a href="javascript:;">好评</a>
+			</li>
+			<li type="middle">
+				<a href="javascript:;">中评</a>
+			</li>
+			<li type="bad">
+				<a href="javascript:;">差评</a>
+			</li>
+		</ul>
+	</div>
+	<div class="grade_list">
+		<div class="commonlist_outside">
+			<#if commentPage.totalCount != 0 >
+			<!-- 全部 -->
+			<ul class="common_list all">
+				<#include 'discuss_all.html'/>
+			</ul>
+			<!-- 好评 -->
+			<ul class="common_list great" style="display:none">
+				<#include 'discuss_great.html'/>
+			</ul>
+			<!-- 中评 -->
+			<ul class="common_list middle" style="display:none">
+				<#include 'discuss_middle.html'/>
+			</ul>
+			<!-- 差评 -->
+			<ul class="common_list bad" style="display:none">
+				<#include 'discuss_bad.html'/>
+			</ul>
+			<#else>
+				 暂无评论，抢沙发，赢取更多积分。 
+			</#if>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- 更改分页标签样式 -->
+<style>
+
+.commonlist_outside .common_list .page {
+	list-style-type:none;
+}
+.commonlist_outside .common_list .page ul li {
+	
+	border-left: none;
+	margin:0;
+    display:inline;
+    padding:0;
+    float:left;
+}
+</style>
+<script>
+	$(function(){
+		$(".goods_common_nav ul li").click(function(){
+			var type = $(this).attr("type");
+			$(".goods_common_nav ul li").removeClass("selected");
+			$(this).addClass("selected");
+			$(".commonlist_outside .common_list").hide();
+			$(".commonlist_outside ."　+　type).show();
+		})
+		
+		$(".all .unselected").live("click",function(){
+			var page = $(this).attr("page");
+			$.ajax({
+				url:"${ctx}/detail/discuss_all.html?page="+page+"&goodsid="+${goodsid},
+				dataType:"html",
+				success:function(result){
+					$(".commonlist_outside .all").html(result);
+				},
+				error:function(){
+					$.alert("请重新试试");
+				}
+			});	
+			
+		});
+		$(".great .unselected").live("click",function(){
+			var page = $(this).attr("page");
+			$.ajax({
+				url:"${ctx}/detail/discuss_great.html?page="+page+"&goodsid="+${goodsid},
+				dataType:"html",
+				success:function(result){
+					$(".commonlist_outside .great").html(result);
+				},
+				error:function(){
+					$.alert("请重新试试");
+				}
+			});	
+			
+		});
+		$(".middle .unselected").live("click",function(){
+			var page = $(this).attr("page");
+			$.ajax({
+				url:"${ctx}/detail/discuss_middle.html?page="+page+"&goodsid="+${goodsid},
+				dataType:"html",
+				success:function(result){
+					$(".commonlist_outside .middle").html(result);
+				},
+				error:function(){
+					$.alert("请重新试试");
+				}
+			});	
+			
+		});
+		$(".bad .unselected").live("click",function(){
+			var page = $(this).attr("page");
+			$.ajax({
+				url:"${ctx}/detail/discuss_bad.html?page="+page+"&goodsid="+${goodsid},
+				dataType:"html",
+				success:function(result){
+					$(".commonlist_outside .bad").html(result);
+				},
+				error:function(){
+					$.alert("请重新试试");
+				}
+			});	
+			
+		});
+	});
+</script>

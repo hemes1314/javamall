@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="静态页生成组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="商品详细页生成插件" id="goodsCreatorPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+	</plugins>
+	
+</component>

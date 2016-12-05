@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app">
+	<context-root>/</context-root>
+	<container-descriptor>
+		<!-- WebLogic's classloader在有重名类时，优先加载Web应用中WEB-INF内的类。 -->
+		<prefer-web-inf-classes>true</prefer-web-inf-classes>
+		<!-- 解决Log4jConfigListener的问题 -->
+		<!-- http://ananthkannan.blogspot.com/2009/12/servletcontextgetrealpath-returns-null.html -->
+		<!-- http://blog.csdn.net/z69183787/article/details/8598547 -->
+		<show-archived-real-path-enabled>true</show-archived-real-path-enabled>
+	</container-descriptor>
+	
+	<!--session-descriptor>
+		<debug-enabled>true</debug-enabled>
+		<persistent-store-type>replicated</persistent-store-type>
+		<sharing-enabled>true</sharing-enabled>
+	</session-descriptor-->
+</weblogic-web-app> 

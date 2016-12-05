@@ -1,0 +1,59 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<#assign storeSellBackListTag=newTag("storeSellBackListTag") />
+<#assign sellBackList=storeSellBackListTag("{'status':${status!'0'} }" ) />
+<div class="layout">
+	<#include '/left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="path">
+					<div>
+						<a href="${ctx}/store.html">商家中心</a> <span>&gt;</span> 
+						<a href="javascript:void(0);">退货管理 </a>
+					</div>
+				</div>
+				<div class="tabmenu">
+					<ul class="tab pngFix">
+						<li class="active"><a href="javascript:void(0);">退货申请</a></li>
+						<li class="normal"><a href="${ctx}/sellBack/return_list.html">退货单</a></li>
+					</ul>
+				</div>
+				<div id="postage-tpl" style="padding: 20px 0;">
+		  			<div id="J_TemplateList" class="manage-list">
+		  				<div class="tbl-head">
+	        				<table cellspacing="0" cellpadding="0" border="0"  width="100%">
+								<tbody>
+									<tr>
+										<th >退货单号</th>
+										<th >订单号</th>
+										<th >会员名称</th>
+										<th >申请时间</th>
+										<th >操作</th>
+									</tr>
+								</tbody>
+							</table>
+		            	</div>
+						<div class="entity">
+						 	<table cellspacing="0" cellpadding="0" border="0" >
+        						<tbody>
+        							<#list sellBackList.result as sellBack>
+        								<tr>
+        									<td>${sellBack.tradeno}</td>
+        									<td>${sellBack.ordersn}</td>
+        									<td>${sellBack.sndto}</td>
+        									<td>
+        										<@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/>
+        									</td>
+        									<td><a href="${ctx}/sellBack/auth_sellback.html?id=${sellBack.id}" target="_blank">审核</a></td>
+        								</tr>
+        							</#list>
+			    				</tbody>
+				      		</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,262 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/layout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/goods_list.css" />
+
+<script src="${ctx}/themes/b2b2cv2/js/jquery.raty.min.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/waypoints.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_category_menu.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_goods.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/class_area_array.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.datalazyload.js" ></script>
+
+
+<#-- 创建选择器标签 -->
+<#assign searchSelectorTag= newTag("searchSelectorTag") >
+
+<#-- 获取选择器 -->
+<#assign goodsSelector = searchSelectorTag() >
+
+<#-- 创建商品搜索标签 -->
+<#assign goodsSearchTag= newTag("goodsSearchTag") >
+<#-- 获取搜索结果 -->
+<#assign webpage = goodsSearchTag('{"pageSize":16}') >
+
+<#-- 各种选中的选择器 -->
+<#assign selected_prop= goodsSelector.selected_prop >
+<#assign selected_cat= goodsSelector.selected_cat >
+<#assign selected_brand= goodsSelector.selected_brand >
+<#assign selected_price= goodsSelector.selected_price![] >
+
+<#-- 各种未选中的选择器 -->
+<#assign propMap= goodsSelector.prop >
+<#assign catList= goodsSelector.cat >
+<#assign brantrist= goodsSelector.brand >
+<#assign sortList= goodsSelector.sort![] >
+<#assign priceList= goodsSelector.price![] >
+
+<#-- 一键选酒的选择器 -->
+
+<#assign goodsListTag= newTag("goodsListTag") >
+<#assign webpage = goodsListTag('{"pageSize":10}') >
+
+<!-- 加入购物车效果 
+<style>
+#box {
+	background: #FFF;
+	width: 238px;
+	height: 410px;
+	margin: -390px 0 0 0;
+	display: block;
+	border: solid 4px #D93600;
+	position: absolute;
+	z-index: 999;
+	opacity: .5
+}
+.shopMenu {
+	position: fixed;
+	z-index: 1;
+	right: 25%;
+	top: 0;
+}
+</style>
+-->
+<div class="clear"></div>
+<div class="goodslist_nav">
+	<div class="breadcrumb wrapper">
+    	<span><a href="index.html">首页</a></span>
+    	<span class="arrow">&gt;</span>
+    	<span>搜索结果</span>
+    	<span class="arrow">&gt;</span>
+			<span>一键选酒</span>
+			<#if tag??>
+			<span class="arrow">&gt;</span>
+			<span>${tag}</span>
+			</#if>
+		<div class="goods_selected_all">
+			<#if selected_cat?size gt 0>
+			<div class="have_chosen have_chosen_cat">
+				<ul class="have_chosen_goods top_have_chosen_goods">
+					<#list selected_cat as selector >
+						<li class="have_chosen_goods_list <#if selector_index == 0>cur</#if><#if !selector_has_next> last</#if>" rel="<#if !selector_has_next> last</#if>">
+							<span class=""><a href="${selector.url!''}" >${selector.name}</a></span>
+							<i class="chosen_cat_middle"></i>
+							<b></b>
+							<div class="ul_border" style="display:none;"></div>
+							<ul style="display:none;" class="goods_list_other">
+								<#list  selector.otherOptions as  other >
+									<li>
+										<a href="${other.url!''}" >${other.name}</a>
+									</li>
+								</#list>
+							</ul>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_prop?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same">
+					<#list selected_prop as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" class="dddd">${selector.name}：${selector.value}<strong></strong></a></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_brand?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same">
+					<#list selected_brand as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" >${selector.name}<strong></strong></a><#if selected_cat?size gt 0></#if></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_price?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same" >
+					<#list selected_price as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" >${selector.name}<strong></strong></a></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			
+		</div>
+	</div>
+</div>
+<div style="width:1200px;height:1px;margin:0px auto;clear:both;"></div>
+<div class="goods_clear"></div>
+<!-- 新版检索html -->
+
+<script>
+		$(function(){
+			//搜索结果
+			
+			$(".top_have_chosen_goods .have_chosen_goods_list").mouseover(function(){
+				var ulwidth = $(this).width()
+				var ulwidth_white = parseInt(ulwidth)+parseInt("30");
+				var ulborder_width = parseInt(ulwidth)+parseInt("141")   //减去ul的2像素边框
+				$(".top_have_chosen_goods .have_chosen_goods_list").find(".goods_list_other").hide();
+				$(".top_have_chosen_goods .have_chosen_goods_list").find(".ul_border").hide();
+				$(this).find(".goods_list_other").show();
+				$(this).find(".ul_border").show();
+				$(this).find(".goods_list_other").css("width",ulborder_width);
+				$(this).find(".ul_border").css("width",ulwidth_white);
+				$(this).css({"border":"1px solid #e4393e","border-bottom":"0px none"});
+			})
+			
+			$(".top_have_chosen_goods .have_chosen_goods_list").mouseleave(function(){
+				$(this).find(".goods_list_other").hide();
+				$(this).find(".ul_border").hide();
+				$(this).css("border","1px solid #ccc");
+			})
+			
+			
+			//等待搜索品牌悬停
+			$(".cat_brand_img").mouseover(function(){
+				$(this).find("img").hide();
+				$(this).find("span").show();
+				$(this).css({"border":"2px solid #e4393e","padding":"1px"});
+			})
+			$(".cat_brand_img").mouseleave(function(){
+				$(this).find("img").show();
+				$(this).find("span").hide();
+				$(this).css({"border":"1px solid #ccc","padding":"2px"});
+			})
+		})
+	</script>
+
+
+<div class="container wrapper" >
+	<div class="left">
+		<h1>为您推荐</h1>
+   		<#assign goodsListTag = newTag("goodsListTag")>
+   		<#assign goodsList=goodsListTag("'tagid':'277','goodsnum':'10'")>
+   		<ul class="goods_list_comment">
+		<#list goodsList as goods>
+			<#if goods_index lte 3>
+			<li>	
+				<div class="goodslist_pic">
+					<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+						<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> 
+					</a>
+				</div>	
+				<h2><a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"><@substring	title="${goods.name}" length="28" dot="..." /></a></h2>
+				<h3>${goods.price?string.currency}</h3>
+			</li>
+			</#if>
+		</#list>
+	</ul>
+	</div>
+	
+  	<div class="right" id="result" style="margin-bottom:60px;">
+  		<div class="shop_list" >
+      		<nav class="goods_bar">
+        		<div class="sorting_goods">商品列表：</div>
+      		</nav>
+      		<!-- 商品列表循环  -->
+			<div id="circulate" >
+				<textarea class="goodslist_bycat" id="circulate" style="display: none;">
+					<div class="squares" nc_type="current_display_mode">
+					    <ul class="goodslist_all ">
+					    	<#list webpage as good>
+						        <li class="item">
+						      		<div class="goodslist" nctype_goods="1" nctype_store="2">
+						        		<div class="goodslist_img">
+						        			<a href="${ctx}/goods-${good.goods_id}.html" target="_blank" title="${good.name}">
+						        				<@image border="0" src="${good.thumbnail!''}"  alt="${good.name!''}" />
+						        			</a> 
+						        		</div>
+							       	 	<div class="goodslist_intro" style="top: 230px;">
+											<div class="goodslist_photo">
+												<ul>
+						              				<li>
+						              					<a href="${ctx}/goods-${good.goods_id}.html">
+						              						<@image border="0" src="${good.thumbnail!''}" width="60" height="60" alt="${good.name!''}" />
+						              					</a>
+						              				</li>
+						                        </ul>
+											</div>
+						         				<div class="goodslist_name">
+						         					<a href="${ctx}/goods-${good.goods_id}.html" target="_blank" title="${good.name!''}">${good.name!''}</a>
+						         				</div>
+											<div class="goodslist_price">
+												<em class="sale-price" title="原价：&yen;${good.price?number?string('0.00')}">&yen;${good.price?number?string('0.00')}</em>
+												
+						     				</div>
+						         			<div class="goodslist_sell">
+								            	<ul>
+										             <li><p class="status">${good.buy_num!'0'}</p><p>商品销量</p></li><!--javascript:void(0)-->
+										             <li><p class="comment">${good.comment_num!'0'}</p><p>用户评论</p></li>
+						          				</ul>
+						         			</div>
+						         			<div class="store_goods_list"><a href="${ctx}/home.html?show_c=1&store_id=${good.store_id}" class="name" title="${good.store_name!''}">${good.store_name!''}</a></div>
+
+						       			</div>
+						      		</div>
+						    	</li>
+					    	</#list>
+						    <div class="clear"></div>
+					  	</ul>
+					</div>	      
+				</textarea>
+      		</div>
+
+      		<div>
+
+      		</div>
+
+    	</div>
+  	</div>
+</div>
+<div style="width:100%;height:1px;clear:both;display:block;"></div>
+<#include 'common/footer.html'/>

@@ -1,0 +1,172 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html'/>
+
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member_store.css" />
+<script src="/themes/b2b2c/js/My97DatePicker/WdatePicker.js"></script>
+
+<style>
+.ui_content {
+	display: block;
+}
+</style>
+
+<div class="layout">
+	<#include '../left_menu.html' />
+
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+
+				<div class="tabmenu">
+					<ul class="tab pngFix">
+						<li class="active">
+							<a href="index.php?act=store&amp;op=store_coupon">优惠券列表</a>
+						</li>
+					</ul>
+					<a title="新增优惠券"  class="user-btn3" href="javascript:void(0)" onclick="saveOrUpdate()"> 新增优惠券</a>
+				</div>
+				<form target="_self" action="index.php" method="get">
+					<table class="search-form">
+						<input type="hidden" value="store" name="act">
+						<input type="hidden" value="store_coupon" name="op">
+						<tbody>
+							<tr>
+								<td>&nbsp;</td>
+								<th>优惠券名称：</th>
+								<td class="w150"><input type="text" value="" name="key"
+									id="in" class="text"></td>
+								<th>有效期：</th>
+								<td class="w180"><input type="text" readonly="readonly"
+									value="" id="add_time_from_index" name="add_time_from"
+									class="text hasDatepicker"> &ndash; <input type="text"
+									readonly="readonly" value="" id="add_time_to_index"
+									name="add_time_to" class="text hasDatepicker"></td>
+								<td class="w90 tc"><input type="submit" value="搜索"
+									class="submit"></td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+
+				<#assign storeBonusListTag=newTag("storeBonusListTag")> 
+				<#assign storeBonusList=storeBonusListTag()/>
+
+				<table class="table-style">
+					<thead>
+						<tr>
+							<th class="w10"></th>
+							<th class="w120">优惠券面额</th>
+							<th class="w60">使用限制</th>
+							<th class="w180">使用期限</th>
+							<th class="w60">发行量</th>
+							<th class="w60">使用量</th>
+							<th class="w90">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list storeBonusList as sbl>
+						<tr class="bd-line">
+							<td></td>
+							<td>${sbl.type_money}元</td>
+							<td>满${sbl.min_goods_amount}元</td>
+							<td class="goods-time"><@dateformat time="${(sbl.use_start_date)?c}"pattern="yyyy-MM-dd"/>~<@dateformat time="${(sbl.use_end_date)?c}"pattern="yyyy-MM-dd"/></td>
+							<td>${sbl.create_num}个</td>
+							<td>${sbl.use_num}个</td>
+							<td>
+								<p> 
+									<a onclick="saveOrUpdate(3)" href="javascript:void(0)">修改优惠券</a>
+								</p>
+							</td>
+						</tr>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script>
+	var dialog;
+
+	function saveOrUpdate(bonusid) {
+		var map = {}; // 相当于Map map = new HashMap();
+		if (!bonusid) {
+			map["title"] = "添加优惠券";
+			map["html"] = "bonus_add.html";
+			map["url"] = "${ctx}/api/b2b2c/promotion!add_fullSubtract.do";
+			map["form"] = "#add_form";
+		} else {
+			map["title"] = "修改优惠券";
+			map["html"] = "bonus_edit.html?bonusid=" + bonusid;
+			map["url"] = "${ctx}/api/b2b2c/promotion!edit_fullSubtract.do";
+			map["form"] = "#edit_form";
+		}
+		openDialog(map);
+	}
+
+	function openDialog(map) {
+		dialog = $.dialog({
+			title : map["title"],
+			width : 480,
+			height : 170,
+			lock : true,
+			min : false,
+			max : false
+		});
+
+		$.ajax({
+			url : map["html"],
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '保存',
+					callback : function() {
+				        
+				        if(!$(map["form"]).validate()){
+							return false;
+						}
+				        if(!$(map["form"]).checkall()){
+							return false;
+						}
+				       
+						formSubmit(dialog, map);
+						return false;
+					}
+				}, {
+					name : '取消'
+				} ]);
+			},
+			error : function() {
+				$.alert("出现错误,请重试！");
+			},
+			cache : false
+		});
+	}
+
+	function formSubmit(dialog, map) {
+		var options = {
+			url : map["url"],
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					dialog.title('保存成功，1秒后关闭此窗口。').time(2);
+					dialog.reload();
+				}
+				if (result.result == 0) {
+					alert(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误，请重试");
+			}
+		};
+		$(map["form"]).ajaxSubmit(options);
+		return false;
+	}
+</script>
+
+<#include '/common/footer.html' />

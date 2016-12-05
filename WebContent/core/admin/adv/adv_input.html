@@ -1,0 +1,63 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th>广告名称：</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="advname" name="adv.aname" data-options="required:true"></input>
+					</td>
+					<th>广告位置：</th>
+					<td><select class="easyui-validatebox" name="adv.acid">
+							<#list adColumnList as adc>
+							<option value="${adc.acid }">${adc.cname }</option> </#list>
+					</select></td>
+				</tr>
+				<tr>
+					<th>起始时间：</th>
+					<td><input class="easyui-datebox input_text" type="text"
+						style="height: 28px;" id="mstartdate" name="mstartdate"
+						data-options="required:true"></input></td>
+					<th>终止时间：</th>
+					<td><input class="easyui-datebox" type="text" id="menddate"
+						style="height: 28px;" name="menddate" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>广告链接：</th>
+					<td><input class="input_text" type="text" name="adv.url"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>上传广告文件：</th>
+					<td colspan="3"><input class="easyui-validatebox" type="file"
+						name="pic"></input>(请上传gif,jpg,bmp,png格式,2M以内的图片) </td>
+				</tr>
+				<tr>
+					<th>单位名称：</th>
+					<td><input class="input_text" type="text" name="adv.company"></input>
+					</td>
+					<th>联系人：</th>
+					<td><input class="input_text" type="text" id="advlinkman"
+						name="adv.linkman" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th>联系方式：</th>
+					<td><input class="input_text" type="text" id="advcontact"
+						validType="mobile" name="adv.contact" data-options="required:true"></input>
+					</td>
+					<th>是否开启：</th>
+					<td><input class="easyui-validatebox input_text" type="radio"
+						style="width: 10px;" name="adv.isclose" value="0" checked />
+						开启&nbsp;&nbsp; <input type="radio" name="adv.isclose" value="1" />
+						关闭</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,32 @@
+<!-- 获取店铺idTag -->
+<#assign offlineStoreTag=newTag("offlineStoreTag")>
+<!-- 调用店铺idTag -->
+<#assign offlineStore=offlineStoreTag("{'id':'${id}'}")>
+
+<div class="form_offline1" style="background-color: white;" >
+			<form id="editOfflineForm" method="post" class="validate">
+				<table>
+					<tr>
+						<td><input type="hidden" id="id" name="id" value="${offlineStore.id}"/></td>
+					</tr>
+					<tr>
+						<td><input type="hidden" name="store_id" value="${offlineStore.store_id}" id="store_id" isrequired="true" dataType="int"></input></td>
+					</tr>
+					<tr>
+						<td>门店名称：</td>
+						<td><input class="input_text" type="text" name="store_name" value="${offlineStore.store_name}" id="store_name" isrequired="true"></input></td>
+					</tr>
+					<tr>
+						<td>位置：</td>
+						<td><input class="input_text" type="text" name="location" value="${offlineStore.location}" id="location" isrequired="true"></input></td>
+					</tr>
+					<tr>
+						<td>联系电话：</td>
+						<td><input class="input_text" type="text" name="link_tel" value="${offlineStore.link_tel}" id="link_tel"  isrequired="true"></input></td>
+					</tr>
+					<tr>
+						<td><input type="hidden" id="status" name="status" value="${offlineStore.status}"></input></td>
+					</tr>
+				</table>
+			</form>
+</div>

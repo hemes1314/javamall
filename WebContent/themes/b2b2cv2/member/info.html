@@ -1,0 +1,314 @@
+<#assign  title="基本资料" />
+<#include 'member_header.html' />
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="javascript:;"><span>我的基本信息</span></a></li>
+		</ul>
+	</div>
+	<div class="userinfo">
+		<form id="form_saveMember"   method="post" class="validate"  action="#">
+			<div class="info_left">
+				<div class="userico">
+					<#if member.face?exists && member.face != ''>
+					<img src="<@imgurl pic='${member.face}'/>" width="100" id="img0" />
+					<#else>
+					<img src="${ctx}/themes/b2b2cv2/images/default_face.jpg" width="120" height="120" id="img0">
+					</#if>
+				</div>
+				<div class="uploadIco">
+					<div class="file clearfix">
+						<div class="ifUpfile">
+							<label>
+								<i>上传头像：</i>
+								<input type="file" name="file" id="file0">
+								<span>&nbsp;</span>
+							</label>
+                            <script>	
+							$("#file0").change(function(){
+								var objUrl = getObjectURL(this.files[0]) ;
+								console.log("objUrl = "+objUrl) ;
+								if (objUrl) {
+									$("#img0").attr("src", objUrl) ;
+								}
+							}) ;
+							//建立一个可存取到该file的url
+							function getObjectURL(file) {
+								var url = null ; 
+								if (window.createObjectURL!=undefined) {
+									url = window.createObjectURL(file) ;
+								} else if (window.URL!=undefined) {
+									url = window.URL.createObjectURL(file) ;
+								} else if (window.webkitURL!=undefined) {
+									url = window.webkitURL.createObjectURL(file) ;
+								}
+								return url ;
+							}
+							</script>
+						</div>
+						<span id="imgS"></span>
+					</div>
+					<!--file end-->
+					<p class="prompt">建议尺寸120*120像素</p>
+					<input name="txtIco" type="hidden" id="txtIco" value="/ajax/MImageHandler.ashx?d=ico\default.jpg" />
+				</div>
+			</div>
+			<div class="info_right">
+				<table width="100%" cellspacing="0" cellpadding="0"	class="perfection">
+					<tr>
+						<th>用户名：</th>
+						<td>
+							<span class="def"><span id="lbNickName">${member.uname!''}</span></span>
+						</td>
+					</tr>
+					<tr>
+						<th class="member_turename">昵称：</th>
+						<td colspan="3"><input type="text" isrequired="true" name="nickname" value="${member.nickname!''}" class="input_text" />
+						</td>
+					</tr>
+					<!-- 
+					<tr>
+						<th class="member_turename">姓名：</th>
+						<td colspan="3"><input type="text" isrequired="true" name="name" value="${member.name!''}" class="input_text member_t" />
+							<p class="prompt member_p">请务必填写您的真实姓名，以便出现问题时客服核对您的真实信息！</p>
+						</td>
+					</tr>
+					 -->
+					<tr id="gender">
+						<th>性别：</th>
+						<td class="middle" colspan="3"><label class="gender">
+							<input type="radio" name="sex" <#if member.sex!=0>checked</#if> value="1"  />
+							<span>男</span></label>
+							<label class="gender" id="lgender">
+							<input type="radio" value="0"  name="sex" <#if member.sex==0>checked</#if> />
+							<span>女</span>
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<th>生日：</th> 
+						<td colspan="3" class="birthday middle">    <!--  mybirthday   -->     
+							<input class="Wdate" type="text" name="mybirthday" onClick="WdatePicker({startDate:'%y',dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})" 
+								<#if member.birthday??> value="<@dateformat time="${(member.birthday)?c}" pattern="yyyy-MM-dd"/>"</#if> >                     
+						</td>
+					</tr>
+					<tr>
+						<th>居住地：</th>
+						<td colspan="3" class="choseAddr ">
+							<div class="select clearfix"><@regionSelect /></div>
+						</td>
+					</tr>
+					<tr>
+						<th>联系地址：</th>
+						<td colspan="3" class="birthday middle">
+							<input name="address" type="text" value="${member.address!''}" class="input_text member_add" />
+						</td>
+					</tr>
+					<!-- 
+					<tr>
+						<th>邮编：</th>
+						<td colspan="3" class="birthday middle">
+							<input name="zip" type="text" value="${member.zip!''}" id="zipcode" class="input_text">
+						</td>
+					</tr>
+					 -->
+					<tr>
+						<th class="label middle">手机：</th>
+						<td colspan="3">
+							<input id="cellphone" name="mobile" type="text" value="${member.mobile!''}" class="input_text" isrequired="true" style="float:left;display:inline;"/>
+						</td>
+					</tr>
+					<!-- 
+					<tr>
+						<th>固定电话：</th>
+						<td colspan="3">
+							<input id="tel" name="tel" type="text" value="${member.tel!''}" class="input_text member_tel" />
+						</td>
+					</tr>
+					 -->
+					<tr>
+						<th>注册邮箱：</th>
+						<td class="email"><input id="email" name="email" type="text" value="${member.email!''}" class="input_text member_email" /></td>
+				    </tr>
+				  <tr style="display:none;">
+						<th>家乡：</th>
+						<td><input id="hometown" name="hometown" type="text" value="${member.province!''}" readonly/>(居住地省份,无法修改)</td>
+				  </tr>
+				</table>
+				<div class="info_ok">
+					<div class="btn">
+						<input type="button" name="btnSubmit" value="保存资料" id="btnSubmit" class="yellow_btn" />
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script language="javascript"> 
+function check(){
+	var a = /^(\d{4})-(\d{2})-(\d{2})$/
+	if (!a.test(document.getElementById("birthdaysss").value)) { 
+	alert("日期格式不正确!") 
+	return false 
+	} 
+	else 
+	return true 
+	} 
+</script> 
+<script type="text/javascript">
+//add by linyang  非法字符验证
+
+$(function(){
+	<#if member.province_id?exists && member.city_id?exists && member.region_id?exists>
+	RegionsSelect.load(${member.province_id},${member.city_id},${member.region_id});
+	</#if>
+	//地区联动选择-选择最后一级（区）时自动设置邮编
+	RegionsSelect.regionChange=function(regionid,name,zipcode){
+		$("#zipcode").val(zipcode);
+	};
+	
+	
+	//保存会员信息	
+	$("#btnSubmit").click(function(result){
+		if(!$("#form_saveMember").checkall())
+			return false;
+			
+		//判断图片像素大小
+		var img = new Image();
+		img.src =$("#img0").attr("src");
+		var w = img.width;
+		var h = img.height;
+		if(w>120 && h>120){
+		   alert("头像图片超过规定尺寸，请上传小于或等于120*120像素的图片");
+		   return false;	
+		}
+								  
+		//判断日期格式
+		var mydate = new Date();
+		var str = "" + mydate.getFullYear() + "-";
+		str += (mydate.getMonth()+1) + "-";
+		str += mydate.getDate();
+		if($(".Wdate").val()>str){
+			alert("不能大于当前日期");
+			return false;
+		}
+		
+		if($(".Wdate").val() == ""){
+		  alert("生日不能为空") 
+		  return false;
+		}
+		//判断手机格式
+		 var tel = $("#cellphone").val();
+		 var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;
+		 if(reg.test(tel)==false){
+			 alert("手机格式错误");
+			 return false;
+		 }
+		 
+		//判断真实姓名
+		if($(".member_t").val()==""){
+			alert("真实姓名不能为空");
+			return false;
+		}
+		
+		/*add by linyang 特殊字符过滤*/
+		//判断真实姓名  
+		/*
+		var strss = "[@/'\"#$%&^*]+";
+		var reg = new RegExp(strss);
+		var tname = $(".member_t").val();
+		if(tname.match(reg)!=null)
+		{
+			alert("姓名中有特殊字符");
+			return false;
+		}
+		*/
+		
+		/*add by linyang 特殊字符过滤*/
+		//判断姓名中不能有数字
+		/*
+		var strss = "[0-9]";
+		var reg = new RegExp(strss);
+		var tname = $(".member_t").val();
+		if(tname.match(reg)!=null)
+		{
+			alert("姓名中不能有数字");
+			return false;
+		}
+		*/
+		
+		/*add by linyang 特殊字符过滤*/
+		//判断联系地址  
+		var strss = "[@/'\"#$%&^*]+";
+		var reg = new RegExp(strss);
+		var tname = $(".member_add").val();
+		if(tname.match(reg)!=null)
+		{
+			alert("联系地址中有特殊字符");
+			return false;
+		}
+		
+		/*add by linyang 特殊字符过滤*/
+		//判断固定电话 
+		/*
+		var strss = "[@/'\"#$%&^*]+";
+		var reg = new RegExp(strss);
+		var tname = $(".member_tel").val();
+		if(tname.match(reg)!=null)
+		{
+			alert("固定电话中有特殊字符");
+			return false;
+		}
+		
+		if(isNaN($(".member_tel").val())!==false){
+			alert("固定电话必须为数字");
+			return false;
+		}
+		*/
+		
+		/*add by linyang 特殊字符过滤*/
+		//判断邮箱
+		var strss = "[/'\"#$%&^*]+";
+		var reg = new RegExp(strss);
+		var tname = $(".member_email").val();
+		if(tname.match(reg)!=null)
+		{
+			alert("邮箱中有特殊字符");
+			return false;
+		}
+		
+		if (!$(".member_email").val().match(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/)) 
+		{
+			alert("邮箱格式不正确");
+			return false;
+		}
+		
+		//判断邮编
+		/*
+		if(isNaN($("#zipcode").val())!==false){
+			alert("邮编必须为纯数字");
+			return false;
+		}
+		*/
+		$.Loading.message("正在保存请稍后....");
+		$("#btnSubmit").attr("disabled","disabled");
+		　　
+		 $("#form_saveMember").ajaxSubmit({
+				url:"${ctx}/api/shop/member!saveInfo.do",
+				dataType:"json",
+				success:function(data){
+					if(data.result==1){
+						alert("保存成功");
+						window.location.href="/member/info.html";
+					} else {
+						alert(data.message);
+					}
+				}
+			})
+	});
+});
+</script>
+	</div>
+	<#include '../common/footer.html'/>

@@ -1,0 +1,178 @@
+<!-- 创建店铺信息标签 -->
+<#assign checkUrlTag= newTag("checkUrlTag")>
+<!-- 调用查询店铺信息标签 -->
+<#assign checkUrl = checkUrlTag("{'show_c':${show_c!0},'store_id':${store_id!0}}")!''>
+
+<!-- 创建店铺信息标签 -->
+<#assign myStoreDetailTag= newTag("myStoreDetailTag")>
+<!-- 调用查询店铺信息标签 -->
+<#assign store = myStoreDetailTag("{'type':0,'store_id':${store_id!0}}")!''>
+
+<#include 'common/header.html' /> 
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/store_style.css" />
+<!-- 创建店铺导航标签 --> 
+<#assign storeNavigationTag= newTag("storeNavigationTag") > 
+<!-- 查询店铺导航列表 --> 
+<#assign storeNavigation= storeNavigationTag("{'store_id':${store_id!0}}")!''>
+
+<!-- 店铺顶部图片 -->
+<#include 'home/home_top.html' />
+<!-- 店铺导航 -->
+<div class="store_nav">
+<div class="store_nav_text">
+			<#-- 创建商品分类标签 --> 
+			<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+			<#-- 查询商品分类列表 0表示查子分类 --> 
+			<#assign storeGoodsCatList= storeGoodsCatListTag("{'type':0,'storeid':${store_id!0}}")!''>
+	<ul>
+		<li class="storeGoodsCatListTag" style="padding:0px;">
+			<i></i>
+			<a href="home.html?show_c=4&store_id=${store_id!0}">全部分类</a>
+			<div class="store_catlist" style="display:none">
+				<ul class="store_cat_list">
+				<#list storeGoodsCatList as cat>
+				<#if cat.store_cat_pid==0 && cat.disable != 0>
+				<li class="s_catlist" style="padding:0px;">
+					<a href="home.html?show_c=4&store_id=${store_id}&stc_id=${cat.store_cat_id}">${cat.store_cat_name!''}</a>
+					<ul style="display:none" class="c_at_list">
+						<#list storeGoodsCatList as childCat> 
+							<#if childCat.store_cat_pid==cat.store_cat_id && childCat.disable !=0 >
+								<li style="padding:0px;border-left:1px solid #fff;">
+									<#if childCat.has_child == "0">
+										<a href="home.html?show_c=4&store_id=${store_id}&stc_id=${childCat.store_cat_id}">${childCat.store_cat_name!''}</a>
+									<#else>
+										${childCat.store_cat_name!''}
+									</#if>
+								</li> 
+							</#if> 
+						</#list>
+					</ul>
+				</li> 
+				</#if> 
+				</#list>
+				</ul>
+			</div>	
+		</li>
+		<script>
+			$(function(){
+				$(".storeGoodsCatListTag").mouseover(function(){
+					$(".storeGoodsCatListTag").find(".store_catlist").show();
+					$(this).find("i").addClass("store_up");
+				})
+				$(".s_catlist").mouseover(function(){
+					$(".s_catlist").find(".c_at_list").hide();
+					$(this).find(".c_at_list").show();
+				})
+				$(".c_at_list").mouseleave(function(){
+					$(".store_catlist").hide();
+				})
+				$(".store_catlist").mouseleave(function(){
+					$(this).hide();
+				})
+				$(".storeGoodsCatListTag").mouseleave(function(){
+					$(".store_catlist").hide();
+					$(this).find("i").removeClass("store_up");
+				})
+				
+			})
+		</script>
+		
+		
+		<li class="normal <#if show_c=='1'>active</#if> ">
+			<a href="home.html?show_c=1&store_id=${store_id}"><span>店铺首页<i></i></span>
+			</a>
+		</li>
+		<li class="normal <#if show_c=='2'>active</#if>">
+			<a href="home.html?show_c=2&store_id=${store_id}"><span>信用评价<i></i>
+			</span> </a>
+		</li>
+		<li class="normal <#if show_c=='3'>active</#if>">
+			<a href="home.html?show_c=3&store_id=${store_id}"><span>店铺详情<i></i>
+			</span> </a>
+		</li>
+		<#list storeNavigation as sl> 
+		<#if sl.disable !=0>
+			<li class="normal">
+				<a target="<#if sl.target==1 >_blank</#if>" href="${sl.nav_url!''}">
+					<span>${sl.name}<i></i></span>
+				</a>
+			</li>
+		</#if>
+		</#list>
+	</ul>
+</div>
+</div>
+<div id="content">
+	<div class="layout <#if show_c!='3'> expanded</#if>">
+		<#if show_c=='2' >
+			<#include 'home/home_credit.html' />
+		<#elseif show_c='3' >
+			<#include 'home/home_info.html' />
+		<#elseif show_c='4' >
+			<#include 'home/home_goods_all.html' />
+		<#else>	
+			<#include 'home/home_context.html' /> 
+		</#if>	
+	</div>
+</div>
+</div>
+
+<script>
+
+
+function openDialog(bonusid,obj){
+	var type_money = $(obj).attr("type_money");
+	var min_order_amount = $(obj).attr("min_order_amount");
+	dialog = $.dialog({
+		title : '领取优惠券',
+		width : 300,
+		height : 120,
+		lock : true,
+		min : false,
+		max : false,
+		content:'${store.store_name}的店铺<span style="font-size: 20px;">'+type_money+'元</span>优惠券(满'+min_order_amount+'元使用)',
+		button:[{
+			name : '领取',
+			focus: true,
+			callback : function() {
+				receiveBonus(dialog,bonusid);
+				return false;
+			}
+		}, {
+			name : '取消'
+		}]
+		
+	});
+}
+
+function receiveBonus(dialog,bonusid){
+	$.ajax({
+		url : "${ctx}/api/b2b2c/promotion!receiveBonus.do?store_id=${store_id!0}&type_id="+bonusid,
+		cache : false,
+		dataType: "json",
+		success : function(data) {
+			if (data.result == 1) {
+				alert("领取成功");
+				dialog.reload();
+			}
+			if (data.result == 0) {
+				alert(data.message);
+			}
+			if(member==null||member==''){
+				//login_dialog(window.location.href);
+				window.top.location.href = ctx;
+			}
+			
+		},
+		error : function() {
+			alert("出现错误,请重试！");
+		}
+	});
+}
+
+</script>
+
+<!-- 店铺优惠卷领取 -->
+<#include 'home/home_bonus.html' /> 
+
+<#include 'common/footer.html' /> 

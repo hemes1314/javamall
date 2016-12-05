@@ -1,0 +1,166 @@
+<#include 'member_header.html' />
+<!-- 退货申请标签 -->
+<#assign sellBackTag=newTag("sellBackTag")>
+<#assign sellBack=sellBackTag("{'id':${id} }")>
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<#assign orderinfo = orderDetailTag('{"ordersn":"${sellBack.ordersn}"}')>
+
+<!-- 退货商品 标签 -->
+<#assign sellBackGoodsListTag=newTag("sellBackGoodsListTag")>
+<#assign sellBackGoodsList=sellBackGoodsListTag("{'id':${id},'sn':${sn} }")>
+<#assign goodsList = sellBackGoodsList.goodsList>
+<#assign childGoodsList = sellBackGoodsList.childGoodsList>
+
+<style>
+.order_detail .order_intro {width:100%;}
+</style>
+<script type="text/javascript">
+$(function(){
+    if($("#tythstatus").val() ==  "13"){
+         $("#thyy").text("退款原因");
+    }
+})
+</script>
+<div class="user_order">
+	<div class="order_detail">
+		<div class="order_intro">
+			<h1>订单信息</h1>
+			<div class="detail_list">
+				<dl>
+					<dt>订单编号：</dt>
+					<dd>${sellBack.ordersn}</dd>
+				</dl>
+				<dl class="online">
+					<dt>申请时间：</dt>
+					<dd><@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></dd>
+				</dl>
+				<dl>
+					<dt>状态：</dt>
+					<dd>
+					  	<#if sellBack.tradestatus  == 0 || sellBack.tradestatus== -1>
+					    		<span>申请退货审核中</span>
+						<#elseif sellBack.tradestatus  == 1||sellBack.tradestatus==2>
+							<span>审核通过</span>
+						<#elseif sellBack.tradestatus  == 3>
+							<span>已完成</span>
+						<#elseif sellBack.tradestatus  == 4>
+							<span>已拒绝</span>
+						<#elseif sellBack.tradestatus  == 5>
+							<span>部分入库</span>
+						</#if>
+					</dd>
+				</dl>
+				<#if sellBack.return_price??>
+				<dl>
+					<dt>退款金额：</dt>
+					<dd>${sellBack.return_price!''}元</dd>
+				</dl>
+				<dl>
+					<dt>余额退款金额：</dt>
+					<dd>${orderinfo.advance_pay!''}元</dd>
+				</dl>
+				<dl>
+					<dt>在线退款金额：</dt>
+					<dd>${sellBack.return_price - orderinfo.advance_pay!''}元</dd>
+				</dl>
+				</#if>
+
+				<dl>
+					<dt><span id="thyy">退货原因</span>：
+					<input type="hidden" id="tythstatus" value="${tythstatus}"/>
+					</dt>
+					<dd>${sellBack.remark!''}</dd>
+				</dl>
+				<#if sellBack.kddh??>
+				<dl>
+					<dt>快递单号：</dt>
+					<dd>${sellBack.kddh!''}</dd>
+				</dl>
+				<dl>
+					<dt>物流公司：</dt>
+					<dd>${sellBack.wlgs!''}</dd>
+				</dl>
+				</#if>
+				<#if sellBack.return_address??>
+				<dl>
+					<dt>回寄地址：</dt>
+					<dd>${sellBack.return_address!''}</dd>
+				</dl>
+				</#if>
+				<#if sellBack.seller_remark??>
+					<dl>
+						<dt>客服回复：</dt>
+						<dd>${sellBack.seller_remark!''}</dd>
+					</dl>
+				</#if>
+			</div>
+		</div>
+	</div>
+	<div class="detail_goodslist">
+		<table>
+			<thead>
+				<tr>
+					<th>图片</th>
+					<th>商品名称</th>
+					<th>单价</th>
+					<th>购买数量</th>
+					<th>退货数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list goodsList as data>
+				<tr>
+					<td><a target="_blank" href="../goods-${data.goods_id}.html"> <span
+							style="display: block; height: 50px;" class="cart-product-img">
+								<img height="50" src="${data.image!''}"
+								style="cursor: pointer;" />
+						</span>
+					</a></td>
+					<td><a href="${ctx}/goods-${data.goods_id}.html">${data.name}</a></td>
+					<td>${data.price?string.currency}</td>
+					<td>${data.num }</td>
+					<#if data.is_pack == 1>
+						<#if data.return_type == 0>
+							<td>${data.return_num!0}</td>
+						<#else>
+							<td>部分退货，无法统计套餐数量</td>
+						</#if>
+					<#else>
+						<td>${data.return_num!0}</td>
+					</#if>
+
+				</tr>
+				<#if data.is_pack == 1>
+				<tr class="detail_${data.goods_id }">
+					<td></td>
+					<td style="background: none repeat scroll 0 0 #FFFDEE;" colspan="6">
+						<div>
+							<table width="100%" style="border: none;">
+								<tr>
+									<th
+										style="background: none repeat scroll 0 0 #FFFDEE; border: none;">商品名称</th>
+									<th
+										style="background: none repeat scroll 0 0 #FFFDEE; border: none;">购买数量</th>
+									<th
+										style="background: none repeat scroll 0 0 #FFFDEE; border: none;">退货数量</th>
+								</tr>
+								<#list childGoodsList as childData> <#if data.goodsId ==
+								childData.parent_id>
+								<tr>
+									<td style="border: none;">${childData.name}</td>
+									<td style="border: none;">${(childData.num)!0}</td>
+									<td style="border: none;">${(childData.return_num)!0 }</td>
+								</tr>
+								</#if> </#list>
+							</table>
+						</div>
+
+					</td>
+				</tr>
+				</#if> </#list>
+			</tbody>
+		</table>
+	</div>
+</div>
+</div>
+<#include '/common/footer.html'/>

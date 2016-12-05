@@ -1,0 +1,115 @@
+<#include '/store/store_header.html' />
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			店铺设置<span>></span>导航管理
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="normal">
+						<a href="store_navigation.html?menu=store">导航列表</a>
+					</li>
+					<li class="active">
+						<a href="navigation_add.html?menu=store">新增导航</a>
+					</li>
+				</ul>
+			</div>
+		</div>	
+		<div class="groupbuy_form">
+				<form id="add_form" >
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em>导航名称：
+							</dt>
+							<dd>
+								<input type="text" value="" name="name" class="text store_title_name" maxlength="5" >
+								<p class="hint">最多五位汉字</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt>是否显示：</dt>
+							<dd>
+								<input type="radio" checked="checked" value="1" name="disable"> 是 
+								<input type="radio" value="0" name="disable"> 否
+							</dd>
+						</dl>
+						<dl style="overflow:hidden; height:0px;">
+							<dt>排序：</dt>
+							<dd>
+								<input type="text" value="255" name="sorts" class="w50 text">
+							</dd>
+						</dl>
+						<dl>
+							<dt>URL：</dt>
+							<dd>
+								<p>
+									<input type="text" name="nav_url" class="w300 text">
+								</p>
+								<p class="hint">请填写以http://www.gomecellar.com/开头的完整的URL地址</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt>新窗口打开：</dt>
+							<dd>
+								<input type="radio" checked="checked" value="1" name="target"> 是&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="radio" value="0" name="target"> 否
+							</dd>
+						</dl>
+						<dl class="bottom">
+							<dt>&nbsp;</dt>
+							<dd>
+								<input type="button" value="提交" id="form_submit" class="submit to_save">
+							</dd>
+						</dl>
+				</form>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	
+	var options = {
+			url : "${ctx}/api/b2b2c/navigation!add.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.href="store_navigation.html?menu=store";
+				}
+				if (result.result == 0) {
+					$.Loading.message(result.message);
+					$("#form_submit").removeAttr("disabled");
+				}
+			},
+			error : function(e) {
+				alert("出现错误，请重试！");
+				$("#form_submit").removeAttr("disabled");
+			}
+		};
+	
+	$("#form_submit").click(function(){
+		if($(".w300").val()==""){
+		    $(".w300").val("#");
+		}
+		var storename = $(".store_title_name").val();
+		if(storename==""){
+			alert("导航内容不能为空");
+			return false;
+		}else{
+			$("#form_submit").attr({"disabled":"disabled"});
+			$('#add_form').ajaxSubmit(options);
+		}
+	});
+})
+</script>
+	<script>
+		$(function(){
+				selectMenu(4);
+		})
+	</script>
+<#include '/common/footer.html' />

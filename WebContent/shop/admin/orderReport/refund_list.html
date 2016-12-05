@@ -1,0 +1,48 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="shadowBoxWhite tableDiv">
+		<table  id="dg" class="easyui-datagrid" 
+		data-options="url:'orderReport!refundListJson.do',pageList: [10,15,20,30],pageSize:20,fitColumns:'true'" 
+		pagination="true" width="width">
+			    <thead>
+			    <tr>
+			   	 	<th  data-options="field:'sn',width:30" >流水号</th>
+			    	<th  data-options="field:'type',width:100"  formatter="formatType" >退款类型</th>
+			    	<th  data-options="field:'pay_method',width:100" >退款方式</th>
+			    	<th  data-options="field:'pay_date',width:100" formatter="formatTime" >退款日期</th>
+			    	<th  data-options="field:'money',width:100" formatter="formatMoney">退款金额</th>
+			    	<th  data-options="field:'op_user',width:100" >退款人</th>
+			    	<th  data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
+			    </tr>
+			    </thead>
+		 </table>
+		<div id="pay_detail"></div>
+	</div>
+</div>
+<script type="text/javascript">
+
+function formatType(value,row,index){
+	var val;
+	if(value==1){val="在线支付";}else if(value==2){val="线下支付";}
+	return val;
+}
+
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+
+function formatTime(value,row,index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+
+function formatOperation(value,row,index){
+	var val="<a href='xxx!xxx.do?refund_id="+row.refund_id+"'>查看详细</a>";
+	return val;
+}
+
+</script>
+<div id="log"></div>
+
+<#include '/admin/footer.html' >

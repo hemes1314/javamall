@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>${site.title!'' }</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href=" ../favicon.ico" />
+
+<link type="image/x-icon" href="${site.icofile!''}" rel="bookmark" />
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-form-2.33.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/login.js"></script>
+<link rel="stylesheet" type="text/css" href="../adminthemes/new/css/login.css" />
+</head>
+<body>
+<div class="home">
+	<div class="logo">
+		<a href="#"><img src="${ctx}/adminthemes/new/images/logo.png" /></a>
+		<span>账号登录</span>
+	</div>
+	<div class="header">
+	<!--span><a href="../" target="_blank">网店前台</a></span>
+		<span>|<a href="http://www.javamall.com.cn" target="_blank">Javashop官网</a></span>
+		<span>|<a href="http://www.javamall.com.cn/version4/docs"  target="_blank">开发文档</a></span>
+		<span>|<a href="http://www.javamall.com.cn/user_help"  target="_blank">使用帮助</a></span>
+		<span>|<a href="http://weibo.com/javashop"  target="_blank">关注我们</a></span-->
+	</div>
+</div>
+<div class="banner">
+	<div class="login">
+		<div class="login-tab">
+			<div class="tab">
+				<form name="oForm">
+					<#if timeout?exists && timeout=='yes'>
+						<span class="info">您尚未登录或已超时，请重新登录。</span>
+					</#if>
+					<input type="hidden" id="referer" value="${referer!''}" />
+					<div class="tab-one">
+						<span>登录名：<input type="text" class="text" id="username" name="username" value="${username!''}" autocomplete="off" disableautocomplete /></span>
+						<script>  
+						function fnSaveForm(){  
+							 window.external.AutoCompleteSaveForm(oForm);  
+							  oForm.username.value="";  
+						}  
+						</script>  
+					</div>
+					<div class="tab-one">
+						<span>登录密码：<input type="password" name="password" class="text" id="password" /></span>
+					</div>
+					<div class="tab-two">
+						<span>验证码：</span>
+					</div>
+					<div class="tab-three">
+						<span><input type="input" id="valid_code" name="valid_code" class="text1"/></span>
+					</div>
+					<div class="tab-img">
+						<img id="code_img" class="code_img" />
+					</div>
+					<div class="tab-button">
+						<input type="button" name="login_btn" id="login_btn" value="登录" class="loginbtnfocus btn" />
+					</div>
+				</form>
+			</div>	
+		</div>
+	</div>
+	<div class="text_bg"></div>
+	<div class="img_bg"><img src="${ctx}/adminthemes/new/images/login_background.jpg" /> </div>
+</div>
+<div class="last">
+	<p>GOME Cellar Copyright&copy;2015-2016 All Right Reserved.</p>
+</div>
+<script>
+$(function(){
+ Loginer.init();
+});
+$(".btn").click(function(){
+	   var username = $.trim($('input[name="username"]').val()); 
+	   $('input[name="username"]').val(username);
+});</script>
+</body>
+</html>

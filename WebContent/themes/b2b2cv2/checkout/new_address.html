@@ -1,0 +1,143 @@
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<div class="address_div">
+<div class="c_address">
+		<dl class="def">
+			<input type="checkbox"   value="" alt="1"  name="def_addr" onclick="checkboxValue(this);" >			
+			<p>使用新地址作为默认收货地址</p>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 收货地区：</dt>
+			<dd><@regionSelect /></dd>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 地址：</dt>
+			<dd><input id="addr" type="text" class="text" size="43" 
+				name="shipAddr" isrequired="true" dataType="string" autocomplete="off"></dd>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 邮编：</dt>
+			<dd><input type="text" id="zip" size="30" style="width: 60px;"
+				name="shipZip"   dataType="post_code"  class="text" autocomplete="off"></dd>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 收货人姓名：</dt>
+			<dd><input type="text" class="text" size="30" style="width: 60px;"
+				id="name" name="shipName" autocomplete="off" isrequired="true" dataType="string">
+				<p class="hint">请填写真实姓名，以免延误收货</p> </dd>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 联系手机：</dt>
+			<dd><input type="text" class="text" id="mobile" style="width: 180px;" 
+					size="30" name="shipMobile" autocomplete="off"></dd>
+		</dl>
+		<dl>
+			<dt>联系电话：</dt>
+			<dd><input type="text" class="text" id="tel" dataType="tel_num"
+				style="width: 180px;" size="30" name="shipTel" autocomplete="off">
+				<p class="hint">手机和电话填写一项即可</p> </dd>
+		</dl>
+		<dl>
+			<dt></dt>
+			<dd><input type="button" value="保存地址" id="add_btn" style="background:#da4f49;width:130px;border:0px none;padding:0px;margin:0px;color:#fff;font-size:12px;height:35px;line-height:35px;"> 
+            <input type="button" value="返回" id="return_btn" style="background:#49afcd;width:130px;border:0px none;padding:0px;margin:0px;color:#fff;font-size:12px;height:35px;line-height:35px; margin-left:10px;">
+            </dd>
+		</dl>
+</div>
+</div>
+<script>
+function checkboxValue(obj){
+	if(obj.checked){
+		obj.value = obj.alt;
+	}else{
+		obj.value ="";
+	}
+}
+$(function(){
+
+	$("#add_btn").click(function(){
+		//判断姓名  
+		var strss = "[@/'\"#$%&^*]+";
+		var reg = new RegExp(strss);
+		var tname = $("#name").val();
+		if(tname.match(reg)!=null)
+		{
+			alert("姓名中有特殊字符");
+			return false;
+		}
+		//判断姓名中不能有数字
+		var strss = "[0-9]";
+		var reg = new RegExp(strss);
+		var tname = $("#name").val();
+		if(tname.match(reg)!=null)
+		{
+			alert("姓名中不能有数字");
+			return false;
+		}
+		
+		var result = $("#checkoutform").checkall();
+		if(!result ) return ;
+		$.Loading.show("正在保存...");
+		var options = {
+			url : "api/shop/memberAddress!addNewAddress.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$(".address .new ").hide();
+					$(".address .modify .list").load("checkout/address_list.html",function(){
+						$(".address").addClass("relborder");
+						$(".payment").removeClass("relborder");
+						CheckOut.showModifyUI();
+					});
+					
+					$.Loading.hide();
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+					 
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误，请重试");
+			}
+		};
+		$("#checkoutform").ajaxSubmit(options);
+	})
+	
+	$("#mobile").setValidator(function(){
+		var tel= $.trim( $("#tel").val() ) ;
+		var mobile = $.trim( $("#mobile").val() ) ;
+		
+		if( tel=="" && mobile==""  ){
+			return  "手机或电话必须填写一项";
+		}
+		
+		if( mobile!="" && !$.isMobile(mobile) ){
+			return  "手机格式不正确";
+		}
+		
+		return true;
+	});
+	
+	
+	$("#region_id").setValidator(function(){
+		var value = $("#region_id").val();
+		if( value=="" || value=="0" ) return "地区信息不完整";
+		else return true;
+	});
+	
+	
+	
+	//地区联动选择-选择最后一级（区）时自动设置邮编
+	RegionsSelect.regionChange=function(regionid,name,zipcode){
+		$("#add_addressForm input[name='shipZip']").val(zipcode);
+	};
+	
+	$("#return_btn").click(function(){
+		$(".address .new").hide();
+		$(".address .selected").attr("style","display:block");
+		$(".address.box").removeClass("relborder");
+	});
+	
+})
+</script>

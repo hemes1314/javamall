@@ -1,0 +1,54 @@
+1. 使用zip包配置而不是jar包安装
+2.如果不是root用户不可以监听1024以下端口，所以让weblogic监听8080然后使用nginx做反向代理
+3.centos7下面安装nginx：https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-centos-7
+4.sudo修改/etc/nginx/nginx.conf
+注释掉root段，在location /添加：
+	location /statics/ {
+		alias /home/gome/statics/;
+	}	
+
+        location / {
+		proxy_pass http://localhost:8080/;
+		proxy_set_header Host      $host;
+		proxy_set_header X-Real-IP $remote_addr;
+        }
+
+5. 因为selinux的原因默认不能做反向代理，所以需要打开权限(http://www.hpboys.com/827.html)
+sudo setsebool -P httpd_can_network_connect 1
+
+6.做成服务：
+sudo systemctl enable nginx
+
+7.重启nginx：
+sudo systemctl restart nginx
+
+8. 后台启动weblogic（不能直接&扔到后台）：http://aniyo.iteye.com/blog/1415349
+nohup ./startWebLogic.sh & 
+
+
+statics目录：setenforce permissive
+selinux又惹麻烦了，必须关闭，否则默认情况下用户互相直接不能互相访问目录。导致nginx无法读取statics下面的内容。
+http://stackoverflow.com/questions/25774999/nginx-stat-failed-13-permission-denied
+
+
+
+==================================================================
+2015年9月28日：重要内容：http://lichunhui.iteye.com/blog/2084275
+如果遇到特别慢，这不是卡死了，这是jre在linux下面的一个bug
+实际是JVM在Linux下的bug
+　　他想调用一个随机函数，但取不到，暂时的解决办法是
+　　1）较好的解决办法： 在Weblogic启动参数里添加 “-
+　　Djava.security.egd=file:/dev/./urandom” (/dev/urandom 无法启动)
+　　2）最差的解决办法： 执行命令 mv /dev/random /dev/random.ORIG ; ln /dev/urandom /dev/random
+　　将/dev/random 指向/dev/urandom
+　　3)最好的解决办法:  修改Linux上Weblogic使用的jdk $JAVA_HOME/jre/lib/security/java.security 文件
+　　将securerandom.source=file:/dev/urandom 修改为
+　　securerandom.source=file:/dev/./urandom
+　　这样可以解决任何一个域Weblogic启动慢的问题
+
+
+==================================================================
+关于错误修正，如果被锁定了之后异常，<2012-3-2 下午05时08分34秒 CST> <Info> <Management> <BEA-141281> <unable to get file lock, will retry …> 
+需要删除一些文件：http://www.cnblogs.com/davidwang456/p/3730330.html
+==================================================================
+

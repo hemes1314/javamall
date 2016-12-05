@@ -1,0 +1,24 @@
+<div class="detail">
+	<table cellspacing="0" cellpadding="0" border="0" width="100%">
+		<thead>
+			<tr>
+				<th>内容</th>
+				<th>发表时间</th>
+				<th>显示状态</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list listComments as comments>
+			<tr>
+				<td title="${comments.content!''}"><@substring title="${comments.content!''}" length="25"
+					dot="..." /></td>
+				<td><@dateformat pattern="yyyy-MM-dd HH:mm"
+					time="${comments.dateline?c}" /></td>
+				<td><#if comments.status == 0 >待审核</#if> <#if comments.status
+					== 1 >审核通过</#if> <#if comments.status == 2 >审核拒绝</#if></td>
+			</tr>
+			</#list>
+		</tbody>
+	</table>
+
+</div>

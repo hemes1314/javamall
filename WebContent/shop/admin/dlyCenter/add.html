@@ -1,0 +1,64 @@
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+
+<style>
+.input_text{
+	width: 200px;
+}
+</style>
+
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form id="dlyCenterForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th>发货点名称：</th>
+					<td><input class="input_text easyui-validatebox" type="text" id="name"
+						name="dlyCenter.name" data-options="required:true"
+						style="width: 155px;"></input>
+					</td>
+					<th>发货人姓名：</th>
+					<td><input class="input_text easyui-validatebox" type="text" id="url"
+						name="dlyCenter.uname" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>地区：</th>
+					<td>
+						<@regionSelectDirective />
+					</td>
+					<th>手机：</th>
+					<td><input class="input_text easyui-validatebox" type="text" validType="mobile"
+						name="dlyCenter.cellphone" maxlength="11"></input>
+					</td>
+				</tr>
+
+				<tr>
+					<th>邮编：</th>
+					<td><input class="input_text easyui-validatebox" name="dlyCenter.zip"
+						maxlength="6">
+					</td>
+					<th>电话：</th>
+					<td><input class="input_text easyui-validatebox" type="text" validType="tel"
+						name="dlyCenter.phone" maxlength="15"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>地址：</th>
+					<td><input class="input_text" type="text"
+						name="dlyCenter.address"></input>
+					</td>
+					<th>默认地址：</th>
+					<td><input type="checkbox" id="is_default_dc"  name="is_default"></input>
+						<input type="hidden" name="dlyCenter.choose"  id="dlyCenterDisabled"/>
+					</td>
+				</tr>
+
+				<tr>
+					<th>备注：</th>
+					<td colspan="3"><textarea rows="5" cols="45" class="input_text"
+							style="width: 395px;" name="dlyCenter.memo"></textarea></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

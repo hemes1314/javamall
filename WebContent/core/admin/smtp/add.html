@@ -1,0 +1,38 @@
+
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="addSmtpForm" method="post" class="validate" >
+			<table>
+				<tr>
+					<td>host:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="smtp.host" data-options="required:true" isrequired="true"   />
+					</td>
+				</tr>
+				
+				<tr>
+					<td>用户名：</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="smtp.username" data-options="required:true"   dataType="string" isrequired="true" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td>密码：</td>
+					<td><input class="easyui-validatebox input_text" type="password" name="smtp.password" data-options="required:true"  dataType="string" isrequired="true"/>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>每日最大发信数：</td>
+					<td><input class="easyui-numberbox input_text" type="text" name="smtp.max_count" data-options="required:true"  dataType="int" isrequired="true"/>封
+					</td>
+				</tr>
+				
+				<tr>
+					<td>from：</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="smtp.mail_from" data-options="required:true"   dataType="string" isrequired="true" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

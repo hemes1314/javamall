@@ -1,0 +1,161 @@
+<#include '/admin/header.html' > 
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<div class="main">
+	<div class="shadowBoxWhite  whiteBox detail input">
+		<form method="post" name="theForm" id="theForm">
+		<table cellspacing="0" cellpadding="0" border="0" id="data" style="width: 99%">
+			<tr>
+				<th class="title" colspan="2">闪购基本信息</th>
+			</tr>
+			
+			<tr>
+				<td style="width: 100px;">闪购活动：</td>
+				<td>${groupBuyActive.act_name}</td>
+			</tr>
+			<tr>
+				<td>活动时间：</td>
+				<td>${groupBuyActive.add_time_str} - ${groupBuyActive.end_time_str}</td>
+			</tr>
+			
+			<tr>
+				<td>闪购名称：</td>
+				<td>
+					<input class="easyui-validatebox input_text" type="text" name="groupBuy.gb_name" value="${groupBuy.gb_name}" data-options="required:true" isrequired="true"   />
+					<input type="hidden" name="groupBuy.goods_id"  id="goods_id"/>
+					<input type="hidden" name="groupBuy.product_id"  id="product_id"/>
+					<input type="hidden" name="groupBuy.original_price"  id="original_price"/>
+					<input type="hidden" name="groupBuy.gb_status"  id="0"/>
+					<input type="hidden" name="groupBuy.act_id"  value="${actid}"/>
+				</td>
+			</tr>
+			<tr>
+				<td>闪购副标题：</td>
+				<td><input class="easyui-validatebox input_text" type="text" name="groupBuy.gb_title" value="${groupBuy.gb_title!''}" data-options="required:true" isrequired="true"   /></td>
+			</tr>
+			<!-- 
+			<tr>
+				<td>选择商品：</td>
+				<td><a herf='javascript:void(0);' onclick='openGoodsSearchDlg(getGoods, 0)'>选择商品</a></td>
+			</tr>
+			 -->
+			<tr>
+				<td>商品名称：</td>
+				<td id="product_name">${goods.name}</td>
+			</tr>
+			
+			<tr>
+				<td>商品价格：</td>
+				<td id="price">${groupBuy.original_price?string("currency")}</td>
+			</tr>
+			<tr>	
+				<td>商品库存：</td>
+				<td id="store">${goods.store}</td>
+			</tr>
+			
+			<tr>
+				<td>闪购价格：</td>
+				<td><input class="input_text" type="text" name="groupBuy.price" data-options="required:true" isrequired="true"  value="${groupBuy.price}" /></td>
+			</tr>
+			<tr>
+				<td>闪购数量：</td>
+				<td><input class="easyui-numberbox input_text" type="text" name="groupBuy.goods_num" data-options="required:true" isrequired="true" value="${groupBuy.goods_num}"  /></td>
+			</tr>
+			
+			<tr>
+				<td>闪购图片：</td>
+				<td>
+					<img alt="闪购图片" src="${image_src}" style="width: 200px;height: 200px;">
+				</td>
+			</tr>
+			<tr>	
+				<td>虚拟数量：</td>
+				<td><input class="easyui-numberbox input_text" type="text" name="groupBuy.visual_num" data-options="required:true" isrequired="true" value="${groupBuy.visual_num}"  /></td>
+			</tr>
+			
+			<tr>
+				<td>闪购分类：</td>
+				<td>
+					<select name="groupBuy.cat_id">
+						<option value="" >不限</option>
+						<#list groupbuy_cat_list as cat>
+							<option value="${cat.catid}" <#if cat.catid==groupBuy.cat_id> selected="selected" </#if>  >
+								${cat.cat_name}
+							</option>
+						</#list>
+					</select>
+				
+				</td>
+			</tr>
+			<tr>	
+				<td>闪购区域</td>
+				<td>
+					<select name="groupBuy.area_id">
+						<option value="0">不限</option>
+						<#list groupbuy_area_list as area>
+							<option value=${area.area_id} <#if area.area_id==groupBuy.area_id> selected="selected" </#if> >
+								${area.area_name}
+							</option>
+						</#list>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>闪购介绍：</td>
+				<td >
+					<textarea id="remarks" name="groupBuy.remark" cols="100" rows="8" style="width: 98%; height: 300px;">${groupBuy.remark!''}</textarea>
+				</td>
+			</tr>
+		</table>
+		</form>
+		<div class="buttonWrap">
+			<a href="javascript:;" id="saveAdd" class="easyui-linkbutton">确定</a>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	window.onload=function(){
+		bindFileEvent();
+	 }
+	var app_path="";
+	$('#remarks').ckeditor();	
+	function getGoods(goods) {
+		$("#product_name").html(goods["name"]+"  "+goods["specs"]);
+		$("#price").html("￥"+goods["price"]);
+		$("#store").html(goods["store"]);
+		$("#goods_id").val(goods["goods_id"]);
+		$("#product_id").val(goods["product_id"]);
+		$("#original_price").val(goods["price"]);
+	};
+	$("#saveAdd").click(function(){
+		var formflag= $("#theForm").form().form('validate');
+		if($("input[name='image']").val()==""){
+			$.Loading.error('请选择闪购图片');
+			return false;
+		}
+		if(formflag){
+			$.Loading.show("正在保存请稍后...");
+			var options = {
+					url : "${ctx}/shop/admin/groupBuy!saveAdd.do",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						if(result.result==1){
+							parent.CloseTabByTitle("添加闪购");
+							$.Loading.success(result.message);
+						}else{
+							$.Loading.error(result.message);
+						}
+				 	},
+				 	error : function(e) {
+				 		$.Loading.error('出现错误，请重试');
+					}
+				};
+			$('#theForm').ajaxSubmit(options);	
+		}
+		
+	});	
+</script>
+
+<#include '/admin/footer.html' > 

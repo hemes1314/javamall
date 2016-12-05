@@ -1,0 +1,487 @@
+<!--  头部-->
+<div class="header_ad">
+  <script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/tc.js"></script>
+  <script language=javascript type="text/javascript">
+  var hmax = 801-1;//最大高度
+  var hmin = 80;//最小高度
+  var h=0;
+  function addcount_zzjs_net(){
+	  if(h<hmax){
+		  h += 20;
+		  setTimeout("addcount_zzjs_net()",1);
+	  }
+	  else {
+		  h=hmax;
+		  setTimeout("noneAds()",3000); //停留时间自己适当调整，1000 = 1秒
+		  document.getElementById("ads_wwwzzjsnet").style.display = "none";
+	  }
+	  document.getElementById("ads").style.display = "";
+	  document.getElementById("ads").style.height = "auto";
+  }
+  window.onload = function showAds(){
+	  document.getElementById("ads").style.display = "none";
+	  document.getElementById("ads").style.height = "0px";
+	  if(window.location.href=='http://www.gomecellar.com/index.html'
+			  || window.location.href=='http://www.gomecellar.com/'){
+		  if(getCookie("firstad")==''){
+			  setCookie("firstad","1","1");
+			  addcount_zzjs_net(); //慢慢打开
+		  }
+	  }
+  //	h=hmax;
+  //	setTimeout("noneAds()",3000); //停留时间自己适当调整，1000 = 1秒
+  }
+  function openAds(){
+	  h = 0;//高度
+	  addcount_zzjs_net(); //慢慢打开
+  }
+  function noneAds(){
+	  if(h>hmin)	{
+		  h -= 20;
+		  setTimeout("noneAds()",1);
+	  }
+	  else {
+		  h = hmin;
+		  document.getElementById("ads").style.display = "none";
+		  document.getElementById("ads_wwwzzjsnet").style.display = "";
+		  return;
+	  }
+	  document.getElementById("ads").style.height = h+"px";
+  }
+  </script>
+  <#assign advListTag= newTag("advListTag")>
+  <!-- 调用广告信息,传递参数acid:61 -->
+  <#assign adv = advListTag("'acid':'61'")!'' >
+  <div id="ads" style="width:100%; overflow:hidden;top:0px;display:none; position:absolute; z-index:999;">
+     <#assign adv = advListTag("'acid':'84'")!'' >
+     <#list adv.advList as adv3>
+     <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+     </#list>
+     <!--img src="${ctx}/themes/b2b2cv2/images/ad_big.jpg"-->
+  </div>
+  <div id="ads_wwwzzjsnet">
+     <#assign adv = advListTag("'acid':'83'")!'' >
+     <#list adv.advList as adv3>
+	 <a target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+     <!--<a href="javascript:openAds()"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>-->
+     </#list>
+     <!--a href="javascript:openAds()"><img src="${ctx}/themes/b2b2cv2/images/ad_small.jpg" /></a-->
+  </div>
+</div>
+<!--   获取CMS数据搜索标签，-->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+<div class="header_outside" style="width:1200px;margin:0px auto;">
+	<header class="wrapper">
+		<!--  LOGO-->
+		<div class="site_logo" id="index_logo">
+			<a href="${ctx}/index.html"><img src="${ctx}/themes/b2b2cv2/images/logo.png" /></a>
+		</div>
+		<!--  搜索-->
+		<div class="head_search" id="search">
+			<!--  商品和店铺-->
+			<ul class="tab">
+				<li
+					<#if search??> 
+						<#if search=="goods"> class="current" </#if>
+					<#else> 
+						class="current" 
+					</#if> act="search" title="按照商品查询"
+					search="goods">商品
+				</li>
+				<li<#if search??> <#if search=="store"> class="current" </#if>
+					</#if> act="shop_search" title="按照店铺查询" search="store">店铺</li>
+			</ul>
+			<div class="search_form">
+				<input name="namekeyword" id="namekeyword" type="text" class="input_text"
+				<#if keyword??> value="${keyword}" <#else> value="请输入您要搜索的商品关键字" </#if>
+				maxlength="60"/>
+				 <input type="button" id="inquiry" value="" class="input_submit" />
+			</div>
+            <script type="text/javascript">
+			  $(".input_submit").click(function(){
+				  var strss = "[@/'\"#$%&^*+]";
+				  var reg = new RegExp(strss);
+				  if($("#namekeyword").val().match(reg)!=null){
+					  alert("有特殊字符，请重新输入");
+					  $("#namekeyword").focus();
+					  $("#namekeyword").val("");
+					  return false;
+				  }
+				  if($("#namekeyword").val().replace(/(^\s*)|(\s*$)/g,"")==""){
+					  alert("输入有误，请重新输入");
+					  $("#namekeyword").focus();
+					  $("#namekeyword").val("");
+					  return false;
+				  }
+			  })
+			</script>
+			<!--  搜索关键字-->
+			<div class="keyword">
+				热门搜索：
+				<ul>
+					<!--   调用CMS数据搜索标签，并传递所在模型ID参数(es_hot_keyword表.)“3”表示出现三个关键词-->
+					<#assign webPage = dataSearchTag('{"modelid":1,"pageSize":9}') />
+					<#list webPage.result as data>
+					<li><a
+						href="${ctx}/goods_list.html?keyword=${data.keyword}&search=goods">${data.keyword}</a></li>
+					</#list>
+				</ul>
+			</div>
+		</div>
+        <!--<div class="QR-Code">
+          <ul class="hoverbox">
+            <li><a href="#"><img src="${ctx}/themes/b2b2cv2/images/QR_Code.png" alt="description" /><img src="${ctx}/themes/b2b2cv2/images/QR_Code_img.jpg" alt="" class="preview" /></a></li>
+          </ul>
+        </div>
+        <div style="float:left; height:100px; line-height:105px; padding-left:15px; font-weight:600; overflow:hidden;"><a href="${ctx}/app_download/index.html" target="_blank">手机端APP下载</a></div>-->
+        
+  <div class="head_menu">
+      <dl class="my_store">
+    
+      </dl>
+    
+     
+      <dl class="my_cart">
+      	<div class="addcart_num"></div>
+        <dt><span class="ico"></span><a href="${ctx}/cart.html">购物车结算</a><i class="arrow"></i></dt>
+        <dd>
+          <div class="my_carttitle">
+            <h4>最新加入的商品</h4>
+          </div>
+          <div class="my_cartlist">
+           <img class="loading" src="${ctx}/themes/b2b2cv2/images/cartdd.gif" />
+          </div>
+        </dd>
+      </dl>
+    </div>
+	</header>
+</div>
+<#assign goodsCatTag= newTag("goodsCatTag")>
+<#assign listTag= newTag("keyListTag")>
+<!-- 调用商品分类信息 -->
+<#assign goodsCat = goodsCatTag()!'' >
+<#assign keySelect = listTag()!'' >
+<nav class="index_nav">
+	<div class="wrapper">
+		<div class="allcategory">
+			<div class="title">
+				<i class="arrow"></i>
+				<h3>
+					<a href="/goods_list.html?cat=13" onMouseOver="javascript:void(0);">所有商品分类</a>
+				</h3>
+			</div>
+			<!--左侧菜单-->
+			<div class="category">
+				<ul class="menu">
+				    <li class="odd" >
+						<div class="class">
+							<span  class="ico">
+							<#list goodsCat.cat_tree as cat>
+                            <#if cat_index=0>
+								<@image src="${cat.image!''}" style="width:16px;height:16px;"/>
+                            </#if>
+                            </#list>
+							</span>
+							<h4>
+								<a href="">一键选酒</a>
+							</h4>
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" style="height:484px;">
+							<dl style="width:500px;">
+							   <#list keySelect as key>
+								<dd>
+									<a class="a-piece" href="${ctx}/key_goods_list.html?tagid=${key.tag_id}&tag=${key.tag_name}">${key.tag_name}</a>
+								</dd>
+								</#list>
+							</dl>
+                            <div class="ads_three">
+                               <#assign adv = advListTag("'acid':'85'")!'' >
+                               <#list adv.advList as adv3>
+                               <a class="ads_link" target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+                               </#list>
+                               <#assign adv = advListTag("'acid':'86'")!'' >
+                               <#list adv.advList as adv3>
+                               <a class="ads_link" target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+                               </#list>
+                               <#assign adv = advListTag("'acid':'87'")!'' >
+                               <#list adv.advList as adv3>
+                               <a class="ads_link" target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+                               </#list>
+                            </div>	
+						</div> 
+					</li> 
+                    
+					<#list goodsCat.cat_tree as cat>
+					<#if cat.name != "一键选酒">
+					<li class="<#if cat_index%2 ==0>odd<#else>even</#if>" cat_id="${cat_index+1}">
+						<div class="class">
+							<span  class="ico">
+								<@image src="${cat.image!''}" style="width:16px;height:16px;"/>
+							</span>
+							<h4>
+								<a href="${ctx}/goods_list.html?cat=${cat.cat_id}">${cat.name}</a>
+							</h4>
+							<span class="recommend">
+							<#assign children2=cat.children /> 
+							<#list children2 as cat2>
+								<#if cat2.hasChildren >
+								<#assign children3=cat2.children />
+								<#list children3 as cat3>
+                                  <#if cat3_index<5>
+                                  <a href="${ctx}/goods_list.html?cat=${cat.cat_id}&prop=${cat2.name}_${cat3.name}">${cat3.name}</a>
+                                  </#if>
+								</#list> 
+								</#if>
+							</dl>
+							</#list>
+							</span> 
+							<span class="arrow"></span>
+						</div> 
+						<#if cat.hasChildren>
+						<div class="sub_classify" cat_menu_id="${cat_index+1}">
+							<#assign children2=cat.children /> 
+							<#list children2 as cat2>
+							<dl>
+								<dt>
+									<h3>
+										${cat2.name }
+									</h3>
+								</dt>
+								<#if cat2.hasChildren >
+								<#assign children3=cat2.children />
+								<#list children3 as cat3>
+								<dd class="goods-class">
+									<a href="${ctx}/goods_list.html?cat=${cat.cat_id}&prop=${cat2.name}_${cat3.name}">${cat3.name}</a>
+								</dd>
+								</#list> 
+								</#if>
+							</dl>
+							</#list>
+                            <div class="ads_three">
+                               <#assign adv = advListTag("'acid':'85'")!'' >
+                               <#list adv.advList as adv3>
+                               <a class="ads_link" target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+                               </#list>
+                               <#assign adv = advListTag("'acid':'86'")!'' >
+                               <#list adv.advList as adv3>
+                               <a class="ads_link" target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+                               </#list>
+                               <#assign adv = advListTag("'acid':'87'")!'' >
+                               <#list adv.advList as adv3>
+                               <a class="ads_link" target="_blank" href="${adv3.url!''}"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}"/></a>
+                               </#list>
+                            </div>
+						</div> </#if>
+                        
+					</li> 
+					</#if>
+					</#list>
+					<div class="clear"></div>
+				</ul>
+			</div>
+		</div>
+		<!--分类树结束-->
+		<#include 'nav_menu.html'/>
+	</div>
+</nav>
+<script type="text/javascript">
+	var goodsSearchTxt = '请输入您要搜索的商品关键字';
+	var storeSearchTxt = '请输入您要搜索的店铺关键字';
+	$(function() {
+	//	$('.my_cartlist').perfectScrollbar();
+		CartBar.init();
+		
+		$("#inquiry").click(function() {
+		   //add by linyang 敏感词过滤
+		  var str = $("#namekeyword").val();
+          var patt1 = new RegExp("(吸毒|法轮功|卖淫|催情药|大鸡巴|仿真枪|和狗交|乱奸|迷情药)");
+          var result = patt1.test(str);
+		  if(result)       
+		  {
+		     alert( "该语句中有限制级词语，系统已经过滤！" ); 
+		     return false;
+		  }
+			
+			var search = $("#search li[class='current']").attr(
+					"search");
+			if ($("#namekeyword").val() == goodsSearchTxt && search == "goods") {
+				alert(goodsSearchTxt);
+			} else if ($("#namekeyword").val() == storeSearchTxt && search == "store") {
+				alert(storeSearchTxt);
+			} else if (!$("#namekeyword").val() == "" && search == "goods") {
+				location.href = ctx
+						+ "/goods_list.html?keyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search;
+			} else if (!$("#namekeyword").val() == ""
+					&& search == "store") {
+				location.href = ctx
+						+ "/store_list.html?keyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search;
+			}
+		});
+		
+		
+		/*document*/$("#namekeyword").keyup(function(event){
+			  if(event.keyCode ==13){
+
+				  //add by linyang 敏感词过滤
+				  var str = $("#namekeyword").val();
+				  var patt1 = new RegExp("(吸毒|法轮功|卖淫|催情药|大鸡巴|仿真枪|和狗交|乱奸|迷情药)");
+				  var result = patt1.test(str);
+				  if(result)       
+				  {
+					 alert( "该语句中有限制级词语，系统已经过滤！" ); 
+					 return false;
+				  }
+					
+					var search = $("#search li[class='current']").attr(
+							"search");
+					if ($("#namekeyword").val() == goodsSearchTxt && search == "goods") {
+						alert(goodsSearchTxt);
+					} else if ($("#namekeyword").val() == storeSearchTxt && search == "store") {
+						alert(storeSearchTxt);
+					} else if (!$("#namekeyword").val() == "" && search == "goods") {
+						location.href = ctx
+								+ "/goods_list.html?keyword="
+								+ $("#namekeyword").val() + "&search="
+								+ search;
+					} else if (!$("#namekeyword").val() == ""
+							&& search == "store") {
+						location.href = ctx
+								+ "/store_list.html?keyword="
+								+ $("#namekeyword").val() + "&search="
+								+ search;
+					}
+			  
+			  }
+			});
+			
+		$("#namekeyword").blur(function() {
+			if ($("#namekeyword").val() == "") {
+				var search = $("#search li[class='current']").attr("search");
+				if (search == "goods")
+					$("#namekeyword").val(goodsSearchTxt);
+				else if (search == "store")
+					$("#namekeyword").val(storeSearchTxt);
+			}
+		});
+			
+		$("#namekeyword").focus(function() {
+			var search = $("#search li[class='current']")
+					.attr("search");
+			var searchTxt = "";
+			if (search == "goods"
+					&& $("#namekeyword").val() == goodsSearchTxt) {
+				$("#namekeyword").val("");
+			} else if (search == "store"
+					&& $("#namekeyword").val() == storeSearchTxt) {
+				$("#namekeyword").val("");
+			}
+		});
+		$("#search .tab li").click(function() {
+			var search = $(this).attr("search");
+			if (search == "goods") {
+				$("#namekeyword").val(goodsSearchTxt);
+				$("#search li[search='goods']").addClass("current");
+				$("#search li[search='store']").removeClass("current");
+				$("#namekeyword").unbind("keydown");
+				$("#namekeyword").unbind("keyup");
+				$("#namekeyword").bigAutocomplete({url:"${ctx}/api/shop/goods-words.do", callback:function(data){
+					 location.href="${ctx}/goods_list.html?keyword="+data.title;
+			    }}); 
+			} else {
+				$("#namekeyword").val(storeSearchTxt);
+				$("#search li[search='store']").addClass("current");
+				$("#search li[search='goods']").removeClass("current");
+				$("#namekeyword").unbind("keydown");
+				$("#namekeyword").unbind("keyup");
+				$("#namekeyword").bigAutocomplete({url:"/api/b2b2c/storeApi!words.do", callback:function(data){
+					location.href="${ctx}/store_list.html?search=store&keyword="+data.store_name;
+			    }}); 
+			}
+		});
+		
+		<#assign luceneCheckTag = newTag("luceneCheckTag") /> 
+		<#assign lucene =luceneCheckTag() />
+		
+		<#if lucene=='ON' >
+		var url_ = '';
+		var search = $("#search li[class='current']").attr("search");
+		if (search == "goods"){
+			$("#namekeyword").bigAutocomplete({url:"${ctx}/api/shop/goods-words.do", callback:function(data){
+				 location.href="${ctx}/goods_list.html?keyword="+data.title;
+		    }}); 
+		}else{
+			$("#namekeyword").bigAutocomplete({url:"/api/b2b2c/storeApi!words.do", callback:function(data){
+				location.href="${ctx}/store_list.html?search=store&keyword="+data.store_name;
+		    }}); 
+		}
+		 
+		</#if>
+	});
+</script>
+<!--script  src="${ctx}/themes/b2b2cv2/js/slide.js"></script-->
+<script>
+$(function(){
+	
+	$(".r-float").css("height",document.documentElement.clientHeight);
+	
+})
+</script>
+<div id="r-float-hide" class="r-float">
+  <ul>
+    <li><a class="a-jiu" href="#"></a>
+        <ul>
+        <#list goodsCat.cat_tree as cat>
+        <#if cat.name != "一键选酒">
+            <li>
+            <h3>
+            <@image src="${cat.image!''}" />
+            <a href="${ctx}/goods_list.html?cat=${cat.cat_id}">${cat.name}</a>
+            </h3>
+            <p>
+            <#assign children2=cat.children /> 
+            <#list children2 as cat2>
+                <#if cat2.hasChildren >
+                <#assign children3=cat2.children />
+                <#list children3 as cat3>
+                  <#if cat3_index<5>
+                  <a href="${ctx}/goods_list.html?cat=${cat.cat_id}&prop=${cat2.name}_${cat3.name}">${cat3.name}</a>
+                  </#if>
+                </#list> 
+                </#if>
+            </dl>
+            </#list>
+            </p>
+            </li>
+        </#if>
+        </#list>
+        </ul>
+    </li>
+    <li><a class="a-se" href="${ctx}/culture/index.html" target="_blank"></a></li>
+    <li><a class="a-cai" href="${ctx}/jinrong/jinrong.html" target="_blank"></a></li><!--${ctx}/finance/index.html-->
+    <li><a class="a-qi" href="${ctx}/sommelier/index.html" target="_blank"></a></li>
+    <li class="hr-line"></li>
+    <li><a class="a-gouwuche" href="${ctx}/cart.html"></a></li>
+    <li class="hr-line"></li>
+    <li><a class="a-QR-Code" href="#" title="二维码"></a>
+      <ul class="QR-Code">
+       <li>
+       <p>
+       <img src="${ctx}/themes/b2b2cv2/images/QR_Code_img.jpg" width="135" height="135" alt=""/>
+       <a class="menu-app" href="${ctx}/app_download/index.html" target="_blank">点击下载</a>
+       </p>
+       </li>
+      </ul>
+    </li>
+    <li><a target="_blank" class="a-kefu" href="http://wpa.qq.com/msgrd?v=3&amp;uin=137560&amp;site=qq&amp;menu=yes" title="客服"></a></li>
+    <li class="hr-line"></li>
+    <li><a class="a-guanzhu" href="${ctx}/member/favorite.html" title="关注"></a></li>
+    <li><a class="a-zuji" href="#" title="足迹"></a></li>
+    <li class="hr-line"></li>
+    <li style="padding-top:0;"><a class="a-top" href="#backtotop" title="回到顶部"></a></li>
+  </ul>
+</div>

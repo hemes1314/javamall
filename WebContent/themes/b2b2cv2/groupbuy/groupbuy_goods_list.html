@@ -1,0 +1,286 @@
+
+<!-- 团购分类 -->
+<#assign groupBuyCatListTag=newTag("groupBuyCatListTag")> <#assign
+groupBuyCatList=groupBuyCatListTag()>
+<!-- 团购活动 -->
+<#assign groupBuyActTag=newTag("groupBuyActTag")> <#assign
+groupBuyAct=groupBuyActTag()>
+<!-- 团购地区列表 -->
+<!-- <#assign groupBuyAreaListTag=newTag("groupBuyAreaListTag")>
+<#assign groupBuyAreaList=groupBuyAreaListTag()> -->
+<#if groupBuyAct!="">
+<!-- 团购时间 -->
+<#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")> 
+<#assign groupBuyActSurplus=groupBuyActSurplusTag("{'end_time':${groupBuyAct.end_time}}")>
+
+
+
+ </#if> <#assign groupBuyListTag=newTag("groupBuyListTag")> <#assign
+gbPage=groupBuyListTag('{"pageSize":12}')>
+
+<!-- 团购活动列表 -->
+<!--<div class="group_list">
+	<ul>
+		<#if gbPage??>
+		<#list gbPage.page.result as gb>
+			<li class="c1">
+				<div class="group_content"> 
+					<a target="_blank" class="pic_thumb" href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}" title="${gb.gb_name}">
+						<@image border="0" src="${gb.img_url!''}"  alt="${gb.gb_name!''}" />
+					</a>
+					<h3 class="title"><a target="_blank" href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}" title="${gb.gb_name}"><@substring title="${gb.gb_name}" length="66" dot="..." /></a></h3>
+					<div class="group_price"> 
+						<span class="price"><i>¥</i>${gb.price}</span>
+						<div class="dock"><span class="group_discount"><#if gb.original_price gt 0>${gb.price/gb.original_price*10}<#else>0</#if>&nbsp;折</span> <del class="group_price">¥${gb.original_price}</del></div>
+					<#if gbPage.sort_type != 2>
+						<span class="group_num"><em>${gb.buy_num+gb.visual_num}</em>件已购买</span>
+						<a class="buy-button" target="_blank" href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}">
+							<#if gb.goods_num==0>
+								已售罄
+							<#else>
+								我要买
+							</#if>
+						</a>
+					</#if>
+					</div>
+				</div>
+			</li>
+		</#list>
+		</#if>
+	</ul>
+</div> -->
+<div class="mainbody">
+<#if gbPage??>
+<#list gbPage.page.result as gb>
+<div class="mainbodyyy">
+	<div class="ljqg">
+		<ul>
+			<li style="margin-top: 14px; text-align:center"><font size="4px">${gb.gb_name!''}</font></li>
+		
+	          <li style="margin-bottom: 16px ; text-align:center"><font size="3px" color="#CCCCCC" >${gb.gb_title!''}</font></li>
+
+			<li><div class="divLine"><!----></div></li>
+			<li style="margin-top: 5px; text-align:center"><font size="4px" color="#e10414">${gb.price?string.currency}</font></li>
+			<div class="dock" style="text-align:center"  >
+				<!-- <span class="group_discount">${gb.price/gb.original_price*10}&nbsp;折</span> -->
+
+				<del class="group_price">
+					<font size="3px">${gb.original_price?string.currency!''}</font>
+				</del>
+			</div>
+						
+			<#if gbPage.sort_type = 1>
+			<li><a href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}"><img
+					src="${ctx}/themes/b2b2cv2/groupbuy/images/sgpd_10.jpg" width="258"
+					height="35" style="margin-top:5px" />
+				</a>
+			</li>
+			</#if>
+			
+			
+			<li style="margin-top: 5px; ">
+			   
+			 <ul>
+			<#if gbPage.sort_type = 1>
+			<li class="frbodr">
+					
+			     <span class="lxftime1"  countTime="${groupBuyAct.end_time}" style="diaplay:none;text-align:center"" >
+						<h5>距离本期结束时间:</h5>
+
+				</span> 
+	      <#if gbPage.sort_type =1>	    		    
+		    <span class="group_num_sell">已售:<em>${gb.buy_num+gb.visual_num}</em>
+			</span>														
+		   </#if>
+             		       		       
+			</li>
+		    </#if>
+		    
+		    <#if gbPage.sort_type =0>
+				<li class="close_end_a" >																    
+				       已经结束																			       
+				</li>
+		    </#if>
+    	        <li cstyle="text-align:center"" >
+						<h5>距离开始时间:0天0时0分0秒</h5>
+				</li> 
+			  </ul>
+			</li>
+			
+		</ul>
+	</div>
+
+	<#if gbPage.sort_type = 1>
+	<div class="zhutu">
+		<a target="_blank"
+			href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}">
+			<@image src="${gb.img_url!''}" width="600" height="300"  /></a>
+	</div>
+	</#if>
+<#if gbPage.sort_type = 0>
+		<div class="zhutu1">
+		<a target="_blank"
+			href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}">
+			<@image src="${gb.img_url!''}" width="600" height="300"   class="gray" /></a>
+	</div>
+</#if>
+	<#if gbPage.sort_type = 2>
+	<div class="zhutu2">
+		<a target="_blank"
+			href="${ctx}/groupbuy/groupbuy_goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}">
+			<@image src="${gb.img_url!''}" width="600" height="300"  /></a>
+	</div>	
+	</#if>
+
+	 
+	 <#if gbPage.sort_type !=2>
+	<div class="xianliang">
+		<a onclick="set_sort_type('2')" type="2"  href="javascript:void(0)"><@image
+			src="${gb.img_next_url!''}" width="290" height="300" border="1" ;
+			/></a>
+	</div>	
+	</#if>
+	
+	 <#if gbPage.sort_type =2>   
+	<div class="xianliang1"  style="dispay:none">	
+	</div>
+   </#if>
+	
+	
+	<!-- <div class="xianliang"><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image13','','${ctx}/themes/b2b2cv2/groupbuy/images/yush_20.jpg',1)"><img src="${ctx}/themes/b2b2cv2/groupbuy/images/yushy_20.jpg" width="280" height="300" id="Image13" /></a></div> -->
+</div>
+</#list>
+ </#if>
+</div>
+<!--分页-->
+<div class="tc mt20 mb20"><@ajaxpager pageno="${page!1}"
+	pagesize="${gbPage.pageSize}" totalcount="${gbPage.totalCount}"/></div>
+<form>
+	<input type="hidden" name="catid" value="${gbPage.catid}" /> <input
+		type="hidden" name="minprice" value="${gbPage.minprice}" /> <input
+		type="hidden" name="maxprice" value="${gbPage.maxprice}" /> <input
+		type="hidden" name="sort_key" value="${gbPage.sort_key}" /> <input
+		type="hidden" name="sort_type" value="${gbPage.sort_type}" /> <input
+		type="hidden" name="area_id" value="${gbPage.area_id}" />
+</form>
+<script type="text/javascript">
+
+
+function lxfEndtime1(){
+
+
+	$(".lxftime1").each(function(){
+
+
+
+
+	
+	
+
+
+	var endtime = $(this).attr("countTime");
+
+   var nowtime = Math.round(new Date().getTime()/1000);
+
+
+	//今天的日期(毫秒值)
+
+	var youtime = endtime-nowtime;//还有多久(毫秒值)
+
+	var seconds = youtime;
+
+	var minutes = Math.floor(seconds/60);
+
+	var hours = Math.floor(minutes/60);
+
+	var days = Math.floor(hours/24);
+
+	var CDay= days ;
+
+	var CHour= hours % 24;
+
+	var CMinute= minutes % 60;
+
+	var CSecond= Math.floor(seconds%60);
+     if(CDay<0) 
+		 CDay=0;
+	 if(CHour<0) 
+		 CHour=0;
+	 if(CMinute<0) 
+		 CMinute=0;
+	 if(CSecond<0) 
+	    CSecond=0; 
+	$(this).html("剩余："+CDay+"天"+CHour+"时"+CMinute+"分"+CSecond+"秒");
+	});
+	setTimeout("lxfEndtime1()",1000);
+	};
+
+$(function(){
+
+	lxfEndtime1();
+	lxfEndtime2();
+
+});
+function lxfEndtime2(){
+
+     
+	$(".lxftime2").each(function(){
+	
+
+
+	var starttime = $(this).attr("countTime2");
+
+
+	//取结束日期(毫秒值)
+     var nowtime = Math.round(new Date().getTime()/1000);
+
+
+	//今天的日期(毫秒值)
+
+	var s =starttime-nowtime;//还有多久(毫秒值)
+
+	var seconds = s;
+
+	var minutes = Math.floor(seconds/60);
+
+	var hours = Math.floor(minutes/60);
+
+	var days = Math.floor(hours/24);
+
+	var CDay= days ;
+
+	var CHour= hours % 24;
+
+	var CMinute= minutes % 60;
+
+	var CSecond= Math.floor(seconds%60);
+	 if(CDay<0) 
+		 CDay=0;
+	 if(CHour<0) 
+		 CHour=0;
+	 if(CMinute<0) 
+		 CMinute=0;
+	 if(CSecond<0) 
+		 CSecond=0;
+
+	$(this).html("离开始还有："+CDay+"天"+CHour+"时"+CMinute+"分"+CSecond+"秒");
+	});
+	setTimeout("lxfEndtime2()",1000);
+	};
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

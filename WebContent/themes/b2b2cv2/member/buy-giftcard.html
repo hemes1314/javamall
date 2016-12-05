@@ -1,0 +1,56 @@
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/member.css">
+
+<#assign giftcardTypeListTag = newTag("giftcardTypeListTag") >             
+<#assign giftcardTypeList = giftcardTypeListTag()>
+
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag()>
+
+<div class="form_wrap">
+	<form id="buyGiftcardForm"  class="validate"   action="/api/b2b2c/buyGiftcardApi.do" method="post" target="_blank">
+		<table cellspacing="0" cellpadding="0" border="0" >
+			<tbody>
+				<tr>
+					<th>礼品卡类型：</th>
+					<td><span>
+						<select class="" name="giftcardTypeId" autocomplete="off">
+						<#list giftcardTypeList as giftcardType>
+							<option value="${giftcardType.type_id}">${giftcardType.type_name+", 面值"+giftcardType.money+", 售价"+giftcardType.price}</option>
+						</#list>
+						</select>
+					</span></td>
+				</tr>
+				<tr>
+					<th>支付方式：</th>
+					<td>
+						<div class="list">
+							<ul>
+								<#list paymentList as payment  >
+									<#if payment.type!="cod" && payment.type!="alipayMobilePlugin">
+									<li>
+										<label>
+											<input type="radio"  autocomplete="off" value="${payment.id}"  payment_name="${payment.name}"  name="paymentId"  style="cursor: pointer;" <#if payment.type=='alipayDirectPlugin'>checked</#if>>${payment.name}
+										</label>
+									</li>
+									</#if>	
+								</#list>
+							</ul>
+						</div>
+					</td>
+				</tr>	
+				<tr>
+					<th></th>	
+					<td>
+						<div class="btn"><input type="submit"  class="yellow_btn" value="去付款"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+
+<script>
+
+</script>		

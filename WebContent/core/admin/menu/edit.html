@@ -1,0 +1,95 @@
+<div class="input">
+	<form class="validate" id="editForm">
+		<input type="hidden" name="menu.id" value="${menu.id}" />
+		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+			<tr>
+				<th><label class="text">名称</label></th>
+				<td>
+					<input type="text" name="menu.title" id="name" maxlength="60" value="${menu.title}" dataType="string" isrequired="true" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">类型</label></th>
+				<td>
+					<select name="menu.menutype">
+						<option value="2"<#if menu.menutype==2>selected</#if>>应用</option>
+						<option value="1"<#if menu.menutype==1>selected</#if>>系统</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">上级菜单</label></th>
+				<td>
+					<select name="menu.pid" id="pid">
+						<option value="0">顶级菜单</option>
+						<#assign children=menuList />
+						<#assign level=1 />
+						<#assign pid=menu.pid />
+						<#include 'select_children.html' />
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">url</label></th>
+				<td>
+					<input type="text" name="menu.url" id="url"	value="${menu.url}" dataType="string" isrequired="true" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">target</label></th>
+				<td>
+					<input type="text" name="menu.target" id="target" value="${menu.target!''}" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">排序</label></th>
+				<td>
+					<input type="text" name="menu.sorder" value="${menu.sorder}" style="width: 50px" dataType="int"	isrequired="true" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">允许导出</label></th>
+				<td>
+					<select name="menu.canexp">
+						<option value="1"<#if menu.canexp==1>selected</#if>>是</option>
+						<option value="0"<#if menu.canexp==0>selected</#if>>否</option>
+					</select>
+				</td>
+			</tr>	
+			
+			<#if menu.icon?? && menu.icon!=''>
+			<tr style="height:70px;">
+				<th><label class="text">图标</label></th>
+				<td>
+				
+					<div class="icon_wrap">
+					 	<input type="hidden" name="menu.icon" value="${menu.icon!''}" id="menu_icon">
+					 	<img src="${menu.icon!'default.png'}" />
+					 	<span>正常态</span>
+				 	</div>
+				 	
+				 	<!-- <div class="icon_wrap">
+					 	<input type="hidden" name="menu.icon_hover" value="${menu.icon!''}">
+					 	<img src="${staticserver}/images/menuicon/${menu.icon_hover!'default.png'}" />
+					 	<span>悬停态</span>
+				 	</div>
+				 	点击图标更换 -->
+				</td>
+			</tr>	
+			</#if>
+								
+		</table>
+		<div class="submitlist" align="center">
+			<table>
+				<tr>
+					<td>
+						<input type="button" value=" 确定 " class="submitBtn"	id="saveEditBtn" />
+						<input name="reset" type="reset" value=" 重置 " class="submitBtn" />
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>
+ 
+ 

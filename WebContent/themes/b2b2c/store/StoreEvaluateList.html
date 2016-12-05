@@ -1,0 +1,272 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<#assign storeConsultListTag=newTag('storeConsultListTag')/>
+<#assign storeConsult=storeConsultListTag("'type':'1'")/>
+<style>
+.detailFind{
+	margin-right: 10%;
+}
+</style>
+<div class="layout">
+	<#include '../left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+			<div class="path">
+				<div>
+					<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span>评价管理
+				</div>
+			</div>
+			<div class="wrap">
+				
+			<div class="personal-rating">
+				<h4>店铺动态评分</h4>
+			    	<table class="seller-rate-info" id="sixmonth">
+			      		<tbody>
+			        		<tr>
+			          			<th><p>宝贝与描述相符</p>
+			            			<p class="rate-star mt5"><em><i style=" width:${myStoreDetail.store_desccredit*20}%;"></i></em></p>
+			            		</th>
+			          			<td>
+			          				<dl class="ncs-rate-column">
+			              				<dt><em style="left:${myStoreDetail.store_desccredit*20}%;">${myStoreDetail.store_desccredit}</em></dt>
+							            <dd>非常不满</dd>
+							            <dd>不满意</dd>
+							            <dd>一般</dd>
+							            <dd>满意</dd>
+							            <dd>非常满意</dd>
+			            			</dl>
+			            		</td>
+			        		</tr>
+					        <tr>
+					        	<th><p>卖家的服务态度</p>
+					            	<p class="rate-star mt5"><em><i style="width:${myStoreDetail.store_servicecredit*20}%;"></i></em></p>
+					            </th>
+					          	<td>
+					          		<dl class="ncs-rate-column">
+					              		<dt><em style="left:${myStoreDetail.store_servicecredit*20}%;">${myStoreDetail.store_servicecredit}</em></dt>
+					              		<dd>非常不满</dd>
+					              		<dd>不满意</dd>
+					              		<dd>一般</dd>
+					              		<dd>满意</dd>
+					              		<dd>非常满意</dd>
+					            	</dl>
+					            </td>
+							</tr>
+			        		<tr>
+			          			<th><p>卖家的发货速度</p>
+			            			<p class="rate-star mt5"><em><i style="width:${myStoreDetail.store_deliverycredit*20}%;"></i></em></p></th>
+			          			<td>
+			          				<dl class="ncs-rate-column">
+				              			<dt><em style="left:${myStoreDetail.store_deliverycredit*20}%;">${myStoreDetail.store_deliverycredit}</em></dt>
+				              			<dd>非常不满</dd>
+				              			<dd>不满意</dd>
+				              			<dd>一般</dd>
+				              			<dd>满意</dd>
+				              			<dd>非常满意</dd>
+			            			</dl>
+			            		</td>
+			        		</tr>
+			      		</tbody>
+			    	</table>
+  				</div>
+  				<div class="tabmenu">
+	  				<ul class="tab pngFix">
+	  					<li class="active"><a href="javascript:void(0);">评论列表</a></li>
+	  				</ul>
+	  				<table>
+	  					<tr>
+	  						<td><a class="user-btn3 " name="stype" stype="0"  href="javascript:void(0);">模糊搜索 </a> </td>
+	  						<td><a class="user-btn3 detailFind" name="stype" stype="1" href="javascript:void(0);">详细搜索 </a> 
+	  							<input type="hidden" id="stype" value="${storeConsult.stype}"/>
+	  						</td>
+	  					</tr>
+	  				</table>
+	  			</div>
+	  			<table class="search-form"  id="keywordFind" <#if storeConsult.stype=="1"> style="display: none;" </#if>>
+			  		<tbody>
+			  			<tr>
+		  					<th >模糊搜索：</th>
+			  				<td >
+			  					<input type="text" class="input_text" name="keyword" value="${storeConsult.keyword!''}"/> (可按商品名称、会员名称、评论内容搜索)
+							</td>
+							<td><input type="button" class="submit"  name="searchComment" value="搜索" /></td>
+		  				</tr>
+		  			</tbody>
+		  		</table>
+		  		<table class="search-form"  id="detailFind" <#if storeConsult.stype=="0"> style="display: none;" </#if>>
+		  			<tbody>
+						<tr>
+		  					<th>会员名称：</th>
+       						<td ><input type="text" class="input_text" name="mname" value="${storeConsult.mname!''}"/></td>
+       						<th>商品名称：</th>
+       						<td> <input type="text" class="input_text" name="gname" value="${storeConsult.gname!''}"/> </td>
+       						<th>内容：</th>
+       						<td> <input type="text" class="input_text" name="content" value="${storeConsult.content!''}"/></td>
+       					</tr>
+       					<tr>
+		  					<th>评价：</th>
+		  					<td>
+		  						<select id="grade">
+									<option value="-1">--全部--</option>
+									<option value="3">好评</option>
+									<option value="2">中评</option>
+									<option value="1">差评</option>
+								</select>
+		  					</td>
+		  					<th>回复状态：</th>
+		  					<td>
+		  						<select id="replyStatus">
+									<option value="0">--全部 --</option>
+									<option value="1">已回复</option>
+									<option value="2">未回复</option>
+								</select>
+		  					</td>
+							<td><input type="button" class="submit"  name="searchComment" value="搜索" /></td>
+		  				</tr>
+			  		</tbody>
+			  	</table>
+				<form id="commentForm">
+					<div id="postage-tpl" style="padding: 20px 0;">
+			  			<div id="J_TemplateList" class="manage-list">
+			            	<div class="section J_Section">
+			            		<h3 class="J_Title"> 商品列表 </h3>
+			            	</div>
+			            	<div class="tbl-head">
+			        			<table cellspacing="0" cellpadding="0" border="0"  width="100%">
+			        				<tbody>
+				        				<tr>
+											<th>评价商品</th>
+											<th>评价用户</th>
+											<th >评价时间</th>
+											<th>评价内容</th>
+											<th>操作</th>
+									  </tr>
+									</tbody>
+								</table>
+			            	</div>
+			            	<div class="entity">
+			            		<table cellspacing="0" cellpadding="0" border="0" >
+				            		<tbody>
+				            			<#list storeConsult.cmmentList.result as comment>
+											<tr>
+												<td><input type="hidden" name="commentId" value="${comment.comment_id}"/> ${comment.goods_name}</td>
+												<td>${comment.uname}</td>
+												<td><center> <@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></center></td>
+												<td>${comment.content!''}</td>
+												<td>
+													<a class="reply" commentId="${comment.comment_id}" href="javascript:void(0)">回复</a>
+												</td>
+											</tr>	
+										</#list>
+				            		</tbody>
+			            		</table>
+			            	</div>
+			            </div>
+			        </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	$("#replyStatus").find("option[value='${storeConsult.replyStatus}']").attr("selected",true);
+	$("#grade").find("option[value='${storeConsult.grade}']").attr("selected",true);
+	$("a.reply").click(function(){
+		dialog = $.dialog({
+			title : "回复评论",
+			width : 475,
+			height : 312,
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "reply_comment.html?comment_id="+$(this).attr("commentId")+"&type=1",
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '修改',
+					callback : function() {
+						reply();
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				$.alert("出现错误，请重试");
+			},
+			async:false
+		});	
+	});
+	$("a[name='stype']").click(function(){
+		var stype=$(this).attr("stype");
+		$("#stype").val(stype);
+		if(stype==0){
+			$("#keywordFind").show();
+			$("#detailFind").hide();
+		}else{
+			$("#detailFind").show();
+			$("#keywordFind").hide();
+		}
+	});
+	$("#deleteComment").click(function(){
+		if(!confirm("确定删除吗？"))
+			return false;
+		if($("input[name='commentId']:checked").size()==0){
+			alert("请至少需要选择一条数据");
+			return false;
+		}
+		var options = {
+				url : "${ctx}/api/b2b2c/storeCommentApi!delComment.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#commentForm").ajaxSubmit(options);
+	});
+	$("input[name='searchComment']").click(function(){
+		var replyStatus=$("#replyStatus").val();
+		var grade=$("#grade").val();
+		var stype=$("#stype").val();
+		if(stype=="0"){
+			var keyword=$("input[name='keyword']").val();
+			
+			location.href="StoreEvaluateList.html?type=1&keyword="+keyword+"&replyStatus="+replyStatus+"&stype="+stype+"&grade="+grade;
+		}else{
+			var mname=$("input[name='mname']").val();
+			var gname=$("input[name='gname']").val();
+			var content=$("input[name='content']").val();
+			location.href="StoreEvaluateList.html?type=1&stype="+stype+"&mname="+mname+"&gname="+gname+"&content="+content+"&replyStatus="+replyStatus+"&grade="+grade;
+		}
+	});
+});
+function reply(){
+	var options = {
+		url : "${ctx}/api/b2b2c/storeCommentApi!edit.do",
+		type : "POST",
+		dataType : 'json',
+		async:false,
+		success : function(data) {	
+			alert(data.message);
+			if(data.result==1){
+				location.reload();
+			}
+		},
+		error : function(e) {
+			alert("出现错误 ，请重试");
+		}
+	};
+	$("#replyForm").ajaxSubmit(options);
+}
+</script>
+<#include '/common/footer.html' />

@@ -1,0 +1,74 @@
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>				
+<div class="main" style="background-color: white;" >
+	<div class="easyui-panel" style="border-style: none;">
+		<div style="padding: 10px 0 10px 20px">
+			<form id="actForm" method="post" class="validate">
+			<input type="hidden" name="advbuyActStartTime" value="${advbuyActStartTime}"/>
+				<table>
+					<tr>
+						<td>活动名称:</td>
+						<td><input class="input_text easyui-validatebox" type="text" id="name" name="act_name" data-options="required:true" ></input></td>
+					</tr>
+					<tr>
+						<td>开始时间：</td>
+						<td>
+							<input  type="easyui-datetimebox" style="height: 28px;width: 150px" id="startTime"  name="start_time" data-options="required:true"  ></input>
+							不能早于：<@dateformat time='${advbuyActStartTime}' pattern='yyyy-MM-dd HH:mm:ss'/>
+						</td>
+					</tr>
+					<tr>
+						<td>结束时间：</td>
+						<td><input  class="easyui-datetimebox" data-options="required:true" style="height: 28px;width: 150px" type="text" id="endTime" name="end_time"></input></td>
+					</tr>
+					<tr>
+						<td>报名截止时间：</td>
+						<td><input  class="easyui-datetimebox" data-options="required:true" style="height: 28px;width: 150px" type="text" id="joinEndTime"  name="join_end_time"></input> </td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+$("input[name='start_time']").datetimebox( {
+    fit : true,
+    formatter : function(date) {
+    	if(date/1000>=${advbuyActStartTime}){
+    		var endTime = $("#endTime").datetimebox('getValue');
+        	var dtEnd = Date.parse(endTime.replace(/-/g,'/'));
+        	if (dtEnd<=date)  $("#endTime").datebox('setValue','');
+        	$("#joinEndTime").datebox('setValue','');
+    		return date.format('yyyy-MM-dd hh:mm:ss');
+    	}
+        return '';  
+    }
+});
+
+
+$("#endTime").datetimebox( {
+    fit : true,
+    formatter : function(date) {
+    	var startTime = $("#startTime").datetimebox('getValue');
+    	var dtStart = Date.parse(startTime.replace(/-/g,'/'));
+    	if(date>dtStart){
+    		$("#joinEndTime").datebox('setValue','');
+    		return date.format('yyyy-MM-dd hh:mm:ss');
+    	}
+        return '';  
+    }
+});
+
+$("#joinEndTime").datetimebox( {
+    fit : true,
+    formatter : function(date) {
+    	var endTime = $("#endTime").datetimebox('getValue');
+    	var dtEnd = Date.parse(endTime.replace(/-/g,'/'));
+    	if(date<=dtEnd){
+    		return date.format('yyyy-MM-dd hh:mm:ss');
+    	}
+        return '';  
+    }
+});
+
+</script>

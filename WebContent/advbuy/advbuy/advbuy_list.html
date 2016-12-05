@@ -1,0 +1,116 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	 <form id="gridform">
+	  <div class='buttonArea'>
+			<span style="float: right;height:28px;"> 
+				<a href="javascript:void(0)" class="button b_fr" id="searchBtn">搜索</a>
+			    <select name="gb_status"  id="gb_status" >
+			    	<option >全部</option>
+			    	<option value="0">未审核</option>
+			    	<option value="1">已审核</option>
+			    	<option value="2">已拒绝</option>
+			    </select>
+			</span>
+		</div>
+	 
+		<div class="shadowBoxWhite tableDiv">
+			
+				<table class="easyui-datagrid"
+					data-options="url:'${ctx}/shop/admin/advBuy!listJson.do?actid=${actid}',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="gbdata">
+					<thead>
+						<tr>
+					   	 	<th  data-options="field:'gb_name',width:100">预售名称</th>
+					   	 	<th  data-options="field:'act_name',width:100">活动名称</th>
+					   	 	<th  data-options="field:'start_time',width:100" formatter="formatTime">开始时间</th>
+					   	 	<th  data-options="field:'end_time',width:100"  formatter="formatTime">结束时间</th> 
+					   	 	<th  data-options="field:'gb_status',width:100" formatter="formatStatus">预售状态</th>
+					   	 	<th  data-options="field:'view_num',width:100">浏览数</th>
+					   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+						</tr>
+					</thead>
+				</table>
+		</div>
+	</form>	
+	
+</div>
+
+<div id="divdia"></div>
+
+<script type="text/javascript">
+
+function formatAction (value,row,index){
+	var status= row.gb_status;
+	var val="";
+	if(status==0){
+		val="<a href='javascript:void(0);' onclick='javascript:auth(1,"+row.gb_id+")'  title='审核'>审核</a>";
+		val+="&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:void(0);' onclick='javascript:auth(2,"+row.gb_id+")'  title='审核'>拒绝</a>  ";
+	}
+	val+="<a href='javascript:void(0);' title='预售商品信息' class='edit' onclick=\"newTab('预售商品信息','${ctx}/shop/admin/advBuy!edit.do?gbid="+row.gb_id+"')\"></a>"
+	return val;
+}
+
+
+function auth(status,gbid){
+	
+	if( !confirm("确认吗？") ){
+		return false;
+	}
+		$.ajax({
+			url:"advBuy!auth.do",
+			data:"gbid="+gbid+"&status="+status,
+			dataType:"json",
+			success:function(json){
+				if(json.result==1){
+					alert("操作成功")
+					$('#gbdata').datagrid('reload');
+				}else{
+					alert(json.result.message);
+				}
+			},
+			error:function(){
+				alert("出现意外错误");
+			}
+		});
+	
+}
+
+
+function formatTime(value,row,index){
+	var val = getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	return val;   		
+}
+
+function formatStatus(value,row,index){
+	
+	
+	var val = "未审核";
+	if(value==0){
+		val = "未审核";
+	}
+	if(value==1){
+		val = "已审核";
+	}
+	if(value==2){
+		val = "已拒绝";
+	}
+	return val;   		
+}
+
+//alert( getFormatDateByLong (1329895874, "yyyy-MM-dd") )
+
+$(function(){
+	
+	$("#searchBtn").click(function(){
+		var gb_status= $("#gb_status").val();
+		$('#gbdata').datagrid('load', {
+			status:gb_status,
+			 page:1
+	   }); 
+	});
+	
+});
+
+ 
+</script>
+<#include '/admin/footer.html' >

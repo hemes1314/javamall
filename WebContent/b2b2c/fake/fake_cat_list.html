@@ -1,0 +1,38 @@
+<#include '/admin/header.html' >
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<style>
+.input_text{
+	width: 95%;
+}
+</style>
+<div id="loading"></div>
+		<div id="tb" style="height: auto">
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid"
+			data-options="url:'fake!listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" >
+			<thead>
+				<tr>
+					<th data-options="field:'id',checkbox:true,width:100" ></th>
+					<th data-options="field:'cat_id',width:200">分类标识</th>
+					<th data-options="field:'cat_name',width:200">分类名称</th>
+					<th data-options="field:'action',width:100,align:'center'" formatter="formatOperation">操作</th>
+				</tr>
+			</thead>
+		</table>
+		</div>
+	<div id="divdia" style="display: none;"></div>
+
+</div>
+<script type="text/javascript">
+
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='newTab(\""
+				+ row.cat_name
+				+ "-评论关键词信息修改\",\"${ctx}/b2b2c/admin/fake!getCommentsKeyWordsById.do?id="
+				+ row.id +"&cat_name="+row.cat_name +"\")' ></a>";
+		return val;
+	}
+	
+</script>
+<#include '/admin/footer.html' >

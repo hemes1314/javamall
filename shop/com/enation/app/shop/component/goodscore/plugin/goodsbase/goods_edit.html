@@ -1,0 +1,79 @@
+<table class="form-table" width="100%">
+	<tr>
+		<th style="width: 10%;">商品分类：</th>
+		<td style="width: 90%; text-align: left;">
+		<#list parentList as parent> 
+			<#if parent_index != 0> 
+				<span>&nbsp;&gt;&nbsp;</span> 
+			</#if>
+			<span>${parent.name}</span> 
+		</#list> 
+			<input type="hidden" name="goods.cat_id" value="${catid}" /> 
+			<input type="hidden" name="goods.type_id" value="${typeid!''}" />
+		</td>
+	</tr>
+	<tr>
+		<th>商品名称：</th>
+		<td style="text-align: left;"><input type="text"
+			name="goods.name" id="goods_name"
+			class="easyui-validatebox input_text" dataType="string"
+			isrequired="true" data-options="required:true"
+			value="${goodsView.name }" style="width: 250px" /></td>
+	</tr>
+	<tr>
+		<th>商品编号：</th>
+		<td style="text-align: left;"><input type="text" name="goods.sn"
+			class="easyui-validatebox input_text" value="${goodsView.sn}"
+			data-options="required:true" /></td>
+	</tr>
+
+	<#if !optype?exists || optype!='stock'>
+	<tr>
+		<th>是否上架销售：</th>
+		<td style="text-align: left;"><input type="radio"
+			name="goods.market_enable"<#if
+			goods.market_enable==1>checked="checked"</#if> value="1"
+			class="market_enable" /> 是&nbsp;&nbsp; <input type="radio"
+			name="goods.market_enable"<#if
+			goods.market_enable==0>checked="checked"</#if> value="0"
+			class="market_enable"/> 否</td>
+	</tr>
+
+
+	<#else>
+	<input type="hidden" name="goods.market_enable" value="0" /> </#if>
+
+	<tr>
+		<th>市场价格：</th>
+		<td style="text-align: left;"><input type="text"
+			name="goods.mktprice" id="mktprice"
+			class="input_text easyui-validatebox" validType="money"
+			isrequired="true" value="${goodsView.mktprice}" style="width: 100px" />
+		</td>
+	</tr>
+	<input type="hidden" name="goods.point"  value="0"  />
+	<!-- 
+	<tr>
+		<th>获得积分：</th>
+		<td style="text-align: left;"><input type="text"
+			name="goods.point" class="input_text easyui-numberbox" dataType=float
+			isrequired="true" value="${goodsView.point}" style="width: 100px" />
+		</td>
+	</tr>
+	
+	 -->
+	 
+	<tr>
+		<th>详细描述：</th>
+		<td><textarea id="intro" name="goods.intro" cols="100" rows="8"
+				style="width: 98%; height: 300px;">${goods.intro!''?html}</textarea>
+		</td>
+	</tr>
+</table>
+
+<script>
+$(function(){
+	 $('#intro' ).ckeditor();	
+});	
+</script>
+

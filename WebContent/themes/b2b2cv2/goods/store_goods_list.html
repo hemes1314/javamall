@@ -1,0 +1,430 @@
+<#include '/store/store_header.html' />
+<#assign myGoodsListTag=newTag("myGoodsListTag")>
+<#assign storeGoods=myGoodsListTag()>
+<#-- 创建店铺商品分类标签 --> 
+<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+<#-- 查询店铺商品分类列表 0表示查子分类 --> 
+<#assign storeGoodsCatList= storeGoodsCatListTag("'type':0")!''>
+
+<style>
+.goodslist_bystore tr th{
+	text-align: center;
+}
+</style>
+
+<div class="store_center">
+<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#"> 商品 </a><span>></span><font><#if market_enable ?? && market_enable == "1">出售中的商品<#else>仓库中的商品</#if></font>
+		</div>
+		<input type="hidden" value="${market_enable!0}" class="left_selected">
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="#">商品列表</a>
+					</li>
+				</ul>
+				<div class="store_goods_tool">
+					<#if type??>
+						<a class="ncu_btn3" id="saveRel" href="javascript:void(0);">保存选中 </a> 
+						<input type="hidden" id="tagId" value="${tagId}"/>
+					<#else>
+			  			<#if disable??>
+			  				<a class="ncu_btn3" id="revert" href="javascript:void(0);">还原 </a>
+			  				<a class="ncu_btn3" id="clean" href="javascript:void(0);">清除 </a>
+			  			<#else>
+							<a class="ncu_btn3 other_store_goods" id="deleteCheck" href="javascript:void(0);">删除 </a>
+							<a class="ncu_btn3" id="trash" href="javascript:void(0);">回收站</a>
+	  					</#if>
+			  		</#if>	
+				</div>
+			</div>
+			<!-- 商品列表 -->
+			<div class="store_goodslist">
+				<table class="search_form">
+			  		<tbody>
+			  			<tr>
+			  				<td style="width:200px">&nbsp;</td>
+			  				<th>本店分类：</th>
+			  				<td >
+			  					<select name="store_cat">
+			  						<option value="0">全部</option>
+									<#list storeGoodsCatList as cat>
+										<#if cat.store_cat_pid==0>
+											<option value="${cat.store_cat_id}"
+												<#if storeGoods.store_cat??> 
+													<#if storeGoods.store_cat+""==cat.store_cat_id+""> 
+														selected="selected"
+													</#if> 
+												</#if> 
+											>${cat.store_cat_name!''}</option>
+										</#if>
+										<#list storeGoodsCatList as childCat>
+											<#if childCat.store_cat_pid==cat.store_cat_id>
+												<option value="${childCat.store_cat_id}" 
+													<#if storeGoods.store_cat??> 
+														<#if storeGoods.store_cat+""==childCat.store_cat_id+""> 
+															selected="selected"
+														</#if> 
+													</#if> 
+												>&nbsp;&nbsp;&nbsp;&nbsp;${childCat.store_cat_name!''}</option>
+											</#if>
+										</#list>
+									</#list>
+								</select>
+							</td>
+			  				<th>商品名称：</th>
+        					<td ><input type="text" class="text" name="goodsName" value="${storeGoods.goodsName!''}"></td>
+        					<td>是否上架：
+        						<select style="width: 100px;" name="market_enable">
+        							<option <#if storeGoods.market_enable==-1> selected="selected"</#if> value="-1">&nbsp;&nbsp;请选择</option>
+        							<option <#if storeGoods.market_enable==1> selected="selected"</#if> value="1">&nbsp;&nbsp;已上架</option>
+        							<option <#if storeGoods.market_enable==0> selected="selected"</#if> value="0">&nbsp;&nbsp;未上架</option>
+        						</select>
+        					</td>
+			  				<td ><input type="button" class="submit" id="btnSearch" value="搜索" /></td>
+			  			</tr>
+			  		</tbody>
+			  	</table>
+			  	<#if storeGoods.storegoods.result??>
+			  	<form id="storeGoodsForm">
+				  	<table class="goodslist_bystore" cellpadding="0" cellspacing="0">
+				  		<thead>
+				  			<tr>
+				  				<th>选择</th>
+				  				<!-- <th>货号</th> -->
+				  				<th>图片</th>
+				  				<th>名称</th>
+				  				<th>价格</th>
+				  				<th>库存</th>
+				  				<th>可用库存</th>
+				  				<th>时间</th>
+				  				<th>状态</th>
+				  				<th>操作</th>
+				  			</tr>
+				  		</thead>
+				  		<tbody>
+				  			<#list storeGoods.storegoods.result as storeGoods>
+				  			<!-- <tr>
+				  				<th colspan="10">商品货号：${storeGoods.sn!''}</th>
+				  			</tr> -->
+				  			<tr>
+			  				<#if type??>
+									<td >
+									<#if type=='tag'>
+									<#if storeGoods.market_enable==1><input type="checkbox" name="reg_id" id ="checkbox" value="${storeGoods.goods_id}" name2 ="${storeGoods.market_enable}" /></#if>
+									<#else>
+									<input type="checkbox" name="reg_id" id ="checkbox" value="${storeGoods.goods_id}" name2 ="${storeGoods.market_enable}" />
+									</#if>
+									</td>
+						    <#else>
+									<td ><input type="checkbox" name="goods_id" id ="checkbox" value="${storeGoods.goods_id}"  name2 ="${storeGoods.market_enable}"></td>
+						    </#if>
+								<!-- <td>${storeGoods.sn!''}</td> -->
+				  				<td>
+				  					<#if storeGoods.thumbnail?exists && storeGoods.thumbnail != ''>
+				  					<@image src="${storeGoods.thumbnail!''}" alt="${storeGoods.name!''}" height="75" width="75" /> 
+				  					<#else>
+				  						暂无图片
+				  					</#if>
+				  				</td>
+				  				<td style="line-height:25px;width: 230px;">
+                                   <#if storeGoods.market_enable==1>
+                                   <a target="_blank" href="${ctx}/goods-${storeGoods.goods_id}.html" style="color:#005ea6;line-height: 20px;">${storeGoods.name}</a>
+                                   <#else>
+                                   <a href="javascript:alert('此商品已下架')" style="color:#005ea6;line-height: 20px;">${storeGoods.name}</a>
+                                 </#if>
+				  				</td>
+				  				<td>
+				  					${storeGoods.price?string.currency}
+				  				</td>
+				  				<td>
+				  					${storeGoods.store!''}件
+				  				</td>
+				  				<td>
+				  					${storeGoods.enable_store!''}件
+				  				</td>
+				  				<td>
+				  					<@dateformat time="${storeGoods.create_time?c}" pattern="yyyy-MM-dd HH:mm"/>
+				  				</td>
+				  				<td>
+				  					<#if storeGoods.market_enable==1>上架<#else>下架</#if>
+				  				</td>
+				  				<input type="hidden" name="marketenable" value="${storeGoods.market_enable}">
+				  				<td class="storegoodslist_tools">
+				  					<#if disable??>
+										<a href="javascript:void(0);" goods_id="${storeGoods.goods_id}" operational="revertGoods" val="还原商品" name="goodsOperation" class="tool1"><i></i>还原</a>
+										<a href="javascript:void(0);" goods_id="${storeGoods.goods_id}" operational="cleanGoods" val="清除商品" name="goodsOperation" class="tool2"><i></i>清除</a>
+										<#else>
+										<a href="edit_goods.html?goods_id=${storeGoods.goods_id}&market_enable=${storeGoods.market_enable}&menu=store_goods" class="tool4"><i></i>编辑</a>
+										<a href="javascript:void(0);" goods_id="${storeGoods.goods_id}" name="updateStore" class="tool3"><i></i>库存</a>
+										<a href="javascript:void(0);" goods_id="${storeGoods.goods_id}" market_enbale = "${storeGoods.market_enable}" operational="deleteGoods" val="删除商品" name="goodsOperation" class="tool2"><i></i>删除</a>
+									</#if>
+				  				</td>
+				  			</tr>
+				  			</#list>
+				  		</tbody>
+				  	</table>
+			  	</form>
+			  	<@pager pageno="${storeGoods.page!'1'}" pagesize="${storeGoods.storegoods.pageSize}" totalcount="${storeGoods.totalCount}" />
+			  	<#else>
+			  	<p class="no_blank">暂无符合条件的数据记录</p>
+			  	</#if>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	if(window.location.search == "?market_enable=1&menu=store_goods"){
+		$(".path font").text("出售中的商品");
+	}
+	
+	if(window.location.search == "?menu=store_goods"){
+		$(".path font").text("仓库中的商品");
+	}
+	
+	$("#btnSearch").click(function(){
+		var goodsName = $.trim($('input[name="goodsName"]').val()); 
+		$('input[name="goodsName"]').val(goodsName);
+
+		var goodsName=$("input[name='goodsName']").val();
+		var store_cat=$("select[name='store_cat']").val();
+		var market_enable=$("select[name='market_enable']").val();
+		
+		var url_parame = "";
+		<#if type??>
+			url_parame = "&type=${type}&mark=${mark}&tagId=${tagId}";
+		</#if>
+		<#if disable??>
+			url_parame += "&disable=${disable}";
+		</#if>
+		location.href="store_goods_list.html?goodsName="+goodsName+"&store_cat="+store_cat+"&market_enable="+market_enable+"&menu=store_goods"+url_parame;
+	});
+	$("a[name='updateStore']").click(function(){
+		dialog = $.dialog({
+			title : "修改库存信息",
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "goodsStore.html?goods_id="+$(this).attr("goods_id"),
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '修改',
+					callback : function() {
+						
+						var productIds = $("input[name='productIds']");
+						if(productIds != undefined && productIds != null && productIds.length > 0) {
+							
+							var storeNums = $(".more_storenum");
+							var storeOldNums = $(".more_storeoldnum");
+							var storeEnableNums = $(".more_storeenablenum");
+							
+							for(var i = 0; i < storeNums.length; i++) {
+								
+								var storeNum = storeNums.eq(i).val();
+								
+								if(parseInt(storeNum) != storeNum) {
+									alert("库存必须是整数");
+									return false;
+								}
+								if(storeNum<=0){
+									alert("库存必须大于0");
+									return false;
+								}
+								if(storeNum.length > 8){
+									alert("输入的库存数量过大（1-99999999之间）");
+									return false;
+								}
+								
+								// 判断可用库存
+								var storeNum = new Number(storeNum);
+								var storeOldNum = new Number(storeOldNums.eq(i).val());
+								var storeEnableNum = new Number(storeEnableNums.eq(i).val());
+								if(!isNaN(storeNum) && !isNaN(storeOldNum) && !isNaN(storeEnableNum) && storeEnableNum - (storeOldNum - storeNum) < 0) {
+									alert("库存数量修改时不可小于可用库存！");
+									return false;
+								}
+							}
+						} else {
+							var storeNum = $(".one_storenum").val();
+
+							if(parseInt(storeNum) != storeNum) {
+								alert("库存必须是整数");
+								return false;
+							}
+							if(storeNum <= 0){
+								alert("库存必须大于0");
+								return false;
+							}
+							if(storeNum.length > 8){
+								alert("输入的库存数量过大（1-99999999之间）");
+								return false;
+							}
+							
+							// 判断可用库存
+							storeNum = new Number(storeNum);
+							var storeOldNum = new Number($(".one_storeoldnum").val());
+							var storeEnableNum = new Number($(".one_storeenablenum").val());
+							if(!isNaN(storeNum) && !isNaN(storeOldNum) && !isNaN(storeEnableNum) && storeEnableNum - (storeOldNum - storeNum) < 0) {
+								alert("库存数量修改时不可小于可用库存！");
+								return false;
+							}
+						}
+						
+						editStore();
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				$.alert("出现错误，请重试");
+			},
+			cache : false
+		});	
+	});
+	function editStore(){
+		var options = {
+				url : "${ctx}/api/b2b2c/goods!saveGoodsStore.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#goodsStoreForm").ajaxSubmit(options);
+	}
+	$("a[name='goodsOperation']").click(function(){
+
+		if ($(this).attr("market_enbale") == 1){
+			alert("此商品正在上架中，不能删除")
+			return;
+		}
+		
+		if(!confirm("确定要"+$(this).attr("val")+"吗？"))
+			return false;
+		var operation=$(this).attr("operational");
+		$.ajax({
+			url : "${ctx}/api/b2b2c/goods!"+operation+".do?goods_id="+$(this).attr("goods_id"),
+			cache : false,
+			dataType : 'json',
+			success : function(json) {
+				alert(json.message);
+				if(json.result==1)
+					location.href="store_goods_list.html?menu=store_goods";
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			}
+		});	
+	});
+	$("#deleteCheck").click(function(){	
+		var checkbox = $("input[type='checkbox']");
+
+		for (var i=0;i<checkbox.length;i++ ){
+			if(checkbox[i].checked){ //判断复选框是否选中
+				if (checkbox[i].getAttribute("name2")=="1"){
+					alert("有商品正在上架中,不能删除!")
+					return;
+				}
+			}
+		}
+		if(!confirm("确定要删除吗？"))
+			return false;	
+		var options = {
+				url : "${ctx}/api/b2b2c/goods!deleteGoods.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					$("input[name='goods_id']").attr("checked", false);           //取消删除商品后，页面剩余同样位置的商品仍然是选中状态;
+					location.href="store_goods_list.html?menu=store_goods";
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#storeGoodsForm").ajaxSubmit(options);
+	});
+	$("#revert").click(function(){
+		var options = {
+			url : "${ctx}/api/b2b2c/goods!revert.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {	
+				alert(data.message);
+				location.reload();
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+		$("#storeGoodsForm").ajaxSubmit(options);
+	});
+	$("#clean").click(function(){
+		var options = {
+				url : "${ctx}/api/b2b2c/goods!cleanGoods.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					location.reload();
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$("#storeGoodsForm").ajaxSubmit(options);
+	});
+	<#if type??>
+	$("#saveRel").click(function(){
+		var options = {
+				url : "${ctx}/api/b2b2c/tag!saveRel.do?tagId=${tagId}",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					location.href="${ctx}/goods/tagGoodsShow.html?tagid=${tagId}&mark=${mark}&menu=store_goods";
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#storeGoodsForm").ajaxSubmit(options);
+	});
+	</#if>
+	$("#trash").click(function(){
+		window.open("store_goods_list.html?disable=1&menu=store_goods")
+	});
+	
+})
+</script>
+<script>
+$(function(){
+	
+	
+	var leftselected = $(".left_selected").val();
+	if(leftselected=="1"){
+		selectMenu(1);
+	}
+	if(leftselected=="0"){
+		selectMenu(2);
+	}
+})
+</script>
+
+<#include '/common/footer.html' />

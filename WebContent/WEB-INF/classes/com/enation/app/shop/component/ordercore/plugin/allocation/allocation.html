@@ -1,0 +1,8 @@
+<script type="text/javascript">
+$(function(){
+	$(".order_detail .tab li[tabid=9]").click(function(){
+		$("#allocaton_wrapper").load("${ctx}/admin/plugin?beanid=orderDetailAllocationPlugin&orderid=${orderid}",{cache:true});
+	});
+});
+</script>
+<div id="allocaton_wrapper">加载中...</div>

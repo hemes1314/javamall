@@ -1,0 +1,125 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript"
+	src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+
+<style>
+.form-table th {
+	width: 150px;
+}
+</style>
+<div class="main">
+	<div class="shadowBoxWhite wf100 whiteBox">
+		<form id="editpayCfgForm" method="post" class="validate">
+			<input type="hidden" name="paymentId" value="${paymentId }" />
+			<table cellspacing="1" cellpadding="3" width="100%"
+				class="form-table" id="pluginTable">
+				<tr id="first">
+					<th>支付方式：</th>
+					<td><select name="type" id="pluginList" onchange="bian()">
+							<option value="">请选择要添加的支付方式</option> <#list pluginList as
+							plugin>
+							<option value="${plugin.id }"<#if
+								type==plugin.id > selected="selected" </#if> >${plugin.name }</option>
+							</#list>
+					</select></td>
+				</tr>
+				<tr id="name">
+					<th>支付方式名称：</th>
+					<td><input type="text" class="easyui-validatebox input_text"
+						name="name" value="${name}" id="payment_name"
+						data-options="required:true" dataType="string" isrequired="true" />
+					</td>
+				</tr>
+				<tr id="last">
+					<th>介绍：</th>
+					<td><textarea name="biref" id="biref">${biref!''}</textarea></td>
+				</tr>
+
+			</table>
+		</form>
+		<div class="buttonWrap">
+			<a href="javascript:;" id="saveBtn" class="easyui-linkbutton">保存</a>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	var app_path = "";
+	$(function() {
+		var instance = CKEDITOR.instances['biref'];
+		if (instance) {
+			CKEDITOR.remove(instance);
+		}
+		$('#biref').ckeditor();
+
+		$("#saveBtn").click(function() {
+			var savebtn = $(this);
+			var formflag= $("#editpayCfgForm").form().form('validate');
+			if(formflag){
+				var options = {
+					url : "payCfg!saveEdit.do?ajax=yes",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						if(result.result==1){
+							$.Loading.success(result.message);
+							$("#payCfginfo").dialog('close');
+							$('#paymentdata').datagrid('reload');
+						}else{
+							$.Loading.error(result.message);
+						}
+						editbtn.linkbutton("enable");
+				 	},
+				 	error : function(e) {
+						editbtn.linkbutton("enable");
+				 		$.Loading.error("出现错误 ，请重试");	
+					}
+				};
+				$('#editpayCfgForm').ajaxSubmit(options);
+			}else{
+				$.Loading.hide();
+				editbtn.linkbutton("enable");
+			}
+		})
+	})
+	$(function(){
+		loadHtml('${paymentId}','${type}','${name}');
+	});
+
+	function bian() {
+		var pluginid = $("#pluginList").val();
+		var name = $("#pluginList option:selected").text();
+		loadHtml("", pluginid, name);
+	}
+
+	function loadHtml(paymentid, pluginid, name) {
+		if (pluginid && pluginid != '') {
+			$.ajax({
+				url : "payCfg!getPluginHtml.do?ajax=yes&pluginId=" + pluginid
+						+ "&paymentId=" + paymentid,
+				success : function(html) {
+					cleanTr();
+					$("#pluginTable tr[id=name]").after(html);
+					$("#payment_name").val(name);
+				},
+				error : function() {
+					$.Loading.error("出错了");
+				}
+			});
+		}
+	}
+
+	function cleanTr() {
+		$("#pluginTable>tbody>tr").each(
+				function() {
+					if ($(this).attr("id") != "first"
+							&& $(this).attr("id") != "last"
+							&& $(this).attr("id") != "name") {
+						$(this).remove();
+					}
+				});
+	}
+</script>
+
+<#include '/admin/footer.html' >
+

@@ -1,0 +1,40 @@
+<tr>
+	 <th>支付宝合作伙伴id ：</th>
+	 <td>
+ 	 <input type="text" name="partner" value="${partner!''}" class="input_text easyui-validatebox"  id="partner" />
+	</td>
+</tr>
+<tr>
+	 <th> 卖家支付宝帐户：</th>
+	 <td>
+ 	 <input type="text" name="seller_email"  value="${seller_email!''}" class="input_text easyui-validatebox"  id="seller_email"  />
+	</td>
+</tr>
+<!-- <tr>
+	 <th> 商户私钥：</th>
+	 <td>
+ 	 <input type="text" name="rsa_private"  value="${rsa_private!''}" class="input_text easyui-validatebox"  id="rsa_private"  />
+	</td>
+</tr> -->
+<tr>
+	 <th> 商户公钥：</th>
+	 <td>
+ 	 <input type="text" name="rsa_public"  value="${rsa_public!''}" class="input_text easyui-validatebox"  id="rsa_public"  />
+	</td>
+</tr>
+<script type="text/javascript">
+$(function(){
+	$('#seller_email').validatebox({ 
+		required:true 
+		}); 
+	$('#partner').validatebox({ 
+		required:true 
+		}); 
+	/* $('#rsa_private').validatebox({ 
+		required:true 
+		});  */
+	$('#rsa_public').validatebox({ 
+		required:true 
+		});
+})
+</script>

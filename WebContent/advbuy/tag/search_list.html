@@ -1,0 +1,79 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+	<input type="hidden" name="tagid" value="${tagid }"/>
+	<input type="hidden" name="tagids" value=""/>
+		<div class='buttonArea'>
+			<span id="searchbtn">
+				<a href="javascript:void(0)" class="button"  onclick="append()">添加选中</a>
+			</span>
+			
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"  url="${ctx}/shop/admin/advBuyActTag!goodsListJson.do?tagid=${tagid}&actid=${actid}" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc"
+				>
+				<thead>
+					<tr>
+						<th data-options="field:'goods_id',checkbox:true,width:100" ></th>
+						<th data-options="field:'goods_name',width:500">商品名称</th>
+						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">销售价格</th>
+						<th data-options="field:'view_num',sortable:'true',width:200">浏览数量</th>
+						<th data-options="field:'buy_num',sortable:'true',width:200">已购数量</th>
+						<th data-options="field:'add_time',sortable:'true',width:200" formatter="formatTime">添加时间</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatTime(value,row,index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+
+function append(){
+	var rows = $('#goodsdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要添加商品");
+		return;
+	}
+	$.Loading.show("正在添加商品...");
+	var options = {
+			url : "${ctx}/shop/admin/goodsShow!batchAdd.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+		 			$('#goodsdata').datagrid("reload");      
+				}
+				if(result.result==0){
+					$.Loading.success(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);	
+}
+</script>
+
+<#include '/admin/footer.html' >
+
+

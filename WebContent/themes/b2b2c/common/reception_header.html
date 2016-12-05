@@ -1,0 +1,175 @@
+<!--头部-->
+<!-- 获取CMS数据搜索标签， -->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+<div class="header-wrap" style="width:1200px;margin:0px auto;">
+	<header class="public-head-layout wrapper">
+		<!--LOGO-->
+		<div class="site-logo index_logo">
+			<a href="${ctx}/index.html"><@image src="${logo}" class="pngFix" style="width:240px;height:60px;" /></a>
+		</div>
+		<!--搜索-->
+		<div class="head-search-bar" id="search">
+			<!--商品和店铺-->
+			<ul class="tab">
+				<li<#if search??> <#if search=="goods"> class="current" </#if>
+					<#else> class="current" </#if> act="search" title="按照商品查询"
+					search="goods">商品</li>
+				<li<#if search??> <#if search=="store"> class="current" </#if>
+					</#if> act="shop_search" title="按照店铺查询" search="store">店铺</li>
+			</ul>
+			<div class="search-form">
+				<input name="namekeyword" id="namekeyword" type="text"
+					class="input-text"<#if search??> <#if
+				namekeyword??> value="${namekeyword} "</#if> <#else>
+				value="请输入您要搜索的商品关键字" </#if> maxlength="60"/> <input type="button"
+					id="inquiry" value="搜索" class="input-submit" />
+			</div>
+			<!--搜索关键字-->
+			<div class="keyword">
+				热门搜索：
+				<ul>
+					<!-- 调用CMS数据搜索标签，并传递所在模型ID参数(es_hot_keyword表.)“3”表示出现三个关键词。 -->
+					<#assign webPage = dataSearchTag('{"modelid":1,"pageSize":5}') />
+					<#list webPage.result as data>
+					<li><a
+						href="${ctx}/goods_list.html?namekeyword=${data.keyword}">${data.keyword}</a></li>
+					</#list>
+				</ul>
+			</div>
+		</div>
+		<div class="head-user-menu">
+			<dl class="my-cart">
+				<div class="num" id="demowhj">0</div>
+				<dt>
+					<!--  <span class="icon-cart"></span>--><a href="${ctx}/cart.html">购物车结算</a><i
+						class="arrow"></i>
+				</dt>
+				<dd>
+					<div class="sub-title">
+						<h4>最新加入的商品</h4>
+					</div>
+					<div class="incart-goods-box"></div>
+				</dd>
+			</dl>
+		</div>
+	</header>
+</div>
+<#assign goodsCatTag= newTag("goodsCatTag")>
+<!-- 调用商品分类信息 -->
+<#assign goodsCat = goodsCatTag()!'' >
+<nav class="public-nav-layout">
+	<div class="wrapper">
+		<div class="all-category">
+			<div class="title">
+				<h3>
+					<a href="javascript:void(0);">所有商品分类</a>
+				</h3>
+				<i class="arrow"></i>
+			</div>
+			<!--左侧菜单-->
+			<div class="category">
+				<ul class="menu">
+					<#list goodsCat.cat_tree as cat>
+					<li class="odd" cat_id="${cat_index+1}">
+						<div class="class">
+							<h4>
+								<a href="${ctx}/goods_list.html?cat_id=${cat.cat_id}">${cat.name
+									}</a>
+							</h4>
+							<span class="recommend-class">推荐分类</span> <span class="arrow"></span>
+						</div> <#if cat.hasChildren>
+						<div class="sub-class" cat_menu_id="${cat_index+1}">
+							<#assign children2=cat.children /> <#list children2 as cat2>
+							<dl>
+								<dt>
+									<h3>
+										<a href="${ctx}/goods_list.html?cat_id=${cat2.cat_id}"
+											title="${cat.name }">${cat2.name }</a>
+									</h3>
+								</dt>
+								<#if cat2.hasChildren > <#assign children3=cat2.children />
+								<#list children3 as cat3>
+								<dd class="goods-class">
+									<a href="${ctx}/goods_list.html?cat_id=${cat3.cat_id}">${cat3.name
+										}</a>
+								</dd>
+								</#list> </#if>
+							</dl>
+							</#list>
+						</div> </#if>
+					</li> </#list>
+					<div class="clear"></div>
+				</ul>
+			</div>
+		</div>
+		<!--分类树结束-->
+		<ul class="site-menu">
+			<li class="current"><a href="${ctx}/index.html">首页</a></li>
+			<li class="link"><a href="${ctx}/groupbuy/groupbuy.html" class="pngFix">团购</a>
+			</li>
+			<li class="link"><a href="javascript:void(0);"> 品牌</a></li>
+			<li class="link"><a href="javascript:void(0);">优惠券</a></li>
+			<li class="link"><a href="javascript:void(0);">积分中心</a></li>
+			<li class="link"><a href="javascript:void(0);">运动专场</a></li>
+		</ul>
+	</div>
+</nav>
+<script type="text/javascript">
+	var goodsSearchTxt = '请输入您要搜索的商品关键字';
+	var storeSearchTxt = '请输入您要搜索的店铺关键字';
+	$(function() {
+		$("#inquiry").click(function() {
+			var search = $("#search li[class='current']").attr(
+					"search");
+			if ($("#namekeyword").val() == goodsSearchTxt && search == "goods") {
+				alert(goodsSearchTxt);
+			} else if ($("#namekeyword").val() == storeSearchTxt && search == "store") {
+				alert(storeSearchTxt);
+			} else if (!$("#namekeyword").val() == "" && search == "goods") {
+				location.href = ctx
+						+ "/goods_list.html?namekeyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search;
+			} else if (!$("#namekeyword").val() == ""
+					&& search == "store") {
+				location.href = ctx
+						+ "/store_list.html?namekeyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search;
+			}
+		});
+		$("#namekeyword").blur(function() {
+			if ($("#namekeyword").val() == "") {
+				var search = $("#search li[class='current']").attr("search");
+				if (search == "goods")
+					$("#namekeyword").val(goodsSearchTxt);
+				else if (search == "store")
+					$("#namekeyword").val(storeSearchTxt);
+			}
+		});
+		$("#namekeyword").focus(function() {
+			var search = $("#search li[class='current']")
+					.attr("search");
+			var searchTxt = "";
+			if (search == "goods"
+					&& $("#namekeyword").val() == goodsSearchTxt) {
+				$("#namekeyword").val("");
+			} else if (search == "store"
+					&& $("#namekeyword").val() == storeSearchTxt) {
+				$("#namekeyword").val("");
+			}
+		});
+		$("#search .tab li").click(function() {
+			var search = $(this).attr("search");
+			if (search == "goods") {
+				$("#namekeyword").val(goodsSearchTxt);
+				$("#search li[search='goods']").addClass("current");
+				$("#search li[search='store']").removeClass("current");
+			} else {
+				$("#namekeyword").val(storeSearchTxt);
+				$("#search li[search='store']").addClass("current");
+				$("#search li[search='goods']").removeClass("current");
+			}
+		});
+	});
+</script>

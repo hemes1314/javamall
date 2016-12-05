@@ -1,0 +1,119 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+
+<!-- 引入幻灯片JS --> 
+<script type="text/javascript" src="${ctx}/themes/b2b2c/js/jquery.flexslider-min.js"></script> 
+<!-- 绑定幻灯片事件 --> 
+<script type="text/javascript">
+$(window).load(function() {
+	$('.flexslider').flexslider();
+});
+</script>
+
+<!-- 右侧 -->
+<article class="goods-main">
+	
+	<#-- 创建标签商品标签 --> 
+	<#assign storeSlideListTag= newTag("storeSlideListTag") > 
+	<#-- 查询标签商品列表 --> 
+	<#assign storeSlideList=storeSlideListTag("{'storeid':${store_id!0}}")!''>
+	
+	<div class="flexslider">
+		<ul class="slides">
+			<#list storeSlideList as sl>
+				<li>
+					<a target="_blank" href="${sl.silde_url!''}"><@image src="${sl.img!'http://demo.javamall.com.cn:80/version4/statics/attachment/adv/1.jpg'}" /></a>
+				</li>
+			</#list>
+			<#if storeSlideList?size==0>
+				<li>
+					<a><img src="http://demo.javamall.com.cn:80/version4/statics/attachment/adv/1.jpg"></a>
+				</li>
+			</#if>
+		</ul>
+	</div>
+	
+	<div class="nc-s-c-s3 goods-list mt10">
+		<div class="title pngFix">
+			<span><a href="#"
+				class="more">更多</a> </span>
+			<h4>推荐商品</h4>
+		</div>
+
+		<#-- 创建标签商品标签 -->
+		<#assign storeTagsGoodsTag= newTag("storeTagsGoodsTag") > 
+		<#-- 查询标签商品列表 -->
+		<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'recommend','storeid':${store_id!0},'num':4}")!''>
+
+		<div class="content pt20">
+			<ul>
+				<#if storeTagsGoods?size!=0>
+				<#list storeTagsGoods.list as st>
+				<li>
+					<dl>
+						<dt>
+							<a href="goods-${st.goods_id}.html" target="_blank">${st.name}</a>
+						</dt>
+						<dd class="ncg-pic pngFix">
+							<a href="goods-${st.goods_id}.html" target="_blank" class="thumb"><i></i> 
+								<@image src="${st.thumbnail!''}" width="160" height="160" alt="${st.name}" title="${st.name}" />
+							</a>
+						</dd>
+						<dd class="ncg-price">
+							<em class="price"><i>&yen;</i>${st.price!0}</em>
+						</dd>
+						<dd class="ncg-sold">
+							已销售：<strong>${st.buy_num!0}</strong> 件
+						</dd>
+					</dl>
+				</li> 
+				</#list>
+				</#if>
+			</ul>
+		</div>
+	</div>
+	<div class="nc-s-c-s3 goods-list mt10">
+		<div class="title pngFix">
+			<span><a href="#"
+				class="more">更多</a> </span>
+			<h4>新品</h4>
+		</div>
+
+		<#-- 创建标签商品标签 --> 
+		<#assign storeTagsGoodsTag=newTag("storeTagsGoodsTag") > 
+		<#-- 查询标签商品列表 --> 
+		<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'new','storeid':${store_id!0},'num':4}")!''>
+
+		<div class="content pt20">
+			<ul>
+				<#if storeTagsGoods?size!=0>
+				<#list storeTagsGoods.list as st>
+				<li>
+					<dl>
+						<dt>
+							<a href="goods-${st.goods_id}.html" target="_blank">${st.name}</a>
+						</dt>
+						<dd class="ncg-pic pngFix">
+							<a href="goods-${st.goods_id}.html" target="_blank" class="thumb"><i></i>
+								<@image src="${st.thumbnail!''}" width="160" height="160" alt="${st.name}" title="${st.name}" />
+							</a>
+						</dd>
+						<dd class="ncg-price">
+							<em class="price"><i>&yen;</i>${st.price!0}</em>
+						</dd>
+						<dd class="ncg-sold">
+							已销售：<strong>${st.buy_num!0}</strong> 件
+						</dd>
+					</dl>
+				</li> 
+				</#list> 
+				</#if>
+			</ul>
+		</div>
+	</div>
+</article>
+
+<!-- 左侧 -->
+<aside class="javashop-sidebar">
+	<#include 'store_left.html' />
+</aside>

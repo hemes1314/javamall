@@ -1,0 +1,35 @@
+
+<style type="text/css">
+p { padding:5px; font:12px tahoma,arial,sans-serif; }
+input[type="text"]{ width:15em; padding:4px; border:1px solid #CCC; }
+input:focus { border-color:#426DC9; }
+</style>
+
+<div>
+	<#-- 创建商品分类标签 --> 
+	<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+	<#-- 查询商品分类列表 0表示查子分类 --> 
+	<#assign storeGoodsCatList= storeGoodsCatListTag("'type':1")!''>
+	<#assign cat_id = (catid!'0')?number >
+	
+	<form id="add_form" class="validate" >
+		<p>分类名称：&nbsp;<input type="text" name="store_cat_name" dataType="string" isrequired="true"  id="cat_name" ></p>
+		<p>上级分类：
+			<select name="store_cat_pid">
+				<option value="0">请选择</option>
+				<#list storeGoodsCatList as cat>
+				<option value="${cat.store_cat_id}" <#if cat_id==cat.store_cat_id> selected="selected" </#if> >${cat.store_cat_name}</option>
+				</#list>
+			</select>
+		</p>
+		<p>
+			排&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序：
+			<input id="amount" maxlength="5" dataType="int" 
+				name="store_sort" type="text" isrequired="true" />
+		</p>
+		
+		<p>显示状态：<input type="radio" name="disable" value="1" checked="checked">是
+					<input type="radio" name="disable"value="0">否</p>
+	</form>
+	
+</div>

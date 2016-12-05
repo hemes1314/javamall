@@ -1,0 +1,30 @@
+<#-- 创建结算订单金额标签 --> <#assign orderPriceTag = newTag("orderPriceTag") />
+<#assign orderPrice = orderPriceTag("{'onlyselected':'yes'}") />
+<div class="chechout1">
+	<h2 class="c_price1">
+		商品价格总计：<span id="goodsPay"
+			data-value="${orderPrice.goodsBasePrice!'0'}">${orderPrice.goodsBasePrice?string("currency")}</span>
+	</h2>
+	<h2 class="c_price2">
+		运费总计：<span id="shippingPay"
+			data-value="${orderPrice.shippingPrice!'0'}">${orderPrice.shippingPrice?string("currency")}</span>
+	</h2>
+	<h2 class="c_price2">
+		优惠券总抵扣：<span id="discount_Pay"
+			data-value="${orderPrice.discountPrice!'0'}">${orderPrice.discountPrice?string("currency")}</span>
+	</h2>
+	<h2 class="c_price2">
+		促销减价：<span id="promotionDiscount"
+			data-value="${orderPrice.promotionDiscount!'0'}">${orderPrice.promotionDiscount?string("currency")}</span>
+	</h2>
+	<h2 class="c_price2">
+		红包支付：<span id="bonusPay">${orderPrice.bonusPay?string("currency")}</span>
+	</h2>
+	<h2 class="c_price2">
+		余额支付：<span id="balancePay">${orderPrice.balancePay?string("currency")}</span>
+	</h2>
+	<h3 class="c_price3">
+		应付支付：<span id="needPay">${orderPrice.needPayMoney?string("currency")}</span>
+	</h3>
+	<input type="hidden" id="needPayOrder" name="needPayOrder" value="${orderPrice.needPayMoney}">
+</div>

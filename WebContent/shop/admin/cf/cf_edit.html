@@ -1,0 +1,95 @@
+<style>
+.input_text {
+	width: 150px;
+}
+body,table{
+font-size:12px;
+}
+table{
+table-layout:fixed;
+empty-cells:show;
+border-collapse: collapse;
+}
+h1,h2,h3{
+font-size:12px;
+margin:0;
+padding:0;
+}
+.table{
+border:1px solid #cad9ea;
+color:#666;
+}
+.table th {
+background-repeat:repeat-x;
+height:30px;
+}
+.table td,.table th{
+border:1px solid #cad9ea;
+padding:0 1em 0;
+}
+.table tr.alter{
+background-color:#f5fafe;
+} 
+</style>
+<script type="text/javascript">
+$(function(){
+		var instance = CKEDITOR.instances["cfcontent"];
+		if (instance) {
+			CKEDITOR.remove(instance);
+		}		
+		$('#cfcontent').ckeditor();
+});
+</script>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editForm" method="post" class="validate">
+			<table class="table" style="float:left; width:99%;">
+				<tr>
+					<th style="width:60px; height:46px;">众筹标题</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="yuemotitle"
+						name="cf.title" value="${cf.title}" data-options="required:true"  style="width:300px;" ></input>
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:46px;">子标题</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="cfsubheading"
+						name="cf.subheading" value="${cf.subheading}" data-options="required:true"  style="width:300px;" ></input>
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:46px;">截止时间</th>
+					<td><input class="easyui-datetimebox" name="scftime" data-options="required:true" value="${cf.time}" style="width:150px">
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:46px;">价格</th>
+					<td><input class="easyui-validatebox input_text" validType="money"  style="width:300px;" type="text" id="cfprice"
+						name="cf.price" value="${cf.price}" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:190px;">图片</th>
+					<td><img src="${cf.bimage}" width="150" height="150" style="margin-right:15px;"><input type="file" name="image" data-options="required:true" style="width:170px;"/>(请上传gif,jpg,bmp,png格式,2M以内的图片)
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:120px;">众筹简介</th>
+					<td>
+						<div style="width:40%">
+							<textarea type="text" id="cfbrief" name="cf.brief" data-options="required:true" style="width: 465px; height: 157px;">${cf.brief}</textarea>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:330px;">众筹介绍</th>
+					<td>
+						<div style="width:40%">
+							<textarea class="easyui-validatebox input_text" type="text" id="cfcontent" name="cf.content" value="${cf.content}" data-options="required:true">${cf.content}</textarea>
+						</div>
+					</td>
+				</tr>																				
+			</table>
+			<input type="hidden" name="cf.id" value="${cf.id}">
+		</form>
+	</div>
+</div>

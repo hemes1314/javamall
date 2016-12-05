@@ -1,0 +1,111 @@
+<#include '../common/header.html' />
+<#include '../common/reception_header.html' />
+<#assign memberIsLoginTag=newTag("storeMemberIsLoginTag")>
+<#assign isLogin=memberIsLoginTag()>
+<!-- add by lin 判断帐号如果被删除 -->
+<#if isLogin >
+<#else>
+	<script type="text/javascript">
+	   alert("请使用正确的帐号重新登录");
+	   window.location.href = "/index.html";
+	</script>
+</#if>
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员评论标签-->
+<#assign memberCommentList = memberCommentListTag()>
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<!-- 调用会员咨询列表标签 -->
+<#assign memberAskList = memberAskListTag()>
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag()!''>
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderList = newTag("storeMemberOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign ordersLists = memberOrderList()>
+<!-- 获得会员订单列表 -->
+<#assign order = ordersLists.ordersList>
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag= newTag("goodsListTag") >  
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<!--调用"商品列表"标签，并传递参数-->            
+<#assign  goodsList= goodsListTag("'tagid':'2','goodsnum':'4'") >
+
+<#assign memberInfoTag=newTag("memberInfoTag")>
+<!-- 调用会员基本信息 并传递mustlogin的参数，如果没登录，直接跳转到index.html页 -->
+<#assign member=memberInfoTag("{'mustlogin':'yes'}")>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/member.css" />
+<script  src="${ctx}/themes/b2b2cv2/js/favorite.js"  ></script>
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+
+<div class="member_content">
+	<div class="user_nav">
+		<a href="${ctx}/index.html">首页</a>><a href="member.html">会员中心</a>>${member.uname!''}
+	</div>
+	<div class="left_member">
+		<!-- 会员中心左侧菜单 -->
+		<div class="member_left">
+			<ul class="sidebar left_same">
+				<li class="side_menu grey_menu">
+					<h1>交易管理<span class="down"></span></h1>
+					<ul>
+						<li><a href="order.html">我的订单</a></li>
+						<li><a href="address.html">收货地址</a></li>
+						<li><a href="return_list.html">退货申请</a></li>
+						<!-- <li><a href="crowdfunding.html?status=1">我的众筹</a></li> -->
+					</ul>
+				</li>
+				<li class="side_menu">
+					<h1>客户服务<span class="down"></span></h1>
+					<ul>
+						<li><a href="favorite.html">我的收藏</a></li>
+					<!--  	<li><a href="gnotify.html">缺货登记</a></li>  -->
+						<li><a href="comments.html">我的评论</a></li>
+						<li><a href="ask.html">我的咨询</a></li>
+					</ul>
+				</li>
+				<li class="side_menu">
+					<h1>帐号管理<span class="down"></span></h1>
+					<ul>
+						<!-- 
+                        <#if member.info_full == 0>
+							<li><a href="info.html"> 完善基本资料</a></li>
+					    <#else>
+						<li><a href="info.html"> 完善基本资料</a></li>
+                        </#if>
+                         -->
+						<!-- <li><a href="security.html">修改密码</a></li> -->
+						<!-- <li><a href="point.html">我的积分</a></li> -->
+						<li><a href="advance_logs.html">我的余额</a></li>
+						<li><a href="bonus.html?store=1">我的优惠券</a></li>
+						<!-- <li><a href="giftcard.html">我的礼品卡</a></li>
+						<li><a href="vitem.html">我的虚拟物品</a></li> -->
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+<script>
+	$(function(){
+		$(".side_menu h1 span").click(function(){
+			var changeclass = $(this).attr("class");
+			if(changeclass=="down"){
+				$(this).parent().next("ul").hide();
+				$(this).removeClass("down");
+				$(this).addClass("top");
+			}
+			else{
+				$(this).parent().next("ul").show();
+				$(this).removeClass("top");
+				$(this).addClass("down");
+			}
+		})
+	})
+</script>

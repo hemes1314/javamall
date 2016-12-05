@@ -1,0 +1,65 @@
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<style>
+.input_text{
+	width: 200px;
+}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form id="dlyCenterEditForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th>名称：</th>
+					<td><input class="input_text easyui-validatebox"  type="text" id="name"
+						name="dlyCenter.name" data-options="required:true" value="${dlyCenter.name!''}"
+						></input>
+					</td>
+					<th>发货人姓名：</th>
+					<td><input class="input_text" type="text" id="url"
+						name="dlyCenter.uname" data-options="required:true" value="${dlyCenter.uname!''}"
+						></input>
+					</td>
+				</tr>
+				<tr>
+					<th>地区：</th>
+					<td>
+						<@regionSelectDirective province_id="${dlyCenter.province_id!''}" city_id="${dlyCenter.city_id!''}" region_id="${dlyCenter.region_id!''}" />
+					</td>
+					<th>手机：</th>
+					<td><input class="input_text easyui-validatebox" type="text" value="${dlyCenter.cellphone!''}"
+						name="dlyCenter.cellphone"  maxlength="11" validType="mobile" ></input>
+					</td>
+				</tr>
+
+				<tr>
+					<th>邮编：</th>
+					<td><input class="input_text" name="dlyCenter.zip" maxlength="6" value="${dlyCenter.zip!''}" >
+					</td>
+					
+					<th>电话：</th>
+					<td><input class="input_text easyui-validatebox" type="text" value="${dlyCenter.phone!''}"
+						name="dlyCenter.phone" maxlength="15" validType="tel"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>地址：</th>
+					<td><input class="input_text" type="text" value="${dlyCenter.address!''}"
+						name="dlyCenter.address" ></input>
+					</td>
+					<th>设置为默认地址</th>
+					<td>
+						<input type="checkbox" id="is_default_dc"  name="is_default" <#if dlyCenter.choose=='true'>checked</#if> ></input>
+						<input type="hidden" name="dlyCenter.choose"  id="dlyCenterDisabled"/>
+					</td>
+				</tr>
+
+				<tr>
+					<th>备注：</th>
+					<td colspan="3"><textarea rows="5" cols="45" class="input_text"
+							style="width: 395px;" name="dlyCenter.memo">${dlyCenter.memo!''}</textarea></td>
+				</tr>
+			</table>
+			<input type="hidden" name="dlyCenter.dly_center_id" value="${dlyCenter.dly_center_id}">
+		</form>
+	</div>
+</div>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd "
+	default-autowire="byName" default-lazy-init="false">
+	<!-- 定义此应用的组件扫描包 -->
+	<context:component-scan base-package="com.enation.app.b2b2c" />
+
+	<!-- 订单支付超时 -->
+	<bean id="rollbackOrderStatus"
+		class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass"
+			value="com.enation.app.b2b2c.schedule.CheckOrderStatusSchedule" />
+		<property name="durability" value="true" />
+	</bean>
+	
+	<bean id="rollbackOrderStatusTrigger"
+		class="com.enation.app.b2b2c.schedule.PersistableCronTriggerFactoryBean">
+		<property name="jobDetail" ref="rollbackOrderStatus" />
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+		<property name="timeZone">
+			<value>GMT+8:00</value>
+		</property>
+	</bean>
+
+	<bean id="quartzScheduler" parent="baseQuartzScheduler">
+		<property name="configLocation" value="classpath:quartz.properties" />
+		<property name="autoStartup" value="true" />
+		<!-- This name is persisted as SCHED_NAME in db. for local testing could 
+			change to unique name to avoid collision with dev server -->
+		<property name="schedulerName" value="apiQuartzScheduler" />
+		<!-- NOTE: Must add both the jobDetail and trigger to the scheduler! -->
+		<property name="triggers">
+			<list>
+				<ref bean="rollbackOrderStatusTrigger" />
+			</list>
+		</property>
+
+		<property name="jobDetails">
+			<list>
+				<ref bean="rollbackOrderStatus" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="baseQuartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="configLocation" value="classpath:quartz.properties" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="transactionManager" ref="transactionManager" />
+
+		<!-- This name is persisted as SCHED_NAME in db. for local testing could 
+			change to unique name to avoid collision with dev server -->
+		<property name="schedulerName" value="quartzScheduler" />
+
+		<!-- Will update database cron triggers to what is in this jobs file on 
+			each deploy. Replaces all previous trigger and job data that was in the database. 
+			YMMV -->
+		<property name="overwriteExistingJobs" value="true" />
+		<!-- <property name="autoStartup" value="true" /> -->
+		<property name="applicationContextSchedulerContextKey" value="applicationContext" />
+		<property name="jobFactory">
+			<bean class="com.enation.app.b2b2c.schedule.AutowiringSpringBeanJobFactory" />
+		</property>
+		<!-- NOTE: Must add both the jobDetail and trigger to the scheduler! -->
+		<!-- <property name="jobDetails"> <list> </list> </property> <property 
+			name="triggers"> <list> </list> </property> -->
+	</bean>
+
+</beans>

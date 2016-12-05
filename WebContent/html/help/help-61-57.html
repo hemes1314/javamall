@@ -1,0 +1,488 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>GomeCellar</title> 
+		<meta name="keywords" content="GomeCellar">
+		<meta name="description" content="GomeCellar">
+	<!--meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/--> 
+	
+</meta>
+
+<!-- 判断IE，并使IE9以下支持html5标签 -->
+<!–[if lt IE 9]> <script  src="/gome-javamall/themes/b2b2cv2/js/html5.js"  ></script> <![endif]–>
+
+
+<script>
+var member = "";
+var loginDialog;
+var ctx="/gome-javamall";
+var app_path="/gome-javamall";
+</script>
+
+<!-- 公共样式 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/base.css" />
+<!-- 内含dialog.css样式，原来的dialog.css中无代码 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/default.css" />
+<!-- 商品详细、 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/shop.css" />
+
+<script>window._prompt = window.prompt;</script>
+
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/lhgdialog.js" ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/common.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/shop.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.ui.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/index.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.validate.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.form-3.51.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/CartBar.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.blockUI.js"   ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/LoginDialog.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.cookie.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/perfect-scrollbar.min.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.SuperSlide.2.1.1.js" ></script>
+<!-- jquery的布局插件 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script>
+<!-- 购物车移入滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.nicescroll.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.bigautocomplete.js"></script>
+<!-- 自定义滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.jscroll.js"></script>
+
+<script type="text/javascript">
+
+var ctx="/gome-javamall";
+
+
+
+$(function(){
+	
+	$(".common_member").load("/gome-javamall/common/member_bar.html?_="+new Date().getTime()	,function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"/gome-javamall/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,              
+				success:function(result){
+					if(result.result==1){
+						//$.alert(result.message);
+						location.href="/gome-javamall/index.html";
+					}else{
+						$.alert(result.message);
+					}	
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		});	
+	});
+	
+	$(".my_store").load("/gome-javamall/common/my_store.html?_="+new Date().getTime());
+	
+	$(".my_store").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+	
+	$(".title_menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+</script>
+
+
+</head>
+<body>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/backtotop.js"></script>
+	<a name="backtotop"></a>
+	<div class="website_top w">
+		<div class="topbar wrapper">
+        	<div class="area" style="width:50px;">
+                  <div class="title" style="overflow:hidden;">
+                      <div class="city"><a href="javascript:void(0)" id="button_show">
+                      <h3 id="show_area_name">全国</h3>
+                      <i class="arrow"></i></a></div>
+                      <div id="list" class="list" style="display: none;">
+                      <a id="button_close" class="close" href="javascript:void(0)">×</a>
+                      <ul>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(0,&#39;全国&#39;)">全国</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(1,&#39;北京&#39;)">北京</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(2,&#39;上海&#39;)">上海</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(3,&#39;天津&#39;)">天津</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(4,&#39;河北&#39;)">河北</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(5,&#39;江苏&#39;)">江苏</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(6,&#39;安徽&#39;)">安徽</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(7,&#39;浙江&#39;)">浙江</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(8,&#39;福建&#39;)">福建</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(9,&#39;辽宁&#39;)">辽宁</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(10,&#39;吉林&#39;)">吉林</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(11,&#39;黑龙江&#39;)">黑龙江</a></li>
+                       </ul>
+                       </div>
+                    </div>
+            </div> 
+			<div class="common_member" style="float:left;">
+			</div>
+			<div class="title_menu">
+                <!--dl style="width:90px;">
+					<dt>
+						手机端App<i></i>
+					</dt>
+					<dd style="width:90px;">
+						<ul>
+							<li>
+                            <img src="/gome-javamall/themes/b2b2cv2/app_download/images/QR_code_android.jpg" width="80" height="80" style="padding:5px; float:left;" />
+                            <a class="menu-app" href="/gome-javamall/app_download/index.html" target="_blank">Android版</a>
+                            </li>
+						</ul>
+					</dd>	
+				</dl-->
+				<dl>
+					<dt>
+						<a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" style="padding-left:5px;">商家中心</a>
+					</dt>
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/order.html">我的订单</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/order.html?status=0">待付款订单</a></li>
+							<li><a href="/gome-javamall/member/order.html?status=5">商品已发货</a></li>
+							<li><a href="/gome-javamall/member/waitcommont.html">待评价商品</a></li>
+						</ul>
+					</dd>	
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/favorite.html" title="我的收藏" target="_top">我的收藏</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/favorite.html" target="_top" title="收藏的商品">收藏的商品</a></li>
+							<li><a href="/gome-javamall/member/collect_store.html" target="_top" title="收藏的店铺">收藏的店铺</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						客户服务<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/help-81-83.html">帮助中心</a></li>
+							<li><a href="/gome-javamall/help-81-84.html">售后服务</a></li>
+							<li><a href="/gome-javamall/help-81-85.html">客服中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						站点导航<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a target="_blank" href="/gome-javamall/index.html">商城首页</a></li>
+                            <li><a href="/gome-javamall/member/member.html">会员中心</a></li>
+							<li><a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" >商家中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+<script type="text/javascript">
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+//选项卡样式
+function index_click(type,value){
+	$("#"+type+" li").removeClass("selected");
+	$("#"+type+" li a[type='"+value+"']").parents("li").addClass("selected");
+}
+function set_groupbuy_area(area_id,area_name){
+	$("#show_area_name").html(area_name);
+	$("input[name='area_id']").val(area_id);
+	$("#list").hide();
+	loadPage();
+}
+</script>
+	</div>
+<div id="goodsSelectDiv"></div>
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/help.css" />
+<div class="content">
+	<!--帮助中心-->
+	<div class="besides">
+		<div class="help2_wh">
+			<div class="help_left">
+				<h1>关于网站</h1>
+				<ul>
+						<li >
+							<a href="help-21-7.html">公司简介</a>
+						</li>
+						<li >
+							<a href="help-21-8.html">招商合作</a>
+						</li>
+						<li >
+							<a href="help-21-9.html">联系我们</a>
+						</li>
+						<li class= "last">
+							<a href="help-21-42.html">合作酒庄</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>新手上路</h1>
+				<ul>
+						<li >
+							<a href="help-17-171.html">登录帮助</a>
+						</li>
+						<li >
+							<a href="help-17-32.html">购物指南</a>
+						</li>
+						<li class= "last">
+							<a href="help-17-31.html">常见问题</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>购物指南</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+			<div class="help_left">
+				<h1>支付方式</h1>
+				<ul>
+						<li >
+							<a href="help-19-48.html">货到付款</a>
+						</li>
+						<li class= "last">
+							<a href="help-19-49.html">在线支付</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>购物条款</h1>
+				<ul>
+						<li >
+							<a href="help-20-50.html">会员介绍</a>
+						</li>
+						<li class= "last">
+							<a href="help-20-168.html">积分说明</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>配送方式</h1>
+				<ul>
+						<li >
+							<a href="help-22-44.html">配送时间及范围</a>
+						</li>
+						<li >
+							<a href="help-22-45.html">配送费收取标准</a>
+						</li>
+						<li >
+							<a href="help-22-47.html">运输包装说明</a>
+						</li>
+						<li class= "last">
+							<a href="help-22-23.html">签收与验货</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>服务</h1>
+				<ul>
+						<li >
+							<a href="help-23-18.html">退换货政策</a>
+						</li>
+						<li >
+							<a href="help-23-14.html">退换货流程</a>
+						</li>
+						<li class= "last">
+							<a href="help-23-16.html">取消订单</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>优惠活动</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>我的订单</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+		</div>
+		<div class="client">
+			<!-- 调用CMS蚊香详细标签，并传递文章所在分类ID，及文章ID -->
+			<!-- 文章详细，所需的catid与articleid通过help.html?catid=XXX&articleid=XXX传递参数 -->
+			<h1 class="help_title">预售服务协议</h1>
+			<h2 class="help_time">2015-10-29 21:15</h2>
+			<p>
+	<span style="color: rgb(20, 20, 20); font-family: Helvetica Neue, Helvetica, Tahoma, Arial, sans-serif; font-size: 13px; line-height: 18.5714px;">预售服务协议</span></p>
+
+
+		</div>
+	</div>
+	<div style="width:100%;height:1px;overflow:hidden;display:block;clear:both;"></div>
+</div>
+<div class="footer">
+	<div class="wrapper">
+	<!-- 
+	<div id="footer-top">
+		<ul>
+			<li class="one"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="two"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="three"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="four"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="five"><strong>正品行货<em>100%正品保证</em></strong></li>
+		</ul>
+	</div>
+	 -->
+	</div>
+	<!--帮助中心-->
+	  <div id="faq">
+	  <div class="wrapper">
+	    <ul>
+	        <li>
+		        <dl class="s1">
+		          	<dt>关于我们 </dt>
+		          			          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-7.html">公司简介</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-8.html">招商合作</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-9.html">联系我们</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-42.html">合作酒庄</a>
+		          		</dd>
+		       </dl>
+	      	</li>
+	        <li>
+	        	<dl class="s2">
+	          		<dt>新手上路</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-171.html">登录帮助</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-32.html">购物指南</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-31.html">常见问题</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <li>
+	    		<dl class="s3">
+			        <dt>配送说明</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-44.html">配送时间及范围</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-45.html">配送费收取标准</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-47.html">运输包装说明</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-23.html">签收与验货</a>
+		          		</dd>
+	          	</dl>
+	      </li>
+	      <li>
+	        	<dl class="s4">
+	          		<dt>支付方式</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-48.html">货到付款</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-49.html">在线支付</a>
+		          		</dd>
+	           </dl>
+	      </li>
+	      <li>
+	        	<dl class="s5">
+	          		<dt>售后服务</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-18.html">退换货政策</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-14.html">退换货流程</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-16.html">取消订单</a>
+		          		</dd>
+		        </dl>
+	      </li>
+	      <li>
+	        	<dl class="s6">
+	          		<dt>特殊服务 </dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-50.html">会员介绍</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-168.html">积分说明</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <div class="clear"></div>
+	    </ul>
+	  </div>
+	</div>
+	<!--底部版权，调用footer.php-->
+	<div id="footer" >
+		<div class="wrapper">
+		  <p><a href="/gome-javamall/index.html">首页</a>
+             | <a  href="/gome-javamall/member/member.html">会员中心</a>
+             | <a  href="/gome-javamall/store/business_center.html?menu=store_index">商家中心</a>
+             | <a  href="/gome-javamall/help-62-65.html">关于网站</a>
+             | <a  href="/gome-javamall/help-21-9.html">联系我们</a>
+             | <a  href="/gome-javamall/help-21-7.html">关于我们</a>
+          </p>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

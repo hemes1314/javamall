@@ -1,0 +1,350 @@
+<#include '/store/store_header.html' />
+<#assign activityListTag=newTag("activityListTag")> 
+<#assign gbPage=activityListTag()>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			满减管理<span>></span>满减活动管理
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="activity_list.html?menu=promotion">满减活动列表</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<!-- 满减活动列表列表 -->
+		<div class="s_commont_list">
+			 <#assign  gbList = gbPage.getResult() />
+				<table cellpadding="0" cellspacing="0" class="goodslist_bystore advbuy_list_table" style="border:0px none;">
+					<thead>
+						<tr>
+							<th>活动名称</th>
+							<th>活动类型</th>
+							<th>开始时间</th>
+							<th>结束时间</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list gbList as gb >
+					       	<tr>
+					       		<td>${gb.name}</td>
+					       		<td>减满</td>
+					       		<td><@dateformat time="${(gb.start_time)?c}"pattern="yyyy-MM-dd HH:mm:ss"/></td>
+					       		<td><@dateformat time="${(gb.end_time)?c}"pattern="yyyy-MM-dd HH:mm:ss"/></td>
+						        <td>${gb.status}</td>
+										<td>
+											<a title="添加活动商品"  dialog_width="480" dialog_id="add_activity_goods" dialog_title="添加活动商品" nc_type="dialog" class="ncu_btn3 new_storecat" href="javascript:void(0)" <#if gb.status != '结束'>onclick="addActivityGoods(${gb.id})</#if>" >添加活动商品</a> |
+											<a title="查看活动商品列表"  dialog_width="480" dialog_id="goods_list" dialog_title="查看活动商品列表" nc_type="dialog" class="ncu_btn3 new_storecat" href="javascript:void(0)" onclick="activityGoodsList(${gb.id})" >查看活动商品列表</a>
+										</td>
+					       	</tr>
+						</#list>
+					</tbody>
+				</table>
+				<@pager pageno="${gbPage.page!'1'}" pagesize="${gbPage.pageSize}" totalcount="${gbPage.totalCount}" />	
+			</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+$(function(){
+	selectMenu(4);
+});
+
+function addActivityGoods(activityId) {
+	var map = {};
+	map["title"] = "添加活动商品";
+	map["html"] = "add_activity_goods.html";
+	map["url"] = "${ctx}/store/activity/add_activity_goods.html?activityId=" + activityId;
+	openDialogAdd(map);
+}
+
+function activityGoodsList(activityId){
+	var map = {};
+	map["title"] = "参加活动的商品";
+	map["html"] = "activity_goods.html";
+	map["url"] = "${ctx}/store/activity/activity_goods.html?activityId=" + activityId;
+	openDialogList(map);
+}
+
+function addActivityGift(activityId) {
+	var map = {};
+	map["title"] = "添加赠送商品";
+	map["html"] = "add_activity_gift.html";
+	map["url"] = "${ctx}/store/activity/add_activity_gift.html?activityId=" + activityId;
+	openGiftDialogAdd(map);
+}
+
+function activityGiftList(activityId) {
+	var map = {};
+	map["title"] = "赠送的商品";
+	map["html"] = "activity_gift.html";
+	map["url"] = "${ctx}/store/activity/activity_gift.html?activityId=" + activityId;
+	openGiftDialogList(map);
+}
+
+function openGiftDialogAdd(map){
+	dialog = $.dialog({
+		title : map["title"],
+		lock : true,
+		min : false,
+		max : false
+	});
+	
+	$.ajax({
+		url : map["url"],
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([{
+				name : '添加',
+				callback : function() {
+					submitAddActivityGift();
+					return false;
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("出现错误，请重试");
+		},
+		cache : false
+	});
+}
+
+function openDialogAdd(map){
+	dialog = $.dialog({
+		title : map["title"],
+		lock : true,
+		min : false,
+		max : false
+	});
+	
+	$.ajax({
+		url : map["url"],
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([{
+				name : '添加',
+				callback : function() {
+					submitAddActivityGoods();
+					return false;
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("超时请重新登录.");
+		},
+		cache : false
+	});
+}
+
+function openDialogList(map){
+	dialog = $.dialog({
+		title : map["title"],
+		lock : true,
+		min : false,
+		max : false
+	});
+	
+	$.ajax({
+		url : map["url"],
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([{
+				name : '删除',
+				callback : function() {
+					submitDelActivityGoods();
+					return false;
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("超时请重新登录.");
+		},
+		cache : false
+	});
+}
+
+function openGiftDialogList(map){
+	dialog = $.dialog({
+		title : map["title"],
+		lock : true,
+		min : false,
+		max : false
+	});
+	
+	$.ajax({
+		url : map["url"],
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([{
+				name : '删除',
+				callback : function() {
+					submitDelActivityGift();
+					return false;
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("超时请重新登录.");
+		},
+		cache : false
+	});
+}
+
+function submitAddActivityGoods() {
+	var valArr = new Array; 
+  $("input:checkbox[checked]").each(function(i){ 
+  	valArr[i] = $(this).val(); 
+  }); 
+  
+  if (valArr[0] == "on") {
+  	valArr.shift();	
+  }
+  
+  $("#goods_ids").val(valArr.join(','));//转换为逗号隔开的字符串
+  
+  if (valArr.length == 0) {
+  	alert("请选择商品");
+  	return false;
+  }
+  
+  if(confirm("所选商品在之前的活动会被清除，确认吗？")) {
+  	var options = {
+  		url : "${ctx}/api/b2b2c/activity!saveActivityGoods.do",
+  		type : "POST",
+  		dataType : 'json',
+  		success : function(data) {	
+  			alert(data.message);
+  			if(data.result==1){
+  				location.reload();
+  			}
+  		},
+  		error : function() {
+  			$.alert("超时请重新登录.");
+  		},
+  	};
+  	  
+  	$("#addActivityGoods").ajaxSubmit(options);
+  }
+}
+
+function submitDelActivityGoods() {
+	var valArr = new Array; 
+  $("input:checkbox[checked]").each(function(i){ 
+  	valArr[i] = $(this).val(); 
+  }); 
+  
+  if (valArr[0] == "on") {
+  	valArr.shift();	
+  }
+  
+  $("#goods_ids").val(valArr.join(','));//转换为逗号隔开的字符串
+  
+  if (valArr.length == 0) {
+  	alert("请选择商品");
+  	return false;
+  }
+  
+  if(confirm("确认删除吗？")) {
+  	var options = {
+  		url : "${ctx}/api/b2b2c/activity!delActivityGoods.do",
+  		type : "POST",
+  		dataType : 'json',
+  		success : function(data) {	
+  			alert(data.message);
+  			if(data.result==1){
+  				location.reload();
+  			}
+  		},
+  		error : function() {
+  			$.alert("超时请重新登录.");
+  		},
+  	};
+  	
+  	$("#activityGoodsForm").ajaxSubmit(options);
+  }
+}
+
+function submitDelActivityGift() {
+	var valArr = new Array; 
+  $("input:checkbox[checked]").each(function(i){ 
+  	valArr[i] = $(this).val(); 
+  }); 
+  
+  if (valArr[0] == "on") {
+  	valArr.shift();	
+  }
+  
+  $("#goods_ids").val(valArr.join(','));//转换为逗号隔开的字符串
+  
+  if (valArr.length == 0) {
+  	alert("请选择商品");
+  	return false;
+  }
+  
+  if(confirm("确认删除吗？")) {
+  	var options = {
+  		url : "${ctx}/api/b2b2c/activity!delActivityGift.do",
+  		type : "POST",
+  		dataType : 'json',
+  		success : function(data) {	
+  			alert(data.message);
+  			if(data.result==1){
+  				location.reload();
+  			}
+  		},
+  		error : function() {
+  			$.alert("超时请重新登录.");
+  		},
+  	};
+  	
+  	$("#activityGiftForm").ajaxSubmit(options);
+  }
+}
+
+function submitAddActivityGift() {
+	var valArr = new Array; 
+  $("input:checkbox[checked]").each(function(i){ 
+  	valArr[i] = $(this).val(); 
+  }); 
+  
+  if (valArr[0] == "on") {
+  	valArr.shift();	
+  }
+  
+  $("#goods_ids").val(valArr.join(','));//转换为逗号隔开的字符串
+  
+  if (valArr.length == 0) {
+  	alert("请选择商品");
+  	return false;
+  }
+  
+  var options = {
+ 		url : "${ctx}/api/b2b2c/activity!saveActivityGift.do",
+ 		type : "POST",
+ 		dataType : 'json',
+ 		success : function(data) {	
+ 			alert(data.message);
+ 			if(data.result==1){
+ 				location.reload();
+ 			}
+ 		},
+ 		error : function() {
+			$.alert("超时请重新登录.");
+		},
+ 	};
+ 	  
+ 	$("#addActivityGift").ajaxSubmit(options);
+}
+
+</script>
+<#include '/common/footer.html' />

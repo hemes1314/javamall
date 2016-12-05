@@ -1,0 +1,174 @@
+<#-- 创建购物车标签 --> <#assign cartTag= newTag("storeCartGoodsTag")>
+<#--通过购物车标签获取购物项列表 --> <#assign itemList = cartTag() > <#-- 创建会员是否登录标签
+--> <#assign memberIsLoginTag= newTag("memberIsLoginTag")> <#-- 获取是否登录
+--> <#assign isLogin = memberIsLoginTag() >
+<script type="text/javascript">
+	//浏览器前进或后退刷新页面
+	if (window.name != "cartWindow") {
+		location.replace(location.href);
+		window.name = "cartWindow";
+	} else {
+		window.name = "";
+	}
+	var isLogin = ${isLogin?string};
+	$.ajaxSetup ({ cache: false });
+</script>
+<div class="border">
+	<table class="storelist" style="width: 1000px; margin: 0 auto;">
+		<#if itemList?exists && itemList?size gt 0> <#assign selectAll=true>
+		<#list itemList as store > <#if store.selected!=1> <#assign
+		selectAll=false> </#if> </#list>
+
+		<thead>
+			<th colspan="2" style="padding-left: 8px; text-align: left;"><input
+				type="checkbox" id="select_all" class="select_all"<#if
+				selectAll> checked="true"</#if>><label for="select_all"> 全选</label>
+			</th>
+			<th>商品</th>
+			<th>&nbsp;</th>
+			<th class="w120">单价(元)</th>
+			<th class="w120">数量</th>
+			<th class="w120">小计(元)</th>
+			<th class="w80">操作</th>
+		</thead>
+		<#list itemList as store >
+		<tbody>
+			<tr>
+				<th><input type="checkbox" name="select_store"
+					storeid="${store.store_id}" class="select_store"<#if
+					store.selected==1>checked="true"</#if>></th>
+				<th colspan="7"><strong> <a
+						href="${ctx}/home.html?show_c=1&store_id=${store.store_id}"
+						target="_blank">店铺名称：${store.store_name}</a>
+				</strong></th>
+			</tr>
+			<#list store.goodslist as item >
+				<#if item.activityName?? || item.current_activity != 0>
+					<tr>
+						<td colspan="8" style="text-align: left; padding-left: 5px;">
+							<span class="line-circle"></span>
+						<#if item.current_activity == 1>
+							<span class="full-icon">闪购<b></b></span>${item.current_activity_name}
+						<#elseif item.current_activity == 2>
+							<span class="full-icon">预售<b></b></span>${item.current_activity_name}
+						<#elseif item.current_activity == 3>
+							<span class="full-icon">直降<b></b></span>${item.current_activity_name}
+						</#if>
+						<#if item.current_activity != 1 && item.current_activity != 2 && item.activityName??>
+							<span class="full-icon">满减<b></b></span>${item.activityName}
+						</#if>
+						</td>
+					</tr>
+				</#if>
+				<tr itemid="${item.id}" productid="${item.product_id}"
+				price="${item.coupPrice}">
+					<td style="width:50px;">
+						<#if !(item.disable !="0" || item.market_enable != "1" || item.storeNum != "1")>
+							<input type="checkbox" name="select_item_${store.store_id}"
+								   storeid="${store.store_id}" itemid="${item.id}" class="select_item"
+							<#if item.selected==1>checked="true"</#if>
+							>
+						</#if>
+					</td>
+					<td style="width:10%">
+						<a target="_blank" href="goods-${item.goods_id}.html">
+							<span style="display: block;height: 50px;"
+						class="cart-product-img" ur="${item.image_default!''}">
+								<@image height="50" width="50" src="${item.image_default!''}" style="cursor: pointer;" />
+							</span>
+						</a>
+					</td>
+					<td class="cart_goodsname" style="width:32%">
+					<!-- add by lxl start -->
+						<#if item.market_enable == "1" >
+                         <a target="_blank"
+					href="goods-${item.goods_id}.html">${item.name}</a>
+                        <#elseif item.disable != "0">
+                         <a href="javascript:alert('此商品已删除')">${item.name}</a>
+                         <#else>
+                         <a href="javascript:alert('此商品已下架')">${item.name}</a>
+                         </#if>
+					<!-- end -->
+						<#if item.others?exists>
+							<#if item.others.specList?exists>
+								<span>
+									<#list item.others.specList as spec>
+										<#if spec_index!=0></#if><strong>${spec.name}:<em
+							style="color:#ED7108">${spec.value}</em></strong>
+									</#list>
+								</span>
+							</#if>
+							<#if item.others.gys_name?exists>
+								供应商：${item.others.gys_name!''}
+							</#if>
+						</#if>
+					</td>
+				<!-- add by lxl start -->
+					<td style="width:8% ; color:red">
+					<#if item.disable !="0">
+					${item.disable}
+					<input name="info" type="hidden" class="limit_info" value="1">
+					<#elseif item.market_enable != "1">
+					${item.market_enable}
+					<input name="info" type="hidden" class="limit_info" value="2">
+					<#elseif item.storeNum != "1">
+					${item.storeNum}
+					<input name="info" type="hidden" class="limit_info" value="3">
+					</#if></td>
+				<!-- end -->
+					<td style="width:10%">
+						${item.price?string("currency")}
+					</td>
+					<td class="cart_quantity" style="width:20%">
+						<div id="num" class="Numinput" value="${item.num}"
+						itemid="${item.id}" productid="${item.product_id}">
+							<span class="numadjust decrease">-</span>
+							<input class="numtext" size="5" name="num" autocomplete="off"
+							type="text" value="${item.num}">
+							<span class="numadjust increase">+</span>
+						</div>
+					</td>
+					<td class="itemTotal" style="width:10%">${item.subtotal?string("currency")}</td>
+					<td class="cart_last" style="width:10%"><a href="javascript:;"
+					class="delete">删除</a></td>
+				</tr>
+				<tr>
+				<td style="padding:3px;background:#fff;" colspan="20"<#if !item_has_next>class="itemlast"</#if>></td>
+			</tr>
+			</#list>
+			</tbody>
+		</#list>
+	</table>	
+			<!-- 总价 -->
+			<div class="total_wrapper" style="width:970px; margin:0 auto;">
+				<#include 'cartTotal.html' />
+			</div>
+			<div class="button_wrapper" style="width:1000px; margin:0 auto;">
+                <input type="button" class="btn01 clean_btn"
+			value="清空购物车" />
+                <input type="button" class="btn02 returnbuy_btn"
+			value="去逛逛" style="margin-right:0;" />
+                <input type="button" class="btn03 checkout_btn"
+			value="去结算" />
+			</div>
+			<div id="login_tip" style="display:none">
+				<div class="cart_tourist">
+					<div class="cart_message">
+						您当前是游客身份，游客身份不能购买商品！<br><br>
+					</div>
+					<div class="button_wrapper">
+						<input type="button" class="tourist_btn to_login_btn" value="马上登录">
+						
+						<input type="button" class="tourist_btn to_checkout_btn"
+					value="去注册">
+					</div>
+				</div>
+			</div>
+		<#else>
+			<div class="cartno">
+				<h1>您的购物车中暂无商品</h1>
+		<a href="index.html">挑选心爱的商品</a><a href="member/order.html">查看我的订单</a>
+			</div>
+		</#if>
+</div>
+

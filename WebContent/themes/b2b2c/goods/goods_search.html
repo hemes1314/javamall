@@ -1,0 +1,53 @@
+<div class="eject_con gselector" style="width:500px">
+  <div id="warning"></div>
+  <form id="goods_search_form">
+    <dl>
+      <dt>商品名称：</dt>
+      <dd>
+        <input type="text" name="keyword" class="w300 text">
+      </dd>
+    </dl>
+    <dl>
+      <dt>本店分类：</dt>
+      <dd>
+      	<#-- 创建商品分类标签 --> 
+		<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+		<#-- 查询商品分类列表 0表示查子分类 --> 
+		<#assign storeGoodsCatList= storeGoodsCatListTag("{'type':0,'storeid':${storeid!0}}")!''>
+		
+        <select class="sgcategory"   name="store_catid">
+        <option value="0">全部分类</option>
+        <#list storeGoodsCatList as cat>
+        <#if cat.store_cat_pid==0>
+          <option value="${cat.store_cat_id}">${cat.store_cat_name!''}</option>
+         </#if>
+         <#list storeGoodsCatList as childCat>
+				<#if childCat.store_cat_pid==cat.store_cat_id>
+						<option value="${childCat.store_cat_id}">&nbsp;&nbsp;&nbsp;&nbsp;${childCat.store_cat_name!''}</option>
+				</#if> 
+         </#list>
+          </#list>
+         </select>
+         
+      </dd>
+    </dl>
+    <dl>
+      <dt>&nbsp;&nbsp;</dt>
+      <dd><a class="user-btn1" href="javascript:void(0)" id="goods_search_btn"><span>查询</span></a></dd>
+    </dl>
+    <dl>
+      <dt>选择商品：</dt>
+      <dd>
+        <select class="w300" style=" height:140px;" size="7"  id="goods_id">
+          <option value="0">请先从上面搜索</option>
+        </select>
+      </dd>
+    </dl>
+    <dl class="bottom">
+      <dt>&nbsp;</dt>
+      <dd>
+        <input type="button" value="确认选择" id="select_btn" class="submit">
+      </dd>
+    </dl>
+    </form>
+</div>

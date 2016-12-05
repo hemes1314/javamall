@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<#assign headerTag = newTag("headerTag") /> 
+<#assign header =headerTag() /> 
+	<#if title??>
+		<title>${title}-${header.title}</title> 
+	<#else>
+		<title>${header.title}</title> 
+	</#if> 
+	<#if keywords??>
+		<meta name="keywords" content="${keywords!''}">
+	<#else>
+		<meta name="keywords" content="${header.keywords!''}">
+	</#if> 
+	<#if description??>
+		<meta name="description" content="${description!''}">
+	<#else>
+		<meta name="description" content="${header.description!''}">
+	</#if>
+	<meta http-equiv="X-UA-Compatible" content="IE=8">
+	
+</meta>
+
+<script>
+var member = "${member!''}";
+var loginDialog;
+var ctx="${ctx}";
+var app_path="${ctx}";
+var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]") ;
+</script>
+
+<#if site.icofile?exists>
+	<link href="${site.icofile}" rel="shortcut icon">
+</#if>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/base.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/home_header.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/home_login.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/style.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/index.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/default.css" />
+
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/dialog.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/shop.css" />
+
+<script  src="${ctx}/themes/b2b2c/js/jquery.js"  ></script>
+<script  src="${ctx}/themes/b2b2c/js/jquery.validate.js"  ></script> 
+<script  src="${ctx}/themes/b2b2c/js/jquery.form-3.51.js"  ></script> 
+
+<script  src="${ctx}/themes/b2b2c/js/lhgdialog.js" ></script>
+<script  src="${ctx}/themes/b2b2c/js/common.js"  ></script>
+<script  src="${ctx}/themes/b2b2c/js/shop.js"></script>
+<script  src="${ctx}/themes/b2b2c/js/CartBar.js"></script>
+<script  src="${ctx}/themes/b2b2c/js/jquery.blockUI.js"   ></script>
+<script  src="${ctx}/themes/b2b2c/js/LoginDialog.js"  ></script>
+
+<script src="${ctx}/themes/b2b2c/js/jquery.cookie.js" ></script>
+<script src="${ctx}/themes/b2b2c/js/perfect-scrollbar.min.js"  ></script>
+<script src="${ctx}/themes/b2b2c/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="${ctx}/themes/b2b2c/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="${ctx}/themes/b2b2c/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="${ctx}/themes/b2b2c/js/jquery.SuperSlide.2.1.1.js" ></script>
+<script src="${ctx}/themes/b2b2c/js/jquery.ui.js" ></script>
+<script src="${ctx}/themes/b2b2c/js/jquery.poshytip.min.js" ></script>
+<script type="text/javascript">
+
+var ctx="${ctx}";
+$(function(){
+	$("#logout").click(function(){
+		$.ajax({
+			url:"${ctx}/api/shop/member!logout.do?ajax=yes",
+			dataType:"json",
+			cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+			success:function(result){
+				if(result.result==1){
+					//$.alert(result.message);
+					location.href="${ctx}/index.html";
+				}else{
+					$.alert(result.message);
+				}	
+				$.Loading.hide();
+			},
+			error:function(){
+				$.Loading.hide();
+				$.alert("出错了:(");
+			}
+		});
+		return false;
+	});	
+		
+	$(".quick-menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+</script>
+</head>
+<body>
+	<div id="append_parent"></div>
+	<div class="public-top-layout w">
+		<div class="topbar wrapper">
+			<div class="user-entry">
+				<#if member?? >
+					 您好
+					<span>
+						<a href="${ctx}/member/member.html">${member.name}</a>
+					</span>
+					，欢迎来到
+					<a alt="首页" title="首页" href="${ctx}/index.html">示例B2B2C示例商城</a>
+					<span>
+						[<a id="logout" href="javascript:void(0);">退出</a>]
+					</span>
+				<#else>
+					您好，欢迎来到 
+					<a href="${ctx}/index.html" title="首页" alt="首页">示例B2B2C示例商城</a>
+					<span>
+						[<a href="${ctx}/store/login.html">登录</a>]
+					</span> 
+					<span>
+						[<a href="${ctx}/store/register.html">注册</a>]
+					</span> 
+				</#if>
+				<span class="seller-login"> 
+				<#if member?? >
+					<a href="${ctx}/store/business_center.html" target="_top" title="商家中心" target="_blank" title="登录商家管理中心">
+					<script type="text/javascript">var isLogin= true;</script>
+					<#else>
+					<a href="${ctx}/store/login.html" target="_top" title="商家中心" target="_blank" title="登录商家管理中心">
+				</#if>
+						<i class="icon-signin"></i>
+						商家管理中心
+					</a>
+				</span>
+			</div>
+			<div class="quick-menu">
+				<dl>
+					<dt>
+						<a href="${ctx}/member/order.html">我的订单</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="${ctx}/member/order.html?status=0">待付款订单</a></li>
+							<li><a href="${ctx}/member/order.html?order_state=5">待确认收货</a></li>
+							<li><a href="${ctx}/member/waitcommont.html">待评价交易</a></li>
+						</ul>
+					</dd>	
+				</dl>
+				<dl>
+					<dt>
+						<a href="${ctx}/member/favorite.html" title="我的收藏" target="_top">我的收藏</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="${ctx}/member/favorite.html" target="_top" title="收藏的商品">收藏的商品</a></li>
+							<li><a href="${ctx}/member/collect_store.html" target="_top" title="收藏的店铺">收藏的店铺</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						客户服务<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="${ctx}/help-21-7.html">帮助中心</a></li>
+							<li><a href="${ctx}/help.html?articleid=16">售后服务</a></li>
+							<li><a href="${ctx}/help.html?articleid=8">客服中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						站点导航<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a target="_blank" href="${ctx}/index.html">商城首页</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>

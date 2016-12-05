@@ -1,0 +1,164 @@
+<script>
+function load(){
+	location.href="${ctx}/store/login.html";
+}
+<#if !member?? >
+	load();
+</#if>
+</script>
+
+<script>
+	function selectMenu(index){
+		$(".store_left li").removeClass("selected");
+		$(".store_left li").eq(index).addClass("selected");
+	}
+</script>
+<!-- 
+商品管理:store_goods/交易管理transaction/促销管理promotion/店铺管理store/客服管理server
+ -->
+<div class="store_left_menu">
+<div class="sidebar" id="sidebar">
+	<#if menu=="store_index">
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<span class="s_store_index"></span>
+			<p>商家中心</p>
+		</dt>
+	</dl>
+	<div class="store_left">
+		<ul>
+			<li  class="selected"><a href="#">商家中心</a></li>
+			<li><a target="_blank" href="${ctx}/goods/select_cat.html?menu=store_goods">商品发布</a></li>
+			<li><a href="${ctx}/store/order/StoreOrder.html?order_state=all&menu=transaction">订单管理</a></li>
+			<li><a href="${ctx}/store/bonus/bonus_list.html?menu=promotion">促销活动管理</a></li>
+			<li><a target="_blank" href="${ctx}/home.html?show_c=1&store_id=${(storeMember.store_id)!0}&?menu=store">我的店铺</a></li>
+			<li><a href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">咨询管理</a></li>
+		</ul>
+	</div>
+	</#if>
+	<#if menu=="store_goods">
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<span class="s_store_goods"></span>
+			<p>商品管理</p>
+		</dt>
+	</dl>
+	<div class="store_left">
+		<ul>
+			<li  class="selected"><a target="_blank" href="${ctx}/goods/select_cat.html?menu=store_goods">商品发布</a></li>
+			<li><a href="${ctx}/goods/store_goods_list.html?market_enable=1&menu=store_goods">出售中的商品</a></li>
+			<li><a href="${ctx}/goods/store_goods_list.html?market_enable=0&menu=store_goods">仓库中的商品</a></li>
+			<li><a href="${ctx}/goods/goods_cat.html?menu=store_goods">分类管理</a></li>
+			<li><a href="${ctx}/goods/goodsTags.html?menu=store_goods">标签列表</a></li>
+		</ul>
+	</div>	
+	</#if>
+	<#if menu=="transaction">
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<span class="s_transaction"></span>
+			<p>交易管理</p>
+		</dt>
+	</dl>	
+	<div class="store_left">
+		<ul>
+			<li><a href="${ctx}/store/order/StoreOrder.html?order_state=all&menu=transaction">订单管理</a></li>
+			<li><a href="${ctx}/store/order/StoreOrder.html?order_state=wait_ship&menu=transaction">待发货订单</a></li>
+			<li><a href="${ctx}/store/ship/transaction/transport.html?menu=transaction">物流工具</a></li>
+			<li><a href="${ctx}/store/comment/StoreEvaluateList.html?replyStatus=0&menu=transaction">评价管理</a></li>
+			<li><a href="${ctx}/store/sellback/sellback_list.html?status=0&menu=transaction">退货申请</a></li>
+			<li><a href="${ctx}/store/bill/store_bill.html?menu=transaction">结算管理</a></li>
+		</ul>
+	</div>	
+	</#if>
+	<#if menu=="promotion">
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<span class="s_promotion"></span>
+			<p>促销管理</p>
+		</dt>
+	</dl>
+	<div class="store_left">
+		<ul>
+			<li><a href="${ctx}/store/bonus/bonus_list.html?menu=promotion">优惠券管理</a></li>
+			<#--检测组件是否启用 -->
+			<#assign checkCmptIsOnTag = newTag("checkCmptIsOnTag") /> 
+			<#assign groupbuyIsOn =checkCmptIsOnTag("{'componentName':'多商户团购组件'}") />
+			<#if groupbuyIsOn=="ON">
+				<li>
+					<a href="${ctx}/store/groupbuy/groupbuy_list.html?menu=promotion">闪购管理</a>
+				</li>
+			</#if>
+
+
+			<li>
+				<a href="${ctx}/store/advbuy/advbuy_list.html?menu=promotion">预售管理</a>
+			</li>
+			<li>
+				<a href="${ctx}/store/groupbuy/costdown_list.html?menu=promotion">直降管理</a>
+			</li>
+			<li><a href="${ctx}/store/activity/activity_list.html?menu=promotion">满减活动管理</a></li>
+		</ul>
+	</div>		
+	</#if>
+	<#if menu=="store">
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<span class="s_store"></span>
+			<p>店铺设置</p>
+		</dt>
+	</dl>
+	<div class="store_left">
+		<ul>
+			<li>
+				<a target="_blank" href="${ctx}/home.html?show_c=1&store_id=${(storeMember.store_id)!0}&menu=store">我的店铺</a>
+			</li>
+			<li>
+				<a href="${ctx}/store/storeInfo.html?menu=store">店铺设置</a>
+			</li>
+			<li>
+				<a href="${ctx}/store/auth.html?menu=store">店铺认证设置</a>
+			</li>
+			<li>
+				<a href="${ctx}/store/store_slide.html?menu=store">店铺幻灯片设置</a>
+			</li>
+			<li>
+				<a href="${ctx}/store/navigation/store_navigation.html?menu=store">导航管理</a>
+			</li>
+		</ul>
+	</div>
+	</#if>
+	<#if menu=="server">
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<span class="s_server"></span>
+			<p>客服管理</p>
+		</dt>
+	</dl>
+	<div class="store_left">
+		<ul>
+			<li><a href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">咨询管理</a></li>
+		</ul>
+	</div>		
+		<!-- 
+		<dd>
+			<a>退款记录</a>
+		</dd>
+		<dd>
+			<a>退货记录</a>
+		</dd>
+		 -->
+	
+	</#if>
+</div>
+</div>
+<script>
+/*$(function(){
+		 //浮动导航  waypoints.js
+	    $("#sidebar,#sotre_right_content").waypoint(function(event, direction) {
+	    	 $(this).parent().toggleClass('sticky', direction === "down");
+	        event.stopPropagation();
+	        });
+	})*/
+</script>
+

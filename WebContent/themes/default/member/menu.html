@@ -1,0 +1,46 @@
+		<div class="manage">
+			<h2>交易管理</h2>
+			<ul>
+			    <li><a href="order.html">我的订单</a></li>		
+				<li><a href="address.html">收货地址</a></li>
+				<li><a href="return_list.html">退货申请</a></li>	
+			</ul>
+		</div>
+	 	<div class="lens">
+	 		<h2>收藏夹</h2>
+			<ul>
+				<li><a href="favorite.html">商品收藏</a></li>
+				<li><a href="gnotify.html">缺货登记</a></li>
+			</ul>	 		
+	 		
+	 	</div>
+	 	
+		<div class="accounts">
+			<h2>评论管理</h2>
+			<ul>
+				<li><a href="comments.html">我的评论</a></li>
+				<li><a href="ask.html">我的咨询</a></li>
+			</ul>	
+		</div>
+		
+	 	<div class="password">
+	 		<h2>帐号管理</h2>
+			<ul>
+				<li><a href="info.html">
+
+				<#if member?exists>
+					<#if member.info_full == 0>
+					完善基本资料(20分)
+					<#elseif member.info_full == 1>
+					修改个人资料
+					</#if>
+				</#if>
+				</a></li>
+				<li><a href="point.html">我的积分</a></li>
+				<li><a href="security.html">修改密码</a></li>		
+				<li><a href="bonus.html">我的优惠券</a></li>			
+			</ul>	 		
+	 		
+	 	</div>
+	 	
+	 	

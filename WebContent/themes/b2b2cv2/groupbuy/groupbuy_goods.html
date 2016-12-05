@@ -1,0 +1,344 @@
+<#include '/common/header.html' />
+<#include '/common/reception_header.html'/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/groupbuy/css/home_group.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/groupbuy/css/goods.css" />
+
+
+<!-- <script  src="${ctx}/themes/b2b2cv2/js/favorite.js"  ></script> -->
+	<script  src="${ctx}/themes/b2b2cv2/js/magiczoom.js"  ></script>
+	<script  src="${ctx}/themes/b2b2cv2/groupbuy/js/groupbuy_Comment.js"></script>
+	<script  src="${ctx}/themes/b2b2cv2/js/favorite.js"  ></script>
+	<script  src="${ctx}/themes/b2b2cv2/js/spec.js" ></script>
+	<!-- 商品详情、商品评论、销售记录、产品咨询浮动 -->
+	<script  src="${ctx}/themes/b2b2cv2/js/airlines.js"  ></script>
+
+
+<!-- 闪购活动 -->
+<#assign groupBuyActTag=newTag("groupBuyActTag")>
+<#assign groupBuyAct=groupBuyActTag("{'act_id':${act_id} }")>
+
+<!-- 闪购标签 -->
+<#assign groupBuyTag=newTag("storeGroupBuyTag")>
+<#assign groupBuy=groupBuyTag("{'goodsid':${goodsid},'act_id':${act_id} }")>
+
+<#if groupBuy==''>
+	<div style="width:100%;height:200px;text-align:center;margin:30px 0px;">
+		<@image src="${ctx}/themes/b2b2cv2/images/new404.jpg" alt="未找到页面"/>
+	</div>
+<#else>
+
+<!--获取商品店铺信息 -->
+<#assign storeInfoTag=newTag("myStoreDetailTag")>
+<#assign storeInfo=storeInfoTag("{'store_id':${groupBuy.store_id},'type':1 }")>
+
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<#assign goodsList=goodsListTag("'tagid':'${groupBuyAct.act_tag_id}','goodsnum':'5'")>
+<!-- 闪购时间 -->
+<#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+<#assign groupBuyActSurplus=groupBuyActSurplusTag("{'end_time':${groupBuyAct.end_time},'start_time':${groupBuyAct.start_time} }")>
+
+<#-- 创建商品基本信息标签 -->
+<#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+<#-- 调用标签获取商品基本信息 -->
+<#assign goods= goodsBaseDataTag("'goodsid':${goodsid!0}") >
+
+	<#-- 创建商品属性标签 -->
+	<#assign goodsAttributeListTag= newTag("goodsAttributeListTag")>
+	<#-- 调用标签获取商品属性信息 -->
+	<#assign attrList= goodsAttributeListTag("'goodsid':${goods.goods_id!''}")!'' >
+
+<!-- 获取商品属性标签 -->
+<#assign advListTag= newTag("advListTag")>
+<#assign adv = advListTag("'acid':'82'")!'' >
+
+<#-- 创建商品参数标签 -->
+<#assign goodsParametersTag= newTag("goodsParametersTag")>
+<#-- 调用标签获取商品参数信息 -->
+<#assign goodsPara= goodsParametersTag("'goodsid':${goods.goods_id!''}")!'' >
+
+<!-- 获取商品评论标签 -->
+<#assign commentListTag = newTag("commentListTag")>
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign commentPage = commentListTag("{'goods_id':${goodsid},'type':1}")>
+
+
+
+<div class="clear"></div>
+<div class="group_title">
+	<div class="breadcrumb wrapper">
+		<span><a href="${ctx}/index.html">首页</a></span>
+		<span class="arrow">&gt;</span>
+		<span>闪购</span>
+	</div>
+</div>
+<div class="group_goods_detail_outside" style="background:#fff;overflow:hidden;">
+<div class="group_goods_detail">
+	<div class="group_detail_left">
+		<!-- 闪购详细介绍 -->
+		<div class="groupbuy_goods_intro">
+			  <h3>${groupBuy.gb_name}</h3>
+		      <h4>${groupBuy.gb_title!''}</h4>
+		      <div class="groupbuy_intro_important">
+		      	<div class="important_left">
+		      	   		<form  id="goodsform">		      	   	
+	          					<input type="hidden" name="goodsid" value="${goods.goods_id}" />
+	          					<input type="hidden" id="storeid" value="${storeInfo.store_id}" />
+	          					<input type="hidden" name="num" id="quantity" value="1"/>
+	          					<input type="hidden" name="action" value="addGoods" />
+		      		<div class="important_left_price">
+		      			<#if groupBuyAct.act_status==0>
+			      			<div class="close">
+		          				即将开始
+		          			</div>
+	          			</#if>
+		      			<#if groupBuyAct.act_status==2>
+			      			<div class="close_end">
+		          				已经结束
+		          			</div>
+	          			</#if>
+	          			<#if groupBuyAct.act_status==1>
+          				<div class="button">
+	          				<span><em>${groupBuy.price?string.currency}</em></span>
+	          				<#if groupBuy.goods_num==0>
+								<a href="javascript:;">已售罄</a>
+	          					<#else>
+	          <a href="javascript:void(0);" class="addcart" id="addGroupbuyToCart"><p style="font-size:14px;">加入购物车</p></a>
+	          				</#if>
+          				</div>
+          			</#if>
+	          		</div>
+					<div class="groupbuy_info_left">
+						<div class="prices">
+							<dl>
+								<dt>市场价</dt>
+								<dd>
+									<del>${groupBuy.storeGoods.price?string.currency}</del>
+								</dd>
+							</dl>
+							<dl>
+								<dt>折扣</dt>
+								<dd>
+									<em>${groupBuy.price/groupBuy.storeGoods.price*10}折</em>
+								</dd>
+							</dl>
+							<dl>
+								<dt>立省</dt>
+								<dd>
+									 <em>${(groupBuy.storeGoods.price-groupBuy.price)?string.currency}</em>
+									     <!-- <em>${(groupBuy.price-groupBuy.storeGoods.price)?string.currency}</em> -->
+								</dd>
+							</dl>
+						</div>
+						<div class="trim"></div>
+						<div class="require">
+						<#if groupBuyAct.act_status==1>
+							<h4>
+								本商品已被闪购 <em>${groupBuy.buy_num+groupBuy.visual_num}</em>件
+							</h4>
+							<p>闪购活动正在进行</p>
+						<#else>
+							<br><br>
+						</#if>
+						</div>
+						<div class="time">
+						<#if groupBuyAct.act_status==0>
+							<!-- 倒计时 距离本期开始 -->
+							离开始还有：
+						<#else>
+							<!-- 倒计时 距离本期结束 -->
+							距结束还有：
+						</#if>
+							<span id="d1"></span><strong>天</strong> <span id="h1"></span><strong>时</strong>
+							<span id="m1"></span><strong>分</strong> <span id="s1"></span><strong>秒</strong>
+
+							<script type="text/javascript">
+								tms[tms.length] = "<#if groupBuyAct.act_status==0>${groupBuyActSurplus.cha0}<#else>${groupBuyActSurplus.cha}</#if>";
+								day[day.length] = "d1";
+								hour[hour.length] = "h1";
+								minute[minute.length] = "m1";
+								second[second.length] = "s1";
+							</script>
+						</div>
+					</div>
+				</div>
+				</form>
+		      	<div class="important_right">
+		      		<a href="${ctx}/goods.html?goodsid=${groupBuy.goods_id}" class="addcart" id="addcart"><@image border="0" src="${groupBuy.img_url!''}"  alt="${groupBuy.gb_name!''}" /></a>
+		      	</div>
+		      </div>
+		</div>
+		<!-- 商品信息、商品评价 -->
+		<div class="groupbuy_detail_tab">
+			<div class="groupbuy_detail_tab_title">
+				<ul>
+					<li id="info" class="selected">
+						<a href="javascript:void(0);">商品信息</a>
+					</li>
+					<li id="groupbuy_goods_comments" class="">
+						<a href="javascript:void(0);">商品评论</a>
+					</li>
+
+					
+				</ul>
+			</div>
+			<div class="groupbuy_detail_tab_contont">
+				<div class="groupbuy_detail_tab_info">
+				   <!--  <#include 'goods_props.html' />
+					 <#list adv.advList as adv3>
+<a target="_blank" href="${adv3.url!''}" style="margin:0 auto;display: block;"><@image border="0" src="${adv3.atturl}" alt="${adv3.aname!''}" /></a>
+						</#list>  -->
+					<div class="default" style="">${goods.intro!''}</div>	
+				</div>
+			  <div id="discuss_wrapper" class="" style="display:none;"  >
+		
+			    <div id="discuss_wrapper_list">
+			      
+						<!--评论列表-->
+				  </div> 
+					<!--发表评论-->				
+			 <#include 'discuss_form.html'/>
+			   </div>				
+
+			</div>
+		</div>
+	</div>
+	<!-- 店铺信息、推荐闪购 -->
+	<div class="group_detail_right">
+		<!-- 店铺信息 -->
+		<div class="groupbuy_detail_store">
+			<div class="groupbuy_detail_store_title">店铺信息</div>
+			<div class="groupbuy_detail_store_contont">
+				<dl>
+	            	<dt>商　　家：</dt>
+	            	<dd> ${storeInfo.store_name} </dd>
+	          </dl>
+	          <dl>
+	            <dt>综合评分：</dt>
+	            <dd>
+	              <!--div class="rating"><span style="width:${(storeInfo.store_desccredit+storeInfo.store_servicecredit+storeInfo.store_deliverycredit)/3}0%;"></span></div-->
+	              <em>${(storeInfo.store_desccredit+storeInfo.store_servicecredit+storeInfo.store_deliverycredit)/3}</em>分
+	            </dd>
+	          	</dl>
+	          	<div class="detail_rate">
+		            <ul class="rate">
+		              	<li>
+		              		<h5>描述</h5><div class="equal">${storeInfo.store_desccredit!'5'}</div></span>
+		              	</li>
+		              <li>
+		              		<h5>服务</h5><div class="equal">${storeInfo.store_servicecredit!'5'}</div></span>
+		              </li>
+		              <li>
+		              		<h5>发货</h5><div class="equal">${storeInfo.store_deliverycredit!'5'}</div></span>
+		              </li>
+		            </ul>
+	          </div>
+	           <div class="goto"> 
+	          		<a href="${ctx}/home.html?show_c=1&store_id=${storeInfo.store_id}" target="_blank">进入商家店铺</a>
+	          </div>
+			</div>
+		</div>
+		
+			<div class="add_success_msg" style="display:none">
+		<dl class="add_message">
+			<dt>恭喜，该商品已添加到您的购物车！</dt>
+			<dd>
+				<input type="button" class="returnbuy_btn" value="继续购物">
+				<input type="button" class="checkout_btn" value="去结算">
+			</dd>
+		</dl>
+	</div>
+	
+	
+		<!-- 热门闪购 -->
+		<div class="groupbuy_hot_list">
+			<h1>热门闪购</h1>
+			<div class="groupbuy_hot_list_all">
+				<#list goodsList as goods>
+					<dl>
+						<!--商品图片-->
+						<dd class="groupbuy_hot_img">
+							<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&act_id=${act_id}"> 
+								<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+						</dd>
+						<!--商品名称-->
+						<dd class="groupbuy_hot_name">
+							<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&act_id=${act_id}" title="${goods.name}">${goods.name}</a>
+						</dd>
+						<dd class="groupbuy_hot_item">
+							<span class="price">商城价：${goods.price?string.currency}</span>
+							<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&act_id=${act_id}" title="${goods.name}">抢购</a>
+						</dd>
+					</dl>
+				</#list>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+
+<script>
+	$(function(){
+
+		Spec.init(${goods.goods_id});	 
+         CommentList.init(${goods.goods_id});
+        loadDiscuss_wrapper_list(1);
+		 Favorite.init();
+	$("#discuss_wrapper_list").change(function(){
+			//alert("discuss_wrapper_list 被选中 ");
+		}); 
+		
+		
+		$("#info").click(function(){
+			$(".groupbuy_detail_tab_title ul li").removeClass("selected");
+			$(this).addClass("selected");
+			$(".groupbuy_detail_tab_info").show();
+		
+			$("#discuss_wrapper").hide();
+		})
+		$("#groupbuy_goods_comments").click(function(){
+			//alert(11);
+			$(".groupbuy_detail_tab_title ul li").removeClass("selected");
+			$(this).addClass("selected");			
+			$(".groupbuy_detail_tab_info").hide();
+			$("#discuss_wrapper").show();
+	
+		})
+ 
+		
+		function loadDiscuss_wrapper_list(page){
+			//alert(234);
+			$("#discuss_wrapper_list").load("discuss_list.html?goods_id="+${goods.goods_id}+"&page="+page,function(){
+				$("#discuss_wrapper_list .page li a").click(function(){
+					var pageno= $(this).attr("page");
+					loadDiscuss_wrapper_list(pageno);
+				});
+			});	
+		}	
+	/* 	$("#addGroupbuyToCart").click(function(){
+			alert("#addGroupbuyToCart1111");
+	 	var $this=$(this);
+			self.addToCart($this); 
+	 	}); */
+		
+   
+	})
+</script>	
+
+</#if>
+<!-----footer------>
+<#include '/common/footer.html'/>
+
+
+
+
+
+
+
+
+
+
+
+
+

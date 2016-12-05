@@ -1,0 +1,66 @@
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<style>
+h2{
+	font-size: 24px;font-weight: bold;
+}
+.dlyCenter{
+	margin-top: 10px;
+}
+.dlyCenter tbody tr td {
+	height:40px;
+	font-size: 14px;
+}
+.dlyCenter tbody tr td input{
+	width: 210px;
+	height: 20px;
+}
+</style>
+<h2>发货信息</h2>
+<form id="dlyCenterForm" method="post"  class="validate">
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" class="dlyCenter">
+			<tbody>
+				<tr>
+					<td style="width: 30%">发货点名称</td>
+					<td >
+						<input name="name" class="text"  isrequired="true" datatype="string" /> 
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>发货人姓名</td>
+					<td>
+						<input name="uname" class="text"  isrequired="true" datatype="string"/> 
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>地区</td>
+					<td>
+						<@regionSelect />
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>地址</td>
+					<td>
+						<input name="address" class="text"  isrequired="true" /> 
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>电话</td>
+					<td>
+						<input name="phone" class="text"  isrequired="true" datatype="tel"/> 
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>邮编</td>
+					<td>
+						<input name="zip" class="text"  isrequired="true" datatype="post_code"/> 
+					</td>
+					<td></td>
+				</tr>
+			</tbody>	
+		</table>
+</form>

@@ -1,0 +1,80 @@
+<!-- 获取导购idTag -->
+<#assign sellerTag = newTag("sellerTag")> 
+<!-- 调用导购idTag -->
+<#assign seller = sellerTag("{'seller_id':'${seller_id}'}")>
+
+<div class="form_seller1" style="background-color: white;">
+	<form id="editSellerForm" method="post" class="validate">
+		<table>
+			<tr>
+				<td><input type="hidden" id="storeId"
+					value="${seller.seller_id}" name="seller_id"></input></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" id="offlineStoreId"
+					value="${seller.offline_store_id}" name="offline_store_id"></input></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" id="storeId"
+					value="${seller.store_id}" name="store_id"></input></td>
+			</tr>
+			<tr>
+				<td>姓名：</td>
+				<td><input class="input_text" type="text" id="sellerName"
+					value="${seller.seller_name}" name="seller_name" isrequired="true"></input></td>
+			</tr>
+			<tr>
+				<td>性别：</td>
+				<td>
+					<input class="input_text" type="radio" id="sellerSex1" value="1" name="seller_sex" isrequired="true">男</input>
+					<input class="input_text" type="radio" id="sellerSex2" value="2" name="seller_sex" isrequired="true">女</input>
+				</td>
+			</tr>
+			<tr>
+				<td>年龄：</td>
+				<td><input class="input_text" type="text" id="sellerAge"
+					value="${seller.seller_age}" name="seller_age" isrequired="true" dataType="int"></input></td>
+			</tr>
+			<tr>
+				<td>手机号：</td>
+				<td><input class="input_text" type="text" id="sellerMobile"
+					value="${seller.seller_mobile}" name="seller_mobile" isrequired="true" dataType="mobile"></input></td>
+			</tr>
+			<tr>
+				<td>用户名：</td>
+				<td><input class="input_text" type="text" id="username"
+					value="${seller.username}" name="username" isrequired="true"></input></td>
+			</tr>
+			<tr>
+				<td>密码：</td>
+				<td><input class="input_text" type="password" id="password"
+					value="${seller.password}" name="password" isrequired="true"></input></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" id="point"
+					value="${seller.point}" name="point" isrequired="true"></input></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" id="lastChangeTime"
+					value="${seller.last_change_time}" name="last_change_time"></input></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" id="changeTimes"
+					value="${seller.change_times}" name="change_times"></input></td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<script type="text/javascript">
+//对导购性别进行回显，当value=1时，选择男，否则选中女
+$(function(){
+	if(${seller.seller_sex} == 1){
+		$("input[name=seller_sex]:eq(0)").attr("checked",true);
+	}else{
+		$("input[name=seller_sex]:eq(1)").attr("checked",true);
+	}
+});
+	
+	
+</script>

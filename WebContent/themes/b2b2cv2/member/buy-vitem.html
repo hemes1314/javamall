@@ -1,0 +1,71 @@
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/member.css">
+
+<#assign vpListTag = newTag("vitemTypeListTag") >             
+<#assign vpList = vpListTag()>
+
+<#assign memberInfoTag = newTag("memberInfoTag") >             
+<#assign member = memberInfoTag()>
+
+<div class="form_wrap">
+	<form id="buyVitemForm"  class="validate"   action="/api/b2b2c/buyVitemApi.do" method="post" >
+		<table cellspacing="0" cellpadding="0" border="0" >
+			<tbody>
+				<tr>
+					<th>当前账户余额：</th>
+					<td>
+						<label>${(member.advance+member.virtual)?string('currency')}</label>
+					</td>
+				</tr>
+				<tr>
+					<th>虚拟物品：</th>
+					<td><span>
+						<select class="" name="vitemTypeId" autocomplete="off">
+						<#list vpList as vp>
+							<option value="${vp.id}">${vp.name+"： "+vp.price?string('currency')}</option>
+						</#list>
+						</select>
+					</span></td>
+				</tr>
+				<tr>
+					<th>购买数量：</th>
+					<td><input type="text" name="num" class="input-text" autocomplete="off" value="1" maxlength="10"></td>
+				</tr>	
+				<tr>
+					<th></th>	
+					<td>
+						<div class="btn"><input type="submit"  class="yellow_btn" value="购买"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+
+<script>
+
+$("#buyVitemForm").submit(function(){
+	var num = parseInt($("input[name=num]").val());
+	if(isNaN(num) || num < 1){
+		alert("请确保输入正确的购买数量");
+		return false;
+	}
+	
+	$("#buyVitemForm").ajaxSubmit({
+		url:'${ctx}/api/b2b2c/buyVitemApi.do',
+		dataType:"json",
+		success:function(json){
+			if(json.result==1){
+				window.location.href = 'vitem.html';
+			}else{
+				alert(json.message);
+			}
+		},
+		error:function(){
+			alert('当前账户余额不足');
+		}
+	});
+	
+	return false;
+});
+</script>		

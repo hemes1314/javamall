@@ -1,0 +1,41 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editSmtpForm" method="post" class="validate" >
+		<input type="hidden" name="smtp.id" value="${smtp.id }"/>
+			<table>
+				<tr>
+					<td>host:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="smtp.host" data-options="required:true"  value="${smtp.host }"  isrequired="true"/>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>用户名：</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="smtp.username" data-options="required:true"  value="${smtp.username }" dataType="string" isrequired="true"/>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>密码：</td>
+					<td><input class="easyui-validatebox input_text" type="password" name="smtp.password" value="" placeholder="不填则为不修改"/></td>
+				</tr>
+				
+				<tr>
+					<td>每日最大发信数：</td>
+					<td><input class="easyui-numberbox input_text" type="text" name="smtp.max_count" data-options="required:true"  value="${smtp.max_count }" dataType="int" isrequired="true"/>封
+					</td>
+				</tr>
+				
+				<tr>
+					<td>from：</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="smtp.mail_from" data-options="required:true"  value="${smtp.mail_from }" dataType="string" isrequired="true"/>
+					</td>
+				</tr>
+				<tr><td><label class="text">今日已发</label></td>
+					<td>${smtp.send_count }封</td>
+				</tr>
+
+			</table>
+		</form>
+	</div>
+</div>

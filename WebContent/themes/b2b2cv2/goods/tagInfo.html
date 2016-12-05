@@ -1,0 +1,10 @@
+<form id="tagForm">
+	<#if type=="2">
+		<#assign storeTagsInfoTag=newTag("storeTagsInfoTag")>
+		<#assign tag=storeTagsInfoTag()>
+		标签名称:<input type="text" name="tag.tag_name" value="${tag.tag_name}"/>
+		<input type="hidden" name="tag.tag_id" value="${tag.tag_id}"/>
+	<#else>
+		标签名称:<input type="text" name="tag.tag_name"/>
+	</#if>
+</form>

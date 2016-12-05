@@ -1,0 +1,61 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div id="loading"></div>
+<div class="main">
+	<div class='buttonArea' style="height: auto">
+		<span style="float: right;">
+		 	<span id="simpleSearch">
+			 	<input id="searchKeyword" class="input_text" type="text" value="" size="30" style="width: 300px;" placeholder="请输入账单号" name="searchKeyWord">
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a>
+			</span>
+		</span>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<table  id="dgs" class="easyui-datagrid"
+			data-options="url:'${ctx}/b2b2c/admin/storeBill!list_json.do',remoteSort:false,pageList: [10,15,20],pageSize:${pageSize},fitColumns:'true'"
+			pagination="true" width="width">
+			    <thead>
+				    <tr>
+					   	<th  data-options="field:'name',width:100">账单号</th>
+					    	<th  data-options="field:'start_time',width:100" formatter="formatTime" >开始日期</th>
+					    	<th  data-options="field:'end_time',width:100" formatter="formatTime" >结束日期</th>
+					    	<th  data-options="field:'order_price',width:100" formatter="formatMoney">订单金额(不含红包)</th>
+					    	<th  data-options="field:'commi_price',width:100" formatter="formatMoney">收取佣金</th>
+					    	<th  data-options="field:'returned_price',width:100" formatter="formatMoney">退单金额</th>
+					    	<th  data-options="field:'returned_commi_price',width:100" formatter="formatMoney">退还佣金</th>
+							<th  data-options="field:'red_packets_price',width:100" formatter="formatMoney">正向红包</th>
+							<th  data-options="field:'returned_red_packets_price',width:100" formatter="formatMoney">退还红包</th>
+					    	<th  data-options="field:'price',width:100" formatter="formatMoney">本期应结</th>
+					    	<th  data-options="field:'action',width:50" formatter="formatAction">操作</th>
+				    </tr>
+			    </thead>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+
+function formatTime(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+function formatAction(value,row,index){
+	var val="<a href='#' onclick=\"newTab('账单列表','${ctx}/b2b2c/admin/storeBill!detail_list.do?bill_id="+row.bill_id+"')\">查看</a>"
+	return val;
+}
+function searchOrder(){
+	var keyword = $("#searchKeyword").val();
+	$("#dgs").datagrid('load', {
+		 keyword:keyword,
+		 page:1
+    });
+}
+</script>

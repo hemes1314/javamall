@@ -1,0 +1,85 @@
+<div class="input">
+	<form class="validate" id="addForm">
+		<input type="hidden" name="menu.id"  disabled="true"  id="menuid"/>
+		<table cellspacing="1" cellpadding="3" width="100%" class="form-table">
+			<tr>
+				<th><label class="text">名称</label></th>
+				<td>
+					<input type="text" name="menu.title" id="name" maxlength="60" value="" dataType="string" isrequired="true" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">类型</label></th>
+				<td>
+					<select name="menu.menutype">
+						<option value="2">应用</option>
+						<option value="1">系统</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">上级菜单</label></th>
+				<td>
+					<select name="menu.pid" id="pid">
+						<option value="0">顶级菜单</option>
+						<#assign children=menuList />
+						<#assign level=1 />
+						<#assign pid=parentid />
+						<#include 'select_children.html' />
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">url</label></th>
+				<td>
+					<input type="text" name="menu.url" id="url"	dataType="string" isrequired="true" />
+				</td>
+			</tr>
+			<tr>
+				<th><label class="text">target</label></th>
+				<td><input type="text" name="menu.target" id="target" /></td>
+			</tr>
+			<tr>
+				<th><label class="text">排序</label></th>
+				<td><input type="text" name="menu.sorder" value="0"	style="width: 50px" dataType="int" isrequired="true" /></td>
+			</tr>
+			<tr>
+				<th><label class="text">允许导出</label></th>
+				<td>
+					<select name="menu.canexp">
+						<option value="1">是</option>
+						<option value="0">否</option>
+					</select>
+				</td>
+			</tr>	
+			<tr style="height:70px;">
+				<th><label class="text">图标</label></th>
+				<td>
+				
+					<div class="icon_wrap">
+					 	<input type="hidden" id="icon" name="menu.icon" value="default.png">
+					 	<img src="" />
+					 	<span>正常态</span>
+				 	</div>
+				 	
+				 	<div class="icon_wrap">
+					 	<input type="hidden" id="con_hover" name="menu.icon_hover" value="default.png">
+					 	<img src="" />
+					 	<span>悬停态</span>
+				 	</div>
+				 	点击图标更换
+				</td>
+			</tr>				
+		</table>
+		<div class="submitlist" align="center">
+			<table>
+				<tr>
+					<td><input type="button" value=" 确定 " class="submitBtn"
+						id="saveAddBtn" /> <input name="reset" type="reset" value=" 重置 "
+						class="submitBtn" /></td>
+				</tr>
+			</table>
+		</div>
+	</form>
+
+</div>

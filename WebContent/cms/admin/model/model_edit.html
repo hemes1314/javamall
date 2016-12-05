@@ -1,0 +1,255 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<div class="main">
+	<div class="shadowBoxWhite whiteBox">
+		<form method="post" id="addmodelForm">
+			<table>
+				<tr>
+					<th width="100px;"><label class="text">模型名称:</label></th>
+					<td><input type="text" class="easyui-validatebox input_text"
+						value="${dataModel.china_name!''}" name="dataModel.china_name"
+						data-options="required:true" maxlength="60" dataType="string"
+						isrequired="true" /> <input type="hidden"
+						name="dataModel.model_id" value="${dataModel.model_id }"
+						id="modelid" />
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">表名:</label></th>
+					<td><input type="text" class="easyui-validatebox input_text"
+						value="${dataModel.english_name!''}" name="dataModel.english_name"
+						data-options="required:true" maxlength="60" size="40"
+						isrequired="true" dataType="string" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">备注：</label></th>
+					<td>
+						<textarea name="dataModel.brief" id="biref" >${dataModel.brief!''}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="text-align: center;"><a href="javascript:;"
+						class="easyui-linkbutton" id="editbtn" onclick="editModel()">
+							保 存</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div class="clear height10"></div>
+	
+	<form id="fieldForm">
+		<div class='buttonArea'>
+			<a href="javascript:void(0)" class="button blueButton"
+				onclick="append()">添加字段</a>
+		</div>
+		
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'model!fileListJson.do?modelid=${dataModel.model_id }',fitColumns:'true'"
+				width="width" id="fielddata">
+				<thead>
+					<tr>
+						<th data-options="field:'field_id',checkbox:true,width:100"></th>
+						<th data-options="field:'china_name',width:100">提示文字</th>
+						<th data-options="field:'english_name',width:100">字段名</th>
+						<th data-options="field:'taxis',width:100">排序</th>
+						<th data-options="field:'edit',width:100" formatter="formatEdit">修改</th>
+						<th data-options="field:'delete',width:100"
+							formatter="formatDelete">删除</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+</div>
+</form>
+<div id="fieldinfo" style="display: none;"></div>
+<script type="text/javascript">
+function editModel(){
+	var disabled=  $("#editbtn").hasClass("l-btn-disabled");
+	if( !disabled ){
+		
+		var formflag= $("#addmodelForm").form().form('validate');
+		if(formflag){
+			$.Loading.show("正在保存请稍后..");
+			$("#editbtn").linkbutton("disable"); 
+			var options = {
+					url : "model!saveEdit.do",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						if(result.result==1){
+							$.Loading.success(result.message);
+						}else{
+							$.Loading.error(result.message);
+						}
+						$("#editbtn").linkbutton("enable"); 
+					},
+				 	error : function(e) {
+				 		$.Loading.error('出现错误，请重试');
+				 		$("#editbtn").linkbutton("enable"); 
+					}
+				};
+			$('#addmodelForm').ajaxSubmit(options);	
+		}
+	}
+}
+function formatEdit(value, row, index) {
+	var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='edit("+ row.field_id + ")' ></a>";
+	return val;
+}
+function formatDelete(value, row, index) {
+	var val = '<a href="javascript:;" class="delete" onclick="del('+ row.field_id+ ')"></a>';
+	return val;
+}
+function edit(fieldid){
+	var modelid=$("#modelid").val();
+	 $("#fieldinfo").show();
+	　　	$('#fieldinfo').dialog({
+	　　		title: '修改字段',			
+	　　		width: 1000,
+	  		top: 10,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: 'field!edit.do?modelid='+modelid+'&fieldid='+fieldid+'&ajax=yes', 	 
+	　　		modal: true,
+	　　		onLoad : function() {
+				/* var instance = CKEDITOR.instances["save_value"];
+				if (instance) { CKEDITOR.remove(instance); }
+				$("#save_value").ckeditor(); */
+			},
+	　　		buttons: [{				
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				  var editbtn = $(this);
+		　　				 var disabled=editbtn.hasClass("l-btn-disabled");
+		　　				 if(!disabled){
+	　　				 		 fieldinForm("edit",editbtn);
+	　　				 	}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#fieldForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+}
+function append(){
+	var modelid=$("#modelid").val();
+	 	$("#fieldinfo").show();
+	　　	$('#fieldinfo').dialog({
+	　　		title: '添加字段',			
+	　　		width: 1000,
+	  		top: 10,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: 'field!add.do?ajax=yes&modelid='+modelid, 	 
+	　　		modal: true,
+	　　		onLoad : function() {
+	　　			//去除控件
+				/*var instance = CKEDITOR.instances["save_value"];
+				if (instance) { CKEDITOR.remove(instance); }
+				$("#save_value").ckeditor();*/
+			},
+	　　		buttons: [{				
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					 fieldinForm("add",savebtn);
+　　					 }
+		　　		 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				$('#fieldForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+}
+function fieldinForm(val,btn){
+	var fieldurl="";
+	if(val=="edit"){caturl="${ctx}/cms/admin/field!saveEdit.do?ajax=yes"}
+	if(val=="add"){caturl="${ctx}/cms/admin/field!saveAdd.do?ajax=yes"}
+	var formflag= $("#fieldinfoForm").form().form('validate');
+	if(formflag){
+		//验证字段名
+		var $name = $("#english_name");
+		var name = $.trim($name.val());
+		var Regx =  /^[a-zA-Z_]+$/;
+		formflag = Regx.test(name);
+		if(formflag){
+			formflag = name != "_";
+			if(formflag){
+				formflag = name.length < 16;
+				if(!formflag){
+					$.Loading.error("字段名的长度不允许超过16位!");
+				}
+			}else{
+				$.Loading.error("字段名不允许单独出现下划线!");
+			}
+		}else{
+			$.Loading.error("字段名不允许包含中文、数字及特殊字符!");
+		}
+		
+	}
+	if(formflag){
+		$.Loading.show("正在保存请稍后...");
+		btn.linkbutton("disable");	
+		var options = {
+				url : caturl,
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result == 1 ){
+						$("#fieldinfo").dialog('close');
+						$.Loading.success(result.message);
+						$('#fielddata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+						btn.linkbutton("enable");
+					}
+					
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		btn.linkbutton("enable");
+				}
+			};
+		$('#fieldinfoForm').ajaxSubmit(options);	
+	}else{
+		$.Loading.hide();
+		btn.linkbutton("enable");
+		
+	}
+}
+function del(field_id){
+	if(!confirm("确认要删除字段吗？")){	
+		return ;
+	}
+	var options = {
+			url : "field!delete.do?ajax=yes&fieldid="+field_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+				$.Loading.success(result.message);
+					$('#fielddata').datagrid('reload');
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#fieldForm').ajaxSubmit(options);	
+}
+
+var app_path = "";
+/* var instance = CKEDITOR.instances["biref"];
+if (instance) { CKEDITOR.remove(instance); }
+$("#biref").ckeditor(); */
+</script>
+<#include '/admin/footer.html' >

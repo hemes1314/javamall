@@ -1,0 +1,24 @@
+<div id="ask_list_wrapper">
+	<div class="ask_all">
+		<#include 'ask_all.html'/>
+	</div>
+	<div class="clear"></div>
+</div>
+<script>
+$(function(){
+	$("#anchor .unselected").live("click",function(){
+		var page = $(this).attr("page");
+		$.ajax({
+			url:"${ctx}/detail/ask_all.html?page="+page+"&goodsid="+${goodsid},
+			dataType:"html",
+			success:function(result){
+				$("#ask_list_wrapper .ask_all").html(result);
+			},
+			error:function(){
+				$.alert("请重新试试");
+			}
+		});	
+		
+	});
+});
+</script>

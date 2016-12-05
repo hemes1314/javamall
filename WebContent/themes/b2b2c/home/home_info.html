@@ -1,0 +1,65 @@
+<section class="layout">
+	<article class="goods-main">
+		<div class="nc-s-c-s3 mt15">
+			<div class="title">
+				<h4>店铺详情</h4>
+			</div>
+			<div class="content pt10 pb20">
+				<div style="float: none; margin: auto;" class="default"></div>
+				<div class="clear mb50"></div>
+				<div class="user-intro">
+					<div class="top"></div>
+					<div class="content clearfix">
+						<h2 class="user-name">${store.store_name}</h2>
+						<dl class="user-shop-info">
+							<dt>
+								<span class="thumb size80"><i></i>
+								<a href="${ctx}/home.html?show_c=1&store_id=${store_id}">
+									<@image src="${store.store_logo!''}" id="logo" width="80" height="80" />
+								</a>
+									</span>
+							</dt>
+							<dd class="base">
+								<p>店铺名称：${store.store_name}</p>
+								<!-- 店铺名称 -->
+								<p>店铺等级：系统默认</p>
+								<!-- 店铺等级 -->
+								<p>
+									<span class="fl">认证信息：</span>
+									<!-- 认证信息 -->
+									<#if store.name_auth==0>
+										<@image src="${ctx}/themes/b2b2c/images/cert_autonym_no.gif" alt="身份未认证或认证失败" title="身份未认证或认证失败" />
+										<#else>
+										实名认证<@image src="${ctx}/themes/b2b2c/images/cert_autonym.gif" />
+									</#if>
+									<#if store.store_auth==0>
+										<@image src="${ctx}/themes/b2b2c/images/cert_material_no.gif" alt="尚未认证或认证失败" title="尚未认证或认证失败" />
+										<#else>
+										店铺认证<@image src="${ctx}/themes/b2b2c/images/cert_material.gif" />
+									</#if>
+								</p>
+
+							</dd>
+						</dl>
+						<dl class="user-basic-info">
+							<dt>基本信息</dt>
+							<!-- 基本信息 -->
+							<dd>
+								<span style="float: left;">卖家信用：</span> ${store.store_credit!0}
+							</dd>
+							<!-- <dd>商品信息：出售中的商品</dd> -->
+							<dd>注册时间：<@dateformat time="${store.create_time}" pattern="yyyy-MM-dd"/> </dd>
+						</dl>
+						<dl class="user-contact">
+							<dt>联系方式</dt>
+							<!-- 联系方式 -->
+							<dd>所&nbsp;在&nbsp;地：${store.store_province}&nbsp;${store.store_city}&nbsp;${store.store_region}</dd>
+							<dd>详细地址：${store.attr}</dd>
+							<dd>联系电话：${store.tel}</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+	</article>
+</section>

@@ -1,0 +1,137 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<!-- 获取店铺信息 -->
+<#assign myStoreDetailTag = newTag("myStoreDetailTag")>
+<!-- 调用订单状态标签 -->
+<#assign store = myStoreDetailTag()> 
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/uploadify.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member_store.css" />
+<script type="text/javascript" src="${ctx}/themes/b2b2c/js/jquery.uploadify.min.js"></script>
+<!-- 调用地区标签 -->
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<!-- 获取店铺信息 -->
+<#assign myStoreDetailTag = newTag("myStoreDetailTag")>
+<!-- 调用订单状态标签 -->
+<#assign store = myStoreDetailTag()> 
+
+<div class="layout">
+	<#include '../left_menu.html'/>
+	<div class="right-content">
+		<div class="path">
+			<div>
+				<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span>认证设置
+			</div>
+		</div>
+		<div class="main">
+			<div class="wrap">
+				<div class="user-form-style">
+<form id="StoreAuthForm">
+	<input type="hidden" value="${store.store_id}" name="store_id"/>
+	<dl>
+	      <dt>认证状态：</dt>
+	      <dd>
+	      	<input type="hidden" value="${store.name_auth}" name="name_auth"/>
+			<#if store.name_auth==1 && store.id_img??>
+				店主信息已认证
+	        	<a target="_blank" href="${store.id_img}">查看身份证</a>
+	       	<#elseif store.name_auth==2>
+	       			 店主信息正在审核...请稍候
+	       	<#else>
+	       		 店主信息未认证
+	        	<input type="file" id="id_img" status="id_img" text="上传身份证"/>
+	        	<input type="hidden" name="fsid_img" value="${store.id_img!''}"  id="fs_id_img" />
+	        	<img alt="" src="" id="img_id_img" style="height:200px;">
+	       	</#if>
+		</dd>
+	</dl>
+	<dl>
+		<dt>店铺认证状态11：</dt>
+		<dd>
+			<input type="hidden" value="${store.store_auth}" name="store_auth"/>
+			<#if store.store_auth==1 && store.license_img??>
+				店铺信息已认证
+	        	<a target="_blank" href="${store.license_img}">查看营业执照</a>
+	       <#elseif store.store_auth==2>
+	       		店铺信息正在审核...请稍候
+	       	<#else>
+	       		店铺信息未认证
+				<input type="file" id="license_img" status="license_img" text="上传营业执照"/>
+				<input type="hidden" name="fslicense_img" value="${store.license_img!''}"  id="fs_license_img"  />
+				<img alt="" src="" id="img_license_img" style="height:200px;">
+	       </#if>
+		</dd>
+	</dl>
+	<dl class="bottom">
+		<dt>&nbsp;</dt>
+		<dd>
+			<input type="button" id="update" value="保存修改" class="submit"/>
+		</dd>
+	</dl>
+</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	bindFileEvent($("#license_img"));
+ 	bindFileEvent($("#id_img"));
+ 	
+ 	$("#update").click(function(){
+		var options = {
+				url : "${ctx}/api/b2b2c/storeApi!store_auth.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1)
+						location.href="business_center.html";
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#StoreAuthForm").ajaxSubmit(options);
+	});
+})
+function bindFileEvent(obj){
+	var status=$(obj).attr("status");
+	var text=$(obj).attr("text");
+	$(obj).uploadify({
+		'buttonText':text,		//显示文字
+		'fileObjName':'image',		//文件对象名称
+									//上传文件大小限制 'fileSizeLimit':'100KB',
+		'fileTypeDesc': '请选择',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 
+		'fileTypeExts': '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+		'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+		'swf'      : '${ctx}/themes/b2b2c/uploadify.swf',
+		'height':'30',				//高度
+		'width':'80',
+		'multi':false,				//是否支持多文件上传
+		'progressData':'percentage',//设置文件上传时显示的数据
+		'uploadLimit':1,
+		'onFallback':function(){				//falsh兼容
+			alert("麻烦了，不兼容falsh!");
+		},							
+		'onUploadSuccess':function(file,data,response){
+			var img =jQuery.parseJSON(data);
+			$("#fs_"+status).val(img.fsimg);
+			$("#img_"+status).attr("src",img.img);
+			if(status=="id_img"){
+				$("input[name='name_auth']").val(2);
+			}else{
+				$("input[name='store_auth']").val(2);
+			}
+		},
+		'onSelectError':function(file,errorCode,errorMsg){
+			if(errorCode==SWFUpload.QUEUE_ERROR.INVALID_FILETYPE){
+				this.queueData.errorMsg="请上传正确的格式";
+			}
+		}
+	});
+}
+</script>
+
+<#include '/common/footer.html' />

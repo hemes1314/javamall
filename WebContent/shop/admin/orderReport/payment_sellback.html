@@ -1,0 +1,360 @@
+<#include '/admin/header.html' > 
+<#assign dateformat=
+"com.enation.framework.directive.DateformateDirective"?new()> 
+<#assign permssion="com.enation.app.base.core.directive.PermssionDirective"?new()>
+
+<div class="main">
+	<form method="post" id="theForm" class="validate">
+	<input type="hidden" name="sellBackList.ordersn" value="${sellBackList.ordersn}"> 
+		<div class="shadowBoxWhite  whiteBox detail">
+				<table cellspacing="0" cellpadding="0" border="0"  style="width: 99%">
+					<tr>
+						<th class="title" colspan="4">退货结算</th>
+					</tr>
+					<tr>
+						<td>退货单号：</th>
+						<td>${sellBackList.tradeno}</td>
+	
+						<td>状态：</td>
+						<td>
+							<#if sellBackList.tradestatus==0>新建
+								<#elseif sellBackList.tradestatus==1>待入库
+								<#elseif sellBackList.tradestatus==2>已入库
+								<#elseif sellBackList.tradestatus==3>已完成
+								<#elseif sellBackList.tradestatus==4>已取消
+							</#if>
+						</td>
+					</tr>
+					<tr>
+					    <td>关联主订单号：</td>
+						<td>${orderinfo.parentOrder.sn}</td>
+						<td >关联订单号：</td>
+						<td>${sellBackList.ordersn}</td>
+					</tr>
+					<tr>
+					    <td>在线支付方式：</td>
+						<td>${onLinePaymentName !''}</td>
+						<td >在线支付金额：</td>
+						<td>${orderinfo.need_pay_money?string("#.##")}</td>
+					</tr>
+					<tr>
+					    <td>扣款金额：</td>
+						<td>${(orderinfo.need_pay_money+orderinfo.advance_pay-sellBackList.return_price)?string("#.##")}</td>
+						<td >退款金额：</td>
+						<td >
+							${sellBackList.return_price?string("#.##")}
+							<input type="hidden"  id="return_price"  value="${sellBackList.return_price?string('#.##') }"/>
+						</td> 
+					</tr>
+					<tr>
+						<td >退款方式：</td>
+						<td>${sellBackList.refund_way!'' }</td>
+						<td >退款在线方式：</td>
+						<td ><!-- 暂时无法实现 chenzhongwei update --></td> 
+					</tr>
+					<tr>
+						<td >退款时间：</td>
+						<td>
+							<#if sellBackList.return_time?exists  &&sellBackList.return_time!=0>
+							  <@dateformat pattern="yyyy-MM-dd HH:mm:ss" time="${( sellBackList.return_time)?c}" />
+							</#if>
+						</td>
+						<td >退款流水号：</td>
+						<td><#if orderinfo.refund_status==1>
+								${orderinfo.tradeno!'' }
+							</#if>
+						</td>
+					</tr>
+					<tr>
+						<td>退货仓库</td>
+						<td>${depot_name}</td> 
+						<td>客户账号</td>
+						<td>${sellBackList.return_account!'' }</td>
+					</tr>
+					<tr>
+						<td>退款备注：</td>
+						<td colspan="3">${sellBackList.remark!'' }</td>
+					</tr>
+					<tr>
+						<td >客服操作备注：</td>
+						<td colspan="3">${sellBackList.seller_remark!'' }</td>
+					</tr>
+					<tr>
+						<td >原支付方式：</td>
+						<td colspan="3">${orderinfo.parentOrder.payment_name}</td>
+					</tr>
+					<tr>
+						<td >余额：</td>
+						<td>${orderinfo.advance_pay?string("#.##")}</td>
+						<td >红包：</td>
+						<td>${orderinfo.bonus_pay?string("#.##")}</td>
+					</tr>
+					<tr>
+						<td >原订单金额：</td>
+						<td colspan="3">${orderinfo.order_amount?string("#.##")}</td>
+					</tr>
+					<tr>
+						<td >库管备注：</td>
+						<td colspan="3">${sellBackList.warehouse_remark!'' }</td>
+					</tr>
+					
+					<#if sellBackList.tradestatus==2> 
+						<tr>
+							<td>财务备注：</td>
+							<td colspan="3">
+								<textarea rows="3" id="finance_remark" name="sellBackList.finance_remark">${sellBackList.finance_remark!''}</textarea>
+							</td>
+						</tr>
+						<tr>
+							<!--<td>退款金额：</td>
+							<td colspan="3"><input type="text" class="easyui-numberbox input_text" precision="2" data-options="required:true" name="sellBackList.alltotal_pay"  /></td>
+							-->
+						</tr>
+						<#else>
+							<tr>
+								<td>财务备注：</td>
+								<td colspan="3">
+									${sellBackList.finance_remark!''}
+									
+								</td>
+							</tr>
+					</#if>
+				</table>
+			</div>
+		<br>
+
+		<div class="shadowBoxWhite  whiteBox detail" >
+			<table width="100%" cellspacing="0" cellpadding="0" border="0" >
+				<tr>
+					<th class="title" colspan="9">退货的商品</th>
+				</tr>
+				<tr>
+					<th width="300px">商品名称</th>
+					<th width="100px">商品价格</th>
+					<th width="100px">购买数量</th>
+					<th width="100px">退货数量</th>
+					<th width="100px">入库数量</th>
+					<th width="100px">佣金</th>
+					<th width="100px">红包</th>
+					<th width="100px">促销分摊</th>
+					<th width="100px">优惠券分摊</th>
+				</tr>
+				<#list goodsList as data>
+				<tr>
+					<td>${data.name }<#if data.other??>
+								         (${data.other!''}) 
+								          </#if></td>
+					<td>${data.price?string.currency}</td>
+					<td>${data.ship_num }</td>
+					<#if data.return_type != 1 >
+					<td>${data.return_num }</td>
+					<td>${data.storage_num!''}</td>
+					<#else>
+					<td></td>
+					<td></td>
+					</#if>
+					<td>${data.commission?string.currency}</td>
+					<td>${data.red_packets_proportion?string.currency}</td>
+					<td>${data.promotion_proportion?string.currency}</td>
+					<td>${data.coupon_proportion?string.currency}</td>
+				</tr>
+				<#if data.return_type == 1 >
+					<tr class="detail_${data.goods_id }">
+						<td style="background: none repeat scroll 0 0 #FFFDEE;" colspan="5">
+							<table width="100%" style="border: none;">
+								<tr>
+									<th style="background: none repeat scroll 0 0 #FFFDEE;border: none;">商品名称</th>
+									<th style="background: none repeat scroll 0 0 #FFFDEE;border: none;">退货数量</th>
+									<th style="background: none repeat scroll 0 0 #FFFDEE;border: none;">入库数量</th>
+								</tr>
+								<#list return_child_list as childData> 
+									<#if data.goods_id == childData.parent_id>
+									<tr>
+										<td style="border: none;">
+											<input type="hidden" id="childParent_${childData_index}" value="${childData.parent_id}" />
+											<input type="hidden" name="childDataGoodsId" value="${childData.goods_id}" />
+											${childData.name}
+										</td>
+										<td style="border: none;">${childData.return_num}
+											<input type="hidden" class="input" id="childReturnNum_${childData_index}" value="${childData.return_num}" />
+										</td>
+										<td style="border: none;">
+											${(childData.storage_num)!0 }
+											<input type="hidden" class="input" id="childOldStorageNum_${childData_index}" value="${(childData.storage_num)!0 }" />
+										</td>
+									</tr>
+									</#if>
+								</#list>
+							</table>
+						</td>
+					</tr>
+				</#if>
+				</#list>
+				
+				<tr>
+					<td colspan="9" style="text-align: center;">
+						<input type="hidden" value="${sellBackList.id }" name="id" /> 
+						<#if sellBackList.tradestatus==2> 
+							<a href="javascript:void(0)" class="easyui-linkbutton saveBtn" status="3">确认结算</a>
+							<#if orderinfo.tradeno?has_content>
+							<#if orderinfo.refund_batchno?has_content && orderinfo.refund_status?? && orderinfo.refund_status gt 0>
+							<span><#if orderinfo.refund_status==1>退款成功<#elseif orderinfo.refund_status==2>退款失败</#if></span>
+							<#else>
+								<#if orderinfo.need_pay_money gt 0 && sellBackList.return_price gt 0>
+									<a href="javascript:void(0)" class="easyui-linkbutton alipayRefund" onclick="checkAliPayButton(${id})">退款</a>
+									<input type="hidden" value="${orderinfo.order_id}" id="orderId" /> 
+								</#if>
+							</#if>
+							</#if>
+						</#if>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<br>
+		<div class="shadowBoxWhite  whiteBox detail">
+			<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tr>
+					<th colspan="3" class="title">操作日志</th>
+				</tr>
+				<tr>
+					<th>操作人员</th>
+					<th>操作详情</th>
+					<th>操作时间</th>
+				</tr>
+				<#list logList as log>
+				<tr>
+					<td>${log.operator }</td>
+					<td>${log.logdetail }</td>
+					<td><@dateformat time='${log.logtime}' pattern='yyyy-MM-dd'/></td>
+				</tr>
+				</#list>
+				<tr id="cancelRemark" style="display: none;">
+					<td colspan="4" align="center">
+						取消原因：
+						<input type="text" class="input" value="" name="cancelRemark" style="width: 150px; height: 26px; line-height: 26px;" />
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	$('.saveBtn').click(function() {
+		//验证是否可以点击确认结算按钮 chenzhongwei add
+		if($("#orderId").length>0){
+			 var flag=false;
+			 $.ajax({
+		            type:'post',
+		            url:"sellBack!checkReturnPriceButton.do",
+		            data:{orderId:$("#orderId").val()},
+		            datatype: 'json',
+		            async:false,
+		            success:function(result){
+		            	if(null!=result&&result!=''){
+		            		var json = eval('(' + result + ')');
+							if (json.result == 0) {
+								flag=true;
+								alert(json.message);
+							}
+		            	}
+		            },
+		            error: function(){
+		            	flag=true;
+		            	alert("出现错误 ，请重试");
+		            }        
+		     });
+			 if(flag){
+				return false;
+			 }
+		}
+		
+		var des = $("#finance_remark").val();
+		if(des==''){
+			alert("请输入财务备注信息！");
+			return false;
+		}
+		
+		var formflag= $("#theForm").form().form('validate');
+		if(!formflag){
+			
+		}
+		var status = 3; //由于ie的bug，直接写死，不用读
+		var options = {
+			url : "sellBack!savePayment.do?return_price="+$('#return_price').val(),
+			data : {
+				"ajax" : "yes",
+				"status" : status
+			},
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					parent.reloadTabGrid("退货单");
+					parent.CloseTabByTitle("退货结算");
+					window.location.href = "${ctx}/shop/admin/sellBack!payment.do?id=${id}";
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				//alert("出现错误 ，请重试");
+			}
+		};
+		if(window.confirm('确定要进行结算吗？')){
+			$('#theForm').ajaxSubmit(options);
+            return true;
+         }else{
+            return false;
+        }
+	});
+	
+	//点击支付宝/微信退款按钮 chenzhongwei add
+	function checkAliPayButton(id){
+		$.ajax({
+	         type:'post',
+	         url:"sellBack!checkAliPayButton.do",
+	         data:{id:id},
+	         datatype: 'json',
+	         async:false,
+	         success:function(result){
+	         	if(result){
+	         		var json = eval('(' + result + ')');
+					if (json.result == 0) {
+						alert(json.message);
+						parent.$('#mm-tabupdate').click();
+						return;
+					}
+					if (confirm(json.message)) {
+						if(json.addon=='wxpay'){
+							$.ajax({
+						         type:'post',
+						         url:"${ctx}/shop/admin/sellBack!refund.do?id=${id}",
+						         datatype: 'json',
+						         async:false,
+						         success:function(result){
+						        	 if(result){
+						        		 alert(result);
+						        	 }
+						         },
+						         error: function(){
+						         	alert("出现错误 ，请重试");
+						         }
+							});
+						}else if(json.addon=='alipay'){
+							window.open('${ctx}/shop/admin/sellBack!refund.do?id=${id}', '_blank');
+						}
+					}
+	         	}
+	         },
+	         error: function(){
+	         	alert("出现错误 ，请重试");
+	         }        
+	  });
+	}
+</script>
+
+<#include '/admin/footer.html' >

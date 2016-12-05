@@ -1,0 +1,3073 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>GomeCellar</title> 
+		<meta name="keywords" content="GomeCellar">
+		<meta name="description" content="GomeCellar">
+	<!--meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/--> 
+	
+</meta>
+
+<!-- 判断IE，并使IE9以下支持html5标签 -->
+<!–[if lt IE 9]> <script  src="/gome-javamall/themes/b2b2cv2/js/html5.js"  ></script> <![endif]–>
+
+
+<script>
+var member = "";
+var loginDialog;
+var ctx="/gome-javamall";
+var app_path="/gome-javamall";
+</script>
+
+<!-- 公共样式 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/base.css" />
+<!-- 内含dialog.css样式，原来的dialog.css中无代码 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/default.css" />
+<!-- 商品详细、 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/shop.css" />
+
+<script>window._prompt = window.prompt;</script>
+
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/lhgdialog.js" ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/common.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/shop.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.ui.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/index.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.validate.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.form-3.51.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/CartBar.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.blockUI.js"   ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/LoginDialog.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.cookie.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/perfect-scrollbar.min.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.SuperSlide.2.1.1.js" ></script>
+<!-- jquery的布局插件 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script>
+<!-- 购物车移入滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.nicescroll.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.bigautocomplete.js"></script>
+<!-- 自定义滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.jscroll.js"></script>
+
+<script type="text/javascript">
+
+var ctx="/gome-javamall";
+
+
+
+$(function(){
+	
+	$(".common_member").load("/gome-javamall/common/member_bar.html?_="+new Date().getTime()	,function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"/gome-javamall/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,              
+				success:function(result){
+					if(result.result==1){
+						//$.alert(result.message);
+						location.href="/gome-javamall/index.html";
+					}else{
+						$.alert(result.message);
+					}	
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		});	
+	});
+	
+	$(".my_store").load("/gome-javamall/common/my_store.html?_="+new Date().getTime());
+	
+	$(".my_store").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+	
+	$(".title_menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+</script>
+
+
+</head>
+<body>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/backtotop.js"></script>
+	<a name="backtotop"></a>
+	<div class="website_top w">
+		<div class="topbar wrapper">
+        	<div class="area" style="width:50px;">
+                  <div class="title" style="overflow:hidden;">
+                      <div class="city"><a href="javascript:void(0)" id="button_show">
+                      <h3 id="show_area_name">全国</h3>
+                      <i class="arrow"></i></a></div>
+                      <div id="list" class="list" style="display: none;">
+                      <a id="button_close" class="close" href="javascript:void(0)">×</a>
+                      <ul>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(0,&#39;全国&#39;)">全国</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(1,&#39;北京&#39;)">北京</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(2,&#39;上海&#39;)">上海</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(3,&#39;天津&#39;)">天津</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(4,&#39;河北&#39;)">河北</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(5,&#39;江苏&#39;)">江苏</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(6,&#39;安徽&#39;)">安徽</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(7,&#39;浙江&#39;)">浙江</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(8,&#39;福建&#39;)">福建</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(9,&#39;辽宁&#39;)">辽宁</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(10,&#39;吉林&#39;)">吉林</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(11,&#39;黑龙江&#39;)">黑龙江</a></li>
+                       </ul>
+                       </div>
+                    </div>
+            </div> 
+			<div class="common_member" style="float:left;">
+			</div>
+			<div class="title_menu">
+                <!--dl style="width:90px;">
+					<dt>
+						手机端App<i></i>
+					</dt>
+					<dd style="width:90px;">
+						<ul>
+							<li>
+                            <img src="/gome-javamall/themes/b2b2cv2/app_download/images/QR_code_android.jpg" width="80" height="80" style="padding:5px; float:left;" />
+                            <a class="menu-app" href="/gome-javamall/app_download/index.html" target="_blank">Android版</a>
+                            </li>
+						</ul>
+					</dd>	
+				</dl-->
+				<dl>
+					<dt>
+						<a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" style="padding-left:5px;">商家中心</a>
+					</dt>
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/order.html">我的订单</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/order.html?status=0">待付款订单</a></li>
+							<li><a href="/gome-javamall/member/order.html?status=5">商品已发货</a></li>
+							<li><a href="/gome-javamall/member/waitcommont.html">待评价商品</a></li>
+						</ul>
+					</dd>	
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/favorite.html" title="我的收藏" target="_top">我的收藏</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/favorite.html" target="_top" title="收藏的商品">收藏的商品</a></li>
+							<li><a href="/gome-javamall/member/collect_store.html" target="_top" title="收藏的店铺">收藏的店铺</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						客户服务<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/help-81-83.html">帮助中心</a></li>
+							<li><a href="/gome-javamall/help-81-84.html">售后服务</a></li>
+							<li><a href="/gome-javamall/help-81-85.html">客服中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						站点导航<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a target="_blank" href="/gome-javamall/index.html">商城首页</a></li>
+                            <li><a href="/gome-javamall/member/member.html">会员中心</a></li>
+							<li><a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" >商家中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+<script type="text/javascript">
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+//选项卡样式
+function index_click(type,value){
+	$("#"+type+" li").removeClass("selected");
+	$("#"+type+" li a[type='"+value+"']").parents("li").addClass("selected");
+}
+function set_groupbuy_area(area_id,area_name){
+	$("#show_area_name").html(area_name);
+	$("input[name='area_id']").val(area_id);
+	$("#list").hide();
+	loadPage();
+}
+</script>
+	</div>
+<div id="goodsSelectDiv"></div>
+<!--  头部-->
+<div class="header_ad">
+  <script type="text/javascript" src="/gome-javamall/themes/b2b2cv2/js/tc.js"></script>
+  <script language=javascript type="text/javascript">
+  var hmax = 801-1;//最大高度
+  var hmin = 80;//最小高度
+  var h=0;
+  function addcount_zzjs_net(){
+	  if(h<hmax){
+		  h += 20;
+		  setTimeout("addcount_zzjs_net()",1);
+	  }
+	  else {
+		  h=hmax;
+		  setTimeout("noneAds()",3000); //停留时间自己适当调整，1000 = 1秒
+		  document.getElementById("ads_wwwzzjsnet").style.display = "none";
+	  }
+	  document.getElementById("ads").style.display = "";
+	  document.getElementById("ads").style.height = "auto";
+  }
+  window.onload = function showAds(){
+	  document.getElementById("ads").style.display = "none";
+	  document.getElementById("ads").style.height = "0px";
+	  if(window.location.href=='http://www.gomecellar.com/index.html'
+			  || window.location.href=='http://www.gomecellar.com/'){
+		  if(getCookie("firstad")==''){
+			  setCookie("firstad","1","1");
+			  addcount_zzjs_net(); //慢慢打开
+		  }
+	  }
+  //	h=hmax;
+  //	setTimeout("noneAds()",3000); //停留时间自己适当调整，1000 = 1秒
+  }
+  function openAds(){
+	  h = 0;//高度
+	  addcount_zzjs_net(); //慢慢打开
+  }
+  function noneAds(){
+	  if(h>hmin)	{
+		  h -= 20;
+		  setTimeout("noneAds()",1);
+	  }
+	  else {
+		  h = hmin;
+		  document.getElementById("ads").style.display = "none";
+		  document.getElementById("ads_wwwzzjsnet").style.display = "";
+		  return;
+	  }
+	  document.getElementById("ads").style.height = h+"px";
+  }
+  </script>
+  <!-- 调用广告信息,传递参数acid:61 -->
+  <div id="ads" style="width:100%; overflow:hidden;top:0px;display:none; position:absolute; z-index:999;">
+     <!--img src="/gome-javamall/themes/b2b2cv2/images/ad_big.jpg"-->
+  </div>
+  <div id="ads_wwwzzjsnet">
+     <!--a href="javascript:openAds()"><img src="/gome-javamall/themes/b2b2cv2/images/ad_small.jpg" /></a-->
+  </div>
+</div>
+<!--   获取CMS数据搜索标签，-->
+<div class="header_outside" style="width:1200px;margin:0px auto;">
+	<header class="wrapper">
+		<!--  LOGO-->
+		<div class="site_logo" id="index_logo">
+			<a href="/gome-javamall/index.html"><img src="/gome-javamall/themes/b2b2cv2/images/logo.png" /></a>
+		</div>
+		<!--  搜索-->
+		<div class="head_search" id="search">
+			<!--  商品和店铺-->
+			<ul class="tab">
+				<li
+						class="current" 
+					 act="search" title="按照商品查询"
+					search="goods">商品
+				</li>
+				<li act="shop_search" title="按照店铺查询" search="store">店铺</li>
+			</ul>
+			<div class="search_form">
+				<input name="namekeyword" id="namekeyword" type="text" class="input_text"
+				 value="请输入您要搜索的商品关键字" 
+				maxlength="60"/>
+				 <input type="button" id="inquiry" value="" class="input_submit" />
+			</div>
+            <script type="text/javascript">
+			  $(".input_submit").click(function(){
+				  var strss = "[@/'\"#$%&^*+]";
+				  var reg = new RegExp(strss);
+				  if($("#namekeyword").val().match(reg)!=null){
+					  alert("有特殊字符，请重新输入");
+					  $("#namekeyword").focus();
+					  $("#namekeyword").val("");
+					  return false;
+				  }
+				  if($("#namekeyword").val().replace(/(^\s*)|(\s*$)/g,"")==""){
+					  alert("输入有误，请重新输入");
+					  $("#namekeyword").focus();
+					  $("#namekeyword").val("");
+					  return false;
+				  }
+			  })
+			</script>
+			<!--  搜索关键字-->
+			<div class="keyword">
+				热门搜索：
+				<ul>
+					<!--   调用CMS数据搜索标签，并传递所在模型ID参数(es_hot_keyword表.)“3”表示出现三个关键词-->
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=葡萄酒&search=goods">葡萄酒</a></li>
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=茅台酒&search=goods">茅台酒</a></li>
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=威士忌&search=goods">威士忌</a></li>
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=拉菲&search=goods">拉菲</a></li>
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=干红&search=goods">干红</a></li>
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=哈迪&search=goods">哈迪</a></li>
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=巴布莱尔&search=goods">巴布莱尔</a></li>
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=蝶之兰&search=goods">蝶之兰</a></li>
+					<li><a
+						href="/gome-javamall/goods_list.html?keyword=蓝极&search=goods">蓝极</a></li>
+				</ul>
+			</div>
+		</div>
+        <!--<div class="QR-Code">
+          <ul class="hoverbox">
+            <li><a href="#"><img src="/gome-javamall/themes/b2b2cv2/images/QR_Code.png" alt="description" /><img src="/gome-javamall/themes/b2b2cv2/images/QR_Code_img.jpg" alt="" class="preview" /></a></li>
+          </ul>
+        </div>
+        <div style="float:left; height:100px; line-height:105px; padding-left:15px; font-weight:600; overflow:hidden;"><a href="/gome-javamall/app_download/index.html" target="_blank">手机端APP下载</a></div>-->
+        
+  <div class="head_menu">
+      <dl class="my_store">
+    
+      </dl>
+    
+     
+      <dl class="my_cart">
+      	<div class="addcart_num"></div>
+        <dt><span class="ico"></span><a href="/gome-javamall/cart.html">购物车结算</a><i class="arrow"></i></dt>
+        <dd>
+          <div class="my_carttitle">
+            <h4>最新加入的商品</h4>
+          </div>
+          <div class="my_cartlist">
+           <img class="loading" src="/gome-javamall/themes/b2b2cv2/images/cartdd.gif" />
+          </div>
+        </dd>
+      </dl>
+    </div>
+	</header>
+</div>
+<!-- 调用商品分类信息 -->
+<nav class="index_nav">
+	<div class="wrapper">
+		<div class="allcategory">
+			<div class="title">
+				<i class="arrow"></i>
+				<h3>
+					<a href="/goods_list.html?cat=13" onMouseOver="javascript:void(0);">所有商品分类</a>
+				</h3>
+			</div>
+			<!--左侧菜单-->
+			<div class="category">
+				<ul class="menu">
+				    <li class="odd" >
+						<div class="class">
+							<span  class="ico">
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111313414764.png" style="width:16px;height:16px;" />							</span>
+							<h4>
+								<a href="">一键选酒</a>
+							</h4>
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" style="height:484px;">
+							<dl style="width:500px;">
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=77&tag=礼节拜访">礼节拜访</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=78&tag=婚庆用酒">婚庆用酒</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=79&tag=商务宴请">商务宴请</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=80&tag=朋友聚会">朋友聚会</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=81&tag=小资生活">小资生活</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=82&tag=女士专区">女士专区</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=83&tag=名优白酒">名优白酒</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=85&tag=精品洋酒">精品洋酒</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=86&tag=大众采购">大众采购</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=894&tag=超值套餐">超值套餐</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=899&tag=列级名庄">列级名庄</a>
+								</dd>
+								<dd>
+									<a class="a-piece" href="/gome-javamall/key_goods_list.html?tagid=1428&tag=9月13日测试标签添加">9月13日测试标签添加</a>
+								</dd>
+							</dl>
+                            <div class="ads_three">
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=561"><img src="http://image.uatcellar.com/attachment/adv/201601291737479135.jpg" alt="商品分类菜单中广告一" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=545"><img src="http://image.uatcellar.com/attachment/adv/201603291109358346.jpg" alt="商品分类菜单中广告二" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=560"><img src="http://image.uatcellar.com/attachment/adv/201601291736530211.jpg" alt="商品分类菜单中广告三" border="0" /></a>
+                            </div>	
+						</div> 
+					</li> 
+                    
+					<li class="even" cat_id="2">
+						<div class="class">
+							<span  class="ico">
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111313514087.png" style="width:16px;height:16px;" />							</span>
+							<h4>
+								<a href="/gome-javamall/goods_list.html?cat=13">葡萄酒</a>
+							</h4>
+							<span class="recommend">
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_波尔多">波尔多</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_勃艮第">勃艮第</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_香槟">香槟</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_罗讷河谷">罗讷河谷</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_南澳">南澳</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_红葡萄酒">红葡萄酒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_白葡萄酒">白葡萄酒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_桃红葡萄酒">桃红葡萄酒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_甜白葡萄酒">甜白葡萄酒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_贵腐酒">贵腐酒</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_中国">中国</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_法国">法国</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_意大利">意大利</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_西班牙">西班牙</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_德国">德国</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_赤霞珠">赤霞珠</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_美乐">美乐</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_品丽珠">品丽珠</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_黑皮诺">黑皮诺</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_马尔贝克">马尔贝克</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_0-49">0-49</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_50-99">50-99</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_100-299">100-299</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_300-699">300-699</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_700-999">700-999</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_拉菲">拉菲</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_洛神">洛神</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_蓝极">蓝极</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_哈迪">哈迪</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_黄尾袋鼠">黄尾袋鼠</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2015">2015</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2014">2014</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2010-2013">2010-2013</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2000-2010">2000-2010</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2000年以前">2000年以前</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=包装_单瓶">单瓶</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=包装_套装">套装</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=包装_礼盒">礼盒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=包装_其他">其他</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=规格_375ml">375ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=规格_500ml">500ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=规格_750ml">750ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=13&prop=规格_1500ml">1500ml</a>
+							</dl>
+							</span> 
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" cat_menu_id="2">
+							<dl>
+								<dt>
+									<h3>
+										产区
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_波尔多">波尔多</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_勃艮第">勃艮第</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_香槟">香槟</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_罗讷河谷">罗讷河谷</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_南澳">南澳</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_西澳">西澳</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_东南澳">东南澳</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_新南威尔士">新南威尔士</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_维多利亚">维多利亚</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_莫舍尔">莫舍尔</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_莱茵高">莱茵高</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_莱茵黑森">莱茵黑森</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_法尔茨">法尔茨</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_中央山谷">中央山谷</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_门多萨">门多萨</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_里奥哈">里奥哈</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=产区_空加瓜谷">空加瓜谷</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										类型
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_红葡萄酒">红葡萄酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_白葡萄酒">白葡萄酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_桃红葡萄酒">桃红葡萄酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_甜白葡萄酒">甜白葡萄酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_贵腐酒">贵腐酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_其他起泡酒">其他起泡酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_香槟">香槟</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_冰酒">冰酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=类型_加强葡萄酒">加强葡萄酒</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										国家
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_中国">中国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_法国">法国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_意大利">意大利</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_西班牙">西班牙</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_德国">德国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_澳大利亚">澳大利亚</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_智利">智利</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_美国">美国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_南非">南非</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_新西兰">新西兰</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_阿根廷">阿根廷</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_加拿大">加拿大</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=国家_葡萄牙">葡萄牙</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										葡萄品种
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_赤霞珠">赤霞珠</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_美乐">美乐</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_品丽珠">品丽珠</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_黑皮诺">黑皮诺</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_马尔贝克">马尔贝克</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_歌海娜">歌海娜</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_西拉/设拉子">西拉/设拉子</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_桑娇维塞">桑娇维塞</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_仙粉黛">仙粉黛</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_佳美娜">佳美娜</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_堂普尼罗">堂普尼罗</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_内比奥罗">内比奥罗</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_霞多丽">霞多丽</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_雷司令">雷司令</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_长相思">长相思</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_赛美容">赛美容</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_琼瑶浆">琼瑶浆</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_维欧尼">维欧尼</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_白诗南">白诗南</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_灰皮诺">灰皮诺</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_威代尔">威代尔</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_麝香葡萄">麝香葡萄</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_莫尼耶皮诺">莫尼耶皮诺</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_混酿">混酿</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										价格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=价格_0-49">0-49</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=价格_50-99">50-99</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=价格_100-299">100-299</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=价格_300-699">300-699</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=价格_700-999">700-999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=价格_1000-1999">1000-1999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=价格_2000-4999">2000-4999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=价格_5000以上">5000以上</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										品牌
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_拉菲">拉菲</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_洛神">洛神</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_蓝极">蓝极</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_哈迪">哈迪</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_黄尾袋鼠">黄尾袋鼠</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_蝶之兰">蝶之兰</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_喜楚思">喜楚思</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										年份
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2015">2015</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2014">2014</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2010-2013">2010-2013</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2000-2010">2000-2010</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2000年以前">2000年以前</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=年份_无年份NV">无年份NV</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										包装
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=包装_单瓶">单瓶</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=包装_套装">套装</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=包装_礼盒">礼盒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=包装_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										规格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=规格_375ml">375ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=规格_500ml">500ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=规格_750ml">750ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=13&prop=规格_1500ml">1500ml</a>
+								</dd>
+							</dl>
+                            <div class="ads_three">
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=561"><img src="http://image.uatcellar.com/attachment/adv/201601291737479135.jpg" alt="商品分类菜单中广告一" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=545"><img src="http://image.uatcellar.com/attachment/adv/201603291109358346.jpg" alt="商品分类菜单中广告二" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=560"><img src="http://image.uatcellar.com/attachment/adv/201601291736530211.jpg" alt="商品分类菜单中广告三" border="0" /></a>
+                            </div>
+						</div> 
+                        
+					</li> 
+					<li class="odd" cat_id="3">
+						<div class="class">
+							<span  class="ico">
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111313593264.png" style="width:16px;height:16px;" />							</span>
+							<h4>
+								<a href="/gome-javamall/goods_list.html?cat=85">白酒</a>
+							</h4>
+							<span class="recommend">
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_浓香型">浓香型</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_酱香型">酱香型</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_清香型">清香型</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_凤香型">凤香型</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_兼香型">兼香型</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_国台">国台</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_茅台">茅台</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_五粮液">五粮液</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_洋河">洋河</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_古井贡酒">古井贡酒</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_0-299">0-299</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_300-699">300-699</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_700-1199">700-1199</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_1200-1999">1200-1999</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_2000-3899">2000-3899</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_贵州">贵州</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_四川">四川</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_江苏">江苏</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_陕西">陕西</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_安徽">安徽</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_50ml">50ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_125ml">125ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_275ml">275ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_500ml">500ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_1000ml">1000ml</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_单瓶">单瓶</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_套装">套装</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_礼盒">礼盒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_坛装">坛装</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_其他">其他</a>
+							</dl>
+							</span> 
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" cat_menu_id="3">
+							<dl>
+								<dt>
+									<h3>
+										香型
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=香型_浓香型">浓香型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=香型_酱香型">酱香型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=香型_清香型">清香型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=香型_凤香型">凤香型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=香型_兼香型">兼香型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=香型_其他香型">其他香型</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										品牌
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_国台">国台</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_茅台">茅台</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_五粮液">五粮液</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_洋河">洋河</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_古井贡酒">古井贡酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_泸州老窖">泸州老窖</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_朴客">朴客</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_郎酒">郎酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_老白干">老白干</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_杜康">杜康</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_其他品牌">其他品牌</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										价格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=价格_0-299">0-299</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=价格_300-699">300-699</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=价格_700-1199">700-1199</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=价格_1200-1999">1200-1999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=价格_2000-3899">2000-3899</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=价格_3900-7299">3900-7299</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=价格_7300-9999">7300-9999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=价格_9999以上">9999以上</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										产地
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_贵州">贵州</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_四川">四川</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_江苏">江苏</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_陕西">陕西</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_安徽">安徽</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_湖北">湖北</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_河北">河北</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_浙江">浙江</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_山西">山西</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_湖南">湖南</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_北京">北京</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_内蒙古">内蒙古</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_河南">河南</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_山东">山东</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=产地_其它省市">其它省市</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										规格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=规格_50ml">50ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=规格_125ml">125ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=规格_275ml">275ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=规格_500ml">500ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=规格_1000ml">1000ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=规格_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										包装
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=包装_单瓶">单瓶</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=包装_套装">套装</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=包装_礼盒">礼盒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=包装_坛装">坛装</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=85&prop=包装_其他">其他</a>
+								</dd>
+							</dl>
+                            <div class="ads_three">
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=561"><img src="http://image.uatcellar.com/attachment/adv/201601291737479135.jpg" alt="商品分类菜单中广告一" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=545"><img src="http://image.uatcellar.com/attachment/adv/201603291109358346.jpg" alt="商品分类菜单中广告二" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=560"><img src="http://image.uatcellar.com/attachment/adv/201601291736530211.jpg" alt="商品分类菜单中广告三" border="0" /></a>
+                            </div>
+						</div> 
+                        
+					</li> 
+					<li class="even" cat_id="4">
+						<div class="class">
+							<span  class="ico">
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111314080162.png" style="width:16px;height:16px;" />							</span>
+							<h4>
+								<a href="/gome-javamall/goods_list.html?cat=144">洋酒</a>
+							</h4>
+							<span class="recommend">
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_白兰地">白兰地</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_威士忌">威士忌</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_伏特加">伏特加</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_金酒">金酒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_龙舌兰">龙舌兰</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_富特尼">富特尼</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_达鲁尼">达鲁尼</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_巴布莱尔">巴布莱尔</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_0-299">0-299</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_300-699">300-699</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_700-1199">700-1199</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_1200-1999">1200-1999</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_2000-3899">2000-3899</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_苏格兰">苏格兰</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_英格兰">英格兰</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_爱尔兰">爱尔兰</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_美国">美国</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_俄罗斯">俄罗斯</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_500ml以下">500ml以下</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_500ml">500ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_700ml">700ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_750ml">750ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_1000ml">1000ml</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=包装_单瓶">单瓶</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=包装_套装">套装</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=包装_礼盒">礼盒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=144&prop=包装_其他">其他</a>
+							</dl>
+							</span> 
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" cat_menu_id="4">
+							<dl>
+								<dt>
+									<h3>
+										类型
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_白兰地">白兰地</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_威士忌">威士忌</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_伏特加">伏特加</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_金酒">金酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_龙舌兰">龙舌兰</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_朗姆酒">朗姆酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_力娇酒">力娇酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_预调鸡尾酒">预调鸡尾酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_清酒/烧酒">清酒/烧酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=类型_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										品牌
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_富特尼">富特尼</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_达鲁尼">达鲁尼</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_巴布莱尔">巴布莱尔</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										价格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=价格_0-299">0-299</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=价格_300-699">300-699</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=价格_700-1199">700-1199</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=价格_1200-1999">1200-1999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=价格_2000-3899">2000-3899</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=价格_3900-7299">3900-7299</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=价格_7300-9999">7300-9999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=价格_9999以上">9999以上</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										产地
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_苏格兰">苏格兰</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_英格兰">英格兰</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_爱尔兰">爱尔兰</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_美国">美国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_俄罗斯">俄罗斯</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_法国">法国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_瑞典">瑞典</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_荷兰">荷兰</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_墨西哥">墨西哥</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_古巴">古巴</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_意大利">意大利</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_日本">日本</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_韩国">韩国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=产地_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										规格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=规格_500ml以下">500ml以下</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=规格_500ml">500ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=规格_700ml">700ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=规格_750ml">750ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=规格_1000ml">1000ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=规格_1500ml">1500ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=规格_1800ml">1800ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=规格_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										包装
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=包装_单瓶">单瓶</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=包装_套装">套装</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=包装_礼盒">礼盒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=144&prop=包装_其他">其他</a>
+								</dd>
+							</dl>
+                            <div class="ads_three">
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=561"><img src="http://image.uatcellar.com/attachment/adv/201601291737479135.jpg" alt="商品分类菜单中广告一" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=545"><img src="http://image.uatcellar.com/attachment/adv/201603291109358346.jpg" alt="商品分类菜单中广告二" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=560"><img src="http://image.uatcellar.com/attachment/adv/201601291736530211.jpg" alt="商品分类菜单中广告三" border="0" /></a>
+                            </div>
+						</div> 
+                        
+					</li> 
+					<li class="odd" cat_id="5">
+						<div class="class">
+							<span  class="ico">
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111314220751.png" style="width:16px;height:16px;" />							</span>
+							<h4>
+								<a href="/gome-javamall/goods_list.html?cat=202">啤酒</a>
+							</h4>
+							<span class="recommend">
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_黑啤">黑啤</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_黄啤">黄啤</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_白啤">白啤</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_干啤">干啤</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_低醇啤酒">低醇啤酒</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_喜力">喜力</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_百威">百威</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_嘉士伯">嘉士伯</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_三得利">三得利</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_科罗娜">科罗娜</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_0-69">0-69</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_70-199">70-199</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_200-399">200-399</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_400-599">400-599</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_600以上">600以上</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_330ml">330ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_500ml">500ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_600ml">600ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_1000ml">1000ml</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_2000ml">2000ml</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_中国">中国</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_法国">法国</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_德国">德国</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_捷克">捷克</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_比利时">比利时</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_听装">听装</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_瓶装">瓶装</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_桶装">桶装</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_整箱">整箱</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_其他">其他</a>
+							</dl>
+							</span> 
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" cat_menu_id="5">
+							<dl>
+								<dt>
+									<h3>
+										类型
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=类型_黑啤">黑啤</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=类型_黄啤">黄啤</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=类型_白啤">白啤</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=类型_干啤">干啤</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=类型_低醇啤酒">低醇啤酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=类型_原浆啤酒">原浆啤酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=类型_精酿啤酒">精酿啤酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=类型_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										品牌
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_喜力">喜力</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_百威">百威</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_嘉士伯">嘉士伯</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_三得利">三得利</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_科罗娜">科罗娜</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_麒麟">麒麟</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_青岛">青岛</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_哈尔滨">哈尔滨</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_燕京">燕京</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_雪花">雪花</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										价格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=价格_0-69">0-69</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=价格_70-199">70-199</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=价格_200-399">200-399</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=价格_400-599">400-599</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=价格_600以上">600以上</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										规格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=规格_330ml">330ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=规格_500ml">500ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=规格_600ml">600ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=规格_1000ml">1000ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=规格_2000ml">2000ml</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=规格_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										产地
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_中国">中国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_法国">法国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_德国">德国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_捷克">捷克</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_比利时">比利时</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_丹麦">丹麦</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_美国">美国</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_俄罗斯">俄罗斯</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_荷兰">荷兰</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_日本">日本</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=产地_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										包装
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=包装_听装">听装</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=包装_瓶装">瓶装</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=包装_桶装">桶装</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=包装_整箱">整箱</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=202&prop=包装_其他">其他</a>
+								</dd>
+							</dl>
+                            <div class="ads_three">
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=561"><img src="http://image.uatcellar.com/attachment/adv/201601291737479135.jpg" alt="商品分类菜单中广告一" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=545"><img src="http://image.uatcellar.com/attachment/adv/201603291109358346.jpg" alt="商品分类菜单中广告二" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=560"><img src="http://image.uatcellar.com/attachment/adv/201601291736530211.jpg" alt="商品分类菜单中广告三" border="0" /></a>
+                            </div>
+						</div> 
+                        
+					</li> 
+					<li class="even" cat_id="6">
+						<div class="class">
+							<span  class="ico">
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111314382372.png" style="width:16px;height:16px;" />							</span>
+							<h4>
+								<a href="/gome-javamall/goods_list.html?cat=255">黄酒/养生酒</a>
+							</h4>
+							<span class="recommend">
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_半干型">半干型</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_干型">干型</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_半甜型">半甜型</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_甜型">甜型</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_浓甜型">浓甜型</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_古越龙山">古越龙山</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_石库门">石库门</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_女儿红">女儿红</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_会稽山">会稽山</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_塔牌">塔牌</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_0-99">0-99</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_100-199">100-199</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_200-399">200-399</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_400-799">400-799</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_800-999">800-999</a>
+							</dl>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_单瓶">单瓶</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_整箱">整箱</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_礼盒">礼盒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_小酒">小酒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_其他">其他</a>
+							</dl>
+							</span> 
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" cat_menu_id="6">
+							<dl>
+								<dt>
+									<h3>
+										类型
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=类型_半干型">半干型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=类型_干型">干型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=类型_半甜型">半甜型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=类型_甜型">甜型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=类型_浓甜型">浓甜型</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=类型_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										品牌
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_古越龙山">古越龙山</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_石库门">石库门</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_女儿红">女儿红</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_会稽山">会稽山</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_塔牌">塔牌</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_即墨老酒">即墨老酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_唐宋">唐宋</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_劲牌">劲牌</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_咸亨">咸亨</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_宁夏红">宁夏红</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_椰岛">椰岛</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_其他">其他</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										价格
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=价格_0-99">0-99</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=价格_100-199">100-199</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=价格_200-399">200-399</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=价格_400-799">400-799</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=价格_800-999">800-999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=价格_1000-1999">1000-1999</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=价格_2000以上">2000以上</a>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h3>
+										包装
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=包装_单瓶">单瓶</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=包装_整箱">整箱</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=包装_礼盒">礼盒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=包装_小酒">小酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=255&prop=包装_其他">其他</a>
+								</dd>
+							</dl>
+                            <div class="ads_three">
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=561"><img src="http://image.uatcellar.com/attachment/adv/201601291737479135.jpg" alt="商品分类菜单中广告一" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=545"><img src="http://image.uatcellar.com/attachment/adv/201603291109358346.jpg" alt="商品分类菜单中广告二" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=560"><img src="http://image.uatcellar.com/attachment/adv/201601291736530211.jpg" alt="商品分类菜单中广告三" border="0" /></a>
+                            </div>
+						</div> 
+                        
+					</li> 
+					<li class="odd" cat_id="7">
+						<div class="class">
+							<span  class="ico">
+<img src="http://www.gomecellar.com/gomepicture/attachment/goodscat/201512111314588917.png" style="width:16px;height:16px;" />							</span>
+							<h4>
+								<a href="/gome-javamall/goods_list.html?cat=293">酒周边</a>
+							</h4>
+							<span class="recommend">
+                                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒柜">酒柜</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_礼盒">礼盒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒杯">酒杯</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_醒酒器">醒酒器</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒鼻子">酒鼻子</a>
+							</dl>
+							</span> 
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" cat_menu_id="7">
+							<dl>
+								<dt>
+									<h3>
+										类型
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒柜">酒柜</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=293&prop=类型_礼盒">礼盒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒杯">酒杯</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=293&prop=类型_醒酒器">醒酒器</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒鼻子">酒鼻子</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒刀">酒刀</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒架">酒架</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=293&prop=类型_其他酒具">其他酒具</a>
+								</dd>
+							</dl>
+                            <div class="ads_three">
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=561"><img src="http://image.uatcellar.com/attachment/adv/201601291737479135.jpg" alt="商品分类菜单中广告一" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=545"><img src="http://image.uatcellar.com/attachment/adv/201603291109358346.jpg" alt="商品分类菜单中广告二" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=560"><img src="http://image.uatcellar.com/attachment/adv/201601291736530211.jpg" alt="商品分类菜单中广告三" border="0" /></a>
+                            </div>
+						</div> 
+                        
+					</li> 
+					<li class="even" cat_id="8">
+						<div class="class">
+							<span  class="ico">
+<img src="http://www.gomecellar.com/gomepicture/attachment/goodscat/201512111314497718.png" style="width:16px;height:16px;" />							</span>
+							<h4>
+								<a href="/gome-javamall/goods_list.html?cat=290">其他</a>
+							</h4>
+							<span class="recommend">
+                                  <a href="/gome-javamall/goods_list.html?cat=290&prop=类型_青稞酒">青稞酒</a>
+                                  <a href="/gome-javamall/goods_list.html?cat=290&prop=类型_金门高粱">金门高粱</a>
+							</dl>
+							</span> 
+							<span class="arrow"></span>
+						</div> 
+						<div class="sub_classify" cat_menu_id="8">
+							<dl>
+								<dt>
+									<h3>
+										类型
+									</h3>
+								</dt>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=290&prop=类型_青稞酒">青稞酒</a>
+								</dd>
+								<dd class="goods-class">
+									<a href="/gome-javamall/goods_list.html?cat=290&prop=类型_金门高粱">金门高粱</a>
+								</dd>
+							</dl>
+                            <div class="ads_three">
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=561"><img src="http://image.uatcellar.com/attachment/adv/201601291737479135.jpg" alt="商品分类菜单中广告一" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=545"><img src="http://image.uatcellar.com/attachment/adv/201603291109358346.jpg" alt="商品分类菜单中广告二" border="0" /></a>
+                               <a class="ads_link" target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=560"><img src="http://image.uatcellar.com/attachment/adv/201601291736530211.jpg" alt="商品分类菜单中广告三" border="0" /></a>
+                            </div>
+						</div> 
+                        
+					</li> 
+					<div class="clear"></div>
+				</ul>
+			</div>
+		</div>
+		<!--分类树结束-->
+<!-- 创建菜单标签 -->
+<!-- 调用菜单信息 -->
+<ul class="site_menu">
+		<li class="first" >
+			<em class="first" ></em>
+			<a href="http://www.gomecellar.com/groupbuy/groupbuy.html" >闪购</a>	 
+			<span ></span> 
+			<em   ></em>
+		</li>
+		<li class="" >
+			<em  ></em>
+			<a href="http://www.gomecellar.com/advbuy/advbuy.html" >预售</a>	 
+			<span ></span> 
+			<em   ></em>
+		</li>
+		<li class="last" >
+			<em  ></em>
+			<a href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=581" >大宗采购</a>	 
+			<span ></span> 
+			<em  class="last" ></em>
+		</li>
+	<li><a href="/gome-javamall/sirendingzhi/sirendingzhi.html" target="_blank">私人订制</a></li>
+    <li><a href="/gome-javamall/culture/index.html" target="_blank">文化</a></li>
+    <!--<li><a href="/gome-javamall/finance/index.html" target="_blank">金融</a></li>-->
+    <li><a href="/gome-javamall/sommelier/index.html" target="_blank">品酒师</a></li>
+</ul>	</div>
+</nav>
+<script type="text/javascript">
+	var goodsSearchTxt = '请输入您要搜索的商品关键字';
+	var storeSearchTxt = '请输入您要搜索的店铺关键字';
+	$(function() {
+	//	$('.my_cartlist').perfectScrollbar();
+		CartBar.init();
+		
+		$("#inquiry").click(function() {
+		   //add by linyang 敏感词过滤
+		  var str = $("#namekeyword").val();
+          var patt1 = new RegExp("(吸毒|法轮功|卖淫|催情药|大鸡巴|仿真枪|和狗交|乱奸|迷情药)");
+          var result = patt1.test(str);
+		  if(result)       
+		  {
+		     alert( "该语句中有限制级词语，系统已经过滤！" ); 
+		     return false;
+		  }
+			
+			var search = $("#search li[class='current']").attr(
+					"search");
+			if ($("#namekeyword").val() == goodsSearchTxt && search == "goods") {
+				alert(goodsSearchTxt);
+			} else if ($("#namekeyword").val() == storeSearchTxt && search == "store") {
+				alert(storeSearchTxt);
+			} else if (!$("#namekeyword").val() == "" && search == "goods") {
+				location.href = ctx
+						+ "/goods_list.html?keyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search;
+			} else if (!$("#namekeyword").val() == ""
+					&& search == "store") {
+				location.href = ctx
+						+ "/store_list.html?keyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search;
+			}
+		});
+		
+		
+		/*document*/$("#namekeyword").keyup(function(event){
+			  if(event.keyCode ==13){
+
+				  //add by linyang 敏感词过滤
+				  var str = $("#namekeyword").val();
+				  var patt1 = new RegExp("(吸毒|法轮功|卖淫|催情药|大鸡巴|仿真枪|和狗交|乱奸|迷情药)");
+				  var result = patt1.test(str);
+				  if(result)       
+				  {
+					 alert( "该语句中有限制级词语，系统已经过滤！" ); 
+					 return false;
+				  }
+					
+					var search = $("#search li[class='current']").attr(
+							"search");
+					if ($("#namekeyword").val() == goodsSearchTxt && search == "goods") {
+						alert(goodsSearchTxt);
+					} else if ($("#namekeyword").val() == storeSearchTxt && search == "store") {
+						alert(storeSearchTxt);
+					} else if (!$("#namekeyword").val() == "" && search == "goods") {
+						location.href = ctx
+								+ "/goods_list.html?keyword="
+								+ $("#namekeyword").val() + "&search="
+								+ search;
+					} else if (!$("#namekeyword").val() == ""
+							&& search == "store") {
+						location.href = ctx
+								+ "/store_list.html?keyword="
+								+ $("#namekeyword").val() + "&search="
+								+ search;
+					}
+			  
+			  }
+			});
+			
+		$("#namekeyword").blur(function() {
+			if ($("#namekeyword").val() == "") {
+				var search = $("#search li[class='current']").attr("search");
+				if (search == "goods")
+					$("#namekeyword").val(goodsSearchTxt);
+				else if (search == "store")
+					$("#namekeyword").val(storeSearchTxt);
+			}
+		});
+			
+		$("#namekeyword").focus(function() {
+			var search = $("#search li[class='current']")
+					.attr("search");
+			var searchTxt = "";
+			if (search == "goods"
+					&& $("#namekeyword").val() == goodsSearchTxt) {
+				$("#namekeyword").val("");
+			} else if (search == "store"
+					&& $("#namekeyword").val() == storeSearchTxt) {
+				$("#namekeyword").val("");
+			}
+		});
+		$("#search .tab li").click(function() {
+			var search = $(this).attr("search");
+			if (search == "goods") {
+				$("#namekeyword").val(goodsSearchTxt);
+				$("#search li[search='goods']").addClass("current");
+				$("#search li[search='store']").removeClass("current");
+				$("#namekeyword").unbind("keydown");
+				$("#namekeyword").unbind("keyup");
+				$("#namekeyword").bigAutocomplete({url:"/gome-javamall/api/shop/goods-words.do", callback:function(data){
+					 location.href="/gome-javamall/goods_list.html?keyword="+data.title;
+			    }}); 
+			} else {
+				$("#namekeyword").val(storeSearchTxt);
+				$("#search li[search='store']").addClass("current");
+				$("#search li[search='goods']").removeClass("current");
+				$("#namekeyword").unbind("keydown");
+				$("#namekeyword").unbind("keyup");
+				$("#namekeyword").bigAutocomplete({url:"/api/b2b2c/storeApi!words.do", callback:function(data){
+					location.href="/gome-javamall/store_list.html?search=store&keyword="+data.store_name;
+			    }}); 
+			}
+		});
+		
+		
+		var url_ = '';
+		var search = $("#search li[class='current']").attr("search");
+		if (search == "goods"){
+			$("#namekeyword").bigAutocomplete({url:"/gome-javamall/api/shop/goods-words.do", callback:function(data){
+				 location.href="/gome-javamall/goods_list.html?keyword="+data.title;
+		    }}); 
+		}else{
+			$("#namekeyword").bigAutocomplete({url:"/api/b2b2c/storeApi!words.do", callback:function(data){
+				location.href="/gome-javamall/store_list.html?search=store&keyword="+data.store_name;
+		    }}); 
+		}
+		 
+	});
+</script>
+<!--script  src="/gome-javamall/themes/b2b2cv2/js/slide.js"></script-->
+<script>
+$(function(){
+	
+	$(".r-float").css("height",document.documentElement.clientHeight);
+	
+})
+</script>
+<div id="r-float-hide" class="r-float">
+  <ul>
+    <li><a class="a-jiu" href="#"></a>
+        <ul>
+            <li>
+            <h3>
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111313514087.png" />            <a href="/gome-javamall/goods_list.html?cat=13">葡萄酒</a>
+            </h3>
+            <p>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_波尔多">波尔多</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_勃艮第">勃艮第</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_香槟">香槟</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_罗讷河谷">罗讷河谷</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=产区_南澳">南澳</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_红葡萄酒">红葡萄酒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_白葡萄酒">白葡萄酒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_桃红葡萄酒">桃红葡萄酒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_甜白葡萄酒">甜白葡萄酒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=类型_贵腐酒">贵腐酒</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_中国">中国</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_法国">法国</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_意大利">意大利</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_西班牙">西班牙</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=国家_德国">德国</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_赤霞珠">赤霞珠</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_美乐">美乐</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_品丽珠">品丽珠</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_黑皮诺">黑皮诺</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=葡萄品种_马尔贝克">马尔贝克</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_0-49">0-49</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_50-99">50-99</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_100-299">100-299</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_300-699">300-699</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=价格_700-999">700-999</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_拉菲">拉菲</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_洛神">洛神</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_蓝极">蓝极</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_哈迪">哈迪</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=品牌_黄尾袋鼠">黄尾袋鼠</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2015">2015</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2014">2014</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2010-2013">2010-2013</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2000-2010">2000-2010</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=年份_2000年以前">2000年以前</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=包装_单瓶">单瓶</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=包装_套装">套装</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=包装_礼盒">礼盒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=包装_其他">其他</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=规格_375ml">375ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=规格_500ml">500ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=规格_750ml">750ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=13&prop=规格_1500ml">1500ml</a>
+            </dl>
+            </p>
+            </li>
+            <li>
+            <h3>
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111313593264.png" />            <a href="/gome-javamall/goods_list.html?cat=85">白酒</a>
+            </h3>
+            <p>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_浓香型">浓香型</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_酱香型">酱香型</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_清香型">清香型</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_凤香型">凤香型</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=香型_兼香型">兼香型</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_国台">国台</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_茅台">茅台</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_五粮液">五粮液</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_洋河">洋河</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=品牌_古井贡酒">古井贡酒</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_0-299">0-299</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_300-699">300-699</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_700-1199">700-1199</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_1200-1999">1200-1999</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=价格_2000-3899">2000-3899</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_贵州">贵州</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_四川">四川</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_江苏">江苏</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_陕西">陕西</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=产地_安徽">安徽</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_50ml">50ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_125ml">125ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_275ml">275ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_500ml">500ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=规格_1000ml">1000ml</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_单瓶">单瓶</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_套装">套装</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_礼盒">礼盒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_坛装">坛装</a>
+                  <a href="/gome-javamall/goods_list.html?cat=85&prop=包装_其他">其他</a>
+            </dl>
+            </p>
+            </li>
+            <li>
+            <h3>
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111314080162.png" />            <a href="/gome-javamall/goods_list.html?cat=144">洋酒</a>
+            </h3>
+            <p>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_白兰地">白兰地</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_威士忌">威士忌</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_伏特加">伏特加</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_金酒">金酒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=类型_龙舌兰">龙舌兰</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_富特尼">富特尼</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_达鲁尼">达鲁尼</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=品牌_巴布莱尔">巴布莱尔</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_0-299">0-299</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_300-699">300-699</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_700-1199">700-1199</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_1200-1999">1200-1999</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=价格_2000-3899">2000-3899</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_苏格兰">苏格兰</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_英格兰">英格兰</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_爱尔兰">爱尔兰</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_美国">美国</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=产地_俄罗斯">俄罗斯</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_500ml以下">500ml以下</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_500ml">500ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_700ml">700ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_750ml">750ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=规格_1000ml">1000ml</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=包装_单瓶">单瓶</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=包装_套装">套装</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=包装_礼盒">礼盒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=144&prop=包装_其他">其他</a>
+            </dl>
+            </p>
+            </li>
+            <li>
+            <h3>
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111314220751.png" />            <a href="/gome-javamall/goods_list.html?cat=202">啤酒</a>
+            </h3>
+            <p>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_黑啤">黑啤</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_黄啤">黄啤</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_白啤">白啤</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_干啤">干啤</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=类型_低醇啤酒">低醇啤酒</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_喜力">喜力</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_百威">百威</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_嘉士伯">嘉士伯</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_三得利">三得利</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=品牌_科罗娜">科罗娜</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_0-69">0-69</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_70-199">70-199</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_200-399">200-399</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_400-599">400-599</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=价格_600以上">600以上</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_330ml">330ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_500ml">500ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_600ml">600ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_1000ml">1000ml</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=规格_2000ml">2000ml</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_中国">中国</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_法国">法国</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_德国">德国</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_捷克">捷克</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=产地_比利时">比利时</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_听装">听装</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_瓶装">瓶装</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_桶装">桶装</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_整箱">整箱</a>
+                  <a href="/gome-javamall/goods_list.html?cat=202&prop=包装_其他">其他</a>
+            </dl>
+            </p>
+            </li>
+            <li>
+            <h3>
+<img src="http://image.uatcellar.com/attachment/goodscat/201512111314382372.png" />            <a href="/gome-javamall/goods_list.html?cat=255">黄酒/养生酒</a>
+            </h3>
+            <p>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_半干型">半干型</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_干型">干型</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_半甜型">半甜型</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_甜型">甜型</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=类型_浓甜型">浓甜型</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_古越龙山">古越龙山</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_石库门">石库门</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_女儿红">女儿红</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_会稽山">会稽山</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=品牌_塔牌">塔牌</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_0-99">0-99</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_100-199">100-199</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_200-399">200-399</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_400-799">400-799</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=价格_800-999">800-999</a>
+            </dl>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_单瓶">单瓶</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_整箱">整箱</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_礼盒">礼盒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_小酒">小酒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=255&prop=包装_其他">其他</a>
+            </dl>
+            </p>
+            </li>
+            <li>
+            <h3>
+<img src="http://www.gomecellar.com/gomepicture/attachment/goodscat/201512111314588917.png" />            <a href="/gome-javamall/goods_list.html?cat=293">酒周边</a>
+            </h3>
+            <p>
+                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒柜">酒柜</a>
+                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_礼盒">礼盒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒杯">酒杯</a>
+                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_醒酒器">醒酒器</a>
+                  <a href="/gome-javamall/goods_list.html?cat=293&prop=类型_酒鼻子">酒鼻子</a>
+            </dl>
+            </p>
+            </li>
+            <li>
+            <h3>
+<img src="http://www.gomecellar.com/gomepicture/attachment/goodscat/201512111314497718.png" />            <a href="/gome-javamall/goods_list.html?cat=290">其他</a>
+            </h3>
+            <p>
+                  <a href="/gome-javamall/goods_list.html?cat=290&prop=类型_青稞酒">青稞酒</a>
+                  <a href="/gome-javamall/goods_list.html?cat=290&prop=类型_金门高粱">金门高粱</a>
+            </dl>
+            </p>
+            </li>
+        </ul>
+    </li>
+    <li><a class="a-se" href="/gome-javamall/culture/index.html" target="_blank"></a></li>
+    <li><a class="a-cai" href="/gome-javamall/jinrong/jinrong.html" target="_blank"></a></li><!--/gome-javamall/finance/index.html-->
+    <li><a class="a-qi" href="/gome-javamall/sommelier/index.html" target="_blank"></a></li>
+    <li class="hr-line"></li>
+    <li><a class="a-gouwuche" href="/gome-javamall/cart.html"></a></li>
+    <li class="hr-line"></li>
+    <li><a class="a-QR-Code" href="#" title="二维码"></a>
+      <ul class="QR-Code">
+       <li>
+       <p>
+       <img src="/gome-javamall/themes/b2b2cv2/images/QR_Code_img.jpg" width="135" height="135" alt=""/>
+       <a class="menu-app" href="/gome-javamall/app_download/index.html" target="_blank">点击下载</a>
+       </p>
+       </li>
+      </ul>
+    </li>
+    <li><a target="_blank" class="a-kefu" href="http://wpa.qq.com/msgrd?v=3&amp;uin=137560&amp;site=qq&amp;menu=yes" title="客服"></a></li>
+    <li class="hr-line"></li>
+    <li><a class="a-guanzhu" href="/gome-javamall/member/favorite.html" title="关注"></a></li>
+    <li><a class="a-zuji" href="#" title="足迹"></a></li>
+    <li class="hr-line"></li>
+    <li style="padding-top:0;"><a class="a-top" href="#backtotop" title="回到顶部"></a></li>
+  </ul>
+</div>
+
+
+
+		<!-- 获取最低价格的活动 -->
+	
+	<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/goods.css" />
+	<!-- 弹出登录层样式 -->
+	<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/home_login.css" />
+	<script  src="/gome-javamall/themes/b2b2cv2/js/magiczoom.js"  ></script>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/Comment.js"  ></script>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/favorite.js"  ></script>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/spec.js" ></script>
+	<!-- 商品详情、商品评论、销售记录、产品咨询浮动 -->
+	<script  src="/gome-javamall/themes/b2b2cv2/js/airlines.js"  ></script>
+	<!-- 商品相册-->
+	<script src="/gome-javamall/themes/b2b2cv2/js/jcarousellite_1.0.1.min.js" type="text/javascript"></script>
+	<div class="background clearfix">
+		<article id="content">
+	    	<div class="goodslist_nav">
+	  			<div class="breadcrumb wrapper">
+	    		    <span><a href="/gome-javamall/index.html">首页</a></span>
+	    		    <span class="arrow">&gt;</span>
+				    <span><a href="/gome-javamall/goods_list.html?keyword=葡萄酒&search=goods">葡萄酒</a></span>
+				    <span class="arrow">&gt;</span>
+				    <span>测试商品（满减1）</span>
+				</div>
+			</div>
+			<div class="goods_detail">
+	            <div  id="detail_wrapper"> 
+	         			<!-- 商品相册 -->
+						<div class="gallery">	
+							<div class="preview">
+								 <a href="http://image.uatcellar.com/attachment//store/580/goods/201609051521510370_big.png"  id="zoom" rel="zoom-width:400px;zoom-height:400px;"  class="MagicZoom"> 
+<img src="http://image.uatcellar.com/attachment//store/580/goods/201609051521510370_small.png" style="width: 320px;height: 320px;" />								 </a>
+							</div>
+							<div class="control_bar">
+								<div class="control left_control"></div>
+								<div class="thumblist">
+									<ul id="imgList">
+										<li class="last" class="selected"> 
+<img src="http://image.uatcellar.com/attachment//store/580/goods/201609051521510370_thumbnail.png" big="http://image.uatcellar.com/attachment//store/580/goods/201609051521510370_big.png" small="http://image.uatcellar.com/attachment//store/580/goods/201609051521510370_small.png" />										</li>
+									</ul>
+								</div>
+								<div class="control right_control " ></div>
+							</div>
+							<!-- 分享 -->
+							<div id="ckepop">
+								<span class="jiathis_txt">分享到：</span>
+								<a class="jiathis_button_qzone"></a>
+								<a class="jiathis_button_tsina"></a>
+								<a class="jiathis_button_renren"></a>
+								<a class="jiathis_button_kaixin001"></a>
+								<a class="jiathis_button_tqq"></a>
+								<a class="jiathis_button_weixin"></a>
+								<a class="jiathis_button_t163"></a>
+								<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+								<div class="favorite" goodsid="4529"  onclick="collect_goods(4529);">收藏商品</div>
+							</div>
+							<script type="text/javascript">
+							var jiathis_config = {
+								url:"http://localhost:0/gome-javamall//goods-4529.html",
+								title:"测试商品（满减1）",
+								pic:"http://image.uatcellar.com/attachment//store/580/goods/201609051521510370_small.png"
+							}
+							</script>
+							<script type="text/javascript" src="http://v2.jiathis.com/code/jia.js" charset="utf-8"></script>
+						</div>
+				        <div class="outline">
+							<div class="name">
+	        					<h1 id="goodsName">测试商品（满减1）</h1>
+	        				</div>
+	                            <!-- 获得 paramList下的json数组，使用第二层list循环-->
+	                                <div class="alias"></div>
+	                                <div class="alias"></div>
+							<!-- <script type="text/javascript">
+								$(function() {
+									if($(".alias:last").text() ==""){
+										$(".alias:last").removeClass("sell-point");
+									}
+									else{
+										$(".alias:last").addClass("sell-point");
+										var height = $(".alias:last").height();
+										var lineHeight = parseInt($(".alias:last").css("line-height"));
+										var hiddenHeight = (lineHeight * 2 - 2);
+										if(typeof(lineHeight)!="undefined" && lineHeight != null){
+											$(".alias:last").css("height",hiddenHeight); //2倍行高 - 边距
+										}
+
+										$(".alias:last").hover(
+												function(){
+													$(this).css('overflow','visible');
+													$(".alias:last").css("height",height); //2倍行高 - 边距
+												},function(){
+													$(this).css('overflow','hidden');
+													$(".alias:last").css("height",hiddenHeight); //2倍行高 - 边距
+												}
+										);
+									}
+								});
+							</script> -->
+							<div class="goods_price">
+	          					<div class="mark_price"><span>市场价：</span><strong>￥1,000.00</strong></div>
+	          					<div class="be_worth">
+										<span id="priceTypeName" >价格：</span>
+										<p id="goods_price">
+											<strong id="priveTypeValue" nctype="goods_price">￥90.00</strong>
+										</p>
+					            </div>
+								<div class="sold_cnt_div">
+									<span>售出数量：</span>
+									<p>
+										<strong id="buy_count">0</strong>
+									</p>
+								</div>
+					            <div class="good_lisheng"><span>立省: </span> <strong nctype="good_lisheng">
+						            ￥910.00
+					            </strong></div>
+								<div class="good_pinglun"><span>评论数量: </span> <strong id="comment_count">0</strong></div>
+					            <div class="goodssn">
+									<span>商品货号</span>
+					              	<strong>55555</strong>
+					           	</div>	
+	          				</div>
+	          				<!--  配送范围暂时不使用
+	          				<div class="goods_send" style="width:100%;height:30px;">
+	          					<span style="float:left;display:inline;">至全国</span>
+	          					<div>卖家承担运费</div>
+	          				</div>
+	          				 -->
+	          				<form  id="goodsform">
+	          					<input type="hidden" name="goodsid" value="4529" />
+	          					<input type="hidden" id="storeid" value="580" />
+	          					<input type="hidden" name="action" value="addGoods" />
+		                    	<div class="goods-key"> 
+		                     
+<!-- 商品规格 -->
+<!-- 创建商品规格标签 -->
+<!-- 调用商品规格标签 -->
+<input type="hidden" name="productid" id="productid"  />
+<input type="hidden" value="1" name="havespec" />
+					 		 
+							 				  <dl id="activity_dl" style="height:0; overflow:hidden; margin-top: 15px;">
+							 				  	<dt style="color:#666;line-height: 14px;">促销信息：</font></dt>
+							 				  	<dd style="color:#e4393c;line-height: 14px;" class="goods-figure-input" id="activity_font"></dd> 
+							 				  </dl>
+							 	
+						            <dl>
+						              	<dt>购买数量：</dt>
+						              	<dd class="goods-figure-input"> 
+						              		<a href="javascript:void(0)" ><i class="icon-minus decrease fl text-hidden" style="padding:2px 5px">-</i></a>
+						                	<input type="text" name="num" id="quantity" value="1" size="3" maxlength="6" class="fl" style="border-radius:0;">
+	                                        <script type="text/javascript">
+											  $("#quantity").blur(function(){
+												  if(!(/^(\+|-)?\d+$/.test($("#quantity").val())) || $("#quantity").val() < 1){
+													  $.alert("数量不得小于等于0且为整数");
+													  return false;
+												  }
+											  })
+											</script>
+						                		<a href="javascript:void(0)" ><i class="icon-plus increase fl text-hidden" style="padding:2px 5px">+</i></a> 
+												<em class="fl ml20">(当前库存<strong nctype='goods_stock'>99</strong>件)</em>
+						                </dd>
+										<div class="clear"></div>
+						            </dl>
+						  
+						            	
+			            				<div class="goods-btn clearfix">
+			            						<div class="goods-btn clearfix">
+												<span class="store-not-enough" style="display:none">抱歉库存不足</span>
+												<div class="btn">
+													 
+														<a href="javascript:void(0);" class="buynow fl " id="buyNow">立即购买</a><!-- 立即购买--> 
+														<a href="javascript:void(0);" class="addcart fl ml10 " id="addCart">添加到购物车<!-- 加入购物车--></a> 
+												</div>
+											</div> 
+			                        	</div>
+									<div class="clear"></div>
+		          				</div>
+	          				</form>
+	        			</div>
+	     				<div class="goods_store">
+						      <h1> 在线测试环境测试店铺</h1>
+						      <div class="store_outdside">
+							      <div class="store_rate">
+							      	<ul>
+							      		<li>
+							      			<h2>描述</h2>
+							      			<span>0分</span>
+							      		</li>
+							      		<li>
+							      			<h2>服务</h2>
+							      			<span>0分</span>
+							      		</li>
+							      		<li>
+							      			<h2>发货</h2>
+							      			<span>0分</span>
+							      		</li>
+							      	</ul>
+							      </div>
+							      <div class="go_store">
+							      		<a href="/gome-javamall/home.html?show_c=1&store_id=580" target="_blank" class="goto_store">进入商家店铺</a>
+							      		<a href="javascript:void(0);" rel="580" class="store_favoritebtn">收藏店铺<!--span>(1)</span--></a>
+							      </div>
+							      <div class="store_contact">
+							      		<h3><i>公司名称：</i>在线测试环境测试店铺</h3>
+							      		<h3><i>所在地：</i>北京-密云县-密云县</h3>
+							      </div>
+						      </div>
+						      <div class="goods_comparison">
+						      		<h1>为您推荐</h1>
+						      		<ul>
+											<li>
+												<div class="goods_comparison_img">
+													<a target="_blank" href="/gome-javamall/goods-4533.html"> 
+<img src="http://image.uatcellar.com/attachment//store/581/goods/201609051720496720_thumbnail.png" alt="测试商品（1号）" class="scrollLoading" />													</a>
+												</div>
+												<div class="goods_comparison_price">￥5.00</div>
+											</li>
+									</ul>
+						      </div>
+	    				</div>
+	     			</div>
+	      			<div class="clear"></div>
+	    		</di>
+	    	  
+	                	<section class="goodsdetail_rec">
+	          				<div class="title">
+	            				<h4>推荐商品</h4>
+	          				</div>
+	          				<div class="content">
+	            				<ul>
+	                             	<li>
+										<dl>
+											<dt class="goods_name" >
+								<a target="_blank" href="/gome-javamall/goods-3708.html"
+									title="茅台酒.蓝色梦想">茅台酒.蓝色梦想</a>
+							</dt>
+							<!--商品图片-->
+							<dd class="goods_img">
+								<a target="_blank" href="/gome-javamall/goods-3708.html"> 
+									<img src="http://image.uatcellar.com/attachment/store/1/goods/201512221127091999_thumbnail.jpg" alt="茅台酒.蓝色梦想" class="scrollLoading" /> </a>
+							</dd>
+							<!--商品价格-->
+							<dd class="goods_price">商城价：￥1,369.00</dd>
+										</dl>
+				   					</li>
+	                             	<li>
+										<dl>
+											<dt class="goods_name" >
+								<a target="_blank" href="/gome-javamall/goods-882.html"
+									title="大赛银奖 波尔多卡普兰干红葡萄酒(Maison Bouey Bordeaux Rouge-Silver Medal  Les Charmes De Capran)">大赛银奖 波尔多卡普兰干红葡萄酒(Maison Bouey Bordeaux Rouge-Silver Medal  Les Charmes De Capran)</a>
+							</dt>
+							<!--商品图片-->
+							<dd class="goods_img">
+								<a target="_blank" href="/gome-javamall/goods-882.html"> 
+									<img src="http://image.uatcellar.com/attachment//store/1/goods/201511061712139977_thumbnail.jpg" alt="大赛银奖 波尔多卡普兰干红葡萄酒(Maison Bouey Bordeaux Rouge-Silver Medal  Les Charmes De Capran)" class="scrollLoading" /> </a>
+							</dd>
+							<!--商品价格-->
+							<dd class="goods_price">商城价：￥150.00</dd>
+										</dl>
+				   					</li>
+	                             	<li>
+										<dl>
+											<dt class="goods_name" >
+								<a target="_blank" href="/gome-javamall/goods-3142.html"
+									title="纳厄 德国喜楚思玫瑰低泡葡萄酒(Sitzius Rosé Secco)">纳厄 德国喜楚思玫瑰低泡葡萄酒(Sitzius Rosé Secco)</a>
+							</dt>
+							<!--商品图片-->
+							<dd class="goods_img">
+								<a target="_blank" href="/gome-javamall/goods-3142.html"> 
+									<img src="http://image.uatcellar.com/attachment/store/1/goods/201511091505073884_thumbnail.jpg" alt="纳厄 德国喜楚思玫瑰低泡葡萄酒(Sitzius Rosé Secco)" class="scrollLoading" /> </a>
+							</dd>
+							<!--商品价格-->
+							<dd class="goods_price">商城价：￥79.00</dd>
+										</dl>
+				   					</li>
+	                             	<li>
+										<dl>
+											<dt class="goods_name" >
+								<a target="_blank" href="/gome-javamall/goods-3753.html"
+									title="朴客1.0浓香型白酒42度">朴客1.0浓香型白酒42度</a>
+							</dt>
+							<!--商品图片-->
+							<dd class="goods_img">
+								<a target="_blank" href="/gome-javamall/goods-3753.html"> 
+									<img src="http://image.uatcellar.com/attachment//store/1/goods/201512241519240168_thumbnail.jpg" alt="朴客1.0浓香型白酒42度" class="scrollLoading" /> </a>
+							</dd>
+							<!--商品价格-->
+							<dd class="goods_price">商城价：￥168.00</dd>
+										</dl>
+				   					</li>
+	                             	<li>
+										<dl>
+											<dt class="goods_name" >
+								<a target="_blank" href="/gome-javamall/goods-3125.html"
+									title="澳大利亚 哈迪徽章赤霞珠干红葡萄酒(crest cabernet savignon)">澳大利亚 哈迪徽章赤霞珠干红葡萄酒(crest cabernet savignon)</a>
+							</dt>
+							<!--商品图片-->
+							<dd class="goods_img">
+								<a target="_blank" href="/gome-javamall/goods-3125.html"> 
+									<img src="http://image.uatcellar.com/attachment/store/1/goods/201511101023242724_thumbnail.jpg" alt="澳大利亚 哈迪徽章赤霞珠干红葡萄酒(crest cabernet savignon)" class="scrollLoading" /> </a>
+							</dd>
+							<!--商品价格-->
+							<dd class="goods_price">商城价：￥158.00</dd>
+										</dl>
+				   					</li>
+	                           	</ul>
+								<div class="clear"></div>
+	          				</div>
+	        			</section>
+	    		<section class="goods_all" >
+	    			<aside class="goodsdetail_left">
+<div class="nc-s-c-s1 ncs-message-bar">
+	<div class="title">
+		<h4>客服中心</h4>
+	</div>
+	<div class="content">
+						<p>
+					QQ：<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1234567&amp;site=qq&amp;menu=yes">
+					<img src="http://wpa.qq.com/pa?p=2:1234567:52" alt=""></a>
+				</p>
+	</div>
+</div>
+<div class="nc-s-c-s1 ncs-search-bar mt10">
+	<div class="title">
+		<h4>店内搜</h4>
+	</div>
+	<div class="content">
+		<form id="" name="searchShop" method="get" action="#">
+			<input type="hidden" name="act" value="show_store" /> <input
+				type="hidden" name="op" value="goods_all" /> <input type="hidden"
+				name="id" value="4" />
+			<table class="ncs-search">
+				<tr>
+					<th>关键字：</th>
+					<td><input type="text" class="w90" name="goods_keyword" id="goods_keyword" value=""></td>
+				</tr>
+				<tr>
+					<th>价格：</th>
+					<td><input type="text" class="w30" name="s_price" id="s_price" value="" >
+						- <input type="text" class="w30" name="e_price" id="e_price" value="" >
+					</td>
+				</tr>
+				<tr>
+					<th>&nbsp;</th>
+					<td><a href="javascript:void(0);" onclick="searchGoods();">搜索</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+
+<div class="nc-s-c-s1 ncs-class-bar mt10">
+	<div class="title">
+		<h4>商品分类</h4>
+	</div>
+	<div class="content">
+		<ul class="ncs-submenu">
+			<li><span class="ico-none"><em>-</em> </span>
+			<a href="home.html?show_c=4&store_id=580">全部商品</a></li>
+			<li><span class="goods_none" onclick="class_list(this);"
+				span_id="808" style="cursor: pointer;"> <em>-</em> </span>
+				<a href="home.html?show_c=4&store_id=580&stc_id=808">葡萄酒</a>
+				<ul class="goods_store_category808">
+				</ul>
+			</li> 
+		</ul>
+		<div class="clear mb10"></div>
+	</div>
+</div>
+
+
+<div class="nc-s-c-s1 ncs-top-bar mt10">
+	<div class="title">
+		<h4>热销商品排行</h4>
+	</div>
+	<div class="content">
+		<!-- <ul class="ncs-top-tab pngFix">
+			<li class="current"><a
+				href="#">热销商品排行</a>
+			</li>
+			<li><a
+				href="#">热门收藏排行</a>
+			</li>
+		</ul> -->
+
+		<div class="ncs-top-panel">
+			<ol>
+				
+			</ol>
+		</div>
+		<p>
+			<a href="/gome-javamall/home.html?show_c=4&store_id=580">查看本店其他商品</a>
+		</p>
+	</div>
+</div>
+
+<script>
+function searchGoods(){
+	var goods_keyword = $("input[name='goods_keyword']").val();
+	var start_price = $("input[name='s_price']").val();
+	var end_price = $("input[name='e_price']").val();
+	
+	window.location.href = "home.html?show_c=4&store_id=580&keyword="+goods_keyword+"&start_price="+start_price+"&end_price="+end_price;
+}
+</script>	      		</aside>
+	      			<article class="goodsdetail_right">
+						<div  id="commodity">
+		        				<nav class="tabbar pngFix" id="airlines_nav">
+		          					<div class="pr" style="z-index: 70;">
+			            				<ul id="detailmenu">
+			              					<li class="current" tab="goodsdetail1"><a href="javascript:void(0);" ><span>商品详情</span></a></li>
+			              					<li tab="goodsdetail2"><a  href="javascript:void(0);"><span>商品评论</span></a></li>
+			              					<!-- <li tab="goodsdetail3"><a  href="javascript:void(0);"><span>销售记录</span></a></li> -->
+			              					<li tab="goodsdetail4"><a  href="javascript:void(0);"><span>产品咨询</span></a></li>
+			            				</ul>
+			            				<!-- 暂时取消商品详细左侧按钮
+		            						<div class="switch-bar"><a href="javascript:void(0)" id="abc">&nbsp;</a></div>
+		            						<div class="gotop"><a href="#header">&nbsp;</a></div>
+		            					 -->
+		          					</div>
+		        				</nav>
+	
+	       				<section class="goodsdetail_same goodsdetail1">
+				          <div id="ncGoodsIntro" class="content bd" style="">
+				          		<!-- 商品属性 -->
+<div class="rer_para">
+	<table cellspacing="0" cellpadding="0" width="100%" class="liststyle data">
+		<colgroup class="span-4 ColColorGray fontcolorBlack"></colgroup>
+		<tbody>
+			<tr class="tr-title">
+				<td class="colspan ColColorGraydark" colspan="2"><strong>商品属性</strong><span class="gname"></span></td>
+			</tr>
+							<tr>
+					<th>类型：</th>
+					<td title="红葡萄酒">红葡萄酒</td>
+				</tr>
+				<tr>
+					<th>品牌：</th>
+					<td title="哈迪">哈迪</td>
+				</tr>
+				<tr>
+					<th>葡萄品种：</th>
+					<td title="混酿">混酿</td>
+				</tr>
+				<tr>
+					<th>国家：</th>
+					<td title="中国">中国</td>
+				</tr>
+				<tr>
+					<th>年份：</th>
+					<td title="2015">2015</td>
+				</tr>
+				<tr>
+					<th>包装：</th>
+					<td title="单瓶">单瓶</td>
+				</tr>
+				<tr>
+					<th>价格：</th>
+					<td title="100-299">100-299</td>
+				</tr>
+				<tr>
+					<th>规格：</th>
+					<td title="375ml">375ml</td>
+				</tr>
+				<tr>
+					<th>适宜品尝温度：</th>
+					<td title=""></td>
+				</tr>
+				<tr>
+					<th>酒精度：</th>
+					<td title=""></td>
+				</tr>
+				<tr>
+					<th>搭配菜肴：</th>
+					<td title=""></td>
+				</tr>
+				<tr>
+					<th>葡萄品种(辅)：</th>
+					<td title=""></td>
+				</tr>
+				<tr>
+					<th>产区：</th>
+					<td title="纳厄">纳厄</td>
+				</tr>
+		</tbody>
+	</table>
+</div>
+<hr>
+<!--<div class="rer_para paramList">
+	<table cellspacing="0" cellpadding="0" width="100%" class="liststyle data">
+		<colgroup class="span-4 ColColorGray fontcolorBlack"></colgroup>
+		<tbody>
+			<tr class="tr-title">
+				<td class="colspan ColColorGraydark" colspan="2"><strong>基本信息</strong><span class="gname"></span></td>
+			</tr>
+				<!-- 获得 paramList下的json数组，使用第二层list循环
+					<tr>
+						<th>别名:</th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>卖点描述:</th>
+						<td></td>
+					</tr>
+		</tbody>
+	</table>
+</div>-->
+
+
+							     <a target="_blank" href="http://www.gomecellar.com/document/list_inner.html?cat_id=167&id=640#" style="margin:0 auto;display: block;text-align:center"><img src="http://image.uatcellar.com/attachment/adv/201602231459444116.jpg" alt="产品详情页广告" border="0" /></a>
+		                        <div class="default" style="text-align:center;"></div>
+				          </div>
+				        </section>
+  
+	        			<section class="goodsdetail_same goodsdetail2" style="display:none">
+	        				<div id="discuss_wrapper" class="content">
+							</div>
+	        			</section>
+	        			<!-- 
+	        			<section class="goodsdetail_same goodsdetail3" style="display:none">
+	        				<div class="content">
+		        				商品成交记录
+								include 'detail/transaction.html'
+							</div>
+	        			</section> -->
+ 						<section class="goodsdetail_same goodsdetail4" style="display:none">
+	        				<div class="content bd">
+	        					<!-- 咨询提示 -->
+	       						<div class="point_out">
+									<p>因厂家更改商品包装、场地、附配件等不做提前通知，且每位咨询者购买、提问时间等不同。为此，客服回复的咨询只针对当前当天咨询问题，给您带来的不便还请谅解，谢谢！</p>
+									<a href="#anchor">我要提问</a>
+								</div>
+								 
+								<div id="ask_wrapper"></div>
+							</div>
+	        			</section>
+	        		</div>
+	      		</article>
+		  		<div class="clear"></div>
+	    	</section>
+	  	</article>
+	</div>
+	<div class="clear"></div>
+	<div class="add_success_msg" style="display:none">
+		<dl class="add_message">
+			<dt>恭喜，该商品已添加到您的购物车！</dt>
+			<dd>
+				<input type="button" class="returnbuy_btn" value="继续购物">
+				<input type="button" class="checkout_btn" value="去结算">
+			</dd>
+		</dl>
+	</div>
+	<script type="text/javascript">
+	$(function(){
+		
+		// 有活动就获取活动价格
+		$.ajax({
+			url : ctx + '/api/shop/goods!getActivityPrice.do?goodsid=4529',
+			type : "post",
+			dataType : 'json',
+			success : function(data){
+				//如果是直降
+				if(data.type = 'zj')
+				{
+					$("#goodsName").html(data.data.gbName);
+					$("#zoom").attr("href",data.data.bigImg);
+					$("#zoom img").attr("src",data.data.smallImg);
+					$("#imgList").children().removeClass("selected");
+					$("#imgList").prepend("<li  class='selected'><img src='"+data.data.thumbnailImg+"' small='"+data.data.smallImg+"'"+ "big='"+data.data.bigImg+"' /></li>");
+				}
+				$("#priceTypeName").html(data.data.typeName);
+				$("#priveTypeValue").html("¥" + data.data.price.toFixed(2));
+			},
+			error : function(){
+				$.alert("获取价格出错");
+			}
+		});
+					
+		//获取促销活动信息
+		$.ajax({
+			url : ctx + '/api/b2b2c/activity!getGoodsActivity.do?goodsId=4529',
+			type : "post",
+			dataType : 'json',
+			success : function(data){
+				if (data.result == 1) {
+					data = data.data;
+					var html = "<div>" + data.name + "</div>";
+					var rules = data.promotionRules;
+					for (var i = 0; i < rules.length; i++) {
+						html += "<div style='margin:5px;'><span style='display:inline-block;background:#e4393c;padding:1px 2px;color:#fff;'>减满</span>" +
+						" <span style='display:inline-block;margin-left:5px;'>满 " + rules[i].d1 + " 减 " + rules[i].d2 + "</div>";
+					}
+					$("#activity_font").html(html)
+					$("#activity_dl").css("height", "auto");
+					$("#activity_dl").css("overflow", "auto");
+				}
+			},
+			error : function(){
+				//$.alert("获取价格出错");
+			}
+		});
+		
+		
+		Spec.init(4529);
+		if (window.console) {
+			console.info('Spec.init(4529);');
+		}
+		CommentList.init(4529);
+		Favorite.init();
+		 
+		$(".goods_detail1").show();
+		$("#detailmenu li").click(function(){
+			$("#detailmenu li").removeClass("current");
+			$(".goodsdetail_same").hide();
+			$(this).addClass("current");
+			$("."+$(this).attr("tab")).show();
+		});
+		
+		
+		
+		$('#airlines_nav').waypoint(function(event, direction) {
+	        $(this).parent().parent().parent().toggleClass('sticky', direction === "down");
+	        event.stopPropagation();
+	    });
+		
+		$("#detail_wrapper .gallery .thumblist").jCarouselLite({
+	        btnNext: ".right_control",
+	        btnPrev: ".left_control",
+			visible:4,
+			circular: false
+	    });
+	
+		
+		
+		
+		
+		//相册放大切换
+		$("#detail_wrapper .gallery .thumblist li").click(function(){
+			var self = this;
+			var $this = $(this);
+			var img  = $this.children("img");
+			var zoom = document.getElementById('zoom'); //get the reference to our zoom object
+		    MagicZoom.update(zoom, img.attr("big"), img.attr("small"), 'show-title: false'); 
+			$this.addClass("selected").siblings().removeClass("selected");
+		});	 
+		
+	})
+	</script>
+<!-----footer------>
+
+<div class="footer">
+	<div class="wrapper">
+	<!-- 
+	<div id="footer-top">
+		<ul>
+			<li class="one"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="two"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="three"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="four"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="five"><strong>正品行货<em>100%正品保证</em></strong></li>
+		</ul>
+	</div>
+	 -->
+	</div>
+	<!--帮助中心-->
+	  <div id="faq">
+	  <div class="wrapper">
+	    <ul>
+	        <li>
+		        <dl class="s1">
+		          	<dt>关于我们 </dt>
+		          			          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-7.html">公司简介</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-8.html">招商合作</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-9.html">联系我们</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-42.html">合作酒庄</a>
+		          		</dd>
+		       </dl>
+	      	</li>
+	        <li>
+	        	<dl class="s2">
+	          		<dt>新手上路</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-171.html">登录帮助</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-32.html">购物指南</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-31.html">常见问题</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <li>
+	    		<dl class="s3">
+			        <dt>配送说明</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-44.html">配送时间及范围</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-45.html">配送费收取标准</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-47.html">运输包装说明</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-23.html">签收与验货</a>
+		          		</dd>
+	          	</dl>
+	      </li>
+	      <li>
+	        	<dl class="s4">
+	          		<dt>支付方式</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-48.html">货到付款</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-49.html">在线支付</a>
+		          		</dd>
+	           </dl>
+	      </li>
+	      <li>
+	        	<dl class="s5">
+	          		<dt>售后服务</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-18.html">退换货政策</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-14.html">退换货流程</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-16.html">取消订单</a>
+		          		</dd>
+		        </dl>
+	      </li>
+	      <li>
+	        	<dl class="s6">
+	          		<dt>特殊服务 </dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-50.html">会员介绍</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-168.html">积分说明</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <div class="clear"></div>
+	    </ul>
+	  </div>
+	</div>
+	<!--底部版权，调用footer.php-->
+	<div id="footer" >
+		<div class="wrapper">
+		  <p><a href="/gome-javamall/index.html">首页</a>
+             | <a  href="/gome-javamall/member/member.html">会员中心</a>
+             | <a  href="/gome-javamall/store/business_center.html?menu=store_index">商家中心</a>
+             | <a  href="/gome-javamall/help-62-65.html">关于网站</a>
+             | <a  href="/gome-javamall/help-21-9.html">联系我们</a>
+             | <a  href="/gome-javamall/help-21-7.html">关于我们</a>
+          </p>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

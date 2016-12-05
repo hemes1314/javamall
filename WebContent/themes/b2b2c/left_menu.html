@@ -1,0 +1,97 @@
+<script>
+function load(){
+	location.href="${ctx}/store/login.html";
+}
+<#if !member?? >
+	load();
+</#if>
+</script>
+<div class="sidebar">
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<i class="pngFix"></i>商品管理
+		</dt>
+		<dd>
+			<a target="_blank" href="${ctx}/goods/select_cat.html">商品发布</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/goods/store_goods_list.html?market_enable=1">出售中的商品</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/goods/store_goods_list.html?market_enable=0">仓库中的商品</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/goods/goods_cat.html">分类管理</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/goods/goodsTags.html">标签列表</a>
+		</dd>
+	</dl>
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<i class="pngFix"></i>交易管理
+		</dt>
+		<dd>
+			<a href="${ctx}/order/StoreOrder.html?order_state=all">订单管理</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/order/StoreOrder.html?order_state=wait_ship">待发货订单</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/sellBack/sellback_list.html?status=0">退货申请</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/ship/dlyCenter/dlyCenter_list.html">发货设置</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/store/StoreEvaluateList.html?replyStatus=0">评价管理</a>
+		</dd>
+	</dl>
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<i class="pngFix"></i>促销管理
+		</dt>
+		<dd>
+			<a href="${ctx}/store/bonus_list.html">优惠券管理</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/groupbuy/admin/groupbuy_list.html">闪购管理</a>
+		</dd>
+	</dl>
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<i class="pngFix"></i>店铺设置
+		</dt>
+		<dd>
+			<a target="_blank" href="${ctx}/home.html?show_c=1&store_id=${(storeMember.store_id)!0}">我的店铺</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/store/storeInfo.html">店铺设置</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/store/auth.html">店铺认证设置</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/store/store_slide.html">店铺幻灯片设置</a>
+		</dd>
+		<dd>
+			<a href="${ctx}/storesite/store_navigation.html">导航管理</a>
+		</dd>
+	</dl>
+	<dl>
+		<dt id="sidebar_goods_manage">
+			<i class="pngFix"></i>客服管理
+		</dt>
+		<dd>
+			<a href="${ctx}/store/StoreConsultList.html?replyStatus=0">咨询管理</a>
+		</dd>
+		<!-- 
+		<dd>
+			<a>退款记录</a>
+		</dd>
+		<dd>
+			<a>退货记录</a>
+		</dd>
+		 -->
+	</dl>
+</div>

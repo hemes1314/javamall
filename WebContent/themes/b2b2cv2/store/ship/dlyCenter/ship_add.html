@@ -1,0 +1,80 @@
+<#assign regionSelectDirective="com.enation.app.base.component.widget.regions.RegionSelectDirective"?new()>
+
+
+<div class="eject_con">
+	<div class="adds">
+		<div id="warning"></div>
+		<form id="add_form">
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>发货点名称：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="name" class="text" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>联系人：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="uname" class="text" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>所在地区：
+				</dt>
+				<dd>
+					<p>
+						<@regionSelectDirective />
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>街道地址：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="address" class="text" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>邮编：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="zip" class="text" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>电话号码：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="cellphone"  >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>手机号码：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="phone">
+					</p>
+				</dd>
+			</dl>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,99 @@
+/*帮助中心（引导页）*/
+.besides{width:1200px;margin:20px auto;}
+.besides .help2_wh{
+	 float: left;
+    width: 208px;
+	height:auto;
+} 
+.besides .help2_wh .help_left{
+	border: 1px solid #d7d7d7;
+	 margin-bottom: 10px;
+	 border-top:0px none;
+}
+.besides .help2_wh .help_left h1{
+	border-top: 2px solid #d93600;
+	 background-color: #f5f5f5;
+    height: 36px;
+     color: #333;
+    font: 14px/20px "microsoft yahei";
+    height: 20px;
+    padding: 8px 10px;
+}
+.besides .help2_wh .help_left ul{
+	overflow: hidden;
+	width:208px;
+	 font-size: 0;
+    padding: 4px 0;
+}
+.besides .help2_wh .help_left ul li{
+	  border-bottom: 1px dotted #d7d7d7;
+    display: inline-block;
+    letter-spacing: normal;
+    margin: 4px 9px;
+    text-align: center;
+    vertical-align: top;
+    word-spacing: normal;
+    width:190px;
+}
+.besides .help2_wh .help_left ul .last{
+	border:0px none;
+}
+.besides .help2_wh .help_left ul li a{
+	   color: #555;
+    display: block;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    padding: 2px 0px 2px 10px;
+    width: 180px;
+    text-align:left;
+}
+.besides .client{
+	float: right;
+    width: 940px;
+    padding:0px 20px 20px 20px;
+     background: none repeat scroll 0 0 #fff;
+    border: 1px solid #e6e6e6;
+    display: block;
+    margin-bottom: 10px;
+    
+}
+.besides .client b{
+	font: 18px/20px "microsoft yahei";
+	margin-top:20px;
+	display:block;
+	
+}
+.besides .client ul li{width:100%;clear:both;}
+
+/*****新增********/
+.help_title{
+	 color: #3d3f3e;
+    font: 600 16px/32px "microsoft yahei";
+    text-align: center;
+    margin:20px 0px 10px 0px;
+}
+.help_time{
+	 border-bottom: 1px solid #d2d2d2;
+    color: #9a9a9a;
+    font-size: 12px;
+    font-weight: normal;
+    margin-bottom: 20px;
+    padding: 5px 0 20px;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+<#assign  title="核对订单信息" />
+<#include 'common/header.html'/>
+
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/button.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/common.css" />
+
+<script  src="${ctx}/themes/b2b2c/js/storecheckout.js"  ></script>
+
+<div id="main">
+	<!--上部填写信息单、购买流程-->
+	<div class="checkout_step2">
+		<@image src="${ctx}/themes/default/images/lc.jpg" alt="结算流程第一步" />
+	</div>
+	<!--上不填写信息单、购买流程结束-->
+	<#include 'checkout/storecheckout.html'/>
+</div>
+<#include 'common/footer.html'/>

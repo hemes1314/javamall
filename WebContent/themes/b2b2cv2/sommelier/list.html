@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>GOME Cellar - 品酒师</title>
+<script src="${ctx}/themes/b2b2cv2/sommelier/js/jquery-1.8.3.min.js"></script>
+<script src="${ctx}/themes/b2b2cv2/sommelier/js/over.js"></script>
+<script src="${ctx}/themes/b2b2cv2/sommelier/js/date.js"></script>
+<script src="${ctx}/themes/b2b2cv2/sommelier/js/glDatePicker.js"></script>
+<link href="${ctx}/themes/b2b2cv2/sommelier/css/style.css" rel="stylesheet" type="text/css" />
+<#assign sommelierTastingListTag = newTag("sommelierTastingListTag")>
+<#assign sommelierDetail = sommelierTastingListTag() />
+</head>
+<body>
+   <div class="Header">
+     <div class="Header-left">
+        <div class="Header-logo"><img src="${ctx}/themes/b2b2cv2/sommelier/images/logo.png" width="355" height="110" alt=""/></div>
+     </div> 
+     <div class="Header-right">
+        <div class="Header-shop"></div>
+     </div>
+   </div>
+   <div class="Header-menu">
+      <div class="Header-menu-left" style="letter-spacing:1px;">
+         GOME Cellar为您提供最权威的品酒师 <!--<a href="/store/login.html"> GOME Cellar</a> [ <a href="/store/login.html">登录</a> ]-->
+      </div>
+      <div class="Header-menu-right"><a class="active" href="index.html">首页</a></div>
+   </div>
+   <div class="Center">
+      <div class="List">
+         <ul>
+           <li class="photo">
+           <a href="index_inner.html?user_id=${sommelierDetail.sommelier.userid}" title="点击查看品酒师详情"><img src="${sommelierDetail.sommelier.img_url}" width="270" height="200" alt=""/></a>
+           <p><a href="index_inner.html">${sommelierDetail.sommelier.name}</a></p>
+           </li>
+           <h2>所有推荐酒品</h2>
+           <li class="wine">
+             <dl>
+             <#list sommelierDetail.tastingNoteList.result as tastingNote>
+              <dt>
+              <a href="list_inner.html?tasting_id=${tastingNote.id}&user_id=${tastingNote.userid}"><img src="${tastingNote.image!''}" style="height:180px;" alt=""/></a>
+              <a class="title" href="list_inner.html?tasting_id=${tastingNote.id}&user_id=${tastingNote.userid}">${tastingNote.title}</a>
+              <span style="font-size:12px;">参考价格：${tastingNote.price}</span>
+              </dt>
+               </#list>
+              </dl>
+           </li>
+           	    <li class="page">  
+	            <#if sommelierDetail.tastingNoteList.totalPageCount!=0>
+	       		  <#if sommelierDetail.tastingNoteList.currentPageNo!=1>
+					<a href="list.html?page=${tastingNoteList.currentPageNo-1}&user_id=${tastingNote.userid}">上一页</a> 
+				  </#if>
+	       		    <a href="list.html?page=${sommelierDetail.tastingNoteList.currentPageNo}&user_id=${sommelierDetail.sommelier.userid}">第${sommelierDetail.tastingNoteList.currentPageNo}页</a> 
+	       		   <#if sommelierDetail.tastingNoteList.currentPageNo!=sommelierDetail.tastingNoteList.totalPageCount>   
+	       		    <a href="list.html?page=${sommelierDetail.tastingNoteList.currentPageNo+1}&user_id=${sommelierDetail.sommelier.userid}">下一页</a> 
+	       		   </#if>
+	       	    </#if>
+	            </li>
+         </ul>
+          <input  id="pagecount" type="hidden" value="${sommelierDetail.tastingNoteList.totalPageCount}"/>
+      </div>
+   </div>
+   <div class="Footer">Copyright © 2015-2016 GOME Cellar 版权所有</div> 
+</body>
+</html>

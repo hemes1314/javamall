@@ -1,0 +1,21 @@
+<div class="main" style="background-color: white;" >
+	<div class="easyui-panel" style="border-style: none;">
+		<div style="padding: 10px 0 10px 20px">
+			<form id="catForm" method="post" class="validate">
+			<input type="hidden" name="catid" value="${secBuyCat.catid}" >
+				<table>
+					<tr>
+						<td>分类名称:</td>
+						<td><input class="input_text easyui-validatebox" type="text" id="name" name="cat_name" value="${secBuyCat.cat_name}"  data-options="required:true" ></input></td>
+					</tr>
+					<tr>
+						<td>排序：</td>
+						<td>
+						<input type="text" class="input_text easyui-numberbox" name="cat_order" value="1" value="${secBuyCat.cat_order}" data-options="min:0,precision:0">
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>

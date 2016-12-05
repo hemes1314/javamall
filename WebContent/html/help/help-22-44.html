@@ -1,0 +1,3045 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>GomeCellar</title> 
+		<meta name="keywords" content="GomeCellar">
+		<meta name="description" content="GomeCellar">
+	<!--meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/--> 
+	
+</meta>
+
+<!-- 判断IE，并使IE9以下支持html5标签 -->
+<!–[if lt IE 9]> <script  src="/gome-javamall/themes/b2b2cv2/js/html5.js"  ></script> <![endif]–>
+
+
+<script>
+var member = "";
+var loginDialog;
+var ctx="/gome-javamall";
+var app_path="/gome-javamall";
+</script>
+
+<!-- 公共样式 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/base.css" />
+<!-- 内含dialog.css样式，原来的dialog.css中无代码 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/default.css" />
+<!-- 商品详细、 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/shop.css" />
+
+<script>window._prompt = window.prompt;</script>
+
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/lhgdialog.js" ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/common.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/shop.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.ui.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/index.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.validate.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.form-3.51.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/CartBar.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.blockUI.js"   ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/LoginDialog.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.cookie.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/perfect-scrollbar.min.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.SuperSlide.2.1.1.js" ></script>
+<!-- jquery的布局插件 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script>
+<!-- 购物车移入滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.nicescroll.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.bigautocomplete.js"></script>
+<!-- 自定义滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.jscroll.js"></script>
+
+<script type="text/javascript">
+
+var ctx="/gome-javamall";
+
+
+
+$(function(){
+	
+	$(".common_member").load("/gome-javamall/common/member_bar.html?_="+new Date().getTime()	,function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"/gome-javamall/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,              
+				success:function(result){
+					if(result.result==1){
+						//$.alert(result.message);
+						location.href="/gome-javamall/index.html";
+					}else{
+						$.alert(result.message);
+					}	
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		});	
+	});
+	
+	$(".my_store").load("/gome-javamall/common/my_store.html?_="+new Date().getTime());
+	
+	$(".my_store").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+	
+	$(".title_menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+</script>
+
+
+</head>
+<body>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/backtotop.js"></script>
+	<a name="backtotop"></a>
+	<div class="website_top w">
+		<div class="topbar wrapper">
+        	<div class="area" style="width:50px;">
+                  <div class="title" style="overflow:hidden;">
+                      <div class="city"><a href="javascript:void(0)" id="button_show">
+                      <h3 id="show_area_name">全国</h3>
+                      <i class="arrow"></i></a></div>
+                      <div id="list" class="list" style="display: none;">
+                      <a id="button_close" class="close" href="javascript:void(0)">×</a>
+                      <ul>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(0,&#39;全国&#39;)">全国</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(1,&#39;北京&#39;)">北京</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(2,&#39;上海&#39;)">上海</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(3,&#39;天津&#39;)">天津</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(4,&#39;河北&#39;)">河北</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(5,&#39;江苏&#39;)">江苏</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(6,&#39;安徽&#39;)">安徽</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(7,&#39;浙江&#39;)">浙江</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(8,&#39;福建&#39;)">福建</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(9,&#39;辽宁&#39;)">辽宁</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(10,&#39;吉林&#39;)">吉林</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(11,&#39;黑龙江&#39;)">黑龙江</a></li>
+                       </ul>
+                       </div>
+                    </div>
+            </div> 
+			<div class="common_member" style="float:left;">
+			</div>
+			<div class="title_menu">
+                <!--dl style="width:90px;">
+					<dt>
+						手机端App<i></i>
+					</dt>
+					<dd style="width:90px;">
+						<ul>
+							<li>
+                            <img src="/gome-javamall/themes/b2b2cv2/app_download/images/QR_code_android.jpg" width="80" height="80" style="padding:5px; float:left;" />
+                            <a class="menu-app" href="/gome-javamall/app_download/index.html" target="_blank">Android版</a>
+                            </li>
+						</ul>
+					</dd>	
+				</dl-->
+				<dl>
+					<dt>
+						<a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" style="padding-left:5px;">商家中心</a>
+					</dt>
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/order.html">我的订单</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/order.html?status=0">待付款订单</a></li>
+							<li><a href="/gome-javamall/member/order.html?status=5">商品已发货</a></li>
+							<li><a href="/gome-javamall/member/waitcommont.html">待评价商品</a></li>
+						</ul>
+					</dd>	
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/favorite.html" title="我的收藏" target="_top">我的收藏</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/favorite.html" target="_top" title="收藏的商品">收藏的商品</a></li>
+							<li><a href="/gome-javamall/member/collect_store.html" target="_top" title="收藏的店铺">收藏的店铺</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						客户服务<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/help-81-83.html">帮助中心</a></li>
+							<li><a href="/gome-javamall/help-81-84.html">售后服务</a></li>
+							<li><a href="/gome-javamall/help-81-85.html">客服中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						站点导航<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a target="_blank" href="/gome-javamall/index.html">商城首页</a></li>
+                            <li><a href="/gome-javamall/member/member.html">会员中心</a></li>
+							<li><a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" >商家中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+<script type="text/javascript">
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+//选项卡样式
+function index_click(type,value){
+	$("#"+type+" li").removeClass("selected");
+	$("#"+type+" li a[type='"+value+"']").parents("li").addClass("selected");
+}
+function set_groupbuy_area(area_id,area_name){
+	$("#show_area_name").html(area_name);
+	$("input[name='area_id']").val(area_id);
+	$("#list").hide();
+	loadPage();
+}
+</script>
+	</div>
+<div id="goodsSelectDiv"></div>
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/help.css" />
+<div class="content">
+	<!--帮助中心-->
+	<div class="besides">
+		<div class="help2_wh">
+			<div class="help_left">
+				<h1>关于网站</h1>
+				<ul>
+						<li >
+							<a href="help-21-7.html">公司简介</a>
+						</li>
+						<li >
+							<a href="help-21-8.html">招商合作</a>
+						</li>
+						<li >
+							<a href="help-21-9.html">联系我们</a>
+						</li>
+						<li class= "last">
+							<a href="help-21-42.html">合作酒庄</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>新手上路</h1>
+				<ul>
+						<li >
+							<a href="help-17-171.html">登录帮助</a>
+						</li>
+						<li >
+							<a href="help-17-32.html">购物指南</a>
+						</li>
+						<li class= "last">
+							<a href="help-17-31.html">常见问题</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>购物指南</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+			<div class="help_left">
+				<h1>支付方式</h1>
+				<ul>
+						<li >
+							<a href="help-19-48.html">货到付款</a>
+						</li>
+						<li class= "last">
+							<a href="help-19-49.html">在线支付</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>购物条款</h1>
+				<ul>
+						<li >
+							<a href="help-20-50.html">会员介绍</a>
+						</li>
+						<li class= "last">
+							<a href="help-20-168.html">积分说明</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>配送方式</h1>
+				<ul>
+						<li >
+							<a href="help-22-44.html">配送时间及范围</a>
+						</li>
+						<li >
+							<a href="help-22-45.html">配送费收取标准</a>
+						</li>
+						<li >
+							<a href="help-22-47.html">运输包装说明</a>
+						</li>
+						<li class= "last">
+							<a href="help-22-23.html">签收与验货</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>服务</h1>
+				<ul>
+						<li >
+							<a href="help-23-18.html">退换货政策</a>
+						</li>
+						<li >
+							<a href="help-23-14.html">退换货流程</a>
+						</li>
+						<li class= "last">
+							<a href="help-23-16.html">取消订单</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>优惠活动</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>我的订单</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+		</div>
+		<div class="client">
+			<!-- 调用CMS蚊香详细标签，并传递文章所在分类ID，及文章ID -->
+			<!-- 文章详细，所需的catid与articleid通过help.html?catid=XXX&articleid=XXX传递参数 -->
+			<h1 class="help_title">配送时间及范围</h1>
+			<h2 class="help_time">2015-10-29 14:24</h2>
+			<table align="left" border="1" cellpadding="0" cellspacing="0">
+	<thead>
+		<tr>
+			<th rowspan="2" style="height:21px;">
+				<p align="center">
+					<strong>省份</strong></p>
+			</th>
+			<th rowspan="2" style="height:21px;">
+				<p align="center">
+					<strong>城市</strong></p>
+			</th>
+			<th rowspan="2" style="height:21px;">
+				<p align="center">
+					<strong>配送范围</strong></p>
+			</th>
+			<th rowspan="2" style="height:21px;">
+				<p align="center">
+					<strong>配送时限</strong></p>
+			</th>
+		</tr>
+		<tr>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					北京市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					北京市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					六环以内</p>
+			</th>
+			<th style="height:2px;">
+				<p align="center">
+					1-2天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					上海市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					上海市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					全境派送（不包括崇明三岛）</p>
+			</th>
+			<th style="height:2px;">
+				<p align="center">
+					2-4天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					天津市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					天津市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					北辰区、大港区、东丽区、汉沽区、和平区、河北区、河东区、河西区、红桥区、津南区、静海县、南开区、宁河县、塘沽区、武清区、西青区、宝坻区、蓟县</p>
+			</th>
+			<th style="height:2px;">
+				<p align="center">
+					1-2天</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="11" style="height:2px;">
+				<p align="left">
+					河北省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					石家庄市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					长安区、桥东区、桥西区、新华区</p>
+			</th>
+			<th rowspan="11" style="height:2px;">
+				<p align="center">
+					2~4</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					沧州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					新华区、运河区、沧县（城区）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					承德市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					承德市、双桥区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					邯郸市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					丛台区、复兴区、邯郸县、邯山区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					衡水市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市区、桃城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					廊坊市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					安次区、广阳区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					秦皇岛市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市区、海港区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					保定市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					北市区、南市区、新市区、</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					唐山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					路北区、路南区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					邢台市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					桥东区、桥西区、邢台县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					张家口市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					桥东区、桥西区、高新区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="9" style="height:2px;">
+				<p align="left">
+					山西省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					太原市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					万柏林区、小店区、杏花岭区、迎泽区</p>
+			</th>
+			<th rowspan="9" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					大同市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城区、南郊区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					晋城市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					临汾市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					尧都区、侯马市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					朔州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					朔城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					长治市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					忻州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					忻府区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					阳泉市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城区、矿区（限二矿、四矿）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					运城市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					盐湖区、河津市</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="9" style="height:2px;">
+				<p align="left">
+					内蒙古自治区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					呼和浩特市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					回民区、赛罕区、新城区、玉泉区</p>
+			</th>
+			<th rowspan="9" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					包头市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东河区、九原区、昆都仑区、青山区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					赤峰市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					红山区、松山区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					鄂尔多斯市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东胜区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					巴彦淖尔市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					临河区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					通辽市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					科尔沁区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					乌海市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					海勃湾区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					乌兰察布市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					集宁区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					锡林郭勒盟</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					锡林浩特市</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="6" style="height:2px;">
+				<p align="left">
+					黑龙江省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					哈尔滨市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					道里区、道外区、南岗区、平房区、松北区、香坊区</p>
+			</th>
+			<th rowspan="6" style="height:2px;">
+				<p align="center">
+					2~4天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					大庆市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					让胡路区、红岗区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					鹤岗市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					向阳区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					佳木斯市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东风区、永红区、前进区、向阳区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					牡丹江市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					爱民区、东安区、西安区、阳明区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					齐齐哈尔市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					建华区、龙沙区、铁锋区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="9" style="height:2px;">
+				<p align="left">
+					吉林省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					长春市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					朝阳区、二道区、宽城区、绿园区、南关区</p>
+			</th>
+			<th rowspan="9" style="height:2px;">
+				<p align="center">
+					2~4天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					白山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					八道江区、江源城区、抚松城区、靖宇城区、临江城区、长白县城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					白城市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市区、洮北区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					吉林市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					昌邑区、船营区、丰满区、龙潭区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					辽源市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					龙山区、西安区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					四平市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					铁东区、铁西区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					松原市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					宁江区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					通化市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东昌区、二道江区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					延边朝鲜族自治州</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					延吉市</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="9" style="height:2px;">
+				<p align="left">
+					辽宁省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					沈阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					大东区、东陵区、和平区、皇姑区、浑南新区、沈河区、沈阳经济开发区、苏家屯区、铁西区、于洪区</p>
+			</th>
+			<th rowspan="9" style="height:2px;">
+				<p align="center">
+					2~4天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					大连市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					甘井子区、开发区、沙河口区、西岗区、中山区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					鞍山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					立山区、千山区、铁东区、铁西区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					丹东市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					元宝区、振安区、振兴区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					抚顺市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					顺城区、望花区、新抚区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					锦州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					古塔区、凌河区、太和区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					辽阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					白塔区、宏伟区、太子河区、文圣区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					本溪市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					明山区、平山区、溪湖区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					营口市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					老边区、西市区、站前区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="11" style="height:2px;">
+				<p align="left">
+					江苏省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					常州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					戚墅堰区、天宁区、武进区、新北区、钟楼区</p>
+			</th>
+			<th rowspan="11" style="height:2px;">
+				<p align="center">
+					2~4天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					淮安市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					淮阴区、清河区、清浦区、楚州区、涟水县（城区）、盱眙县（城区）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					连云港市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					海州区、新浦区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					南京市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					白下区、鼓楼区、建邺区、江宁区、浦口区、栖霞区、秦淮区、下关区、玄武区、雨花区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					南通市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					崇川区、港闸区、开发区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					泰州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					海陵区、高港区、姜堰、靖江、兴化</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					无锡市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					北塘区、崇安区、惠山区、南长区、锡山区、滨湖区、北塘区、新区、江阴市、宜兴市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					徐州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					鼓楼区、泉山区、云龙区、铜山县、丰县、沛县、邳州市、睢宁县、新沂市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					扬州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					广陵区、邗江区、维扬区、宝应县、高邮市、仪征市、江都市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					镇江市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					丹徒区、京口区、润州区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					苏州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					沧浪区、虎丘区、金阊区、平江区、吴江市、吴中区、相城区、张家港市（市区及部分镇）、昆山市（市区及部分镇）、太仓市（市区及部分镇）、常熟市（市区及部分镇）</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="11" style="height:2px;">
+				<p align="left">
+					浙江省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					杭州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					滨江区、淳安县、富阳市、拱墅区、江干区、临安市、上城区、桐庐县、西湖区、下城区、萧山区、余杭区</p>
+			</th>
+			<th rowspan="11" style="height:2px;">
+				<p align="center">
+					2~4天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					湖州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					安吉县、长兴县、德清县、南浔区、吴兴区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					嘉兴市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					海宁市、嘉善县、南湖区、平湖市、桐乡市、秀洲区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					金华市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东阳市、金东区、浦江县、武义县、婺城区、义乌市、永康市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					丽水市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					缙云县、莲都区、松阳县、遂昌县、云和县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					宁波市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					北仑区、慈溪市、奉化市、海曙区、江北区、江东区、宁海县、象山县、鄞州区、余姚市、镇海区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					衢州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					开化县、柯城区、龙游县、衢江区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					绍兴市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					上虞市、绍兴县、嵊州市、新昌县、越城区、诸暨市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					台州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					黄岩区、椒江区、路桥区、三门县、仙居县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					温州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					苍南县、洞头县、乐清市、龙湾区、鹿城区、瓯海区、瑞安市、永嘉县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					舟山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					定海区、普陀区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="17" style="height:2px;">
+				<p align="left">
+					安徽省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					合肥市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					包河区、庐阳区、蜀山区、瑶海区、肥东县、肥西县</p>
+			</th>
+			<th rowspan="17" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					蚌埠市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					蚌山区、龙子湖区、禹会区、固镇县、五河县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					马鞍山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					花山区、金家庄区、雨山区、当涂县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					芜湖市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					镜湖区、鸠江区、弋江区、芜湖县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					亳州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					谯城区、涡阳县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					巢湖市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					居巢区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					安庆市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					大观区、桐城市、望江县、宜秀区、迎江区、岳西县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					池州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					贵池区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					滁州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					琅琊区、天长市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					阜阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					太和县、颍泉区、颍州区、颍东区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					淮北市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					杜集区、相山区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					淮南市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					田家庵区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					黄山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					屯溪区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					六安市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					金安区、裕安区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					宿州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					泗县、埇桥区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					铜陵市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					郊区、狮子山区、铜官山区、铜陵县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					宣城市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					宣州区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="9" style="height:2px;">
+				<p align="left">
+					福建省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					福州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					仓山区、长乐市、福清市、鼓楼区、晋安区、马尾区、台江区、闽侯县、连江县、罗源县、闽清县、平潭县、永泰县</p>
+			</th>
+			<th rowspan="9" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					南平市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					延平区、光泽县、建瓯市、建阳市、浦城县、邵武市、顺昌县、武夷山市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					龙岩市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					新罗区、长汀县、连城县、上杭县、武平县、永定县、漳平市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					宁德市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					蕉城区、福鼎市、古田县、屏南县、寿宁县、霞浦县、柘荣县、周宁县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					莆田市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城厢区、涵江区、荔城区、秀屿区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					泉州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					丰泽区、鲤城区、洛江区、洛江区、泉港区、安溪县、德化县、惠安县、晋江市、南安市、石狮市、永春县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					三明市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					梅列区、三元区、沙县、永安市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					厦门市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					海沧区、湖里区、集美区、思明区、同安区、翔安区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					漳州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					龙文区、芗城区、长泰县</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="5" style="height:2px;">
+				<p align="left">
+					江西省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					南昌市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东湖区、青山湖区、青云谱区、西湖区、长棱镇、民和镇、长岭镇</p>
+			</th>
+			<th style="height:2px;">
+				<p align="center">
+					3-5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					赣州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					章贡区、欣山镇、横水镇、南岸镇、历市镇、梅林镇、龙南镇、蓉江街道、东山街道、象湖镇、琴江镇、嘉定镇、贡江镇</p>
+			</th>
+			<th rowspan="4" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					景德镇市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					昌江区、珠山区、浮梁县、乐平市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					九江市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					庐山区、浔阳区、都昌镇、双钟镇、沙河街镇、新宁镇、义宁镇、涂埠镇、瑞昌市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					萍乡市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					安源区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="17" style="height:2px;">
+				<p align="left">
+					山东省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					济南市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					槐荫区、历城区、历下区、市中区、天桥区、长清区、高新技术开发区（部分）</p>
+			</th>
+			<th rowspan="17" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					德州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					德城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					东营市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东营区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					菏泽市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					牡丹区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					滨州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					滨城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					济宁市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					任城区、市中区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					莱芜市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					钢城区、莱城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					聊城市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东昌府区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					临沂市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					河东区、兰山区、罗庄区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					青岛市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城阳区、黄岛区、崂山区、李沧区、市北区、市南区、四方区、即墨市、胶州市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					日照市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市区、东港区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					泰安市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					威海市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					环翠区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					潍坊市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					坊子区、寒亭区、奎文区、寿光市、潍城区、诸城市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					烟台市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					福山区、开发区、龙口市、牟平区、招远市、芝罘区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					枣庄市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市城区、市中区、薛城区、峄城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					淄博市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					张店区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="15" style="height:2px;">
+				<p align="left">
+					河南省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					郑州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					二七区、管城区、惠济区、金水区、中原区</p>
+			</th>
+			<th rowspan="15" style="height:2px;">
+				<p align="center">
+					2~4天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					安阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					北关区、龙安区、文峰区、殷都区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					鹤壁市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					淇滨区、山城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					焦作市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					解放区、马村区、山阳区、中站区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					开封市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					鼓楼区、金明区、龙亭区、顺河回族区、禹王台区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					洛阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					瀍河回族区、涧西区、老城区、洛龙区、西工区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					漯河市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					郾城区、源汇区、召陵区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					南阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					宛城区、卧龙区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					平顶山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					卫东区、新华区、湛河区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					濮阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					华龙区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					三门峡市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					新乡市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					红旗区、牧野区、卫滨区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					信阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					平桥区、浉河区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					许昌市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					长葛市、魏都区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					驻马店市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					驿城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="2" style="height:2px;">
+				<p align="left">
+					湖南省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					长沙市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					长沙县、芙蓉区、开福区、天心区、雨花区、岳麓区</p>
+			</th>
+			<th rowspan="2" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					株洲市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					荷塘区、芦淞区、石峰区、天元区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="6" style="height:2px;">
+				<p align="left">
+					湖北省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					武汉市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					东西湖区、汉阳区、洪山区、江岸区、江汉区、硚口区、青山区、武昌区</p>
+			</th>
+			<th rowspan="6" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					黄石市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					黄石港区、西塞山区、下陆区、大冶市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					十堰市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					茅箭区、张湾区、丹江口市（城区）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					襄樊市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					二气开发区、樊城区、襄阳区、枣阳市（城区）、宜城市（城区）、老河口市（城区）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					孝感市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					孝南区、汉川市（城区）、孝昌县（城区）、应城市（城区）、云梦县（城区）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					宜昌市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					伍家岗区、西陵区、当阳市（城区）、宜都市（城区）、枝江市（城区）</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="21" style="height:2px;">
+				<p align="left">
+					广东</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					广州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					白云区、从化市、番禺区、海珠区、花都区、黄埔区、荔湾区、萝岗区、南沙区、天河区、越秀区、增城市</p>
+			</th>
+			<th rowspan="21" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					深圳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					宝安区、福田区、龙岗区、罗湖区、南山区、盐田区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					潮州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					潮安县、饶平县、湘桥区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					东莞市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					除沙田镇沥沙岛外</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					佛山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					禅城区、高明区、南海区、三水区、顺德区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					河源市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					龙川县、源城区、紫金县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					惠州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					博罗县、惠城区、惠东县、惠阳区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					江门市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					恩平市、鹤山市、江海区、开平市、蓬江区、台山市、新会区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					揭阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					揭东县、普宁市、榕城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					茂名市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					电白县、高州市、化州市、茂港区、茂南区、信宜市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					梅州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					蕉岭县、梅江区、梅县、平远县、五华县、兴宁市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					清远市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					佛冈县、清城区、清新县、英德市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					汕头市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					潮南区、潮阳区、澄海区、濠江区、金平区、龙湖区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					汕尾市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城区、海丰县、陆丰市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					韶关市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					乐昌市、南雄市、曲江区、仁化县、乳源瑶族自治县、始兴县、翁源县、武江区、浈江区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					阳江市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					江城区、阳春市、阳东县、阳西县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					云浮市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					新兴县、云城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					湛江市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					赤坎区、雷州市、廉江市、麻章区、坡头区、遂溪县、吴川市、霞山区、徐闻县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					肇庆市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					鼎湖区、端州区、高要市、四会市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					中山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					石岐区、</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					珠海市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					斗门区、金湾区、香洲区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="9" style="height:2px;">
+				<p align="left">
+					广西壮族自治区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					南宁市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					江南区、良庆区、青秀区、西乡塘区、兴宁区</p>
+			</th>
+			<th rowspan="9" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					北海市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					海城区、银海区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					贵港市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					港北区、港南区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					桂林市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					叠彩区、七星区、象山区、秀峰区、雁山区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					柳州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城中区、柳北区、柳南区、鱼峰区、柳江县（城区）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					百色市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					右江区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					钦州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					钦北区、钦南区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					梧州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					苍梧县、长洲区、蝶山区、万秀区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					玉林市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					玉州区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="2" style="height:2px;">
+				<p align="left">
+					海南省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					海口市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					龙华区、美兰区、琼山区、秀英区</p>
+			</th>
+			<th rowspan="2" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					三亚市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					重庆市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					重庆市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					巴南区、北碚区、大渡口区、涪陵区、江北区、九龙坡区、沙坪坝区、渝北区、渝中区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="6" style="height:2px;">
+				<p align="left">
+					四川省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					成都市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					成华区、金牛区、锦江区、龙泉驿区、青白江区、青羊区、温江区、武侯区、新都区、高新西区、高新区、郫县、双流县</p>
+			</th>
+			<th rowspan="6" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					德阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					旌阳区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					广元市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					利州区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					乐山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市中区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					泸州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					江阳区、纳溪区、龙马潭区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					绵阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					涪城区、高新区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="6" style="height:2px;">
+				<p align="left">
+					贵州省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					贵阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					白云区、花溪区、南明区、乌当区、小河区、云岩区</p>
+			</th>
+			<th rowspan="6" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					毕节市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					毕节城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					安顺市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					安顺市、西秀区、镇宁县城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					六盘水市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					水城县城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					黔东南苗族侗族自治州</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					凯里市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					遵义市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					红花岗区、汇川区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="4" style="height:2px;">
+				<p align="left">
+					云南省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					昆明市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					官渡区、盘龙区、五华区、西山区</p>
+			</th>
+			<th rowspan="4" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					大理白族自治州</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					大理市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					曲靖市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					麒麟区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					玉溪市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					红塔区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="3" style="height:2px;">
+				<p align="left">
+					西藏自治区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					拉萨市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城关区</p>
+			</th>
+			<th rowspan="3" style="height:2px;">
+				<p align="center">
+					3~7天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					林芝地区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					林芝县（限八一镇）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					日喀则地区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					日喀则市</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="5" style="height:2px;">
+				<p align="left">
+					陕西省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					西安市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					灞桥区、碑林区、长安区、莲湖区、未央区、西高经济技术产业开发区、新城区、阎良区、雁塔区</p>
+			</th>
+			<th rowspan="5" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					汉中市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					汉台区、南郑县（限大河坎开发区）</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					宝鸡市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					金台区、渭滨区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					咸阳市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					秦都区、渭城区、兴平市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					延安市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市区、宝塔区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="2" style="height:2px;">
+				<p align="left">
+					甘肃省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					兰州市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					安宁区、城关区、七里河区、西固区</p>
+			</th>
+			<th rowspan="2" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					酒泉市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					肃州区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					青海省</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					西宁市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					城北区、城东区、城西区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="4" style="height:2px;">
+				<p align="left">
+					宁夏回族自治区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					银川市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					金凤区、西夏区、兴庆区</p>
+			</th>
+			<th rowspan="4" style="height:2px;">
+				<p align="center">
+					3~5天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					石嘴山市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					大武口区、惠农区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					固原市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					原州区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					中卫市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					沙坡头区</p>
+			</th>
+		</tr>
+		<tr>
+			<th rowspan="13" style="height:2px;">
+				<p align="left">
+					新疆维吾尔自治区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					乌鲁木齐市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					经济开发区、沙依巴克区、水磨沟区、天山区、新市区</p>
+			</th>
+			<th rowspan="13" style="height:2px;">
+				<p align="center">
+					3~7天</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					阿勒泰地区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					阿勒泰市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					巴音郭楞蒙古自治州</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					库尔勒市、焉耆回族自治县、轮台县</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					博尔塔拉蒙古自治州</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					博乐市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					昌吉回族自治州</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					昌吉市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					哈密地区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					哈密市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					喀什地区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					喀什市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					克拉玛依市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					独子山区、克拉玛依区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					克孜勒苏柯尔克孜自治州</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					阿图什市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					塔城地区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					乌苏市</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					阿克苏地区</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					阿克苏市、库车县城区</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					伊犁哈萨克自治州</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					奎屯市、伊宁市、独山子</p>
+			</th>
+		</tr>
+		<tr>
+			<th style="height:2px;">
+				<p align="left">
+					石河子市</p>
+			</th>
+			<th style="height:2px;">
+				<p align="left">
+					市区</p>
+			</th>
+		</tr>
+	</thead>
+</table>
+<p>
+	&nbsp;</p>
+<p>
+	<br />
+	<b>配送范围：</b>我公司将在可配送范围和预计配送时限内为您配送您的订单，特殊说明如下：<br />
+	1、如在预计投递时限内未送达订单，请您及时与我公司联系，我们将追踪您的订单尽快为您送达，因天气、灾害、其他不可抗力因素导致订单时限延迟的请您谅解；<br />
+	2、对于县级配送范围目前只能投递到县内所辖地区，县级城市下辖的村、镇可能无法投递，我们可以为您配送到最近的可服务区，由您自提，详细情况可与客服进行沟通；<br />
+	3、如无法确认您所在地区是否在投递范围内可直接与客服进行联系确认。<br />
+	<br />
+	<b>付款方式：</b>以上配送区域表的区域可支持货到付款，其中部分县级市仅限城区可货到付款，不含下辖的乡镇村；<br />
+	<br />
+	<b>配送方式：</b>因红酒属于易碎品且为瓶装液体，国家相关法规规定不能航空运输，我们会安排陆运的方式将产品快速、安全送达您指定的收货地点；<br />
+	<br />
+	<b>包装安全说明：</b>为保证商品安全，每瓶商品都采用安全包装，减少运输中因碰撞、挤压等造成产品损伤；<br />
+	<br />
+	<b>温馨提示： </b><br />
+	1、暂不受理用户到仓库、门店的自取业务，所有订单都需经过统一配送安排，敬请理解；<br />
+	2、由于您所订购产品属于瓶装易碎品且含有酒精，国家规定不能航空运输，我们会安排陆路运输尽快安全稳妥送至您指定的送货地点；<br />
+	3、发货时间，在核对用户所订购的商品、邮寄地址、款项支付等信息无误后确认订单，订单确认后通常在一个工作日内将包裹发出；包裹发出后，使用支付宝的用户还可直接通过支付宝后台的物流公司平台查询包裹在途情况；<br />
+	4、收件人请填写中文名字，如使用非中文名字，请务必与身份证或护照保持完全一致，以保证您的包裹可以准确送达。如因此造成包裹无法送达或丢失，不承担任何责任；<br />
+	5、当包裹发出时，会将订单号、配送的物流公司名称及包裹单号等内容以邮件或短信的形式通知，请注意保存便于收货时进行相应的核对；<br />
+	6、当物流公司人员上门送货时，请注意检查商品外包装是否有破损，核对包裹单的详细内容，尤其为订单号、代收款金额、物流公司派件人信息是否完全。如发现商品破损或信息有遗漏或不明，请及时与客服中心联系；<br />
+	7、由于受季节影响，部分地区室外温度不适应酒品质量保存环境情况下，我们将进行部分地区停运，请您详细浏览网站内通知。</p>
+
+
+		</div>
+	</div>
+	<div style="width:100%;height:1px;overflow:hidden;display:block;clear:both;"></div>
+</div>
+<div class="footer">
+	<div class="wrapper">
+	<!-- 
+	<div id="footer-top">
+		<ul>
+			<li class="one"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="two"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="three"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="four"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="five"><strong>正品行货<em>100%正品保证</em></strong></li>
+		</ul>
+	</div>
+	 -->
+	</div>
+	<!--帮助中心-->
+	  <div id="faq">
+	  <div class="wrapper">
+	    <ul>
+	        <li>
+		        <dl class="s1">
+		          	<dt>关于我们 </dt>
+		          			          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-7.html">公司简介</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-8.html">招商合作</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-9.html">联系我们</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-42.html">合作酒庄</a>
+		          		</dd>
+		       </dl>
+	      	</li>
+	        <li>
+	        	<dl class="s2">
+	          		<dt>新手上路</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-171.html">登录帮助</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-32.html">购物指南</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-31.html">常见问题</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <li>
+	    		<dl class="s3">
+			        <dt>配送说明</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-44.html">配送时间及范围</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-45.html">配送费收取标准</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-47.html">运输包装说明</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-23.html">签收与验货</a>
+		          		</dd>
+	          	</dl>
+	      </li>
+	      <li>
+	        	<dl class="s4">
+	          		<dt>支付方式</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-48.html">货到付款</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-49.html">在线支付</a>
+		          		</dd>
+	           </dl>
+	      </li>
+	      <li>
+	        	<dl class="s5">
+	          		<dt>售后服务</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-18.html">退换货政策</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-14.html">退换货流程</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-16.html">取消订单</a>
+		          		</dd>
+		        </dl>
+	      </li>
+	      <li>
+	        	<dl class="s6">
+	          		<dt>特殊服务 </dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-50.html">会员介绍</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-168.html">积分说明</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <div class="clear"></div>
+	    </ul>
+	  </div>
+	</div>
+	<!--底部版权，调用footer.php-->
+	<div id="footer" >
+		<div class="wrapper">
+		  <p><a href="/gome-javamall/index.html">首页</a>
+             | <a  href="/gome-javamall/member/member.html">会员中心</a>
+             | <a  href="/gome-javamall/store/business_center.html?menu=store_index">商家中心</a>
+             | <a  href="/gome-javamall/help-62-65.html">关于网站</a>
+             | <a  href="/gome-javamall/help-21-9.html">联系我们</a>
+             | <a  href="/gome-javamall/help-21-7.html">关于我们</a>
+          </p>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

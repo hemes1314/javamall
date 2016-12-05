@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="商品lucene组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="商品lucene索引插件" id="goodsIndexPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="lucene设置插件" id="luceneSettingPlugin">
+				<bundle id="settingPluginBundle"></bundle>
+		</plugin>
+			
+	</plugins>
+	
+</component>

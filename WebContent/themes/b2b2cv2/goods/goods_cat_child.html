@@ -1,0 +1,40 @@
+<div class="store_goodscat">
+	<#-- 创建商品分类标签 --> 
+	<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+	<#-- 查询商品分类列表 0表示查子分类 --> 
+	<#assign storeGoodsCatList= storeGoodsCatListTag("'type':1")!''>
+	
+	<form id="add_form">
+		<dl>
+			<dt>分类名称：</dt>
+			<dd>
+				<input type="text" name="store_cat_name" >
+			</dd>
+		</dl>
+		<dl>
+			<dt>上级分类：</dt>
+			<dd>
+				<select name="store_cat_pid">
+					<option value="0">请选择</option>
+					<#list storeGoodsCatList as cat>
+					<option value="${cat.store_cat_id}" >${cat.store_cat_name}</option>
+					</#list>
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>排&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序：</dt>
+			<dd>
+				<input type="text" name="store_sort">
+			</dd>
+		</dl>
+		<dl>
+			<dt>显示状态：</dt>
+			<dd id="add_goodscat">
+				<label><input type="radio" name="disable" value="1" checked="checked" style="border:0px none"><span style="height:32px;line-height:32px;display:block;">是</span></label>
+				<label><input type="radio" name="disable"value="0" style="border:0px none"><span style="height:32px;line-height:32px;display:block;">否</span></label>
+			</dd>
+		</dl>
+	</form>
+	
+</div>

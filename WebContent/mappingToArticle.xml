@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<body>
+<appArticle>
+
+	<jiuyinhang value="酒银行">35</jiuyinhang>
+	<jiucaijing value="酒财经">36</jiucaijing>
+	<jiutouzi value="酒投资">37</jiutouzi>
+	<canjiudapei value="餐酒搭配">40</canjiudapei>
+	<jiuzhuanglishi value="酒庄历史">41</jiuzhuanglishi>
+	<chuanqirenwu value="传奇人物">42</chuanqirenwu>
+	<gedijiuling value="各地酒令">43</gedijiuling>
+	<jingxuancanba value="精选餐吧">44</jingxuancanba>
+	<chanqufengqing value="产区风情">45</chanqufengqing>	
+	<zaixianjiangjiu value="在线讲酒">48</zaixianjiangjiu>
+	<shijiuliyi value="侍酒礼仪">49</shijiuliyi>
+	<jiucidian value="就词典">38</jiucidian>
+	<jiupingfen value="酒评分">39</jiupingfen>
+	
+	<!-- 色》入门必备 -->
+		<ruhepinjiu value="如何品酒">173</ruhepinjiu>
+		<pingfentixi value="评分体系">177</pingfentixi>
+		<canjiudapei value="餐酒搭配">40</canjiudapei>
+		<jiusujiuling value="酒俗酒令">43</jiusujiuling>
+		<!-- 色》入门必备》酒俗酒令-->
+		<jsjl_1 value="华东">209</jsjl_1>
+		<jsjl_2 value="华北">210</jsjl_2>
+		<jsjl_3 value="华中">211</jsjl_3>
+		<jsjl_4 value="华南">212</jsjl_4>
+		<jsjl_5 value="西南">213</jsjl_5>
+		<jsjl_6 value="西北">214</jsjl_6>
+		<jsjl_7 value="东北">215</jsjl_7>
+		<jsjl_8 value="其他">259</jsjl_8>
+		
+		<shuyujieshi value="术语解释">254</shuyujieshi>
+		<!-- 色》入门必备》基础知识-->
+		<putaojiudeniangzao value="葡萄酒的酿造">252</putaojiudeniangzao>
+		<putaojiudepinzhong value="酿酒葡萄品种">253</putaojiudepinzhong>
+		<niangzao value="酿造">255</niangzao>
+		<zhongzhi value="种植">256</zhongzhi>
+		<pinjian value="品鉴">257</pinjian>
+		<qita value="其他">258</qita>
+		
+	
+	<!-- 色》产区风情 -->
+		<yidali value="意大利">162</yidali>
+		<xibanya value="西班牙">163</xibanya>
+		<deguo value="德国">164</deguo>
+		<putaoya value="葡萄牙">178</putaoya>
+		<aodili value="奥地利">179</aodili>
+		<xiongyali value="匈牙利">180</xiongyali>
+		<meiguo value="美国">181</meiguo>
+		<jiananda value="加拿大">182</jiananda>
+		<zhili value="智利">183</zhili>
+		<agenting value="阿根廷">184</agenting>
+		<nanfei value="南非">185</nanfei>
+		<aodaliya value="澳大利亚">187</aodaliya>
+		<xinxilan value="新西兰">188</xinxilan>
+		<weishijichanqu value="威士忌产区">189</weishijichanqu>
+		<baijiuchanqu value="白酒产区">190</baijiuchanqu>
+	
+	<!-- 色》产区风情》法国 -->
+		<bierduo value="波尔多">216</bierduo>
+		<bogendi value="勃艮第">217</bogendi>
+		<xiangbin value="香槟">218</xiangbin>
+		<luonehegu value="罗讷河谷">219</luonehegu>
+		<xinan value="西南">220</xinan>
+		<luwaerhegu value="卢瓦尔河谷">222</luwaerhegu>
+		<aersasi value="阿尔萨斯">223</aersasi>
+		<puluowangsi value="普罗旺斯">224</puluowangsi>
+		<langgeduoke value="朗格多克">225</langgeduoke>
+		<luxirong value="鲁西荣">226</luxirong>
+		<rulasawa value="茹拉萨瓦">227</rulasawa>
+
+	<!-- 色》名庄名酒 -->
+		<faguo1 value="法国">192</faguo1>
+		<!-- 色》名庄名酒》法国 -->
+		<mjfg_1 value="梅多克列级酒庄">228</mjfg_1>
+		<mjfg_2 value="苏玳和巴萨克列级酒庄">229</mjfg_2>
+		<mjfg_3 value="圣爱美隆列级庄">233</mjfg_3>
+		<mjfg_4 value="格拉芙名庄">231</mjfg_4>
+		<mjfg_5 value="波美侯名庄">232</mjfg_5>
+		<mjfg_6 value="勃艮第名庄">234</mjfg_6>
+		<mjfg_7 value="香槟大牌">235</mjfg_7>
+		
+		<yidali1 value="意大利">193</yidali1>
+		<xibanya1 value="西班牙">194</xibanya1>
+		<deguo1 value="德国">195</deguo1>
+		<!-- 色》名庄名酒》德国 -->
+		<mjdg_1 value="白兰地">197</mjdg_1>
+		<mjdg_2 value="威士忌">198</mjdg_2>
+		<mjdg_3 value="伏特加">200</mjdg_3>
+		
+		<zhimingliejiu value="知名烈酒">196</zhimingliejiu>
+		<pinpaibaijiu value="名牌白酒">201</pinpaibaijiu>
+
+
+		<!-- 跨界酒韵 -->
+		<j_1 value="酒艺术">202</j_1>
+		<j_2 value="酒音乐">203</j_2>
+		<j_3 value="酒电影">204</j_3>
+		<j_4 value="酒体育">205</j_4>
+		<j_5 value="酒历史">206</j_5>
+		<j_6 value="酒雪茄">207</j_6>
+		<j_7 value="酒性">208</j_7>
+       
+	
+<!-- 	<jiuyinhang value="酒银行">65</jiuyinhang> -->
+<!-- 	<jiucaijing value="酒财经">66</jiucaijing> -->
+<!-- 	<jiutouzi value="酒投资">67</jiutouzi> -->
+<!-- 	<jiuzhuanglishi value="酒庄历史">69</jiuzhuanglishi> -->
+<!-- 	<chuanqirenwu value="传奇人物">70</chuanqirenwu> -->
+<!-- 	<gedijiuling value="各地酒令">71</gedijiuling> -->
+<!-- 	<jingxuancanba value="精选餐吧">72</jingxuancanba> -->
+<!-- 	<chanqufengqing value="产区风情">73</chanqufengqing>	 -->
+<!-- 	<jiucidian value="就词典">75</jiucidian> -->
+<!-- 	<jiupingfen value="酒评分">76</jiupingfen> -->
+</appArticle>
+
+<firstPageShow>
+<!-- 分类选取固定Id -->
+	<baijiu value="白酒">85</baijiu>
+	<yangjiu value="洋酒">144</yangjiu>
+	<putaojiu value="葡萄酒">13</putaojiu>
+	<xuanjiu value="一键选酒">1</xuanjiu>
+<!-- 标签选取固定Id -->
+
+	
+	<xinpinfaxian value = "新品发现">134</xinpinfaxian>
+	<meirigeili value = "每日给力">135</meirigeili>
+	<qingcanghaigou value ="清仓嗨购">136</qingcanghaigou>
+	<rementuijian value = "热门推荐">137</rementuijian>
+	<cainixihuan value = "猜你喜欢">138</cainixihuan> 
+<!-- 	<rementuijian value = "热门推荐">1</rementuijian> -->
+<!-- 	<cainixihuan value = "猜你喜欢">2</cainixihuan>  -->
+<!-- 	<xinpinfaxian value = "新品发现">3</xinpinfaxian>	 -->
+<!-- 	<qingcanghaigou value ="清仓嗨购">4</qingcanghaigou> -->
+<!-- 	<meirigeili value = "每日给力">5</meirigeili> -->
+</firstPageShow>
+</body>

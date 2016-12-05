@@ -1,0 +1,18 @@
+<#include '/admin/header.html' >
+<div class="main">
+		<form method="post" name="theForm" id="exform" action="data-export!doExport.do">
+		
+			<div style="display: block;" class="seeting_input">
+		请选择要导出的类型：<br>
+				<input type="radio" name="type" value="0" checked="checked"/>b2c<br>
+				<input type="radio" name="type" value="1" />b2b2c
+
+			</div>
+		
+			<div class="buttonWrap" align="center" style="background-color: white;padding-bottom: 10px;">
+				<input type="submit" name="submit"  class="easyui-linkbutton" value="导出">
+			</div>
+		
+		</form>
+</div>
+<#include '/admin/footer.html' >

@@ -1,0 +1,84 @@
+<#assign title="我的评论" />
+<#include 'member_header.html' />
+<!-- 获取会员我的咨询标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员我的咨询标签 -->
+<#assign commentsList = memberCommentListTag()>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="comments.html"><span>我的评论</span></a></li>
+			<li class=""><a href="waitcommont.html" ><span>待评论的商品</span></a></li>
+		</ul>
+	</div>
+	<!-- 评论列表 -->
+	<div class="user_comment">
+		<h1>我的评论</h1>
+		<#if commentsList?size gt 0 >
+		<ul>
+			<#list commentsList.commentsList as comment>
+				<li>
+					<div class="comment_title">
+						<span><a href="${ctx}/goods-${comment.goods_id}.html" target="_blank">${comment.name!''}</a></span>
+						<span><@dateformat time="${comment.dateline?c}" pattern="yy-MM-dd HH:mm"/></span>
+						<em>
+						<#if comment.status == 1> 
+							审核通过
+						<#elseif comment.status == 2> 
+							审核拒绝
+						 <#else>
+						 	 待审核
+						 </#if>
+						</em>
+					</div>
+					<div class="comment_inpro">
+						<strong>我的评论：</strong>
+						<span>
+							<p>${comment.content}</p>
+							<i class="comment_img">
+							<#if comment.img?? && comment.img!= '' && comment.img!='null'>
+								<img src="${comment.img}"  />
+							</#if>	
+							</i>	
+						</span>
+					</div>
+					<#if comment.replystatus == 1>
+						<div class="comment_reply">
+							<strong>客服回复：</strong><span>${comment.reply}</span>
+						</div>
+					</#if>
+				</li>
+			</#list>
+		</ul>
+		<#else>
+			<p class="no_commont">暂无评论</p>
+		</#if>
+	</div>
+	<!-- add by lxl -->
+	<div >
+			<@pager pageno="${commentsList.page}" 	pagesize="${commentsList.pageSize}" totalcount="${commentsList.totalCount}" />
+	</div>
+</div>
+<script>
+	$(function() {
+		
+		$(".comment_img img").mouseover(function(){
+			$(this).attr("style","width:200px;height:200px;")
+		})
+		$(".comment_img img").mouseout(function(){
+			$(this).attr("style","width:60px;height:60px;")
+		})
+		
+		$(".waitcomment").click(function() {
+			$(".tab ul li").removeClass("selected");
+			$(this).parent().addClass("selected");
+			$(".commontwait").load("waitcommont.html", function() {
+				$(".commontlist").hide();
+				$(".commontwait").show();
+				Favorite.init();
+			})
+		})
+	})
+</script>
+</div>
+<#include '../common/footer.html'/>

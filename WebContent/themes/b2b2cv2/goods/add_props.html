@@ -1,0 +1,50 @@
+
+<h1>商品属性<span style="color:#ff0000; margin-left:10px;">(下拉列表为必选项)</span></h1>
+<div class="addgoods" style="border-bottom:0px none">
+<div class="form-table goods_attribute" >
+	<!--<dl>
+		<dt>计价单位：</dt>
+		<dd>
+			<input name="unit" style="width: 192px;" class="input_text" value="${(storeGoods.unit)!''}" />
+		</dd>
+	</dl>-->
+	<#if attrList?exists > 
+		<#list attrList as attr>
+		<input type="hidden" name="propnames" value="${attr.name }" />
+		<dl>
+			<dt>${attr.name } ：</dt>
+			<dd >
+			<#if attr.type<3 > 
+				<input type="text" name="propvalues" class="input_text text" value="${attr.value}" style="width: 192px"
+				<#if attr.datatype?exists && attr.datatype!=''>dataType="${attr.datatype}"</#if> 
+				<#if attr.required==1>isrequired="true"</#if> />${attr.unit!''} </#if>
+				<#if (attr.type>=3) && (attr.type<=5)> 
+				<select name="propvalues"  class="easyui-combobox input_text"
+				<#if attr.datatype?exists && attr.datatype!=''>dataType="${attr.datatype}"</#if> 
+				<#if attr.required==1>isrequired="true"</#if>>
+					<option value="">请选择</option> 
+					<#list attr.optionAr as option>
+						<option value="${option_index }"
+						<#if attr.value==(""+option_index)>selected</#if> >${option }</option> 
+					</#list>
+				</select>
+			${attr.unit!''} 
+			</#if> 
+			
+			<#if (attr.type==6) > 
+			<input type="hidden" name="propvalues" id="attr_${attr_index}" value="${attr.value!''}">
+				<#list attr.optionAr as option> 
+					<label>
+						<input type="checkbox" value="${option}" attrid="attr_${attr_index}" class="check"
+						<@havevalue v1="${attr.value}" v2="${option}" /> />${option }
+					</label> 
+				</#list>
+			</#if>
+			</dd>
+		</dl>
+		</#list>
+	<#else>
+		该类型未定义属性
+	</#if>
+</div>
+</div>

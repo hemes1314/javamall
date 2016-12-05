@@ -1,0 +1,46 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<#if  allocationList?exists && allocationList?size != 0 >
+<div>发货仓库：${all_depotname!''}</div>
+<div>配货下达时间： 
+  <@dateformat pattern="yyyy-MM-dd HH:mm:ss" time="${(all_time*1000)?c}" />
+</div>
+<div class="grid">
+
+  <table cellspacing="0" cellpadding="0" border="0" width="100%"  >
+        <thead>
+        <tr>
+      		<th  width="">货品SN</th>
+			<th>商品名称</th>
+			<th>配货仓库</th>
+			<th>配货数量</th>
+			<th>配货完成情况</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+        <#list allocationList  as allocate>
+       
+         <tr>
+         
+         <td>${allocate.sn }</td>
+         
+         <td > ${allocate.gname!'' } <div class="other">${allocate.other!''}</div> </td>
+          
+         <td>${allocate.a_name}</td>
+   
+         <td>${allocate.num}</td>
+         <td>
+         <#if allocate.iscmpl == 0>未完成</#if>
+		 <#if allocate.iscmpl == 1>已完成</#if>
+		</td>
+        
+        </tr>
+		</#list>
+         </tbody>
+      </table>
+
+</div>
+<#else>
+<h1>订单还没有配货！</h1>
+</#if>
+ 

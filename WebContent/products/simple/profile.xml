@@ -1,0 +1,194 @@
+<?xml version="1.0"?>
+<product>
+
+	<apps>
+		<app id="base" version="2.2.0"></app>
+		<app id="cms" version="2.2.0"></app>
+		<app id="shop" version="2.2.0"></app>
+	</apps>
+	 
+	<site>
+		<field name="sitename" value="Javashop示例商城" />
+		<field name="title" value="Javashop示例商城" />
+		<field name="keywords" value="最好的Java网店系统,Java多用户商城,Java商城定制开发" />
+        <field name="descript" value="Javashop提供优质的电子商务解决方案，提供最好的Java网店系统、Java多用户商城、Java商城定制开发。" />
+        <field name="logofile" value="fs://images/logo.gif" />
+	</site>
+	
+	<menus>
+		<menu text="商品" type="app" url="/shop/admin/goods!list.do" selected="1" icon="/adminthemes/new/images/menu_01.gif" >
+			<menu text="商品管理">
+	           	<menu text="商品列表" url="/shop/admin/goods!list.do" />
+	           	<menu text="添加商品" url="/shop/admin/goods!selectCat.do" />
+				<menu text="进货"    url="/shop/admin/goodsStore!listGoodsStore.do?optype=purchase"  />
+				<menu text="库存维护" url="/shop/admin/goodsStore!listGoodsStore.do?optype=view"  />
+			</menu>
+			<menu text="商品设置">
+	           	<menu text="分类列表" url="/shop/admin/cat!list.do" />
+	           	<menu text="品牌列表" url="/shop/admin/brand!list.do" />
+				<menu text="类型列表" url="/shop/admin/type!list.do" />
+				<menu text="规格列表" url="/shop/admin/spec!list.do" />
+			</menu>
+			<menu text="标签管理">
+				<menu text="标签列表" url="/shop/admin/tag!list.do" />
+	 			<menu text="标签商品设置" url="/shop/admin/goodsShow!taglist.do" />				
+			</menu>
+		</menu>
+		<menu text="订单" type="app" url="/shop/admin/order!list.do" target="ajax" icon="/adminthemes/new/images/menu_default.gif">
+			<menu text="订单管理">
+				<menu text="订单列表" url="/shop/admin/order!list.do" target="ajax" />
+	            <menu text="待结算订单" url="/shop/admin/order!notPayOrder.do" target="ajax"/>
+	            <menu text="待发货订单" url="/shop/admin/order!notShipOrder.do" target="ajax"/>
+	            <menu text="待收货订单" url="/shop/admin/order!notRogOrder.do" target="ajax"/>								
+			</menu>
+			<menu text="单据管理">
+				<menu text="收款单" url="/shop/admin/orderReport!paymentList.do" />
+				<menu text="退货单" url="/shop/admin/orderReport!returnedList.do" />
+			</menu>
+			<!-- <menu text="退货申请">
+				<menu text="退货申请" url="/shop/admin/sellBack!list.do" />
+			</menu> -->
+		</menu>
+		<menu text="会员" type="app" url="/shop/admin/member!memberlist.do" icon="/adminthemes/new/images/menu_03.gif">
+			<menu text="会员管理">
+				<menu text="会员列表" url="/shop/admin/member!memberlist.do" />
+				<menu text="会员等级" url="/shop/admin/member!list_lv.do" />
+			</menu>
+	        <menu text="商品评论">
+	            <menu text="商品评论列表" url="/shop/admin/comments!list.do?type=1" />
+	            <menu text="购买咨询列表" url="/shop/admin/comments!list.do?type=2" />
+	        </menu>
+		</menu>
+		<menu text="促销" type="app" url="/shop/admin/activities/index.jsp" icon="/adminthemes/new/images/menu_04.gif">
+			<menu text="优惠卷管理">
+				<menu text="优惠券列表" url="/shop/admin/bonus-type!list.do"/>
+			</menu>
+		</menu>
+		<menu text="页面" type="app" url="/core/admin/user/siteTheme.do" icon="/adminthemes/new/images/menu_05.gif">
+			<menu text="广告管理">
+				<menu text="广告位" url="/core/admin/adColumn!list.do" />
+				<menu text="广告列表" url="/core/admin/adv!list.do" />		
+			</menu>
+			<menu text="页面设置">
+				<menu text="文档管理" url="/cms/admin/cat!list.do" />
+				<menu text="导航栏管理" url="/core/admin/siteMenu!list.do" />
+			</menu>
+		</menu>
+		<menu text="设置" type="app" url="/core/admin/setting!edit_input.do" icon="/adminthemes/new/images/menu_06.gif">
+			<menu text="网店设置">
+				<menu text="系统设置" url="/core/admin/setting!edit_input.do" />
+				<menu text="smtp设置" url="/core/admin/smtp!list.do" />	
+				<menu text="短信网关设置" url="/core/admin/sms!list.do" />	
+				<menu text="快递平台设置" url="/shop/admin/express!list.do" />
+			</menu>
+			<menu text="配送和支付">  
+				<menu text="支付方式" url="/shop/admin/payCfg!list.do" />
+				<menu text="配送方式" url="/shop/admin/dlyType!list.do" />
+				<menu text="物流公司" url="/shop/admin/logi!list_logi.do" />
+				<menu text="地区管理" url="/shop/admin/region!list.do" />
+				<menu text="仓库管理" url="/shop/admin/depot!list.do"/>
+			</menu>
+			<menu text="快递单管理">
+				<menu text="快递单模板管理" url="/shop/admin/printTmpl!list.do" />
+				<menu text="发货信息管理" url="/shop/admin/dlyCenter!list.do" />
+			</menu>
+			<menu text="权限管理">
+	            <menu text="管理员管理" url="/core/admin/userAdmin!list.do" />
+	            <menu text="角色管理" url="/core/admin/role!list.do" />
+	            <menu text="权限点管理" url="/core/admin/auth!list.do" />
+	        </menu>
+			<menu text="模板管理">
+				<menu text="前台模板" url="/core/admin/user/siteTheme.do" />
+				<menu text="后台模板" url="/core/admin/user/siteAdminTheme.do" />
+			</menu>	 
+		</menu>
+		<menu text="开发者" type="app" url="/admin/setting/setting!edit_input.do" icon="/adminthemes/new/images/menu_07.gif">
+			<menu text="工具">
+				<menu text="URL映射" url="/core/admin/themeUri!list.do" />
+				<menu text="菜单管理" url="/core/admin/menu!tree.do" />		
+				<menu text="数据导出" url="/core/admin/data-export.do" />		
+						
+			</menu>
+			<menu text="主题管理" >
+				<menu text="站点前台主题" url="/core/admin/user/siteTheme.do" />
+				<menu text="站点后台主题" url="/core/admin/user/siteAdminTheme.do" />
+			</menu>		
+			<menu text="页面管理">
+				<menu text="文章模型" url="/cms/admin/model!list.do" />
+				<menu text="文章管理" url="/cms/admin/cat!list.do" />					
+				<menu text="导航栏管理" url="/core/admin/siteMenu!list.do" />
+			</menu>	
+			<menu text="网店设置">
+				<menu text="系统设置" url="/core/admin/setting!edit_input.do"  />
+				<menu text="smtp设置" url="/core/admin/smtp!list.do" />
+				<menu text="组件管理" url="/core/admin/component!list.do" />
+			</menu>
+	        <menu text="权限管理">
+	            <menu text="管理员管理" url="/core/admin/userAdmin!list.do" />
+	            <menu text="角色管理" url="/core/admin/role!list.do" />
+	        </menu>
+		</menu>
+	</menus>
+
+	<urls>
+        <url from="/index.jsp" to="/index.html" name="首页" point="0" sitemaptype="0" cache="1"/>
+        <url from="/index.html" to="/index.html" name="首页" point="0" sitemaptype="1" cache="1"/>
+        <url from="/goods-(\d+).html" to="/goods.html" name="商品详情" point="0" sitemaptype="0" cache="1"/>
+        <url from="/search-(.*).html" to="/goods_list.html" name="商品搜索" point="0" sitemaptype="0" cache="1"/>
+        <url from="/help-(\d+)-(\d+).html" to="/help.html" name="帮助" point="0" sitemaptype="0" cache="1"/>
+        <url from="/(.*)_payment-result.html" to="/payment_result.html" name=" 支付结果" point="0" sitemaptype="0" cache="0"/>
+         <url from="/(.*)_payment-wap-result.html" to="/payment_wap_result.html" name="app支付结果" point="0" sitemaptype="0" cache="0"/>
+       
+	</urls>
+
+	<components>		
+		<component id="goodsCoreComponent"></component><!-- 商品核心组件 -->
+		
+		<!-- 下面两个规格组件和标准货品组件，只能二选其一  -->
+		<!--<component id="productComponent"></component> 标准货品组件 -->
+		<component id="goodsSpecComponent"></component>  <!-- 规格组件 -->
+		<component id="depotComponent"></component><!-- 库存管理组件 -->		
+		<component id="orderCoreComponent"></component><!-- 订单核心组件 -->
+		<component id="paymentComponent"></component><!-- 支付 组件 -->			
+		<component id="shopEmailComponent"></component><!-- 网店邮件组件 -->			
+		<component id="receiptComponent"></component> <!--  发票组件 -->	
+		<component id="goodsSearchComponent"></component>	<!--商品搜索组件 -->
+		<component id="shopShortMsgComponent"></component>	<!-- 网店消息提醒组件 -->
+		<component id="shopMemberComponent"></component>	<!-- 网店会员组件组件 -->
+		<component id="memeberPointComponent"></component>	<!-- 会员积分组件组件 -->
+		<component id="visitedGoodsComponent"></component>	<!-- 浏览过的商品组件 -->
+		<component id="cmsCoreComponent"></component><!--CMS核心组件 -->
+		<component id="galleryComponent"></component><!--新相册组件 -->
+		<component id="bonusComponent"></component><!--新版优惠卷组件 -->
+		<component id="shopExpressComponent"></component><!-- 快递平台组件 by_xlp 2015年08月20日15:25:19 -->
+		
+	</components>
+  
+	<themes>
+		<theme id="default" name="默认模板" default="yes"></theme>
+		
+	</themes>
+	
+    <indexitems>
+    	<item>
+    		<title>站点统计信息</title>
+    		<url>/core/admin/indexItem!base.do</url>
+    	</item>     
+    	<item>
+    		<title>订单统计信息</title>
+    		<url>/shop/admin/indexItem!order.do</url>
+    	</item> 
+    	<item>
+    		<title>商品统计信息</title>
+    		<url>/shop/admin/indexItem!goods.do</url>
+    	</item><!--
+    	<item>
+    		<title>文章统计信息</title>
+    		<url>/cms/admin/indexItem!article.do</url>
+    	</item>
+    	<item>
+    		<title>流量统计信息</title>
+    		<url>/core/admin/indexItem!access.do</url>
+    	</item>  -->
+    </indexitems> 
+</product>

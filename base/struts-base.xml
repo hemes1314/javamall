@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="adminUi" namespace="/admin" extends="eop_default">
+		 <interceptors>	
+			<interceptor name="backendRightInterceptor" class="com.enation.eop.processor.core.BackendRightInterceptor">	
+			</interceptor>
+			<interceptor-stack name="backendStack">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="backendRightInterceptor" />
+			</interceptor-stack>				
+		 </interceptors>
+		 	
+ 		<action name="backendUi" class="backendUiAction">
+			<result name="login_page" type="freemarker">/adminthemes/${theme}/login.html</result>
+			<result name="main_page" type="freemarker">/adminthemes/${theme}/main_page.html</result>
+			<result name="not_login" type="redirectAction">backendUi!login.do?timeout=yes</result>
+			<interceptor-ref name="backendStack">  
+			  <param name="backendRightInterceptor.excludeMethods">login</param>  
+			</interceptor-ref>  			
+		</action>
+	</package>
+		
+	<package name="basefacade" namespace="/core" extends="eop_default">
+		<action name="adv" class="advAction">
+			<result name="go">adv/go.jsp</result>
+		</action>
+	</package>	
+	
+	
+	<package name="base" namespace="/core/admin" extends="eop_default">
+
+		<action name="resourceState" class="resourceStateAction">
+			<result name="input">resource/input.jsp</result>
+		</action>	
+		
+		<!-- 帮助-->
+	    <action name="help" class="helpAction">
+			<result name="content">help/content.jsp</result>
+		</action>	
+		
+		<!-- 友情链接-->
+		<action name="friendsLink" class="friendsLinkAction">
+	 		<result name="list">friendsLink/list.jsp</result>
+	 		<result name="edit">friendsLink/edit.jsp</result>
+	 		<result name="add">friendsLink/add.jsp</result>
+	 		<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">1048576</param>
+        	</interceptor-ref>
+		</action>
+			
+		<!-- 流量 -->
+	   <action name="access" class="accessAction">
+			<result name="list">access/list.jsp</result>
+			<result name="detaillist">access/detaillist.jsp</result>
+			<result name="history">access/history.jsp</result>
+		</action>
+
+		<action name="ask" class="askAction">
+			<result name="alllist">ask/alllist.jsp</result>
+			<result name="mylist">ask/mylist.jsp</result>
+			<result name="admin_view">ask/admin_view.jsp</result>
+			<result name="user_view">ask/user_view.jsp</result>
+			<result name="ask">ask/ask.jsp</result>
+		</action>	
+		 <action name="guestBook" class="guestBookAction">
+			<result name="list">guestbook/list.jsp</result>
+			<result name="detail">guestbook/detail.jsp</result>
+		</action>
+		<action name="themeFile" class="themeFileAction">
+			<result name="list">theme/file_list.jsp</result>
+			<result name="new_file">theme/new_file.jsp</result>
+			<result name="edit_file">theme/edit_file.jsp</result>
+			<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">10485760</param>
+        	</interceptor-ref>
+		</action>
+		
+		<action name="multiSite" class="multiSiteAction">
+			<result name="add">multisite/add.jsp</result>
+			<result name="edit">multisite/edit.jsp</result>
+			<result name="main" type="freemarker">multisite/main.html</result>
+		</action>
+		
+		<action name="widgetCache" class="widgetCacheAction">
+		</action>
+		
+		<!-- 短信 -->
+		<action name="sms" class="smsAction">
+			<result name="edit" type="freemarker">sms/edit.html</result>
+			<result name="list" type="freemarker">sms/sms_platform.html</result>
+		</action>
+	</package>
+ 
+	
+	<package name="user" namespace="/core/admin/user" extends="eop_default">
+
+		<action name="baseInfo" class="baseInfoAction">
+			<result name="input">baseinfo.jsp</result>
+			<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">1048576</param>
+        	</interceptor-ref>
+		</action>
+		
+		<action name="userDetail" class="userDetailAction">
+			<result name="input">userdetail.jsp</result>
+		</action>
+		
+		<action name="userSite" class="userSiteAction">
+			<result name="success">usersite.jsp</result>
+			<result name="add">addUserSite.jsp</result>
+			<result name="edit" type="freemarker">editUserSite.html</result>
+			<result name="adddomain">addDomain.jsp</result>
+			<result name="domainlist">domainlist.jsp</result>
+			<result name="domain">domain.jsp</result>
+			<result name="init_data">init_data.jsp</result>
+			<result name="export">export.jsp</result>
+			<result name="import">import.jsp</result>			
+		</action>
+
+		
+
+		<action name="siteTheme" class="siteThemeAction">
+			<result name="input">newtheme.jsp</result>
+			<result name="success" type="freemarker" >sitetheme.html</result>
+		</action>
+		<action name="siteAdminTheme" class="siteAdminThemeAction">
+			<result name="success" type="freemarker" >siteadmintheme.html</result>
+		</action>
+		
+	</package>
+ 
+	<package name="eop_saler_default" extends="eop_default" namespace="/eop">
+ 	    <action name="index" class="indexAction">
+			<result name="index">index.jsp</result>
+		</action>
+		<action name="border" class="borderAction">
+			<result name="list">setting/borderlist.jsp</result>
+		</action>
+	
+		<action name="upload" class="uploadAction">
+			<interceptor-ref name="fileUploadStack"></interceptor-ref>
+			<result name="input" type="freemarker">/core/admin/upload/upload.html</result>
+			<result name="input_file" type="freemarker">/core/admin/upload/upload_file.html</result>
+		</action>
+		<action name="ckuploader" class="ckEditorUploadAction">
+			<interceptor-ref name="fileUploadStack"></interceptor-ref>
+		    <result name="success">/core/admin/upload/cksuccess.jsp</result>
+		</action>		
+ 		<action name="download" class="downloadAction" method="download"/>
+	</package>
+	 
+</struts>

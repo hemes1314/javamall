@@ -1,0 +1,13 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="levelform">
+		<#if storeLevel??>
+					<input type="hidden" name="storeLevel.level_id" value="${storeLevel.level_id}" />
+					店铺等级名称：<input type="text" class="input_text" name="storeLevel.level_name" value="${storeLevel.level_name}"/>
+		<#else>
+			店铺等级名称：<input type="text" class="input_text" name="level_name" />
+		</#if>
+		
+		</form>
+	</div>
+</div>

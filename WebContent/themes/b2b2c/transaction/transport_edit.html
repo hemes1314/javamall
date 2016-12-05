@@ -1,0 +1,582 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<div class="layout">
+	<#include '/left_menu.html' />
+
+	<div class="right-content">
+		<div class="main">
+		<div class="wrap">
+			<div class="path">
+				<div>
+					<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span> 
+					<a href="transport.html">物流工具 </a><span>&gt;</span>
+					<a href="javascript:void(0);">修改运费模板 </a>
+				</div>
+			</div>
+
+		<#-- 创建物流模板标签 --> 
+		<#assign storeTransportTag= newTag("storeTransportTag") > 
+		<#-- 查询物流模板 --> 
+		<#assign storeTransport = storeTransportTag("{'tempid':${tempid!0}}")!''>
+		
+		<div class="main">
+			<div class="wrap">
+				<div class="tabmenu">
+				    <ul class="tab pngFix">
+				  		<li class="active"><a href="transport.html">运费模板</a></li>
+				  	</ul>
+				</div>
+				
+				<div class="user-form-style">
+					<form id="edit_dlyform">
+						<input type="hidden" name="tempid" value="${tempid}" >
+						<div>
+							<div class="postage-tpl-head">
+								<ul>
+									<li class="form-elem">
+										<label for="J_TemplateTitle" class="label-like">模板名称：</label>
+										<input id="title" class="text" type="text" name="dlyname" value="${storeTransport.name}" autocomplete="off">
+									</li>
+									<li class="form-elem express">
+										<span class="label-like">运送方式：</span>
+										<span class="field-note">除指定地区外，其余地区的运费采用"默认运费"</span>
+									</li>
+								</ul>
+							</div>
+							
+							<div class="postage-tpl">
+								 <p class="trans-line">
+								 	<input type="checkbox" name="tplType" autocomplete="off" value="1"<#if storeTransport.py??><#if storeTransport.py==1>checked</#if> </#if> >&nbsp;平邮
+								 	<input type="hidden" name="py_div" autocomplete="off" id="py_div" value="${(storeTransport.py)!0}">
+								 	<div class="py site_tpl" <#if !storeTransport.py??>style="display: none;"</#if> >
+									<#list storeTransport.dlylist as dl>
+										<#if dl.tpltype==1>
+										<div class="entity">
+											<div class="default J_DefaultSet" style="width: 630px;">
+												<div style="border-bottom:1px dashed #ccc">
+													默认运费:：<input type="text" value="${(dl.dlyConfig.firstunit)!''}" class="w30 is_vali text" name="default_firstunit_py" >g内，
+													<input type="text" value="${(dl.dlyConfig.firstprice)!''}" class="w50 is_vali text" name="default_firstmoney_py">元，
+													每增加：<input type="text" value="${(dl.dlyConfig.continueunit)!''}" class="w30 is_vali text" name="default_continueunit_py" >g，
+													增加运费：<input type="text" value="${(dl.dlyConfig.continueprice)!''}" class="w50 is_vali text"  name="default_continueprice_py">元
+												</div>
+											</div>
+											<div class="tbl-except">
+												<table cellspacing="0" cellpadding="0" border="1" width="100%">
+													<colgroup>
+														<col class="col-area">
+														<col class="col-start">
+														<col class="col-postage">
+														<col class="col-plus">
+														<col class="col-postageplus">
+														<col class="col-action">
+													</colgroup>
+													<thead>
+														<tr>
+															<th>运送到</th>
+															<th>首费(元)</th>
+															<th>续费(元)</th>
+															<th style="width: 50px;">操作</th>
+														</tr>
+													</thead>
+													<tbody>
+														<#list dl.arealist as al>
+														<tr>
+															<td>
+																<a onclick="editArea(this,'py')" href="#" style="float: right;">编辑</a>
+																<div class="area-group">
+																	<p>${al.area!''}</p>
+																</div>
+																<input type="hidden" name="express_py_areaids_${al_index+1}" class="tpl_areaids" value="${(al.area_id_group)!''}">
+																<input type="hidden" name="express_py_areanames_${al_index+1}" class="tpl_areanames" value="${(al.area_name_group)!''}">
+															</td>
+															<td>
+																<input type="text" name="express_py_firstmoney_${al_index+1}" class="is_vali" value="${(al.areaConfig.firstprice)!''}" >
+															</td>
+															<td>
+																<input type="text" name="express_py_continuemoney_${al_index+1}" class="is_vali" value="${(al.areaConfig.continueprice)!''}" >
+															</td>
+															<td>
+																<a onclick="del(this)" href="javascript:void(0)">删除</a>
+															</td>
+														</tr>
+														</#list>
+														<input type="hidden" id="py_count" value="${dl.arealist?size}">
+													</tbody>
+												</table>
+											</div>
+											<a onclick="apptotr('py')" href="javascript:void(0);">为指定地区城市设置运费</a>
+										</div>
+										</#if>
+									</#list>
+									</div>
+								 </p>
+							</div>
+							
+							<div class="postage-tpl">
+								<p class="trans-line">
+									<input type="checkbox" name="tplType" autocomplete="off" value="2"<#if storeTransport.kd??><#if storeTransport.kd==1>checked</#if> </#if>>&nbsp;快递
+									<input type="hidden" name="kd_div" id="kd_div" autocomplete="off" value="${(storeTransport.kd)!0}">
+									<div class="kd site_tpl" <#if !storeTransport.kd??>style="display: none;"</#if> >
+										<#list storeTransport.dlylist as dl> 
+											<#if dl.tpltype==2>
+										<div class="entity">
+										
+											<div class="default J_DefaultSet" style="width: 630px;">
+												<div style="border-bottom:1px dashed #ccc">
+													默认运费:：<input type="text" value="${(dl.dlyConfig.firstunit)!''}" class="w30 is_vali text" name="default_firstunit_kd" >kg内，
+													<input type="text" value="${(dl.dlyConfig.firstprice)!''}" class="w50 is_vali text" name="default_firstmoney_kd">元，
+													每增加：<input type="text" value="${(dl.dlyConfig.continueunit)!''}" class="w30 is_vali text" name="default_continueunit_kd" >kg，
+													增加运费：<input type="text" value="${(dl.dlyConfig.continueprice)!''}" class="w50 is_vali text"  name="default_continueprice_kd">元
+												</div>
+											</div>
+											<div class="tbl-except">
+												<table cellspacing="0" cellpadding="0" border="1" width="100%">
+													<colgroup>
+														<col class="col-area">
+														<col class="col-start">
+														<col class="col-postage">
+														<col class="col-plus">
+														<col class="col-postageplus">
+														<col class="col-action">
+													</colgroup>
+													<thead>
+														<tr>
+															<th>运送到</th>
+															<th>首费(元)</th>
+															<th>续费(元)</th>
+															<th style="width: 50px;">操作</th>
+														</tr>
+													</thead>
+													<tbody>
+														<#list dl.arealist as al>
+														<tr>
+															<td>
+																<a onclick="editArea(this,'kd')" href="#" style="float: right;">编辑</a>
+																<div class="area-group">
+																	<p>${al.area!''}</p>
+																</div>
+																<input type="hidden" name="express_kd_areaids_${al_index+1}" class="tpl_areaids" value="${(al.area_id_group)!''}">
+																<input type="hidden" name="express_kd_areanames_${al_index+1}" class="tpl_areanames" value="${(al.area_name_group)!''}">
+															</td>
+															<td>
+																<input type="text" name="express_kd_firstmoney_${al_index+1}" class="is_vali" value="${(al.areaConfig.firstprice)!''}" >
+															</td>
+															<td>
+																<input type="text" name="express_kd_continuemoney_${al_index+1}" class="is_vali" value="${(al.areaConfig.continueprice)!''}" >
+															</td>
+															<td>
+																<a onclick="del(this)" href="javascript:void(0)">删除</a>
+															</td>
+														</tr>
+														</#list>
+														<input type="hidden" id="kd_count" value="${dl.arealist?size}">
+													</tbody>
+												</table>
+											</div>
+											<a onclick="apptotr('kd')" href="javascript:void(0);">为指定地区城市设置运费</a>
+										</div>
+										</#if>
+									</#list>
+									</div>
+								</p>
+							</div>
+							
+							<div class="postage-tpl">
+								<p class="trans-line">
+									<input type="checkbox" name="tplType" autocomplete="off" value="3"<#if storeTransport.yz??><#if storeTransport.yz==1>checked</#if> </#if>>&nbsp;邮政
+									<input type="hidden" name="yz_div" id="yz_div" autocomplete="off" value="${(storeTransport.yz)!0}">
+									<div class="yz site_tpl" <#if !storeTransport.yz??>style="display: none;"</#if> >
+										<#list storeTransport.dlylist as dl> 
+										<#if dl.tpltype==2>
+										<div class="entity">
+										
+											<div class="default J_DefaultSet" style="width: 630px;">
+												<div style="border-bottom:1px dashed #ccc">
+													默认运费:：<input type="text" value="${(dl.dlyConfig.firstunit)!''}" class="w30 is_vali text" name="default_firstunit_yz" >kg内，
+													<input type="text" value="${(dl.dlyConfig.firstprice)!''}" class="w50 is_vali text" name="default_firstmoney_yz">元，
+													每增加：<input type="text" value="${(dl.dlyConfig.continueunit)!''}" class="w30 is_vali text" name="default_continueunit_yz" >kg，
+													增加运费：<input type="text" value="${(dl.dlyConfig.continueprice)!''}" class="w50 is_vali text"  name="default_continueprice_yz">元
+												</div>
+											</div>
+											<div class="tbl-except">
+												<table cellspacing="0" cellpadding="0" border="1" width="100%">
+													<colgroup>
+														<col class="col-area">
+														<col class="col-start">
+														<col class="col-postage">
+														<col class="col-plus">
+														<col class="col-postageplus">
+														<col class="col-action">
+													</colgroup>
+													<thead>
+														<tr>
+															<th>运送到</th>
+															<th>首费(元)</th>
+															<th>续费(元)</th>
+															<th style="width: 50px;">操作</th>
+														</tr>
+													</thead>
+													<tbody>
+														<#list dl.arealist as al>
+														<tr>
+															<td>
+																<a onclick="editArea(this,'kd')" href="#" style="float: right;">编辑</a>
+																<div class="area-group">
+																	<p>${al.area!''}</p>
+																</div>
+																<input type="hidden" name="express_kd_areaids_${al_index+1}" class="tpl_areaids" value="${(al.area_id_group)!''}">
+																<input type="hidden" name="express_kd_areanames_${al_index+1}" class="tpl_areanames" value="${(al.area_name_group)!''}">
+															</td>
+															<td>
+																<input type="text" name="express_kd_firstmoney_${al_index+1}" class="is_vali" value="${(al.areaConfig.firstprice)!''}" >
+															</td>
+															<td>
+																<input type="text" name="express_kd_continuemoney_${al_index+1}" class="is_vali" value="${(al.areaConfig.continueprice)!''}" >
+															</td>
+															<td>
+																<a onclick="del(this)" href="javascript:void(0)">删除</a>
+															</td>
+														</tr>
+														</#list>
+														<input type="hidden" id="kd_count" value="${dl.arealist?size}">
+													</tbody>
+												</table>
+											</div>
+											<a onclick="apptotr('kd')" href="javascript:void(0);">为指定地区城市设置运费</a>
+										</div>
+										</#if>
+									</#list>
+									</div>
+								</p>
+							</div>
+							
+							<div class="trans-submit">
+   	  							<input type="button" value="保存并返回" id="submit_tpl">
+   							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="sitetpl">
+	<div class="entity" style="display: none">
+		<div class="default J_DefaultSet" style="width: 630px;">
+			<div style="border-bottom:1px dashed #ccc">
+				默认运费:：<input type="text" value="" class="w30 is_vali text" name="default_firstunit" >kg内，
+				<input type="text" value="" class="w50 is_vali text" name="default_firstmoney">元，
+				每增加：<input type="text" value="" class="w30 is_vali text" name="default_continueunit" >kg，
+				增加运费：<input type="text" value="" class="w50 is_vali text"  name="default_continueprice">元
+			</div>
+		</div>
+
+		<div class="tbl-except">
+			<table cellspacing="0" cellpadding="0" border="1" width="100%">
+				<colgroup>
+					<col class="col-area">
+					<col class="col-start">
+					<col class="col-postage">
+					<col class="col-plus">
+					<col class="col-postageplus">
+					<col class="col-action">
+				</colgroup>
+				<thead>
+					<tr>
+						<th>运送到</th>
+						<th>首费(元)</th>
+						<th>续费(元)</th>
+						<th style="width: 50px;">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</div>
+
+<script>
+
+	// 指定地区的数量
+	var pycount = $("#py_count").val();
+	var kdcount = $("#kd_count").val();
+	var yzcount = $("#yz_count").val();
+	
+	if(pycount==null){
+		pycount=0;
+	}
+	if(kdcount==null){
+		kdcount=0;
+	}
+	if(yzcount==null){
+		yzcount=0;
+	}
+	
+	
+	//存放各个运送方式已经选择的地区数组
+	var py_areaids = [];
+	var kd_areaids = [];
+	var yz_areaids = [];
+
+	
+	//存放当前要编辑的指定地区的所有地区id
+	var checkout_areaids;
+
+	$(function() {
+		/* 提交表单 */
+		$("#submit_tpl").click(function() {
+			var flag = true;
+			
+			$("#edit_dlyform").find(".is_vali").each(function() {
+				if ($(this).val() == "") {
+					flag = false;
+				}
+			})
+			if (flag) {
+				var options = {
+					url : "${ctx}/api/b2b2c/dlyType!update.do?ajax=yes&pycount=" + pycount
+							+ "&kdcount="+ kdcount
+							+ "&yzcount=" + yzcount,
+					type : "POST",
+					dataType : 'json',
+					success : function(date) {
+						if (date.result == 1) {
+							alert(date.message);
+							location.href="${ctx}/transaction/transport.html";
+						}
+						if (date.result == 0) {
+							alert(date.message);
+						}
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+				};
+				$("#edit_dlyform").ajaxSubmit(options);
+			} else {
+				alert("有未填写的字段");
+			}
+	
+		});
+	})
+	
+		
+		$("input[name='tplType']").click(function() {
+
+			//平邮
+			if ($(this).val() == 1) {
+				if ($(this).attr("checked")=="checked") {
+					if($("#py_div").val()!=1){			//设置是否隐藏显示指定地区不重新创建div
+						appto_site_tpl("py");			//指定地区的div创建
+						$("#py_div").val(1);			//1 为已经为当前的运送方式创建div了
+					}
+					$(".py").show();
+				} else {
+					$(".py").hide();
+				}
+			}
+			
+			//快递
+			if ($(this).val() == 2) {
+				if ($(this).attr("checked")=="checked") {
+					if($("#kd_div").val()!=1){
+						appto_site_tpl("kd");
+						$("#kd_div").val(1);
+					}
+					$(".kd").show();
+				} else {
+					$(".kd").hide();
+				}
+			}
+
+			//邮政
+			if ($(this).val() == 3) {
+				if ($(this).attr("checked")=="checked") {
+					if($("#yz_div").val()!=1){
+						appto_site_tpl("yz");
+						$("#yz_div").val(1);
+					}
+					$(".yz").show();
+				} else {
+					$(".yz").hide();
+				}
+			}
+
+		})
+
+		
+	//创建指定地区的div
+	function appto_site_tpl(class_name) {
+		var cname = $("." + class_name);
+		cname.empty();
+		$(".sitetpl .entity").clone().appendTo(cname).show();
+		var btn = '<a href="javascript:void(0);" onclick="apptotr(\''
+				+ class_name + '\')" >为指定地区城市设置运费</a>';
+		$("." + class_name + " .entity").append(btn);
+		$("." + class_name + " .entity").find("input").each(function() {
+			$(this).attr("name", $(this).attr("name") + "_" + class_name + "");
+		})
+	}
+
+	//创建指定地区tr，并添加到tbody中
+	function apptotr(class_name) {
+		var tr_str = "";
+		if (class_name == "py") {
+			pycount++;
+			tr_str = append_tr(class_name, pycount);
+		}
+		if (class_name == "kd") {
+			kdcount++;
+			tr_str = append_tr(class_name, kdcount);
+		}
+		if (class_name == "yz") {
+			yzcount++;
+			tr_str = append_tr(class_name, yzcount);
+		}
+		$("." + class_name + " tbody").append(tr_str);
+	}
+
+	//生成指定地区tr
+	function append_tr(class_name, count) {
+		var tr_str = "";
+
+		tr_str += "<tr>";
+		tr_str += '<td> <a style="float: right;" href="#" onclick="editArea(this,\''
+				+ class_name
+				+ '\');">编辑</a><div class="area-group"><p>未添加地区</p></div>';
+		tr_str += '<input type="hidden" value="" class="tpl_areaids" name="express_'+class_name+'_areaids_'+count+'">';
+		tr_str += '<input type="hidden" value="" class="tpl_areanames" name="express_'+class_name+'_areanames_'+count+'"></td>';
+		tr_str += "<td> <input type='text' class='is_vali' name='express_"+class_name+"_firstmoney_"+count+"' > </td>";
+		tr_str += "<td> <input type='text' class='is_vali' name='express_"+class_name+"_continuemoney_"+count+"' ></td>";
+		tr_str += "<td> <a href='javascript:void(0)' onclick='del(this)'>删除</a> </td>";
+		tr_str += "</tr>";
+
+		return tr_str;
+	}
+
+	//创建并打开 dialog
+	function openDialog(map) {
+		dialog = $.dialog({
+			title : map["title"],
+			width : 400,
+			top:20,
+			height : 170,
+			lock : true,
+			min : false,
+			max : false
+		});
+
+		$.ajax({
+			url : map["html"],
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '保存',
+					callback : function() {
+						formSubmit(dialog, map);
+						return false;
+					}
+				}, {
+					name : '取消'
+				} ]);
+			},
+			error : function() {
+				$.alert("出现错误,请重试！");
+			},
+			cache : false
+		});
+	}
+
+	//编辑指定地区
+	function editArea(obj, class_name) {
+
+		checkout_areaids = $(obj).parent().find(".tpl_areaids").val();
+
+		dialog = $.dialog({
+			title : "编辑地区",
+			top:20,
+			width : 580,
+			height : 400,
+			lock : true,
+			min : false,
+			max : false
+		});
+
+		$.ajax({
+			url : "site_area.html?class_name=" + class_name,
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([{
+					name : '保存',
+					callback : function() {
+						var local_names = "";
+						var tpl_areaids = "";
+						
+						//保存已选中的地区 存到相应的数组中
+						$("#areas").find(".area:checked").each(function() {
+							local_names += $(this).attr(
+									"local_name")
+									+ ",";
+							tpl_areaids += $(this).val() + ",";
+
+							if (class_name == "py") {
+								py_areaids.push($(this).val());
+							}
+							if (class_name == "kd") {
+								kd_areaids.push($(this).val());
+							}
+							if (class_name == "yz") {
+								yz_areaids.push($(this).val());
+							}
+						});
+						
+						
+						$(obj).parent().find("p").html(local_names);
+						$(obj).parent().find(".tpl_areaids").val(tpl_areaids);
+						$(obj).parent().find(".tpl_areanames").val(local_names);
+						
+						py_areaids.unique();
+						kd_areaids.unique();
+						yz_areaids.unique();
+					}
+				}, {
+					name : '取消'
+				} ]);
+			},
+			error : function() {
+				$.alert("出现错误,请重试！");
+			},
+			cache : false
+		});
+
+	}
+
+	//删除当前行
+	function del(obj) {
+		$(obj).parent().parent().remove();
+	}
+
+	// js数组去重
+	Array.prototype.unique = function() {
+		var res = [];
+		var json = {};
+		for ( var i = 0; i < this.length; i++) {
+			if (!json[this[i]]) {
+				res.push(this[i]);
+				json[this[i]] = 1;
+			}
+		}
+		return res;
+	}
+	
+	
+</script>
+
+<#include '/common/footer.html' />

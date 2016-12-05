@@ -1,0 +1,19 @@
+<#assign checkB2b2cMemberTag=newTag("checkB2b2cMemberTag")>
+<#assign storeMember=checkB2b2cMemberTag()>
+<#if !storeMember.is_store??>
+	<#include '/create_store.html' />
+	<#else>
+		<#if storeMember.store_id??>
+			<!-- 获取店铺信息  判断店铺状态-->
+			<#assign myStoreDetailTag=newTag("myStoreDetailTag")/>
+			<#assign myStoreDetail=myStoreDetailTag()>
+			
+			<#if myStoreDetail.disabled==1>
+				<#include '/store.html' />
+			<#else>
+				<#include '/store/create_store.html' />
+			</#if>
+		<#else>
+			<#include '/store/create_store.html' />
+		</#if>
+</#if>

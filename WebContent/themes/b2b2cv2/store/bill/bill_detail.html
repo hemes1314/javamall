@@ -1,0 +1,138 @@
+<#include '/store/store_header.html' />
+<#assign storeBillTag=newTag("storeBillTag")>
+<#assign storeBill=storeBillTag("{'id':${id}}")>
+<style>
+.bill-alert-block {
+    padding-bottom: 14px;
+    padding-top: 14px;
+}
+.bill_alert {
+    background-color: #F9FAFC;
+    border: 1px solid #F1F1F1;
+    margin-bottom: 20px;
+    padding: 8px 35px 8px 14px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	line-height:30px;
+}
+.s_orderlist tbody tr td{border:0px none;height: 40px;border-top:1px solid #ddd;}
+</style>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			结算管理<span>></span>本期结算
+		</div>
+		<div class="store_right_main">
+			<div class="bill_alert bill-alert-block mt10">
+				<div style="width:800px">
+					<h3 style="float:left">本期结算</h3>
+					<#if storeBill.status==1>
+						<div style="float:right;">
+							<input type="button" class="go_save_selectcat" value="本期结算无误，我要确认" id="nextBtn">
+						</div>
+					</#if>
+					<div style="clear:both"></div>
+				</div>
+				<ul>
+					<li>结算单号：${storeBill.sn}  <@dateformat time="${storeBill.start_time?c}" pattern="yyyy-MM-dd "/>&nbsp;至&nbsp;<@dateformat time="${storeBill.end_time?c}" pattern="yyyy-MM-dd "/>	</li>
+					<li>出账时间：<@dateformat time="${storeBill.bill_time?c}" pattern="yyyy-MM-dd HH:mm"/></li>
+					<li>本期应收：${storeBill.price?string.currency} = ${storeBill.bill_price?string.currency} (订单金额不含红包) - ${storeBill.commi_price?string.currency} (佣金金额) - ${storeBill.returned_price?string.currency} (退单金额) + ${storeBill.returned_commi_price?string.currency} (退还佣金) + ${storeBill.red_packets_price?string.currency} (红包) - ${storeBill.returned_red_packets_price?string.currency} (退还红包)</li>
+					<li>结算状态：<#if storeBill.status==1>
+									已出账
+								<#elseif storeBill.status==0>
+									未出账
+								<#elseif storeBill.status==2>
+									已确认
+								<#elseif storeBill.status==3>
+									已审核
+								<#else>
+									已付款
+								</#if>	
+					</li>
+				</ul>
+			</div>
+			<div class="tabmenu">
+  				<ul class="tab pngFix">
+  					<li class="active" id="order">
+  						<a href="#">订单列表</a>
+  					</li>
+  					<li class="normal" id="sell_back">
+  						<a href="#">退款订单</a>
+  					</li>
+  				</ul>
+  			</div>
+  			<div class="store_orderlist">
+  				
+			</div>
+			<div class="store_sellbacklist"> 
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	load_order_list(1);
+	load_sellback_list(1);
+	
+	$("#order").click(function(){
+		load_order_list(1);
+		$(".store_orderlist").show();
+		$(".store_sellbacklist").hide();
+		$("#order").attr("class","active");
+		$("#sell_back").attr("class","normal");
+	});
+	$("#sell_back").click(function(){
+		$(".store_orderlist").hide();
+		$(".store_sellbacklist").show();
+		load_sellback_list(1);
+		$("#sell_back").attr("class","active");
+		$("#order").attr("class","normal");
+	});
+	function load_order_list(page){
+		$(".store_orderlist").load("store_bill_order.html?page="+page,{'sn':'${storeBill.sn}' },function(){
+			$(".store_orderlist .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				load_order_list(pageno);
+			});
+		});	
+	};
+	function load_sellback_list(page){
+		$(".store_sellbacklist").load("store_bill_sell_back.html?page="+page,{'sn':'${storeBill.sn}' },function(){
+			$(".store_sellbacklist .page li a").click(function(){
+				var pageno= $(this).attr("page");
+				load_sellback_list(pageno);
+			});
+		});	
+	};
+	$("#nextBtn").click(function(){
+		if(!confirm("确定操作"))
+			return false;
+		//$("#pass").linkbutton("disable");
+		var id=${storeBill.id};
+		$.ajax({
+			url : "${ctx}/api/bill/storeBill!confirm.do",
+			data:{'id':id},
+			dataType: "json", 
+			cache : false,
+			success : function(result) {
+				$.Loading.message(result.message);
+				//$("#pass").linkbutton("enable");
+				if(result.result==1){
+					location.reload();
+				}
+			},
+			error : function() {
+				$.Loading.message("出现错误,请重试！");
+				//$("#pass").linkbutton("enable");
+			}
+		});
+	});
+	
+	selectMenu(5);
+	$(".store_sellbacklist").hide();
+});
+
+</script>
+<#include '/common/footer.html'/>

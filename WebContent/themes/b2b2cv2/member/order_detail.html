@@ -1,0 +1,301 @@
+<#assign  title="订单详细" />
+<#include 'member_header.html' />
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<!-- 获取会员订单日志标签 -->
+<#assign orderDetailLogTag = newTag("orderDetailLogTag")>
+<!-- 调用订单日志标签 -->
+<#assign orderDetailLog = orderDetailLogTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 获取会员订单详细快递信息 -->
+<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+<!-- 调用会员订单详细快递信息 -->
+<#assign orderDelivery = orderDeliveryListTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 使用关键字"deliveryList"得到会员订单详细快递信息MAP集合 -->
+<#assign orderSend = orderDelivery.deliveryList>
+<!--创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<!--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 获得商品META（快递、运费）信息 --><!-- 会员优惠券等与王峰商量后在弄。 -->
+<#assign orderMetaTag = newTag("orderMetaTag")>
+<!-- 调用商品META（快递、运费）信息 --><!-- 会员优惠券等与王峰商量后在弄。 -->
+<#assign orderMeta = orderMetaTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 创建“发票标签” -->
+<#assign receiptTag = newTag("receiptTag")>
+<!-- 调用发票标签 -->
+<#assign orderreceipt = receiptTag("{'orderid':${orderDetail.order_id}}")>
+    <#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+        <!--
+        <link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/button.css" />
+         -->
+        <script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+        <style>
+            .ui_content{min-width:100px;}
+        </style>
+        <div class="user_order">
+            <div class="order_detail">
+                <div class="order_intro">
+                    <h1>订单信息</h1>
+                    <div class="detail_list">
+                        <dl>
+                            <dt>下单时间：</dt>
+                            <dd><@dateformat time="${orderDetail.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></dd>
+                        </dl>
+                        <dl>
+                            <dt>收货地址：</dt>
+                            <dd>${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}-${orderDetail.ship_name!''}</dd>
+                        </dl>
+                        <dl>
+                            <dt>发票抬头:</dt>
+                            <dd>
+                                ${orderreceipt.title!'无'}
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>发票内容:</dt>
+                            <dd>
+                                ${orderreceipt.content!'无'}
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>客户留言：</dt>
+                            <dd>${orderDetail.remark!'无'}</dd>
+                        </dl>
+                        <dl class="online">
+                            <dt>订单编号：</dt>
+                            <dd>${orderDetail.sn!''}</dd>
+                        </dl>
+                        <dl>
+                            <dt>付款方式：</dt>
+                            <dd>
+                            <#if orderDetail.parentOrder??>
+                            	${orderDetail.parentOrder.paymentMethod!''}
+                                <#else>
+                                    ${orderDetail.payment_name!''}
+                            </#if>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>商品总价：</dt>
+                            <dd>${orderDetail.goods_amount?string.currency!''}</dd>
+                        </dl>
+                        <dl>
+                            <dt>促销优惠:</dt>
+                            <dd>${(orderDetail.discount!0)?string.currency!''}</dd>
+                        </dl>
+                        <dl class="">
+                            <dt>运费金额：</dt>
+                            <dd>${orderDetail.shipping_amount?string.currency!''}</dd>
+                        </dl>
+                        <dl class="m_order_middle">
+                            <dt>订单金额：</dt>
+                            <dd>${orderDetail.order_amount?string.currency!''}</dd>
+                        </dl>
+                        <dl class="">
+                            <dt>使用红包：</dt>
+                            <dd>${orderDetail.bonus_pay?string.currency!''}</dd>
+                        </dl>
+                        <dl class="">
+                            <dt>使用余额：</dt>
+                            <dd>${orderDetail.advance_pay?string.currency!''}</dd>
+                        </dl>
+
+                        <dl class="m_order_big">
+                            <dt>应付金额：</dt>
+                            <dd>${orderDetail.need_pay_money?string.currency!''}</dd>
+                        </dl>
+
+                        <#if orderSend[0]?exists>
+                            <dl class="online">
+                                <dt>快递信息：</dt>
+                                <dd>	<a target="_blank" href="http://m.kuaidi100.com/result.jsp?com=${orderSend[0].logi_code!''}&nu=${orderSend[0].logi_no!''}" class="optExpress">
+                                    查询物流[${orderSend[0].logi_name!''}-${orderSend[0].logi_no!''}]
+                                </a></dd>
+                            </dl>
+                        </#if>
+                    </div>
+
+
+                </div>
+                <div class="intro_staus">
+                    <div class="orderdetail">
+                        <i class="<#if orderDetail.status==8>order_no<#else> order_ok</#if>"></i>
+                        订单状态：
+                        <#if orderDetail.status  == 13>
+       							申请退款
+       					<#elseif orderDetail.status  == 18>
+       							申请退货中
+       				   <#elseif  orderDetail.status == 12>
+							    用户拒收
+						<#elseif  orderDetail.status == -15>
+					            退款被拒绝
+					    <#elseif  orderDetail.status == 16>
+					            已拒收
+					    <#elseif  orderDetail.status == 17>
+						退款中
+					    <#elseif  orderDetail.status == -12>
+					            拒收被拒绝
+       					<#else>
+								<@orderstatus status="${orderDetail.status}" type="order" />
+						</#if>
+                    </div>
+                    <ul>
+                    	<!-- 
+                        <li>
+                            1. 您尚未对该订单进行支付，请
+                            <strong>
+                                <#if orderDetail.status == orderState.ORDER_NOT_PAY >
+                                    <#if !orderDetail.isCod && orderDetail.pay_status==orderState.PAY_NO||!orderDetail.isCod && orderDetail.pay_status == orderState.PAY_PARTIAL_PAYED>
+                                        <a href="${ctx}/api/shop/payment.do?orderid=${orderDetail.order_id}" class="order_pay">按此为订单付款</a>
+                                        <#else>
+                                            按此为订单付款
+                                    </#if>
+                                </#if>
+                            </strong>
+                            以确保商家及时发货。
+                        </li>
+                        <li>
+                            2. 如果您不想购买此订单的商品，请
+                            <strong>
+                                <#if orderDetail.status == orderState.ORDER_NOT_PAY >
+                                    <a href="javascript:;" sn="${orderDetail.sn}" class="cancelBtn order_delno">取消订单</a>
+                                    <#else>
+                                        取消订单
+                                </#if>
+                            </strong>
+                            操作。
+                        </li>
+                        <li>
+                            3. 如果您已经收到商品，请
+                            <strong>
+
+                                <#if orderDetail.status==orderState.ORDER_SHIP>
+                                    <a href="javascript:;" orderid="${orderDetail.order_id}" class="orderdetail_ok rogBtn">确认收货</a>
+                                    <#else>
+                                        确认收货
+                                </#if>
+                            </strong>
+                            订单操作。
+                        </li>
+                        
+                        <#if orderDetail.status==orderState.ORDER_SHIP>
+                            <li>
+                                4.
+                                <strong>
+                                    <#if orderDetail.status==orderState.ORDER_SHIP>
+                                        <a href="order_express.html?order_id=${orderDetail.order_id}" orderid="${orderDetail.order_id}" class="optExpress">查询物流</a>
+                                        <#else>
+
+                                    </#if>
+                                </strong>
+                            </li>
+                        </#if>
+                         -->
+                        <#if orderDetail.status==orderState.ORDER_SHIP>
+                            <li>
+                                <strong>
+                                	<a href="order_express.html?order_id=${orderDetail.order_id}" orderid="${orderDetail.order_id}" class="optExpress">查询物流</a>
+                                </strong>
+                            </li>
+                        </#if>
+                    </ul>
+                    <div class="order_help">
+                        <a href="/help-17-32.html" target="_blank">我有疑问要咨询</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 流程图 -->
+            <div class="flow ">
+                <#if (orderDetail.payment_id)?? && (orderDetail.payment_id == 3)>
+                    <div class="statusway${orderDetail.status} arrive_order"></div>
+                    <#else>
+                        <div class="status${orderDetail.status} no_arrive_order"></div>
+                </#if>
+            </div>
+
+            <#if orderItemList?size gt 0>
+                <!-- 商品列表 -->
+                <div class="detail_goodslist">
+                    <table cellpadding="0" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th class="dt1" colspan="2">商品名称</th>
+                            <th class="dt2">单价(元)</th>
+                            <th class="dt3">数量</th>
+                            <th class="dt4">小计</th>
+                            <th class="dt5">状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="d1" colspan="5" style="padding:0px;border-bottom:0px none;">
+                                <table>
+                                    <#list orderItemList as item>
+                                        <tr>
+                                            <td >
+                                                <a target="_blank" href="../goods-${item.goods_id}.html">
+                                                    <img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+                                                </a>
+                                            </td>
+                                            <td style="text-align:left;">
+                                                <a target="_blank" href="../goods-${item.goods_id}.html">${item.name} <#if item.other?? >(${item.other!''})</#if></a>
+                                            </td>
+                                            <td style="width:100px;">
+                                                ${item.price?string.currency}
+                                            </td>
+                                            <td style="width:100px;">
+                                                ${item.num}
+                                            </td>
+                                            <td style="width:100px;">
+                                                ${(item.num * item.price)?string.currency}
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                </table>
+                            </td>
+                            <td class="d2">
+                            	<#if orderDetail.status  == 13>
+		       							申请退款
+		       				   <#elseif  orderDetail.status == 12>
+									    用户拒收
+								<#elseif  orderDetail.status == -15>
+							            退款被拒绝
+							    <#elseif  orderDetail.status == 16>
+							            已拒收
+							    <#elseif  orderDetail.status == 17>
+								退款中
+							    <#elseif  orderDetail.status == -12>
+							            拒收被拒绝
+		       					<#else>
+		       							<@orderstatus status="${orderDetail.status}" type="order" />
+								</#if>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </#if>
+        </div>
+        <#include 'order_cancel.html'/>
+        <!-- 浮动窗口 取消订单结束 -->
+        <script>
+            $(function(){
+                Order.init();
+                if($("#statustype").val() == 13){
+
+                }
+            })
+            function showRogInfo(logino,logicode){
+                $("#store_content").load('${ctx}/api/shop/order!orderKuaidi.do?ajax=yes&logino='+logino+'&code='+logicode,function(){});
+            }
+        </script>
+        </div>
+ <#include '../common/footer.html'/>
+

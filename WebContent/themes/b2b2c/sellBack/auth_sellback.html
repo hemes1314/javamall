@@ -1,0 +1,106 @@
+<#include '/common/header.html' >
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>
+<!--退货申请标签 -->
+<#assign storeSellBackTag=newTag("storeSellBackTag")>
+<#assign storeSellBack=storeSellBackTag("{'id': ${id} }")>
+<!-- 退货申请 -->
+<#assign sellBack=storeSellBack.sellBack>
+<!-- 退货订单 -->
+<#assign orderinfo=storeSellBack.orderinfo>
+<!-- 退货商品列表 -->
+<#assign goodsList=storeSellBack.goodsList>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member_store.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member.css" />
+<div class="layout">	
+	<div class="wrap-shadow">
+		<div class="wrap-all user-order-view">
+			<h2>退货单基本信息</h2>
+			<div class="item-publish">
+				<form method="post" id="theForm"  class="validate">
+					<input type="hidden" value="${sellBack.id}" name="id"/>
+					<dl>
+		        		<dt>退货单号：</dt>
+		        			<dd>${sellBack.tradeno }</dd>
+		        		<dt>关联订单号：</dt>
+		        			<dd> ${orderinfo.sn }</dd>
+		        		<dt>已支付：</dt>
+		        			<dd>${orderinfo.paymoney?string("currency")}</dd>
+					</dl>
+					<h3>退货单商品</h3>
+		      		<table class="table-style">
+		       			<thead>
+		         			<tr>
+		         				<th>商品名称</th>
+								<th>金额</th>
+								<th>购买数量</th>
+								<th>退货数量</th>
+		         			</tr>
+		       			</thead>
+		       			<tbody>
+			       			<#list goodsList as data>
+									<tr class="bd-line">				
+										<td>
+											${data.name }
+										</td>
+										<td>
+											${data.price?string.currency}
+										</td>
+										<td>
+											${data.num }
+										</td>
+										<td>${data.ship_num!0}</td>
+									</tr>
+							</#list>
+						</tbody>
+			        </table>
+		          	<ul class="order_detail_list">
+		          		<li>退&nbsp;&nbsp;货&nbsp;人：${orderinfo.ship_name }</li>
+		          		<li>退货原因：${sellBack.remark!''}</li>
+		          		<li>审&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;核&nbsp;&nbsp;：
+		          			<input type="radio" name="status" value="2" checked="checked"/>通过
+							<input type="radio" name="status" value="4"/>不通过 
+						</li>
+		          	</ul>
+					<dl>
+						<dt>
+							操作备注：
+						</dt>
+						<dd>
+							<textarea rows="5" cols="100" name="seller_remark" style="resize:none;"></textarea>
+						</dd>
+					</dl>
+					<div class="user-form-style tc mb30">
+						<input type="button" value="审核" onclick="submitForm()" class="submit" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function submitForm() {
+	$.Loading.show("正在提交");
+	var options = {
+			url : "${ctx}/api/store/storeSellBack!saveAuth.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result){
+				$.Loading.hide();
+				if(result.result==1){
+					$.Loading.success(result.message);
+					location.href="${ctx}/sellBack/sellback_list.html";
+				}
+				if(result.result==0){ 
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.hide();
+				alert("出现错误 ，请重试");
+			}
+		};
+	$("#theForm").ajaxSubmit(options);
+}
+</script>
+
+<#include '/common/footer.html' >

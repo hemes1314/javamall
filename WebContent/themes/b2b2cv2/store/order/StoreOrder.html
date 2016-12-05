@@ -1,0 +1,203 @@
+<#include '/store/store_header.html' />
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<!-- 获取店铺订单标签 -->
+<#assign storeorderList=newTag("storeOrderListTag")/>
+<#assign orderList=storeorderList()/>
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			交易管理<span>></span>订单列表
+		</div>
+		<input type="hidden" value="${order_state!''}" class="left_selected">
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<input type="hidden" id="order_state" value="${orderList.order_state!''}" />
+				<ul class="tab pngFix">
+					<li <#if order_state?? && order_state=="all"> class="active"  <#else> class="normal"  </#if> ><a href="javascript:void(0);" order_state="all" name="order_state">所有订单</a></li>
+		  			<li <#if order_state?? && order_state=="0"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="0" name="order_state">等待付款</a></li>
+		  			<div hidden="true">
+		  				<li <#if order_state?? && order_state=="wait_pay"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_pay" name="order_state">等待收款</a></li>
+		  			</div>
+		  			<li <#if order_state?? && order_state=="wait_ship"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_ship" name="order_state">等待发货</a></li>
+		  			<li <#if order_state?? && order_state=="wait_rog"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_rog" name="order_state">等待收货</a></li>
+		  			<li <#if order_state?? && order_state=="7"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="7" name="order_state">已完成</a></li>
+		  			<li <#if order_state?? && order_state=="8"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="8" name="order_state">已取消</a></li>
+				</ul>
+			</div>
+			<!-- 订单列表 -->
+			<div class="store_orderlist">
+				<table class="search_form">
+			  		<tbody>
+			  			<tr>
+			  				<td style="width:180px">&nbsp;</td>
+			  				<th >订单编号：</th>
+			  				<td ><input id="indent_number" type="text" class="text" name=keyword value="${orderList.keyword!''}"></td>
+			  				<th>买家：</th>
+        					<td ><input type="text" class="text" name="buyerName" value="${orderList.buyerName!''}"></td>
+			  				<th>下单时间：</th>
+			  				<td  class="storeorderlist">
+			  					<label><input id="start_time" class="text hasDatepicker" type="text" name="startTime" onClick="WdatePicker()" value="${orderList.startTime!''}" /><span class="storeorder_time"></span></label>
+			  					<i>-</i><label><input id="end_time" class="text hasDatepicker" type="text" name="endTime" onClick="WdatePicker()" value="${orderList.endTime!''}" ><span class="storeorder_time"></span></label>
+			  				</td>
+			  				<td class=""><input type="button" class="submit" id="btnSearch" value="搜索"></td>
+			  			</tr>
+			  		</tbody>
+			  	</table>
+			  	<!-- 订单列表详细 -->
+			  	<table class="s_orderlist"  cellpadding="0" cellspacing="0">
+			  		<thead>
+			  			<tr class="s_orderlist_title">
+			  				<th class="s_orderlist_th1">商品名称</th>
+			  				<th class="s_orderlist_th2">单价（元）</th>
+			  				<th class="s_orderlist_th3">数量</th>
+			  				<th class="s_orderlist_th4">买家</th>
+			  				<th class="s_orderlist_th5">订单金额</th>
+			  				<th class="s_orderlist_th6">交易状态</th>
+			  				<th class="s_orderlist_th7">操作</th>
+			  			</tr>
+			  		</thead>
+			  		<#if orderList.totalCount != 0 >
+			  		<tbody>
+			  		<#list orderList.storeOrder.result as order>
+			  			<tr  style="line-height:12px;height:12px;padding:0px;">
+			  				<td colspan="20" style="border:0px none;">&nbsp;</td>
+			  			</tr>
+				  		<tr>
+				  			<th colspan="20" >
+				  				<span>订单编号：${order.sn}</span>
+				  				<span style="border:0px none;">下单时间：<@dateformat time="${order.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+				  			</th>
+				  		</tr>
+				  		<tr>
+				  			<!--创建“订单货物列表”标签-->
+							<#assign orderItemListTag = newTag("orderItemListTag")>
+							<!--调用“订单货物列表”标签，并传递参数-->
+							<#assign orderItemList = orderItemListTag("{'orderid':${order.order_id}}")>
+							<td style="width:650px;border-bottom:0px none;" colspan="3" >
+								<ul>
+								<#list orderItemList as item>
+									<li>
+										<div class="s_item_list_img">
+											<a target="_blank" href="${ctx}/goods-${item.goods_id}.html">
+				            					<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+				            				</a>
+				            			</div>
+				            			<div class="s_item_list_name">
+										<!-- add by lxl start -->
+										<#if  item.disable == 1>
+                   								<a href="javascript:alert('此商品已删除')" title="${item.name}">${item.name}</a>
+                  							 <#elseif item.market_enable == 0>
+                   								<a href="javascript:alert('此商品已下架')" title="${item.name}">${item.name}</a>
+                   							<#else>
+                    							<a target="_blank" href="${ctx}/goods-${item.goods_id}.html" title="${item.name}">${item.name}</a>
+                    					</#if>
+										<!-- end -->
+				            			</div>
+				            			<div class="s_item_list_price">
+				            				${item.price?string.currency}
+				            			</div>
+				            			<div class="s_item_list_num">
+				            				${item.num}
+				            			</div>
+									</li>	
+								</#list>
+								</ul>
+							</td>
+							<td style="width:100px">
+								${order.ship_name!''}
+							</td>
+							<td style="width:100px">
+								<strong>${order.order_amount?string.currency}</strong>
+								<p>运费(${(order.shipping_amount!0)?string.currency})</p>
+								<p>${order.paymentMethod!""}</p>
+							</td>
+							<td class="orderlist_staus" style="width:100px">
+								<p>
+								<#if  order.status == 13>
+									 申请退款
+								<#elseif  order.status == 12>
+									 用户拒收
+								<#elseif  order.status == -15>
+									退款被拒绝
+								<#elseif  order.status == 16>
+									已拒收
+								<#elseif  order.status == 17>
+									退款中
+								<#elseif  order.status == -12>
+					            	拒收被拒绝
+					            <#elseif  order.status == 18>
+					            	申请退货中
+								<#else>
+									<@orderstatus status="${order.status}" type="order" />
+								</#if>
+								</p>
+								<#if order.status==5>
+									<p><a href="order_exp_info.html?ordersn=${order.sn}&menu=transaction" style="color: red;">物流信息</a></p>
+								</#if>
+							</td>
+							<td style="width:100px" class="go_store_orderdetail">
+								<a target="_blank" href="order_detail.html?ordersn=${order.sn}&menu=transaction">查看订单</a> 
+								<#if order.status==5 || order.status== -12>
+									<a target="_blank" href="returnOrder.html?ordersn=${order.sn}&menu=transaction&yprice=${order.order_amount}" style="margin-top:5px">用户拒收</a> 
+								</#if>
+							</td>
+						</tr>
+			  		</#list>
+						<tr>
+						</tr>			  		
+			  		</tbody>
+			  	</table>
+			  	<@pager pageno="${orderList.page!'1'}" pagesize="${orderList.pageSize}" totalcount="${orderList.totalCount}" />
+			  	<#else>	
+			  		</table>
+			  		<p class="no_blank">暂无符合条件的数据记录</p>
+			  	</#if>
+			</div>
+		</div>
+	</div>		
+</div>
+
+	<script type="text/javascript">
+		$("#btnSearch").click(function(){
+			
+			if(isNaN($("#indent_number").val())!==false){
+				alert("订单编号必须为数字");
+				return false;
+			}
+			
+			if($("#start_time").val() > $("#end_time").val()){
+				alert("开始时间不得大于结束时间！");
+				return;
+			}
+
+			search();
+		});
+		$("a[name='order_state']").click(function(){
+			$("#order_state").val($(this).attr("order_state"));
+			search();
+		});
+		function search(){
+			var keyword=$("input[name='keyword']").val();
+			var buyerName=$("input[name='buyerName']").val();
+			var startTime=$("input[name='startTime']").val();
+			var endTime=$("input[name='endTime']").val();
+			var order_state=$("#order_state").val();
+			location.href="StoreOrder.html?keyword="+keyword+"&buyerName="+buyerName+"&startTime="+startTime+"&endTime="+endTime+"&order_state="+order_state+"&menu=transaction";
+		}
+	</script>
+	<script>
+		$(function(){
+			var leftselect = $(".left_selected").val();
+			if(leftselect=="wait_ship"){
+				selectMenu(1);
+			}else{
+				selectMenu(0);
+			}
+		})
+	</script>
+<#include '/common/footer.html'/>

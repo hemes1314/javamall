@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+	<!-- 定义此应用的组件扫描包 -->
+	<context:component-scan base-package="com.enation.app.shop.component,com.enation.app.shop.core.tag,com.enation.app.shop.core.taglib" />
+
+	<!-- 
+	         ================================================
+	                              插件桩
+	         ================================================
+	 -->
+	 
+	 <!-- 商品插件桩-->
+	<bean id="goodsPluginBundle" class="com.enation.app.shop.core.plugin.goods.GoodsPluginBundle"></bean>
+	
+	 <!-- 商品库存插件桩-->
+	<bean id="goodsStorePluginBundle" class="com.enation.app.shop.core.plugin.goods.GoodsStorePluginBundle"></bean>
+	
+	 <!-- 购物车插件桩-->
+	<bean id="cartPluginBundle" class="com.enation.app.shop.core.plugin.cart.CartPluginBundle"></bean>
+	
+	<!-- 支付插件桩-->
+	<bean id="paymentPluginBundle" class="com.enation.app.shop.core.plugin.payment.PaymentPluginBundle"></bean>
+ 
+
+	<!-- 促销插件桩 -->
+	<bean id="promotionPluginBundle" class="com.enation.app.shop.core.plugin.promotion.PromotionPluginBundle"></bean>
+	
+ 
+	<!-- 商品搜索插件桩 -->
+	<bean id="goodsSearchPluginBundle" class="com.enation.app.shop.core.plugin.search.GoodsSearchPluginBundle"></bean>
+
+ 
+	<!-- 商品数据过滤插件桩 -->
+	<bean id="goodsDataFilterBundle" class="com.enation.app.shop.core.plugin.goods.GoodsDataFilterBundle"></bean>
+	
+	
+	<!-- 订单插件桩 -->
+	<bean id="orderPluginBundle" class="com.enation.app.shop.core.plugin.order.OrderPluginBundle"></bean>
+
+	<!-- 商品批量导入插件桩 -->
+	<bean id="goodsImportPluginBundle" class="com.enation.app.shop.core.plugin.goodsimp.GoodsImportPluginBundle"></bean>
+
+	<!-- 商品评论插件桩
+	<bean id="commentsPluginBundle" class="com.enation.app.shop.core.plugin.comments.CommentsPluginBundle"></bean>
+ -->
+	<!-- 会员插件桩 -->
+	<bean id="memberPluginBundle" class="com.enation.app.shop.core.plugin.member.MemberPluginBundle"></bean>
+	
+	<!-- 自动登录处理-->
+	<bean id="autoLoginProcessor" class="com.enation.app.shop.core.service.AutoLoginProcessor" lazy-init="true"></bean>	
+	
+</beans>

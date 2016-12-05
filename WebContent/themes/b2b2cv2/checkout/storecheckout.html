@@ -1,0 +1,723 @@
+<script language="javascript">
+	//浏览器前进或后退刷新页面
+	if (window.name != "checkoutWindow") {
+		location.replace(location.href);
+		window.name = "checkoutWindow";
+	} else {
+		window.name = "";
+	}
+</script>
+<div id="checkout_wrapper">
+	<div class="pay_warm">请确认以下信息，然后提交订单</div>
+	<div class="pay_frame">
+		<form class="validate" id="checkoutform">
+			<#-- 创建会员是否有默认地址标签 -->
+			<#assign defaultConsigneeTag= newTag("defaultConsigneeTag")>
+			<#assign sessionConsigneeTag= newTag("sessionConsigneeTag")>
+			<#-- 获取是否有默认地址  -->
+			<#assign defAddress = defaultConsigneeTag()!'none' >
+
+			<#assign sessionAddress = sessionConsigneeTag()!'none'>
+			
+			<div class="box address <#if defAddress=='none'>relborder</#if>">
+			 
+				<div class="selected" <#if defAddress=='none'>style="display:none"</#if> >
+				
+					
+					<h1>收货人信息<a href="javascript:;" class="modify_btn">[修改]</a></h1>
+						<span class="take_delivery">
+							<#if sessionAddress!='none' >
+							${(sessionAddress.province)!''}-${sessionAddress.city!''}-${sessionAddress.region!''}-${sessionAddress.addr!''}
+							(收货人：${sessionAddress.name!''}，手机：${sessionAddress.mobile!''}，电话：${sessionAddress.tel!''}，邮编：${sessionAddress.zip!''})
+							<#elseif defAddress!='none'>
+							${(defAddress.province)!''}-${defAddress.city!''}-${defAddress.region!''}-${defAddress.addr!''}
+							(收货人：${defAddress.name!''}，手机：${defAddress.mobile!''}，电话：${defAddress.tel!''}，邮编：${defAddress.zip!''})
+							<#else>
+							</#if>
+						</span>
+				</div>
+				
+				<div class="modify" style="display:none" >
+				
+					<h1>收货人信息</h1>
+					<#-- 创建会员是否登录标签 -->
+					<#assign memberIsLoginTag= newTag("memberIsLoginTag")>
+					<#-- 获取是否登录  -->
+					<#assign isLogin = memberIsLoginTag() >
+					
+					<#if isLogin >
+						<div class="list"> 
+							<#include 'address_list.html' />
+						</div> 
+					</#if>
+					
+					<!-- 创建会员收货地址标签 -->
+					<#assign memberAdressRegionTag= newTag("memberAdressRegionTag")>
+					<!-- 获取收货地址的id -->
+					<#assign memberAdressRegion = memberAdressRegionTag('"addrid":${addrid!0}') >
+					<input type="hidden" id="regionid" value="${memberAdressRegion!0}" >
+					<div class="pay_botton btn">
+						<a href="javascript:void(0);"  onclick="add_address();" class="add_address">新增收货地址</a>
+						
+						<input type="button" class="yellow_btn address_ok" id="saveAddrBtn" value="确认收货人信息"/>
+					</div>
+					
+				</div>
+				
+				 
+					<div class="new " <#if defAddress!='none'>style="display:none"</#if> >
+						<#include 'new_address.html' />
+					</div>
+				
+			</div>
+			<#if defAddress !='none' >
+			<input type="hidden" id="checkAddressid" value="${(defAddress.addr_id)!''}" > 
+			<#else>
+			<input type="hidden" id="checkAddressid" value="0" > 
+			</#if>
+			<div class="box payment">
+				<div class="selected" >
+					<h1>
+						付款方式<a href="javascript:;" class="modify_btn">[修改]</a>
+					</h1>
+					<span class="pay_payment">支付宝</span>
+				</div>
+				<div class="modify" style="display:none">
+					<h1>付款方式</h1>
+					<div class="list">
+						<#include 'payment_list.html' />
+					</div>
+					
+					<div class="pay_botton btn">
+						<input type="button" class="yellow_btn" id="savePaymentBtn"
+							value="确认付款方式"  >
+					</div>
+				</div>
+			</div>
+			
+			<input type="hidden" name="typeId" value="0">
+			<div class="send_pucker box">
+				<h1>
+					送货时间：
+					<a href="javascript:;" class="change_sand">[修改]</a>
+				</h1>
+				<div class="send_selected">
+					<span class="send_ok">任意时间</span>
+				</div>
+				<div class="send_timetools" style="display:none;">
+					<label class="sand_time">
+						<input type="radio"  value="任意日期" name="shipDay" checked="true"/>
+						<p>任意日期</p>
+					</label>
+					<label class="sand_time">
+						<input type="radio"  value="仅工作日" name="shipDay"/>
+						<p>仅工作日</p>
+					</label>
+					<label >
+						<input type="radio"  value="仅休息日" name="shipDay"/>
+						<p>仅休息日</p>
+					</label>
+					
+						<!-- 修改人lee.li-->
+					
+					<!-- <label class="not_send">
+						<input type="radio"  value="存酒暂不送货" name="shipDay"/>
+						<p>存酒暂不送货</p>
+					</label> -->
+					<input type="button" value="保存送货时间" class="send_timesave">
+				</div>
+			</div>
+			
+			<!-- <div class="box dlytype" >
+				<div class="selected" style="display:none">
+					<h1>配送方式[<a href="javascript:;" class="modify_btn">修改</a>]</h1>
+				</div>
+				<div class="modify">
+					<h1>配送方式</h1>
+					<div class="list">请先选择支付方式。</div>
+					<div class="pay_botton btn">
+						<input type="button" class="yellow_btn" id="saveDlytypeBtn" value="确认配送方式" style="display:none">
+					</div>
+				</div>
+			</div> -->
+			
+			<!-- 发票 lee.li -->
+			<div class="box invoice">
+				<h1>
+					发票信息：
+					
+	<!-- 		<label><input type="radio" name="getOrNo_invoice"  value="1"  checked="true"><span>不需要发票</span></label>
+			<label><input type="radio" name="getOrNo_invoice" value="2" >需要发票<span></span></label>  -->
+				  <!--    <a href="javascript:;" class="change_invoice">[修改]</a> -->
+			 <input id="invoice_1" class="radioItem" checked="checked" name="getOrNo_invoice" type="radio" value="1" />
+		         <label  style="color: #27a9e3;display: inline-block;font-family: Arial,Helvetica,sans-serif;font-size: 12px;">不需要发票</label>
+		<input id="invoice_2" class="radioItem" name="getOrNo_invoice" type="radio" value="2" />
+		         <label style="color: #27a9e3;display: inline-block;font-family: Arial,Helvetica,sans-serif;font-size: 12px;">需要发票</label> 
+				  
+				  
+				  
+				  
+		       <!--  <a href="javascript:;" class="change_invoice">需要发票</a>    
+				<a href="javascript:;" class="unchange_invoice" style="display:none;font-family: Arial,Helvetica,sans-serif;display: inline-block;font-size: 12px;
+    margin-left: 10px;">不需要发票</a>   -->   
+          
+	        <div class="unInvoice_selected">                                               
+					<span name="unInvoice_selected" value="" style="color: #777;display: inline-block;font-family: Arial,Helvetica,sans-serif;font-size: 13px;" >不需要发票</span>				
+		  </div>  
+				</h1>
+				<div class="invoice_selected" >
+					<span  name="receiptType" value=""    class="receiptTypespan"  ></span>
+					<span  name="receiptContent" value="" class="receiptContentspan" ></span>
+					<span   value="" class="receiptTitlespan" name="receiptTitle"></span>
+				<input type="hidden" value="" name="receipt" class="receiptspan"> 
+					<!-- <input type="" value="" name="receipt" class="receiptspan">  -->
+				</div>
+				<div class="invoice_tools" style="display:none;">
+					<dl>
+						<dt>发票抬头：</dt>
+						<dd>
+							<label><input type="radio" name="receiptType" value="1" checked="true"><span>个人</span></label>
+							<label><input type="radio" name="receiptType" value="2" ><span>单位</span></label>
+							<label><input type="text" name="receiptTitle" id="receiptTitle" style="display: none;"/></label>
+						</dd>
+					</dl>
+					<dl>
+						<dt>发票内容：</dt>
+						<dd>
+							<!-- 修改人lee.li-->
+							<select name="receiptContent" class="receiptContent">
+									<option value="酒">酒</option>
+									<option value="酒明细">酒明细</option>
+									
+							</select>
+						</dd>
+					</dl>
+					<dl >
+						<dt></dt>
+						<dd style="padding:0px 0px 10px 0px">注：内容不全默认为不索取发票</dd>
+						
+						
+					</dl>
+					<input type="button" class="invoice_save" value="保存发票信息">
+				</div>
+			</div>
+			
+			<!-- 订单备注 -->
+			<div class="remark box">
+				<h1>
+					订单备注
+					<a href="javascript:;" class="change_remark">[修改]</a>
+				</h1>
+				<div class="remark_selected">
+					<span name="remark" value="" >暂无备注信息</span>
+					
+				</div>
+				<div class="remark_tools" style="display:none;">
+					<label><input type="text" name="remark" value="" class="remark_content"><span>*请勿填写有关支付/收货/发票方面的信息，如有特殊需要请联系客服人员。</span></label>
+					<input type="button" value="保存备注信息" class="remark_ok">
+				</div>
+				<script>
+					$(function(){
+						$(".remark_ok").click(function(){
+							var c_remark = $(".remark_content").val();
+							$(".remark_selected span").attr("val",c_remark);
+							$(".remark_selected span").text(c_remark);
+							$(".change_remark").show();
+							$(".remark").removeClass("relborder");
+							$(".remark_selected").show();
+							$(".remark_tools").hide();
+							if(c_remark==""){
+								$(".remark_selected span").text("暂无备注信息");
+							}
+						})
+						$(".change_remark").click(function(){
+							$(this).hide();
+							$(".remark").addClass("relborder");
+							$(".remark_selected").hide();
+							$(".remark_tools").show();
+						})
+					})
+				</script>
+			</div>
+			
+			<#-- 创建购物车标签 -->
+			<#assign cartTag= newTag("storeCartGoodsTag")>
+			<#--通过购物车标签获取购物项列表 --> 
+			<#assign itemList = cartTag("{'countship':'yes', 'onlyselected':'yes'}")>			
+		
+			<div class="goods_wrapper">
+				<h1>
+					商品清单<a href="${ctx}/cart.html"><span>[返回购物车修改]</span></a>
+				</h1>
+				<table class="checkout_goodslist">
+					<thead>
+						<tr>
+							<th colspan="3">商品</th>
+							<th >单价(元)</th>
+							<th >数量</th>
+							<th >小计(元)</th>
+						</tr>
+					</thead>
+					<tbody>
+				<#if itemList?exists && itemList?size gt 0> 
+				<#list itemList as store >
+					<tr>
+						<th colspan="10">
+							店铺名称:${store.store_name}
+							<input type="hidden" name="storeid" value="${store.store_id}" >
+						</th>
+					</tr>
+					<#assign storeActivityNum = 0>
+					<#list store.goodslist as item >
+						<#if item.activityName?? || item.current_activity != 0>
+							<!-- 直降和普通商品 显示优惠券 -->
+							<#if item.current_activity == 1 || item.current_activity == 2 || item.activityName??>
+								<#assign storeActivityNum = 1>
+							</#if>
+							<input type="hidden" name="costDownIds" value="${item.costDownId}"/>
+							<tr>
+								<td colspan="8" style="text-align: left; padding-left: 5px;">
+									<span class="line-circle"></span>
+								<#if item.current_activity == 1>
+									<span class="full-icon">闪购<b></b></span>${item.current_activity_name}
+								<#elseif item.current_activity == 2>
+									<span class="full-icon">预售<b></b></span>${item.current_activity_name}
+								<#elseif item.current_activity == 3>
+									<span class="full-icon">直降<b></b></span>${item.current_activity_name}
+								</#if>
+								<#if item.current_activity != 1 && item.current_activity != 2 && item.activityName??>
+									<span class="full-icon">满减<b></b></span>${item.activityName}
+								</#if>
+								</td>
+							</tr>
+						</#if>
+						<tr itemid="${item.id}">	
+							<td>
+								<input type="hidden" value="${store.store_id}">&nbsp;
+							</td>
+							<td width="100">
+								<a target="_blank" href="goods.html?goodsid=${item.goods_id}">
+									<span style="display: block; height: 50px;" class="cart-product-img"> 
+										<@image height="50" width="50" src="${item.image_default!''}" style="cursor: pointer;" /> 
+									</span>
+								</a>
+							</td>
+							<td style="text-align:left;font-weight:bold;color:#333">
+								<a target="_blank" href="goods.html?goodsid=${item.goods_id}">${item.name}</a> 
+								<#if item.others?exists> 
+									<#if item.others.specList?exists> 
+										<span>
+											<#list item.others.specList as spec>
+											<#if spec_index!=0>
+											</#if>
+												<strong>${spec.name}:
+													<em style="color: #ED7108">${spec.value}</em>
+												</strong>
+											</#list>
+										</span> 
+									</#if> 
+								</#if>
+							</td>
+							<td>
+								${item.price?string("currency")}
+							</td>
+							<td>
+								${item.num}
+							</td>
+							<td>
+								${item.subtotal?string("currency")}
+							</td>
+						</tr>
+						<input type="hidden" name="goodsIds" value="${item.goods_id}">
+						<input type="hidden" name="nums" value="${item.num}">
+						<input type="hidden" name="prices" value="${item.price}">
+					</#list>
+					<tr class="tfoot">
+						<td style="border-bottom: 0px dashed #bebebe;text-align: right;background:#fff" colspan="9" class="change_store_bonus">
+						
+							<!-- 创建店铺优惠券标签 --> 
+							<#assign storeBonusTag= newTag("storeBonusTag") > 
+							<!-- 查询店铺优惠券列表 -->
+								<#assign storeBonus= storeBonusTag("{'store_id':${store.store_id!0},'storeprice':${(store.storeprice.couponPrice)?string('0.00')}}")!''>
+									<div class="storeBonusDiv" style="display: inline-block;">
+							<span>店铺优惠券：</span>
+										<select style="width: 200px; color:red;" name="bonusid"
+												id="bonusid_${store.store_id}" storeid="${store.store_id}"
+												class="store_bonus" autocomplete="off" oldValue="0-0">
+								<option value="0-0" style="color: #999">不使用优惠券</option>
+								<#list storeBonus as s>
+									<option style="color: #999" value="${s.bonus_id!0}-${s.type_money}">${s.type_money}元优惠券</option>
+								</#list>
+							</select>
+							</div>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+			 
+							<#assign storeDlytype = store.shiplist>
+							<span>店铺配送方式：</span>
+							<select name="shippingId" id="type_${store.store_id}" class="store_dlyss" storeid="${store.store_id}" autocomplete="off" > 
+								<#list storeDlytype as s>
+								<option value="${s.type_id!0}">${s.name}&nbsp;&nbsp;&nbsp;&nbsp;${s.shipPrice}&nbsp;元</option>
+								</#list>
+							</select>
+						</td>
+					</tr>
+					<tr  class="tfoot">
+						<td colspan="6" style="text-align: right;background:#fff;padding-right:20px;">
+							<ul>
+								<li ><span>优惠券抵扣：</span><span class="couponprice" id="discountPrice_${store.store_id}">${store.storeprice.discountPrice?string("currency")}</span></li>
+								<li ><span>店铺总计(含运费)：</span><span class="storeprice" id="orderprice_${store.store_id}">${store.storeprice.orderPrice?string("currency")}</span></li>
+							</ul>
+						</td>
+					</tr>
+			 
+				</#list>
+				</tbody>
+				<#else>
+				<meta http-equiv="refresh" content="0.1;url=${ctx}/cart.html">
+				</#if>
+				</table>
+				
+				<div class="gome-wrapper" style="float:left;padding-top:40px;width:50%;text-align:right">
+					<#assign storeBonusTag= newTag("storeBonusTag")>
+					<#assign bonusList = storeBonusTag("{'store_id':0,'storeprice':999999.99}")!''>
+					<div>
+						<span style="font-size:13px">红包：</span>
+						<select style="width: 100px;color: red" name="bonusid" id="bonusid" class="bonus"
+								oldValue="0-0">
+							<option style="color: #999" value="0-0">不使用红包</option>
+							<#list bonusList as bonus>
+								<#if bonus_index == 0 >
+									<option style="color: #999" value="${bonus.bonus_id!0}-${bonus.type_money!''}">
+										${bonus.type_money!''}元红包
+									</option>
+								<#else>
+									<option style="color: #999" value="${bonus.bonus_id!0}-${bonus.type_money!''}">${bonus.type_money!''}元红包</option>
+								</#if>
+							</#list>
+
+						</select>
+					</div>
+					
+					<br/>
+					
+					<#assign memberInfoTag = newTag("memberInfoTag") />
+					<#assign member = memberInfoTag() />
+					<div>
+						<label style="font-size:13px">
+							<input type="checkbox" class="useBalance"> 
+							使用余额(${(member.advance+member.virtual)?string('currency')})支付
+						</label> 
+					</div>
+				</div>
+				
+				
+				<div class="total_wrapper" style="height:auto;">
+					<#include 'checkout_total.html' />
+				</div>
+			</div>
+			<div class="order_total">
+
+				<div class="button_wrapper btn">
+					<input type="hidden" id="firmlySubmit" name="firmlySubmit" value="no">
+					<input type="button" value="提交订单" id="createBtn" class="blue_btn enable" />
+				</div>
+				<div class="clear"></div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="add_success_msg" style="display:none">
+	<dl class="add_message">
+		<dt id="cart_message">购物车中的商品已发生改变!</dt>
+		<dd>
+			<input id="messageBut" type="button" class="returnbuy_btn" value="返回购物车">
+		</dd>
+	</dl>
+</div>
+
+<div id="dd"></div>
+
+<script>
+$(document).ready(function(){
+
+	$(".order_coupon .toggle-title").bind('click',function(){
+		if ($(this).parent(".credit").hasClass("toggle-active")) {
+			$(this).parent(".credit").removeClass("toggle-active")
+ 			$(this).parent().find(".toggle-wrap").addClass("hide");
+		} else {
+			$(this).parent(".credit").addClass("toggle-active");
+			$(this).parent().find(".toggle-wrap").removeClass("hide");
+		} 
+		
+	});
+	
+	// 2015/10/12 humaodong
+
+	$(".bonus").change(function(){
+		var args = $(this).val().split("-"); 
+		var bonusid = args[0];
+		var bonusAmount = args[1];
+		var oldValue = $(this).attr("oldValue");
+		if (Number($("#needPayOrder").val()) + Number(oldValue.split("-")[1]) <= bonusAmount) {
+			alert("红包金额不能大于应支付价格!");
+			$(this).val(oldValue);
+			return false;
+		}
+		$(this).attr("oldValue", $(this).val());
+		$.post("api/store/storeOrder!useBonus.do", {bonus_id:bonusid}, function(json) {
+			if(json.result==1){
+				$(".total_wrapper").load("checkout/checkout_total.html");
+			} else {
+				alert(json.message);
+			}
+		});
+	});
+	$('.bonus').change();
+
+	// 2015/10/26 humaodong
+	$('input.useBalance').change(function() {
+		var useBalance = $(this).is(':checked') ? 1 : 0;
+		$.post("api/store/storeOrder!useBalance.do", {useBalance:useBalance}, function(json) {
+			if(json.result==1){
+				$(".total_wrapper").load("checkout/checkout_total.html");
+			} else {
+				alert(json.message);
+			}
+		});
+	});
+	$('input.useBalance').change();
+	//2015/12/3 humaodong reset session info 
+
+
+	//check if the bonus is legal to use, it can't be larger than total amount of the order
+//	var _args = $("select.bonus option:selected").val().split("-");
+//	if (!isBonusLegal(_args[1])) {
+//		$("select.bonus option").removeAttr("selected");
+//		$("select.bonus option:first").attr("selected", "selected");
+//	}
+
+	//$('select.bonus').change();
+
+
+
+	$(".store_bonus").change(function(){
+		var regionid= $("#regionid").val();
+		var $this= $(this);
+		var storeid = $this.attr("storeid");
+		var typeid=$("#type_"+storeid+"").val();
+		var args = $("#bonusid_" + storeid + "").val().split("-");
+		var oldValue = $(this).attr("oldValue");
+		if (Number($("#needPayOrder").val()) + Number(oldValue.split("-")[1]) <= args[1]) {
+			alert("红包金额不能大于应支付价格!");
+			$(this).val(oldValue);
+			return false;
+		}
+		$(this).attr("oldValue", $(this).val());
+
+		changeArgsType(storeid,typeid,regionid,args[0],args[1]);
+	});
+	
+	$(".store_dlyss").change(function(){
+		
+		var regionid= $("#regionid").val();
+		var $this= $(this);
+		var storeid = $this.attr("storeid");
+		var typeid=$this.val(); 
+		var args = $("#bonusid_"+storeid+"").val().split("-"); 
+		changeArgsType(storeid,typeid,regionid,args[0],args[1]);
+	});
+	
+	//送货时间
+	$(".send_timesave").click(function(){
+		var val=$('input:radio[name="shipDay"]:checked').val();
+		$(".send_selected").show();
+		$(".send_timetools").hide();
+		$(".send_ok").empty();
+		$(".send_ok").text(val);
+		$(".send_pucker").removeClass("relborder");
+		$(".change_sand").show();
+	});
+	
+	$(".change_sand").click(function(){
+		$(".send_pucker").addClass("relborder");
+		$(".send_selected").hide();
+		$(".send_timetools").show();
+		$(this).hide();
+	});
+	
+	$(".invoice_save").click(function(){
+		var rType=$('input:radio[name="receiptType"]:checked').val();
+		var rContent= $(".receiptContent").find("option:selected").text(); 
+		var rTitle=$("#receiptTitle").val();
+		$(".invoice_tools").hide();
+		$(".receiptTypespan").attr("value",rType);
+		$(".receiptContentspan").attr("value",rContent);
+		$(".receiptContentspan").text(rContent);
+		$(".receiptTitlespan").attr("value",rTitle);
+		$(".receiptTitlespan").text(rTitle);   
+		$(".invoice_selected").show();
+		
+		$(".invoice").removeClass("relborder");
+		$(".change_invoice").hide();
+		$(".unchange_invoice").hide();
+		
+	
+	   $(".unInvoice_selected").hide();
+	    
+	/* 	$(".get_invoice").show)();
+	     $(".no_invoice").show)(); */
+		
+		if(rType!=""){
+			$(".receiptspan").attr("value","1");
+		}
+		if(rType==1){
+			$(".receiptTypespan").text("个人");
+				<!-- 修改人lee.li-->
+			/* $(".receiptTitlespan").attr("value","");
+			$(".receiptTitlespan").text("");    */
+		}
+		if(rType==2){
+			$(".receiptTypespan").text("单位");
+		}
+	});
+	
+	$(".change_invoice").click(function(){
+	    
+		
+		$(".invoice_selected").hide();
+		$(".invoice_tools").show();
+		$(".invoice").addClass("relborder");
+		$(".unInvoice_selected").hide();
+		$(".unchange_invoice").hide();
+		$(this).hide();
+	});
+
+	$(".unchange_invoice").click(function(){
+		$(".invoice_selected").hide();
+		//$(".invoice_selected").show();
+		$(".invoice_tools").hide();
+		$(".change_invoice").show();
+        $(".unInvoice_selected").show();
+		
+        
+		//$(".invoice").addClass("relborder");
+		$(this).hide();
+
+		//$(this).toggleClass().css("color","#CCC");
+	});
+	
+	$(".radioItem").change(function() {
+		
+		var $selectedvalue = $("input[name='getOrNo_invoice']:checked").val();
+		
+		if ($selectedvalue == 1) {
+			$(".invoice_selected").hide();
+			//$(".invoice_selected").show();
+			$(".invoice_tools").hide();
+			 $(".unInvoice_selected").show();
+		    // $(".invoice").addClass("relborder");
+			
+		} else {
+			$(".invoice_selected").hide();
+			$(".invoice_tools").show();
+			$(".invoice").addClass("relborder");
+			$(".unInvoice_selected").hide();
+
+		}
+	});
+
+})
+
+/**
+ * 更改快递方式
+ */
+function changeArgsType(storeid,typeid,regionid,bonusid,bonusMoney){
+	$.ajax({
+		url:"api/store/storeOrder!changeArgsType.do",
+		data: {store_id:storeid,regionid:regionid,type_id:typeid,bonus_id:bonusid},
+		dataType:"json",
+		success:function(res){
+			if(res.result==1){
+				/* 2015/10/16 humaodong update.
+				var orderprice  = res.storeprice.orderPrice;
+				orderprice =price_format(orderprice-bonusMoney);
+				$("#orderprice_"+storeid).html(orderprice);
+				$("#discountPrice_"+storeid).html(price_format(bonusMoney));
+				*/
+				var needpay = price_format(res.storeprice.needPayMoney);
+				var discount = price_format(res.storeprice.discountPrice);
+				$("#orderprice_"+storeid).html(needpay);
+				$("#discountPrice_"+storeid).html(discount);
+				
+				$(".total_wrapper").load("checkout/checkout_total.html");
+			}else{
+				alert(res.message);
+			}
+		},
+		error:function(){
+			alert("糟糕，发生意外错误");
+		}
+	});	
+}
+ 
+
+//禁用支付方式确认按钮
+function disableButton(disable){
+	//禁用
+	if(disable==0){
+		$("#savePaymentBtn").attr("disabled",true); 
+	}else{
+		$("#savePaymentBtn").removeAttr("disabled");
+	}
+}
+
+//检查 是不是货到付款 是的话检查可不可以支持货到付款
+function toCheckIsCod(){
+	//禁用确认按钮
+	disableButton(0);
+	var addrid = $("#checkAddressid").val();
+	$.ajax({
+		url: "${ctx}/api/shop/payment!checkSupportCod.do",
+		data: {'addrid': addrid},
+		dataType: "json",
+		success: function (res) {
+			if (res.result == 1) {
+				disableButton(res.result);
+			} else {
+				disableButton(res.result);
+				$.alert("该收货地址不支持货到付款！<br>请选择其他支付方式或者其他收货地址");
+			}
+		},
+		error: function () {
+			alert("糟糕，发生意外错误");
+		}
+	});
+}
+ 
+
+function add_address(){
+	
+	// 与会员中心规则一致，最多添加10个
+	if($(".def_addr").length >= 10) {
+		$.alert("最多可以保存10个地址，无法新增收货地址！");
+		return;
+	}
+	
+	$(".address .modify").hide();
+    $(".address .new").show();
+	$("#checkoutform .address :input").not(":button, :submit, :reset, :hidden").val("").removeAttr("checked").remove("selected");
+	
+}
+/*
+function isBonusLegal(__bonusAmount) {
+	var _bonusAmount = parseFloat(__bonusAmount);
+	var goodsPay = parseFloat($("#goodsPay").data("value"));
+	var shippingPay = parseFloat($("#shippingPay").data("value"));
+	var discount_Pay = parseFloat($("#discount_Pay").data("value"));
+	var promotionDiscount = parseFloat($("#promotionDiscount").data("value"));
+	var delta = _bonusAmount - (goodsPay + shippingPay - discount_Pay - promotionDiscount);
+	return delta < 0.01;
+ }*/
+</script>

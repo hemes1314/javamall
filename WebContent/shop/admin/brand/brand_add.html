@@ -1,0 +1,31 @@
+<div class="main" style="background-color: white;" >
+	<div class="easyui-panel" style="border-style: none; height: 600px">
+		<div style="padding: 10px 0 10px 20px">
+			<form id="brandForm" method="post" class="validate">
+				<table>
+					<tr>
+						<td>品牌名称</td>
+						<td><input class="input_text easyui-validatebox" type="text" id="name"
+							name="brand.name" data-options="required:true"
+							></input></td>
+					</tr>
+					<tr>
+						<td>品牌网址：</td>
+						<td><input class="input_text easyui-validatebox" type="text" id="url" value="http://"
+							name="brand.url" data-options="required:true,validType:'url'"
+							></input></td>
+					</tr>
+					<tr>
+						<td>品牌LOGO：</td>
+						<td><input class="easyui-validatebox" type="file" id="logo"
+							name="logo" data-options="required:false"></input></td>
+					</tr>
+					<tr>
+						<td>详细说明</td>
+						<td><textarea id="brief" name="brand.brief"></textarea></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>

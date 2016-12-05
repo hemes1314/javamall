@@ -1,0 +1,45 @@
+<#if member?? >
+	<script type="text/javascript">var isLogin= true;</script>
+	<span>
+		<a href="${ctx}/member/member.html">${member.name!}</a>
+	</span>
+	，欢迎来到
+	<a alt="首页" title="首页" href="${ctx}/index.html" style="color:#e10414">GOME Cellar</a>
+	<span>
+		[<a id="logout" href="javascript:void(0);">退出</a>]
+	</span>
+<#else>
+	<script type="text/javascript">
+		var isLogin= false;
+		var url = window.location.href;	
+		if (url.indexOf("forward") < 0) {
+			var forward = window.location.pathname.substring(1) + window.location.search;
+			
+			if (forward.indexOf("gome-javamall/") >= 0) {
+				forward = forward.replace("gome-javamall/", "");
+			}
+			
+			if (forward == "store/register_phone.html") {
+				forward = "index.html";
+			}
+			if (forward == "store/register.html") {
+				forward = "index.html";
+			}
+			$("#member_login_url").attr("href", "${ctx}/store/login.html?forward="+encodeURI(forward));
+		}
+	</script>
+	欢迎来到 
+	<a href="${ctx}/index.html" title="首页" alt="首页" style="color:#e10414">GOME Cellar</a>
+	<span>
+		[<a id="member_login_url" href="">登录</a>]
+	</span> 
+	<#if sms_isopen==0>
+		<span>
+			[<a href="${ctx}/store/register.html">注册</a>]
+		</span> 
+	<#else>
+		<span>
+			[<a href="${ctx}/store/register_phone.html">注册</a>]
+		</span> 
+	</#if>
+</#if>

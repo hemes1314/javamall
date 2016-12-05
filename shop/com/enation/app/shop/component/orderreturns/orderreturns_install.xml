@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>create</command>
+		<table>returns_order</table>
+		<field><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>ordersn</name><type>varchar</type><size>50</size><option>00</option></field>
+		<field><name>memberid</name><type>int</type><size>11</size><option>00</option></field>
+		<field><name>state</name><type>int</type><size>6</size><option>00</option></field>
+		<field><name>goodsns</name><type>memo</type><size>21845</size><option>00</option></field>
+		<field><name>type</name><type>int</type><size>6</size><option>00</option></field>
+		<field><name>add_time</name><type>long</type><size>19</size><option>00</option></field>
+		<field><name>photo</name><type>varchar</type><size>100</size><option>00</option></field>
+		<field><name>refuse_reason</name><type>varchar</type><size>200</size><option>00</option></field>
+		<field><name>apply_reason</name><type>varchar</type><size>200</size><option>00</option></field>
+	</action>
+</dbsolution>

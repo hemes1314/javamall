@@ -1,0 +1,91 @@
+<#include '/admin/header.html' > 
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+
+<div class="main" style="background-color: white;">
+	<form id="addForm">
+		<table cellspacing="1" cellpadding="3" width="100%" style="border-collapse:collapse;" border='1' bordercolor="#d7d7d7" class="form-table">
+			<input type="hidden" name="goods_id" value="${goods_fake.goods_id}">
+			<input type="hidden" name="cat_id" value="${goods_fake.cat_id}">
+			<input type="hidden" name="store_id" value="${goods_fake.store_id}">
+			<tr>
+				<th>商品名称:</th>
+				<td><input class="input_text" type="text" name="name" readonly value="${goods_fake.name}"></input></td>
+			</tr>
+			<tr>
+				<th>商品SN:</th>
+				<td><input class="input_text" type="text" name="sn" readonly value="${goods_fake.sn}"></input></td>
+			</tr>
+			<tr>
+				<th>分类名称:</th>
+				<td><input class="input_text" type="text" name="cat_name" readonly value="${goods_fake.cat_name}"></input></td>
+			</tr>
+			<tr>
+				<th>评论时间段:</th>
+				<td>
+					<input class="easyui-datebox" style="width: 90px;height: 28px;" id="start_time"  name="start_time"/>
+                       <span>&nbsp;~&nbsp;</span>
+                       <input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time" name="end_time"/>
+                   </td>
+            </tr>
+
+			<tr>
+				<th>评论数量:</th>
+				<td><input class="input_text" type="text" name="goods_fake_commentsNumber"  value="${goods_fake.goods_fake_commentsNumber}"></input></td>
+			</tr>
+			<tr>
+				<th>销售数量:</th>
+				<td><input class="input_text" type="text" name="goods_fake_salesNumber"  value="${goods_fake.goods_fake_salesNumber}"></input></td>
+			</tr>
+		</table>
+	</form>
+	<div class="buttonWrap fixed">
+		<a id="submitButton" class="easyui-linkbutton" onclick="submitForm()"
+			href="javascript:;">保存</a>
+	</div>
+</div>
+<script>
+	
+	function submitForm() {
+		var start_time = $('#start_time').datebox('getValue');
+		var end_time = $('#end_time').datebox('getValue'); 
+		
+		if(start_time > end_time){
+			alert("开始时间不得大于结束时间！");
+			return;
+		}
+		var formflag = $("#addForm").form().form('validate');
+		
+		if (formflag) {
+			$.Loading.show("正在提交......");
+			$("#submitButton").linkbutton("disable");
+			var options = {
+				url : "fake!generateFakeData.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success("数据已生成！");
+						//newTab("申诉申请", "${ctx}/b2b2c/admin/appeal!list.do");
+						//parent.CloseTabByTitle("申诉申请");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$("#submitButton").linkbutton("enable");
+					
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					$("#submitButton").linkbutton("enable");
+					$.Loading.hide();
+				}
+			};
+			$("#addForm").ajaxSubmit(options);
+		} else {
+			$.Loading.hide();
+		}
+	}
+	
+</script>
+
+<#include '/admin/footer.html' >

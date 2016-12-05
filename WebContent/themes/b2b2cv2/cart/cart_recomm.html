@@ -1,0 +1,15 @@
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>		
+<!-- 调用商品列表标签，并传递商品列表所在catid及循环次数 -->		
+<#assign goodsList=goodsListTag("'tagid':'331','goodsnum':'5'")>
+<div class="shop_cargo">
+    <ul>
+        <#list goodsList as goods>
+        <li>
+            <a href="goods-${goods.goods_id}.html" ><@image src="${goods.thumbnail!''}" alt="广告小图片列表" /></a>
+            <h1><a href="goods-${goods.goods_id}.html" title="${goods.name}">${goods.name}</a></h1>
+            <p>售价：<span>${goods.price?string.currency}</span></p>
+        </li>
+        </#list>
+    </ul>
+</div>

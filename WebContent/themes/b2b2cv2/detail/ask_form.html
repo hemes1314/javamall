@@ -1,0 +1,50 @@
+<#include 'ask_list.html'/>
+<div id="ask_form_wrapper">
+	<form method="post" id="askForm">
+		<input type="hidden" name="goods_id" value="${goodsid}" />
+		<input type="hidden" name="commenttype" value="2" />
+		<h2>发表咨询</h2>
+		<label>
+			<h3>咨询内容：</h3>
+			<textarea  name="content" id="ask_content" >请在此处输入您的问题</textarea>
+		</label>
+ 		<div class="ask_btn" style="float:none;display:block;text-align:left;margin:10px 0px">
+			<a href="javascript:;" class="blue_btn" id="askBtn">提交咨询</a>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+$(function(){	
+	$("#ask_content").focus(function(){
+		if(this.value=="请在此处输入您的问题"){
+			this.value="";	
+		}
+	}).blur(function(){
+		if( $.trim(this.value)==""){
+			this.value="请在此处输入您的问题";
+		}
+	});
+	$("#askBtn").click(function(){
+		//$("#askBtn").prop("disabled",true);
+		//$("#askBtn").attr({"disabled":"disabled"});
+		    //设置href属性
+		//$("#askBtn").href = "javascript:void(0);";
+		//设置disabled属性
+		 //$(this).attr('disabled',"true");
+
+		var cval = $('#ask_content').val();
+		if(cval == '' ||cval=='请在此处输入您的问题' ){
+			alert("请输入您的咨询内容！");
+			return;
+		}
+		else if(cval.length>1000){
+			alert("请您输入1000字以内的文字");
+			return;
+		}
+		$("#askBtn").remove();
+		CommentForm.formSubmit($(this),$("#askForm"));
+		$("#askBtn").removeAttr("disabled");
+	});
+});
+</script>

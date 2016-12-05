@@ -1,0 +1,103 @@
+
+<div class="shop-card">
+	<h4>店铺</h4>
+	<dl>
+		<dt>
+			<span class="thumb size60"><i></i>
+				<a href="#4">
+				<@image src="${store.store_logo!''}" title="${store.store_name}" class="pngFix" width="50px" height="50px" />
+			</a> </span>
+		</dt>
+		<dd>
+			<a href="#" class="shopkeeper">${store.member_name}</a>
+			<a href="javascript:void(0);" class="message text-hidden"
+				title="发站内信">发站内信</a>
+		</dd>
+		<dd class="ncs-level">卖家信用：0</dd>
+		<dd>
+			<span>好评率：</span>0%
+		</dd>
+	</dl>
+</div>
+<div class="shop-rate">
+	<h4>动态评价</h4>
+	<!-- 动态评价 -->
+	<dl class="rate">
+		<dt>描述相符：</dt>
+		<dd class="raty" data-score="0">
+			<#if store.store_desccredit==0>
+				<#list 1..5 as t>
+					<@image src="/images/star-on.png" alt="1" style="display: inline-block;" />
+				</#list>
+				<#else>
+					<#list 1..store.store_desccredit as t>
+						<@image src="/images/star-on.png" alt="1" style="display: inline-block;" />
+					</#list>
+			</#if>
+			
+		</dd>
+		<dt>服务态度：</dt>
+		<dd class="raty" data-score="0">
+			<#if store.store_desccredit==0>
+				<#list 1..5 as t>
+					<@image src="/images/star-on.png" alt="1" style="display: inline-block;" />
+				</#list>
+				<#else>
+					<#list 1..store.store_servicecredit as t>
+						<@image src="/images/star-on.png" alt="1" style="display: inline-block;" />
+					</#list>
+			</#if>
+			
+			
+		</dd>
+		<dt>发货速度：</dt>
+		<dd class="raty" data-score="0">
+			<#if store.store_deliverycredit==0>
+				<#list 1..5 as t>
+					<@image src="/images/star-on.png" alt="1" style="display: inline-block;" />
+				</#list>
+				<#else>
+					<#list 1..store.store_deliverycredit as t>
+						<@image src="/images/star-on.png" alt="1" style="display: inline-block;" />
+					</#list>
+			</#if>
+		</dd>
+	</dl>
+</div>
+<div class="shop-detail">
+	<!-- 店铺信息 -->
+	<h4>店铺信息</h4>
+	<dl>
+		<dt>创店时间：</dt>
+		<dd><@dateformat time='${store.create_time!0}' pattern='yyyy-MM-dd'/> </dd>
+		<dt>所&nbsp;在&nbsp;地：</dt>
+		<dd>${store.store_province!''} ${store.store_city!''} ${store.store_region!''}</dd>
+		<dt>商品数量：</dt>
+		<dd>
+			<strong>${store.goods_num!0}</strong>件商品
+		</dd>
+		<dt>店铺收藏：</dt>
+		<dd>
+			<strong nctype="store_collect">${store.store_collect!0}</strong>人收藏
+		</dd>
+		<dt>认证信息：</dt>
+		<dd>
+			<#if store.name_auth==1 >
+				<img alt="身份已认证" title="身份已认证" src="${ctx}/themes/b2b2cv2/images/cert_autonym.gif">
+			<#else>
+			
+				<img title="身份未认证或认证失败" alt="身份未认证或认证失败" src="${ctx}/themes/b2b2cv2/images/cert_autonym_no.gif">
+			</#if>
+			
+			<#if store.store_auth==1 >
+				<img alt="店铺已认证" title="店铺已认证" src="${ctx}/themes/b2b2cv2/images/cert_material.gif">	
+			<#else>
+				<img alt="尚未认证或认证失败" title="尚未认证或认证失败" src="${ctx}/themes/b2b2cv2/images/cert_material_no.gif">
+			</#if>
+		</dd>
+	</dl>
+</div>
+<div class="shop-im">
+	<h4>联系方式</h4>
+	<p>联系电话：${store.tel!''}</p>
+</div>

@@ -1,0 +1,232 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+<#assign storeSearchTag=newTag("storeSearchTag")>
+<#assign storeSearch=storeSearchTag()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/layout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/common_02.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/skin.css" />
+
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/waypoints.js"></script>
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.jcarousel.min.js"></script>
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.raty.min.js"></script>
+
+<style type="text/css">
+.sticky #main-nav { width: 1200px;}
+/*.jcarousel-skin-tango .jcarousel-prev-horizontal, .jcarousel-skin-tango .jcarousel-next-horizontal { margin-top: -60px;}*/
+.jcarousel-skin-tango .jcarousel-clip-horizontal { width: 1000px !important; height: 225px !important;}
+.jcarousel-skin-tango .jcarousel-item { height: 225px !important;}
+.jcarousel-skin-tango .jcarousel-container-horizontal { width: 1000px !important;}
+.jcarousel-list-horizontal { z-index:99;}
+</style>
+
+<div class="clear"></div>
+<div class="breadcrumb-layout">
+	<div class="breadcrumb wrapper">
+    	<span>
+    		<a href="index.html">首页</a>
+    	</span>
+    	<span class="arrow">&gt;</span>
+			<span>店铺</span>
+	</div>
+</div>
+<div class="container wrapper">
+	<#if storeSearch.totalCount == 0>
+		<div style="width:100%;height:300px;text-align:center;margin:66px 0px;">
+			<@image src="${ctx}/themes/b2b2cv2/images/no_search.jpg" alt="抱歉，没有找到您要的搜索结果"/>
+		    <p style="padding:50px 0;">
+		    <a href="/index.html" style="text-align:center; padding:15px 30px; background:#c40000; color:#fff; font-family:微软雅黑; font-size:20px; margin-left:10px;">去首页逛逛~</a>
+		    </p>
+		</div>
+	<#else>
+	<div class="sort-bar">
+		<div class="shop_con_list" id="main-nav-holder">
+			<div class="sort-bar">
+				<div class="shop_con_list" id="main-nav-holder">
+					<nav class="nc-gl-sort-bar" id="main-nav">
+						<div class="sort-bar">
+							<!-- 排序方式S -->
+							<ul class="array">
+								<li class="li_time"><a href="javascript:void(0)" title="点击按开店时间从近到远排序" name="searchByType"  searchType="default" title="">时间</a></li>
+					            <!-- 信用 -->
+					            <li class="li_credit"><a href="javascript:void(0)" title="点击按信用从高到低排序" name="searchByType" searchType="store_credit" >信用</a></li>
+				          	</ul>
+							<!-- 排序方式E -->
+							<!-- 
+							<div class="sidebox w150">
+								<h5 class="title">店铺名称：</h5>
+								<div class="selectbox">
+									<input class="text" type="text" name="keyword" value="${namekeyword!''}" style="width: 80px;" />
+								</div>
+							</div>
+							<div class="sidebox w150">
+								<h5>店主：</h5>
+								<div class="selectbox">
+									<input class="text" type="text" name="user_name" value=""style="width: 80px;" />
+								</div>
+							</div>
+							<div class="sidebox width5" style="background-image: none">
+								<div class="selectbox">
+									<input class="btn" type="button" value="搜索">
+								</div>
+							</div>
+							 -->
+						</div>
+					</nav>
+				</div>
+			</div>
+        </div>
+		<ul class="store-list">
+			<#list storeSearch.list.result as store>
+			<li class="item">
+				<dl class="shop-info">
+					<dt class="shop-name"><a href="${ctx}/home.html?show_c=1&store_id=${store.store_id!0}">${store.store_name}</a></dt>
+					<dd class="shop-pic">
+						<a href="${ctx}/home.html?show_c=1&store_id=${store.store_id!0}" title="">
+							<span class="size72">
+								<@image  class="size72" border="0" src="${store.store_logo!''}" alt="${store.store_name!''}" />
+							</span>
+						</a>
+					</dd>
+					<dd class="shopkeeper">店主：${store.member_name}
+						 <#if store.qq??>
+						 	<span><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=${store.qq!''}&amp;site=qq&amp;menu=yes"><img src="http://wpa.qq.com/pa?p=2:1234567:52" alt=""></a></span>
+						</#if>
+					</dd>
+				</dl>
+				<dl class="w200">
+					<dd>商品数量${store.goods_count}件</dd>
+					<dd>最近成交${store.recently}笔</dd>
+					<dd nc_type="${store_index}" attr="morep" class="more-on" onclick="showGoods(this)">收起相关商品<i></i>
+					</dd>
+				</dl>
+              	<dl class="w150">
+      				<!-- 店铺信用度 -->
+        			<dd>店铺好评率：${store.praise_rate*100}%</dd>
+        			<dd class="shop-rate" nc_type="shop-rate" store_id="2">
+        				店铺动态评分：<span><i></i></span>
+        				<div class="shop-rate-con">
+              				<div class="arrow"></div>
+              				<dl class="rate">
+              					<dt>描述相符：</dt>
+								<dd class="rate-star">
+									<em><i style="width: ${store.store_desccredit*20}%;"></i></em>
+									<span>${store.store_desccredit!'5'}分</span>
+								</dd>
+								<dt>服务态度：</dt>
+                  				<dd class="rate-star">
+									<em><i style="width: ${store.store_servicecredit*20}%;"></i></em>
+									<span>${store.store_servicecredit!'5'}分</span>
+								</dd>
+                  				<dt>发货速度：</dt>
+                  				<dd class="rate-star">
+									<em><i style="width: ${store.store_deliverycredit*20}%;"></i></em>
+									<span>${store.store_deliverycredit!'5'}分</span>
+							</dd>
+                  			</dl>
+                  		</div>
+					</dd>
+				</dl>
+				<dl class="w120">
+	        		<dd class="tr">${store.store_province!''}&nbsp;${store.store_city!''}&nbsp;${store.store_region!''}</dd>
+	      		</dl>
+	      		
+	      		
+	      		<#assign storeGoodsListTag=newTag("storeGoodsListTag")>
+				<#assign storeGoodsList=storeGoodsListTag("{'store_id':${store.store_id},'disable':0,'market_enable':1}")>
+				
+				<#if storeGoodsList?size !=0 >
+	      		<div class="shop-goodslist" nc_type="goods_${store_index}">
+	      			<div class="arrow"></div>
+	      			<div class=" jcarousel-skin-tango">
+	      				<div class="jcarousel-container jcarousel-container-horizontal" style="position: relative; display: block;">
+	      					<div class="jcarousel-clip jcarousel-clip-horizontal" style="position: relative;">
+			      				<ul class="jcarousel-list jcarousel-list-horizontal" nc_type="jcarousel" style="overflow: hidden; position: relative; top: 0px; margin: 0px; padding: 0px; left: 0px; width: 1600px;">
+			      					
+			      					<#list storeGoodsList as sgl>
+			      					<li class="jcarousel-item jcarousel-item-horizontal jcarousel-item-1 jcarousel-item-1-horizontal" jcarouselindex="1" style="float: left; list-style: none; width: 190px;">
+			            				<dl>
+			            					<dt class="goods-pic">
+			            						<span class="thumb size160">
+			            							<i></i> 
+			            							<a href="${ctx}/goods-${sgl.goods_id}.html" target="_blank"> 
+			            							<@image onload="javascript:DrawImage(this,160,160);" alt="${sgl.name}" src="${sgl.thumbnail}" width="160" height="160" /></a>
+			            						</span>
+			            					</dt>
+			            					<dd class="goods-name"><a href="${ctx}/goods-${sgl.goods_id}.html" title="${sgl.name}" target="_blank">${sgl.name}</a></dd>
+			              					<dd class="goods-sales"><!-- 这里显示最近成交数量 --></dd>
+			              				</dl>
+			              			</li>
+			              			</#list>
+			              		</ul>
+	              			</div>
+	              			<div class="jcarousel-prev jcarousel-prev-horizontal jcarousel-prev-disabled jcarousel-prev-disabled-horizontal" disabled="disabled" style="display: block;"></div>
+	              			<div class="jcarousel-next jcarousel-next-horizontal" style="display: block;"></div>
+						</div>
+					</div>
+				</div>
+				</#if>
+			</li>
+			</#list>
+		</ul>
+	    <div class="tc">
+			<div class="pagination">
+				 <@pager pageno="${storeSearch.page!'1'}" pagesize="${storeSearch.pageSize}" totalcount="${storeSearch.totalCount}" />
+			</div>
+		</div>          		
+	</div>
+	</#if>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+$(function(){
+	$("a[name='searchByType']").click(function(){
+		var searchType=$(this).attr("searchType");
+		var keyword=$("input[name='namekeyword']").val();
+		window.location.href = "${ctx}/store_list.html?keyword=" + keyword + "&searchType=" + searchType + "&search=store";
+	});
+})
+</script>
+
+<script type="text/javascript">
+//浮动导航  waypoints.js
+$('#main-nav-holder').waypoint(function(event, direction) {
+    $(this).parent().toggleClass('sticky', direction === "down");
+    event.stopPropagation();
+});
+$(function(){
+	
+	(function ($) {
+		$.getUrlParam = function (name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null) return unescape(r[2]); return null;
+		}
+	})(jQuery);
+
+	var time_credit = $.getUrlParam('searchType');
+
+	if(time_credit == "default"){
+		$(".li_time").addClass("selected");
+	}
+	
+	if(time_credit == "store_credit"){
+		$(".li_credit").addClass("selected");
+	}
+	
+   
+	//图片轮换
+    $('[nc_type="jcarousel"]').jcarousel({visible: 5});
+});
+
+function showGoods(data) {
+	var id = $(data).attr('nc_type');
+	if ($(data).hasClass('more-off')) {
+		$(data).addClass('more-on').removeClass('more-off').html('收起相关商品<i></i>');
+		$('div[nc_type="goods_' + id + '"]').show();
+	} else {
+		$(data).addClass('more-off').removeClass('more-on').html('展开相关商品<i></i>');
+		$('div[nc_type="goods_' + id + '"]').hide();
+	}
+}
+</script>
+<#include 'common/footer.html'/>

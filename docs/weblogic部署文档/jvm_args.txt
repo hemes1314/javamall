@@ -1,0 +1,29 @@
+2015年3月30日：更新的时候的内存占用情况
+1. 看服务器内存使用情况（决定mysql的内存加到多大，看heidisql里面的分析）
+1.5g available
+heidisql 540M，所以先放大点768M
+java 850M
+mysql 230M
+
+
+
+最终选定的方式，直接占了2Gb内存。
+JAVA7:
+set JAVA_OPTS=%JAVA_OPTS% -server -XX:MaxPermSize=512M -Xms2048M -Xmx2048M -Xss64M -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled
+export JAVA_OPTS="$JAVA_OPTS -server -XX:MaxPermSize=512M -Xms2048M -Xmx2048M -Xss64M -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled"
+
+set JAVA_OPTS="-server -XX:MaxPermSize=512M -Xms2048M -Xmx2048M -Xss64M -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled"
+
+
+JAVA8: 使用G1并且允许字符串去重 
+http://www.cnblogs.com/zhangminghui/p/4128623.html
+http://blog.sokolenko.me/2014/11/javavm-options-production.html
+set JAVA_OPTS=%JAVA_OPTS% -server -Xms1536M -Xmx1536M -XX:+UseStringDeduplication
+set JAVA_OPTS=%JAVA_OPTS% -server -Xms1536M -Xmx1536M -Xss32M -XX:+UseG1GC -XX:+UseStringDeduplication
+
+
+
+古老的方式：
+set JAVA_OPTS=-Xms256m -Xmx512m -XX:MaxNewSize=256m -XX:MaxPermSize=256m
+==============
+以后新的试试开启G1

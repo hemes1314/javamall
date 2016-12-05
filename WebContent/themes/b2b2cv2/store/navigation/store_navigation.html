@@ -1,0 +1,90 @@
+<#include '/store/store_header.html' />
+<#-- 创建店铺导航标签 --> 
+<#assign storeNavigationTag= newTag("storeNavigationTag") > 
+<#-- 查询店铺导航列表 --> 
+<#assign storeNavigation= storeNavigationTag()!''>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			店铺设置<span>></span>导航管理
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="store_navigation.html?menu=store">导航列表</a>
+					</li>
+					<li class="normal">
+						<a href="navigation_add.html?menu=store">新增导航</a>
+					</li>
+				</ul>
+			</div>
+			<!-- 导航列表 -->
+			<div class="s_commont_list">
+				<table cellpadding="0" cellspacing="0" class="goodslist_bystore groupbuy_list_table" style="border:0px none;">
+					<thead>
+						<tr>
+							<th >排序</th>
+							<th style="width:600px;">导航名称</th>
+							<th >是否显示</th>
+							<th >操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list storeNavigation as sl> 
+							<tr>
+								<td><input type="checkbox" value="2" class="checkitem" style="margin-right:10px;">${sl.sort}</td>
+								<td style="text-align:center;width:600px;">${sl.name}</td>
+								<td>
+									<#if sl.disable==1> 是 </#if>
+									<#if sl.disable==0> 否 </#if>
+								</td>
+								<td class="storegoodslist_tools" style="text-align:center;">
+									 <a href="navigation_edit.html?nav_id=${sl.id}&menu=store" class="tool4"><i></i>编辑</a>
+							         <a class="delete tool2" onclick="del(${sl.id});" href="javascript:;"><i></i>删除</a>
+								</td>
+							</tr>
+						</#list>
+					</tbody>
+				</table>	
+			</div>
+		</div>
+	</div>	
+</div>
+
+<script>
+
+function del(nav_id){
+	if(window.confirm('你确定要删除吗？')){
+		$.ajax({
+			url : "${ctx}/api/b2b2c/navigation!delete.do?nav_id="+nav_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.href="store_navigation.html?menu=store";
+				}
+				if (result.result == 0) {
+					alert(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误，请重试！");
+			}
+		});
+	}else{
+		return false;
+	}
+	
+}
+
+</script>
+	<script>
+		$(function(){
+				selectMenu(4);
+		})
+	</script>
+<#include '/common/footer.html' />

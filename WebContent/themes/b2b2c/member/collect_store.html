@@ -1,0 +1,121 @@
+<#assign title="店铺收藏" /> 
+<#include 'member_header.html' />
+
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>
+
+<!-- 获取会员收藏列表标签 -->
+<#assign storeCollectTag = newTag("storeCollectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign storeCollect = storeCollectTag()!''>
+
+
+<div class="data">
+	<h2>我的收藏夹</h2>
+</div>
+<!--温馨提示-->
+<div class="tip">
+	<div class="top"></div>
+	<div class="body">
+		<@image src="${ctx}/themes/default/images/gth.jpg" />
+
+		<div>
+			<h2>温馨提示</h2>
+			<p>1、这里将显示您的收藏夹信息。</p>
+			<p>2、您还可以查看您收藏的所有信息、管理您的收藏夹等操作。</p>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+
+<div class="tab">
+	<ul>
+		<li class=""><a href="favorite.html"><span>收藏的商品</span></a></li>
+		<li class="selected"><a href="collect_store.html"><span>收藏的店铺</span></a></li>
+	</ul>
+</div>
+<div class="box">
+	<div class="top"></div>
+	<div class="body">
+		<#if storeCollect.totalCount !=0 >
+		<table cellspacing="0" cellpadding="3" class="liststyle"
+			style="width: 100%">
+			<tbody>
+				<tr>
+					<th>&nbsp;&nbsp;</th>
+					<th>店铺图片1</th>
+					<th style="text-align: left;">店铺名称</th>
+					<th>收藏时间</th>
+					<th>操作</th>
+				</tr>
+			</tbody>
+			<#list storeCollect.storelist.result as sl>
+			<tr class="hovertr">
+				<td class="checkbox">&nbsp;&nbsp;</td>
+				<td class="img">
+					<a target="_blank" href="${ctx}/home.html?show_c=1&store_id=${sl.store_id!0}" title="${sl.store_name!''}" class="img"> 
+						<@image src="${sl.store_logo!''}" alt="${sl.store_name!''}" height="80" width="80" /> 
+					</a>
+				</td>
+				<td class="param">
+					<dl>
+						<dt>
+							<a target="_blank" href="${ctx}/home.html?show_c=1&store_id=${sl.store_id!0}">${sl.store_name!''}</a>
+						</dt>
+						<dd>
+							<span>${sl.store_province!''}&nbsp;${sl.store_city!''}&nbsp;${sl.store_region!''}</span>
+						</dd>
+						<dd>javamall</dd>
+					</dl>
+				</td>
+				<td><@dateformat time='${(sl.create_time)!0}'
+					pattern='yyyy-MM-dd' /></td>
+				<td class="oper">
+					<p rel="1" style="cursor: pointer" class="del_favorite">
+						<a class="del_collect" href="javascript:void(0);" celloct_id="${sl.celloct_id!0}" store_id="${sl.store_id}"  >删除</a>
+					</p>
+				</td>
+			</tr>
+			</#list>
+		</table>
+		<div class="pager_border">
+			<@pager pageno="${storeCollect.page!'1'}"
+			pagesize="${storeCollect.pageSize}"
+			totalcount="${storeCollect.totalCount}" />
+			<div class="clear"></div>
+		</div>
+		</#if>
+	</div>
+	<div class="bottom"></div>
+</div>
+
+<!--会员中心首页右侧结束-->
+<div class="rr_bottom"></div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+	$(function() {
+		$(".del_collect").click(function() {
+			if(confirm("确定要删除此店铺收藏吗？")){
+				var celloct_id = $(this).attr("celloct_id");
+				var store_id = $(this).attr("store_id");
+				$.post("${ctx}/api/b2b2c/storeCollect!del.do", {
+				"celloct_id" : celloct_id,"store_id":store_id
+				}, function(result) {
+					if (result.result == 1) {
+						alert("删除收藏成功");
+						location.href = "collect_store.html";
+					} else {
+						alert(result.message);
+					}
+				}, "json");
+			}
+
+		})
+	})
+</script>
+
+<#include '../common/footer.html'/>

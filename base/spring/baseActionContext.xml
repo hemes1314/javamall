@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+	<!-- 定义此应用的组件扫描包 -->
+	<context:component-scan base-package="com.enation.app.base.core.action" />
+	
+	<!--  用户基本信息维护 -->
+	<bean id="baseInfoAction" class="com.enation.app.base.core.action.BaseInfoAction" scope="prototype"></bean>
+	
+	<!--  前台站点主题-->
+	<bean id="siteThemeAction" class="com.enation.app.base.core.action.SiteThemeAction" scope="prototype"></bean>
+	
+	<!--  后台站点主题-->
+	<bean id="siteAdminThemeAction" class="com.enation.app.base.core.action.SiteAdminThemeAction" scope="prototype"></bean>
+	
+	
+	<!--  帮助-->
+	<bean id="helpAction" class="com.enation.app.base.core.action.HelpAction" scope="prototype" />
+	
+	<!--  边框-->
+	<bean id="borderAction" class="com.enation.app.base.core.action.BorderAction" scope="prototype" />
+	
+	<!--  上传-->
+	<bean id="uploadAction" class="com.enation.app.base.core.action.UploadAction" scope="prototype" />
+	
+	<!--  下载-->
+	<bean id="downloadAction" class="com.enation.app.base.core.action.DownloadAction" scope="prototype" />
+	
+	
+	<!--  ckeditor上传-->
+	<bean id="ckEditorUploadAction" class="com.enation.app.base.core.action.CkEditorUploadAction" scope="prototype" />
+	
+	<!--  问答-->
+	<bean id="askAction" class="com.enation.app.base.core.action.AskAction" scope="prototype" />
+ 	
+	<!--  留言板-->
+ 	<bean id="guestBookAction" class="com.enation.app.base.core.action.GuestBookAction" scope="prototype" />
+ 	
+	<!-- 多站点管理-->
+ 	<bean id="multiSiteAction" class="com.enation.app.base.core.action.MultiSiteAction" scope="prototype" />
+ 	
+	<!-- 友情连接 -->
+	<bean id="friendsLinkAction" class="com.enation.app.base.core.action.FriendsLinkAction" scope="prototype" />
+
+	<!-- 资源状态action -->
+	<bean id="resourceStateAction" class="com.enation.app.base.core.action.ResourceStateAction" scope="prototype"/>						
+
+	<bean id="cacheAction" class="com.enation.app.base.core.action.CacheAction" scope="prototype"/>
+	
+	<!-- 后台界面-->
+	<bean id="backendUiAction" class="com.enation.app.base.core.action.BackendUiAction" scope="prototype" />
+	
+	<!-- 系统设置-->
+	<bean id="systemSettingAction" class="com.enation.app.base.core.action.SystemSettingAction" scope="prototype" />
+	
+	<bean id="smsAction" class="com.enation.app.base.core.action.SmsAction" scope="prototype" />
+</beans>

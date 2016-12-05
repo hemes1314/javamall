@@ -1,0 +1,57 @@
+<script type="text/javascript">
+var ext='do';
+</script>
+<link type="text/css" rel="stylesheet" href="css/album.css"  />
+<script type="text/javascript" src="js/fileprogress.js"></script>
+<script type="text/javascript" src="js/photo_handlers.js"></script>
+<script type="text/javascript" src="js/swfupload.cookies.js"></script>
+<script type="text/javascript" src="js/swfupload.js"></script>
+<script type="text/javascript" src="js/swfupload.queue.js"></script>
+<div id="album_tab" class="form-table albumbox"  >
+	<input type="hidden" name="image_default" id="defaultpic" value="${image_default!''}" />
+	<table style="width:100%;height:auto;">
+		<tr>
+			<td align="left" style="padding-left:150px" id="up">
+				<span id="spanButtonPlaceHolder"></span>
+			</td>
+		</tr>	
+		<tr> 
+			<td height="179" align="left" style="padding-left:50px;">
+				<div class="imgPrivew" id="imgPrivew">
+	             <#if   image_default?exists && image_default!='' >
+	             <img height="220" width="240" src="${image_default}" />
+	             <#else>
+	                 <p style="margin-top:100px">此处显示商品页默认图片<br/>
+	                   [您还未上传商品图片！]</p>
+	             </#if>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td id="uploadProgress" align="left" style="padding-left:25px">
+			 <#if  thumbnail_images?exists >
+				<#list thumbnail_images as img>
+				<div class="progressContainer" >
+					<div class="proWrapper" >
+						<a img="${img.original!'' }" href="javascript:;">
+						<img border="0" src="${img.original!'' }" class="uploadImg"/>
+						</a>
+						<input type="hidden" name="picnames" value="${img.original!'' }"/>
+					</div>
+					<div>
+						<a href="javascript:;" class="deleteBtn">&nbsp;</a>
+					</div>
+				</div>				
+				</#list>
+			</#if>
+			</td>
+		</tr>
+
+	</table>
+<script type="text/javascript">
+$(function(){
+	bindPhotoEvent();
+	initUpload('${ctx}','do');		
+});
+</script>	
+</div>

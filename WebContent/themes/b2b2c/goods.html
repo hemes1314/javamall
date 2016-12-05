@@ -1,0 +1,368 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+<#-- 创建商品基本信息标签 -->
+<#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+<#-- 调用标签获取商品基本信息 -->
+<#assign goods= goodsBaseDataTag("'goodsid':${goodsid!0}") >
+<#--获取商品店铺信息 -->
+<#assign storeInfoTag=newTag("myStoreDetailTag")>
+<#assign storeInfo=storeInfoTag("{'store_id':${goods.store_id},'type':1 }")>
+<#--店铺分类 -->
+<#assign storeGoodsCatTag=newTag("storeGoodsCatTag")>
+<#assign goodsCat=storeGoodsCatTag("{'catid':${goods.cat_id} }")>
+<#-- 创建商品相册标签 -->
+<#assign goodsGalleryTag= newTag("goodsGalleryTag")>
+<#-- 调用标签获取商品相册信息 -->
+<#assign galleryList= goodsGalleryTag("{'goods_id':${goods.goods_id}}")!'' >
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/goods.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/store_style.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/dialog.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/common_02.css" />
+<script  src="${ctx}/themes/b2b2c/js/magiczoom.js"  ></script>
+<script  src="${ctx}/themes/b2b2c/js/Goods.js"  ></script>
+<script  src="${ctx}/themes/b2b2c/js/favorite.js"  ></script>
+<script  src="${ctx}/themes/b2b2c/js/Comment.js"  ></script>
+<script  src="${ctx}/themes/b2b2c/js/spec.js" ></script>
+<div class="clear"></div>
+<style type="text/css">
+body{background:0}
+#content{width:1200px}
+.expanded .goods-main.goods-main{width:980px}
+.expanded .sidebar{width:210px}
+.goods-main{width:1200px}
+.wrapper{width:1200px;}
+</style>
+
+<div class="background clearfix">
+	<article id="content">
+    	<div class="breadcrumb-layout">
+  			<div class="breadcrumb wrapper">
+    		    <span><a href="${ctx}/index.html">首页</a></span>
+    		    <span class="arrow">&gt;</span>
+			    <span><a href="${ctx}/goods_list.html?namekeyword=${goodsCat.cat.name}&search=goods">${goodsCat.cat.name!''}</a></span>
+			    <span class="arrow">&gt;</span>
+			    <span>${goods.name}</span>
+			</div>
+		</div>
+		<section class="goods-detail">
+            <div id="detail_wrapper"> 
+            	<#list galleryList as gallery>
+					<#if gallery.isdefault==1>
+						<#assign big="${gallery.big!''}" />
+						<#assign small="${gallery.small!''}" />
+					</#if>
+				</#list>
+       			<aside class="gallery" >
+         			<!-- 商品相册 -->
+					<div class="gallery">	
+						<div class="preview">
+							 <a href="${big!''}"  id="zoom" rel="zoom-width:400px;zoom-height:400px;"  class="MagicZoom"> 
+							 	<img   src="${small!''}" style="width: 300px;height: 300px;" />
+							 </a>
+						</div>
+						<div class="control_bar">
+							<div class="control left-control"></div>
+							<div class="thumblist">
+								<ul>
+								<#list galleryList as gallery>
+									<li <#if !gallery_has_next>class="last"</#if> <#if gallery.isdefault==1>class="selected"</#if>> 
+										<@image src="${gallery.tiny!''}"  big="${gallery.big}" small="${gallery.small}" width="40" height="40"  />
+									</li>
+								</#list>	
+								</ul>
+							</div>
+							<div class="control right-control " ></div>
+						</div>
+					</div>
+       			</aside>
+			        <article class="goods-summary">
+						<div class="name">
+        					<h1>${goods.name}(${goods.sn})</h1>
+        					<strong></strong>
+        				</div>
+          				<div class="goods-meta"> 
+				            <dl class="goods-detail-price ">
+				            	<#if goods.is_groupbuy==1>
+				            		<dt>团购价格：</dt>
+					              	<dd><strong nctype="goods_price">&yen; ${groupBuy.price}</strong></dd>
+				            		<#else>
+					              	<dt>价&#12288;&#12288;格：</dt>
+					              	<dd id="goods_price"><strong nctype="goods_price">&yen; ${goods.price}</strong></dd>
+				              	</#if>
+				            </dl>
+							<ul class="goods-panel">
+								<li class="goods-item goods-sellCount">
+									<p class="goods-count">
+										<#if goods.is_groupbuy==1>
+											<em><a href="javascript:void(0);">${groupBuy.buy_num!'0'}</a></em>
+										<#else>
+											<em><a href="javascript:void(0);">${goods.buy_num!'0'}</a></em>
+										</#if>
+									</p>
+									<p class="goods-label">累计售出</p>
+								</li>
+								<li class="goods-item goods-reviewCount goods-line3">
+									<p class="tm-count" id="comment_num"><em>${goods.comment_num!'0'}</em></p>
+									<p class="tm-label">条评论</p><p class="raty ra" data-score="0"></p>
+								</li>
+								<li class="goods-item goods-emPointCount">
+									<a target="_blank">
+										<p class="tm-count"><em>全新</em></p>
+										<p class="tm-label">商品类型</p>
+									</a>
+								</li>
+							</ul>
+          				</div>
+          				<form  id="goodsform">
+          					<input type="hidden" name="goodsid" value="${goods.goods_id}" />
+          					<input type="hidden" id="storeid" value="${storeInfo.store_id}" />
+          					<input type="hidden" name="action" value="addGoods" />
+	                    	<div class="goods-key"> 
+	                    	<#if goods.have_spec?exists && goods.have_spec==1 >
+								<#include 'detail/spec.html' />
+							</#if>
+					            <dl>
+					              	<dt>购买数量：</dt>
+					              	<dd class="goods-figure-input"> 
+					              		<a href="javascript:void(0)" ><i class="icon-minus decrease fl text-hidden" style="padding:2px 5px">-</i></a>
+					                	<input type="text" name="num" id="quantity" value="1" size="3" maxlength="6" class="fl" style="border-radius:0;">
+					                	<a href="javascript:void(0)" ><i class="icon-plus increase fl text-hidden" style="padding:2px 5px">+</i></a> 
+					                	
+											<#if goods.is_groupbuy==1>
+						                		<em class="fl ml20">(当前库存<strong >${groupBuy.visual_num!'0'}</strong>件)</em> 
+						                		<#else>
+						                		<em class="fl ml20">(当前库存<strong >${goods.store!'0'}</strong>件)</em> 
+						                	</#if>
+					                </dd>
+									<div class="clear"></div>
+					            </dl>
+					            <#if goods.is_groupbuy==0&&goods.store==0||goods.is_groupbuy==1&&groupBuy.visual_num==0>
+					            	<div class="nc-btn clearfix">
+					            		<p>抱歉，暂无库存</p>
+					            	</div>
+					            <#else>
+					            	
+		            				<div class="goods-btn clearfix">
+		            					<span class="store-not-enough" style="display:none">抱歉库存不足</span>
+		            					<div class="btn">
+		            					<#if  goods.is_groupbuy==0>
+		                            	<a href="javascript:void(0);" class="buynow fl " id="buyNow">立即购买</a><!-- 立即购买--> 
+		              					<a href="javascript:void(0);" class="addcart fl ml10 " id="addCart">添加到购物车<!-- 加入购物车--></a> 
+		              					<#else>
+		              					<a href="javascript:void(0);" class="addGroupbuyGoods  fl ml10 " title="添加到购物车" id="addGroupBuy">添加到购物车<!-- 加入购物车--></a> 
+		              					</#if>
+		              					</div>
+		                          	</div>
+	                          	</#if>
+	                          	
+	                          	
+								<div class="clear"></div>
+	          				</div>
+          				</form>
+		          		<div class="goods_share">
+			            	<div class="goods-handle fl ml10">
+			              		<div class="handle-left">
+			              			<i class="share-goods"></i>
+			              			<a href="javascript:void(0);" class="favorite" goodsid="${goods.goods_id}">收藏商品</a>
+			              		</div>
+			            	</div>
+		             		<div class="clear"></div>
+		          		</div>
+        			</article>
+     				<div class="goods-store"style=" position: absolute; z-index: 1; top: 60px; right: 0;">
+      					<div class="title">店铺信息</div>
+        				<div class="content">
+       						<div class="goods-store-info">
+	          					<dl class="name">
+						            <dt>商　　家：</dt>
+						            <dd> ${storeInfo.store_name} </dd>
+	          					</dl>
+					          	<dl class="all-rate">
+					            	<dt>综合评分：</dt>
+					            	<dd>
+					              		<div class="rating"><span style="width:0%;"></span></div>
+					              		<em>${(storeInfo.store_desccredit+storeInfo.store_servicecredit+storeInfo.store_deliverycredit)/3}</em>分 
+					              	</dd>
+					          	</dl>
+	          					<div class="detail-rate">
+	            					<h5><strong>店铺动态评分(满分5分)</strong></h5>
+						            <ul class="rate">
+						              <li>描述相符：<span >${storeInfo.store_desccredit!'5'}分</span></li>
+						              <li>服务态度：<span >${storeInfo.store_servicecredit!'5'}分</span></li>
+						              <li>发货速度：<span >${storeInfo.store_deliverycredit!'5'}分</span></li>
+						            </ul>
+	          					</div>
+					          	<dl class="messenger">
+					            	<dt>在线客服：</dt>
+									<dd>
+										<#if storeInfo.qq??>
+								  			 	<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=${storeInfo.qq!''}&amp;site=qq&amp;menu=yes"><img src="http://wpa.qq.com/pa?p=2:1234567:52" alt=""></a>
+										</#if>
+					      			 </dd>
+					          	</dl>
+         							<div class="goto" id="shop-other"> 
+         								<a href="javascript:void(0);" show_c="1" store_id="${storeInfo.store_id}" target="_blank" id="open_store" >进入商家店铺</a>
+         							</div>
+       						</div>
+     					</div>
+    				</div>
+     			</div>
+      			<div class="clear"></div>
+    		</section>
+    		
+    		<section class="layout expanded main" >
+	    		
+      			<article class="goods-main">
+					<div  id="main-nav-holder">
+					
+        				<nav class="tabbar pngFix" id="main-nav">
+          					<div class="pr" style="z-index: 70;">
+	            				<ul id="categorymenu">
+	              					<li class="current" tab="tabGoodsIntro"><a href="javascript:void(0);" ><span>商品详情</span></a></li>
+	              					<li tab="tabGoodsRate"><a  href="javascript:void(0);"><span>商品评论</span></a></li>
+	              					<li tab="tabGoodsTraded"><a  href="javascript:void(0);"><span>销售记录</span></a></li>
+	              					<li tab="tabGuestbook"><a  href="javascript:void(0);"><span>产品咨询</span></a></li>
+	            				</ul>
+            					<div class="switch-bar"><a href="javascript:void(0)" id="abc">&nbsp;</a></div>
+            					<div class="gotop"><a href="#header">&nbsp;</a></div>
+          					</div>
+        				</nav>
+        				
+       				<section class="store-c-s4 tabGoodsIntro">
+			          <div id="ncGoodsIntro" class="content bd" style="">
+			          		
+	                        <div class="default">${goods.intro!''}</div>
+			          </div>
+			        </section>
+				        
+        			<section class="store-c-s4 tabGoodsRate">
+        				<div id="discuss_wrapper" class="content">
+        					<!-- 评论列表 -->
+							<#include '/detail/discuss_list.html'/>
+							<!--发表评论-->				
+							<#include '/detail/discuss_form.html'/>
+						</div>
+        			</section>
+        			
+        			<section class="store-c-s4 tabGoodsTraded">
+        				<div class="content">
+	        				<!--商品成交记录-->
+							<#include 'detail/transaction.html'/>
+						</div>
+        			</section>
+        			<section class="store-c-s4 tabGuestbook">
+        				<div class="content bd">
+							<!--商品咨询列表-->
+							<#include 'detail/ask_list.html'/>
+							<!--商品咨询表单-->				
+							<#include 'detail/ask_form.html'/>
+						</div>
+        			</section>
+                	<section class="store-s-c-s2 goods-com-list">
+          				<div class="title">
+            				<h4>推荐商品</h4>
+          				</div>
+          				<div class="content">
+            				<ul>
+            					<#assign goodsList=goodsListTag("'tagid':'1','goodsnum':'5'")>
+								<#list goodsList as goods>
+	                             	<li>
+										<dl>
+											<dt class="goods-name">
+												<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html" title="${goods.name}">${goods.name}</a>
+											</dt>
+											<dd class="goods-pic">
+												<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+													<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> 
+												</a>
+											</dd>
+											<dd class="goods-price">商城价：${goods.price?string.currency}</dd>
+										</dl>
+				   					</li>
+			   					</#list>
+                           	</ul>
+							<div class="clear"></div>
+          				</div>
+        			</section>
+        		</div>
+      		</article>
+      			<aside class="sidebar">
+	      			<#assign store_id=storeInfo.store_id />
+					<#include 'home/store_basic.html' />
+	      		</aside>
+	  		<div class="clear"></div>
+    	</section>
+  	</article>
+</div>
+<div class="clear"></div>
+<div class="add_success_msg" style="display:none">
+	<div >
+		<div class="goods_message">
+			恭喜，该商品已添加到您的购物车！
+		</div>
+		<div class="button_wrapper">
+			<div class="btn"><input type="button" class="returnbuy_btn" value="继续购物"></div>
+			<div class="btn"><input type="button" class="checkout_btn" value="去结算"></div>
+		</div>
+	</div>	
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".store-c-s4").hide();
+	$(".tabGoodsIntro").show();
+	$("#categorymenu li").click(function(){
+		//alert(1);
+		$("#categorymenu li").removeClass("current");
+		$(".store-c-s4").hide();
+		$(this).addClass("current");
+		$("."+$(this).attr("tab")).show();;
+		//alert("over");
+	});
+	
+	//相册缩略图滑动
+	 <#if galleryList?size gt 4 > 
+		$("#detail_wrapper .gallery .thumblist").jCarouselLite({
+	        btnNext: ".left-control",
+	        btnPrev: ".right-control",
+			visible:4
+	    });
+	</#if> 
+
+	//相册放大切换
+	$("#detail_wrapper .gallery .thumblist li").click(function(){
+		var $this = $(this);
+		var img  = $this.children("img");
+		var zoom = document.getElementById('zoom'); //get the reference to our zoom object
+	    MagicZoom.update(zoom, img.attr("big"), img.attr("small"), 'show-title: false'); 
+		$this.addClass("selected").siblings().removeClass("selected");
+	});	 
+	
+	
+	Goods.init();
+	CommentList.init();
+	CommentForm.init();	
+	
+	$(".store-c-s4").hide();
+	$(".tabGoodsIntro").show();
+	$("#categorymenu li").click(function(){
+		$("#categorymenu li").removeClass("current");
+		$(".store-c-s4").hide();
+		$(this).addClass("current");
+		$("."+$(this).attr("tab")).show();;
+	});
+	
+	$("#open_store").click(function(){
+		var show_c = $(this).attr("show_c");
+		var store_id = $(this).attr("store_id");
+		window.open("${ctx}/home.html?show_c="+show_c+"&store_id="+store_id);
+	})
+	
+})
+
+
+</script>
+
+<!-----footer------>
+<#include 'common/footer.html'/>

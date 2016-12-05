@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="标准货品组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+		<plugin name="标准的商品价格插件" id="standardGoodsPricePlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>		
+		<plugin name="普通货品插件" id="generalProductPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="普通货品库存插件" id="genericGoodsStorePlugin">
+			<bundle id="goodsStorePluginBundle"></bundle>
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="普通货品订单插件" id="genericOrderPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>
+
+		<plugin name="普通商品配货插件" id="genericAllocationPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>
+		
+	</plugins>
+</component>

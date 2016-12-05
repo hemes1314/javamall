@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>create</command>
+		<table>es_giftcard_type</table>
+		<field><name>type_id</name><type>int</type><size>8</size><option>11</option></field>
+		<field><name>type_name</name><type>varchar</type><size>60</size><option>01</option></field>
+		<field><name>type_image</name><type>varchar</type><size>260</size><option>00</option></field>
+		<field><name>money</name><type>int</type><size>5</size><option>01</option></field>
+		<field><name>price</name><type>decimal</type><size>10,2</size><option>01</option></field>
+	</action>
+	
+	<action>
+ 		<command>create</command>
+		<table>es_member_giftcard</table>
+		<field><name>card_id</name><type>int</type><size>10</size><option>11</option></field>
+		<field><name>member_id</name><type>int</type><size>10</size><option>01</option></field>
+		<field><name>type_name</name><type>varchar</type><size>60</size><option>01</option></field>
+		<field><name>type_image</name><type>varchar</type><size>260</size><option>00</option></field>
+		<field><name>money</name><type>int</type><size>5</size><option>01</option></field>
+		<field><name>price</name><type>decimal</type><size>10,2</size><option>01</option></field>
+		<field><name>card_sn</name><type>varchar</type><size>30</size><option>01</option></field>
+		<field><name>card_pw</name><type>varchar</type><size>6</size><option>00</option></field>
+		<field><name>payment_id</name><type>int</type><size>8</size><option>01</option></field>
+		<field><name>create_time</name><type>long</type><size>11</size><option>01</option></field>
+		<field><name>used</name><type>int</type><size>2</size><option>00</option><default>0</default></field>
+		<field><name>used_time</name><type>long</type><size>11</size><option>00</option></field>
+		<field><name>used_member_id</name><type>int</type><size>10</size><option>00</option></field>
+ 	</action>
+ 	
+ 	<action>
+ 		<command>create</command>
+		<table>es_member_vitem</table>
+		<field><name>item_id</name><type>int</type><size>10</size><option>11</option></field>
+		<field><name>member_id</name><type>int</type><size>10</size><option>01</option></field>
+		<field><name>type_id</name><type>int</type><size>10</size><option>01</option></field>
+		<field><name>type_name</name><type>varchar</type><size>60</size><option>01</option></field>
+		<field><name>type_image</name><type>varchar</type><size>260</size><option>00</option></field>
+		<field><name>price</name><type>decimal</type><size>10,2</size><option>01</option></field>
+		<field><name>num</name><type>int</type><size>10</size><option>01</option><default>1</default></field>
+ 	</action>
+ 	
+</dbsolution>

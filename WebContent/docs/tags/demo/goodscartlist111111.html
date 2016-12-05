@@ -1,0 +1,5 @@
+<#assign cartnum = newTag("goodsCatListTag")>
+<#assign num = cartnum("'catid':'1002'")>
+<#list num as list>
+${list.name}
+</#list>

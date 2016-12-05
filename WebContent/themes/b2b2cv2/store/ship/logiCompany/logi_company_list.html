@@ -1,0 +1,111 @@
+<#include '/store/store_header.html' />
+<#assign logiCompanyListTag=newTag("logiCompanyListTag") />
+<#assign logiCompanyList=logiCompanyListTag() />
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			交易管理<span>></span>物流工具
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="#" >物流公司</a>
+					</li>
+					<li class="normal">
+						<a href="${ctx}/store/ship/transaction/transport.html?menu=transaction">运费模版</a>
+					</li>
+				</ul>
+			</div>
+			<!-- 物流模版 -->
+			<div class="store_transport_list">
+				<table class="store_taglist" width="100%" cellspacing="0" cellpadding="0" border="0">
+					<thead>
+						<tr>
+							<th style="width:400px;border:0px none;">物流公司</th>
+							<th style="width:150px;border:0px none;">公司状态</th>
+							<th style="width:150px;border:0px none;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list logiCompanyList as logiCompany>
+							<tr>
+								<td>${logiCompany.name}</td>
+								<td>
+									 <#if (logiCompany.store_id!=0)><span style="color:#e90101;font-weight:bold;"> 已选择</span> <#else> 未选择 </#if>
+								</td>
+								<td>
+									<label class="logistics_company">
+										<input type="checkbox" name="rel_logi" logi_id="${logiCompany.id}"  <#if logiCompany.store_id!=0 > checked="checked" status="1" <#else>  status="0" </#if> />
+										<span>
+										<#if (logiCompany.store_id!=0)>
+											关闭
+										<#else> 
+											开启
+										</#if>
+										</span>
+									</label>
+								</td>
+							</tr>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+		</div>	
+	</div>
+</div>	
+
+<script type="text/javascript">
+$(function(){
+	$("input[name='rel_logi']").change(function(){
+		if($(this).attr("status")=="0"){
+			$.ajax({
+				url : "${ctx}/api/b2b2c/storeLogiCompany!saveReal.do",
+				dataType:"json",
+				type:"post",
+				data:"logi_id="+$(this).attr("logi_id"),
+				success : function(json) {
+					if(json.result==1){
+						$(this).attr("status","1");
+					}
+					alert(json.message);
+					 location.reload();
+				},
+				error : function() {
+					alert("出现错误，请重试");
+					 location.reload();
+				}
+			});	
+		}else{
+			$.ajax({
+				url : "${ctx}/api/b2b2c/storeLogiCompany!delReal.do",
+				dataType:"json",
+				type:"post",
+				data:"logi_id="+$(this).attr("logi_id"),
+				success : function(json) {
+					if(json.result==1){
+						$(this).attr("status","0");
+					}
+					//成功提示信息
+					alert(json.message);
+					 location.reload() ;
+				},
+				error : function() {
+					alert("出现错误，请重试");
+					 location.reload();
+				}
+			});	
+		}
+	});
+})
+
+</script>
+	<script>
+		$(function(){
+				selectMenu(2);
+		})
+		</script>
+<#include '/common/footer.html' />

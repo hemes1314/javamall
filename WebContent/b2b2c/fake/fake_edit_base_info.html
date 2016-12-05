@@ -1,0 +1,65 @@
+<#include '/admin/header.html' > 
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+
+<div class="main" style="background-color: white;">
+	<form id="addForm">
+		<table cellspacing="1" cellpadding="3" width="100%" style="border-collapse:collapse;" border='1' bordercolor="#d7d7d7" class="form-table">
+			<input type="hidden" name="id" value="${memberCommentKeyWordsPage.id}">
+			<tr>
+				<th>分类名称:</th>
+				<td><input class="input_text" type="text" name="cat_name" readonly value="${memberCommentKeyWordsPage.cat_name}"></input>
+				</td>
+			</tr>
+			<tr>
+				<th>关键字:</th>
+				<td>
+					<textarea  name="key_words" 
+					 cols="100" rows="8" id="intro" style="resize: none;"
+					 data-options="required:true">${memberCommentKeyWordsPage.key_words}</textarea>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div class="buttonWrap fixed">
+		<a id="submitButton" class="easyui-linkbutton" onclick="submitForm()"
+			href="javascript:;">保存</a>
+	</div>
+</div>
+<script>
+	
+	function submitForm() {
+		var formflag = $("#addForm").form().form('validate');
+		if (formflag) {
+			$.Loading.show("正在提交......");
+			$("#submitButton").linkbutton("disable");
+			var options = {
+				url : "fake!update.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success("关键字已保存！");
+						//newTab("申诉申请", "${ctx}/b2b2c/admin/appeal!list.do");
+						//parent.CloseTabByTitle("申诉申请");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$("#submitButton").linkbutton("enable");
+					
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					$("#submitButton").linkbutton("enable");
+					$.Loading.hide();
+				}
+			};
+			$("#addForm").ajaxSubmit(options);
+		} else {
+			$.Loading.hide();
+		}
+	}
+	
+</script>
+
+<#include '/admin/footer.html' >

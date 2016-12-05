@@ -1,0 +1,251 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="ymform">
+	<#if user.username == 'admin'>
+		<div style="height: auto">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="append()">添加</a> <a
+				href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="del()">删除</a>
+		</div>
+	</#if>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		<#if user.username == 'admin'>
+			<table class="easyui-datagrid"
+							data-options="url:'sommelierOrderType!list_sommelier_order_type.do',pageSize:${pageSize},fitColumns:'true'"
+							pagination="true" id="ymdata" >
+				<thead>
+				<tr>
+				    <th data-options="field:'id',checkbox:true"></th>
+					<th data-options="field:'order_type_name',width:100,sortable:'true'">服务名称</th>
+					<th data-options="field:'order_type_intro',width:450,sortable:'true'">服务描述</th>
+					<th data-options="field:'order_type_price',width:50,sortable:'true'">标准价格</th>
+				    <th data-options="field:'action',width:100,align:'center'"
+							formatter="formatOperation">
+							操作</th>					
+				</tr>
+				</thead>
+			</table>
+			<#else>	
+				<table class="easyui-datagrid"
+								data-options="url:'sommelierOrderType!list_sommelier_my_type.do',pageSize:${pageSize},fitColumns:'true'"
+								pagination="true" id="ymdata" >
+			
+					<thead>
+					<tr>
+					    <th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'order_type_name',width:100,sortable:'true'">服务名称</th>
+						<th data-options="field:'order_type_intro',width:450,sortable:'true'">服务描述</th>
+						<th data-options="field:'status',width:50,sortable:'true'">是否提供</th>
+						<th data-options="field:'order_type_price',width:50,sortable:'true'">参考价格</th>
+						<th data-options="field:'my_price',width:50,sortable:'true'">我的价格</th>
+					    <th data-options="field:'action',width:100,align:'center'" formatter="formatOperation">操作</th>					
+					</tr>
+					</thead>
+				</table>
+			</#if>	
+		</div>
+		<div id="divdia" style="display: none;"></div>
+		<div id="divdiad" style="display: none;"></div>
+	</form>
+</div>
+<script type="text/javascript">
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "sommelierOrderType!add_sommelier_type.do";
+			map["formId"] = "#addForm";
+			map["url"] = "sommelierOrderType!saveAddsommelierType.do?ajax=yes";
+			map["title"] = "添加酒评师服务类型";
+			map["loadshow"] = "正在添加......";
+		} else {
+			<#if user.username == 'admin'>
+			  map["href"] = "sommelierOrderType!edit_order_type.do?typeId=" + id;
+			<#else>	
+			  map["href"] = "sommelierOrderType!edit_order_my_type.do?typeId=" + id;
+			</#if>
+			map["formId"] = "#editForm";
+			<#if user.username == 'admin'>
+			  map["url"] = "sommelierOrderType!saveEditSommelierType.do?ajax=yes";
+			<#else>	
+			  map["url"] = "sommelierOrderType!saveEditSommelierMyType.do?ajax=yes";
+			</#if>
+			map["title"] = "酒评师服务类型";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#ymdata";
+		addDialog(map);
+	}
+
+	
+	function detail(id){
+		var map = {}; // Map map = new HashMap();
+		map["title"] = "酒评师详情"
+		map["href"] = "sommelier!detail_sommelier.do?sommelierId=" + id;
+		map["divDialog"] = "#divdiad";
+		map["gridreload"] = "#ymdata";
+		showDialog(map);
+	}
+	
+	function addDialog(map) {
+		var width = self.parent.$(window).width();
+		var height = self.parent.$(window).height();
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			top : 0,
+			left : 0,
+			title : map["title"],
+			width: width,
+			height : height,
+			maximizable:true,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			onClose : function() {
+				  window.location.reload();
+	            },
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);//获取按钮本身
+					savebtn.linkbutton("disable"); //禁用	
+					map["btn"]=savebtn;
+					submitForm(map);
+				}
+			}, {
+				text : '清空',
+				handler : function() {
+					clearForm(map);
+				}
+			} ]
+		});
+	}
+	
+	function showDialog(map) {
+		var width = self.parent.$(window).width();
+		var height = self.parent.$(window).height();
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			top : 0,
+			left : 0,
+			title : map["title"],
+			width: width,
+			height : height,
+			maximizable:true,
+			closed : true,
+			cache : false,
+			href : map["href"],
+			modal : true
+		});
+	}
+	
+	function submitForm(map) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.show(result.message);
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+					}
+					if (result.result == 0) {
+						//$.Loading.error(result.message);
+						alert(result.message);
+						map["btn"].linkbutton("enable");
+					}
+					$.Loading.hide();
+				},
+				error : function(e) {
+					map["btn"].linkbutton("enable"); 
+					alert("出现错误 ，请重试");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}else{
+			map["btn"].linkbutton("enable"); 
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append("
+				+ row.id + ")' ></a>";
+/* 		val += "<a class='detail' title='查看' href='javascript:void(0);' onclick='detail("
+					+ row.id + ")' ></a>"; */
+		return val;
+	}
+
+	function formatDefault_lv(value, row, index) {
+		var val;
+		if (value == 1) {
+			val = "是";
+		} else {
+			val = "否";
+		}
+		return val;
+	}
+	function del() {
+		var rows = $('#ymdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择删除的品酒师服务");
+			return;
+		}
+		if (!confirm("确认要删除酒评师服务吗？")) {
+			return;
+		}
+		var options = {
+			url : "sommelierOrderType!deleteSommelierType.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				$.Loading.success(result.message);
+				if (result.result == 1) {
+					var rows = $('#ymdata').datagrid("getSelections");
+					for ( var i = 0; i < rows.length; i++) {
+						var index = $('#ymdata').datagrid('getRowIndex',
+								rows[i]);
+						$('#ymdata').datagrid('deleteRow', index);
+					}
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+		$('#ymform').ajaxSubmit(options);
+	}
+
+	$.extend($.fn.validatebox.defaults.rules, {
+		maxnum : {
+			validator : function(value, param) {
+				return value < param[0];
+			},
+			message : '最大数字为100'
+		}
+	});
+</script>
+<#include '/admin/footer.html' >

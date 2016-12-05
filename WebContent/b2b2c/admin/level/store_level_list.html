@@ -1,0 +1,163 @@
+<#include '/admin/header.html' > 
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueBlue"
+			data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+		<a href="javascript:void(0)" class="button"
+			data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="storelevelform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/storelevel!storeLevelJson.do',fitColumns:'true'" width="width" id="leveldata">
+				<thead>
+					<tr>
+				   	 	<th  data-options="field:'level_id',checkbox:true,width:100">店铺等级Id</th>
+				   	 	<th  data-options="field:'level_name',width:100">店铺等级名称</th>
+				   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+		<div id="levelinfo" style="display: none;"></div>
+	</div>
+</div>
+<script type="text/javascript">
+function formatAction(value,row,index){
+	var val="<a href='javascript:void;'class='edit' title='编辑店铺等级' onclick='edit("+row.level_id+")'></a>"
+	return val;
+}
+function append(){
+	 $("#levelinfo").show();
+	　　	$('#levelinfo').dialog({
+	　　		title: '添加店铺等级',			//对话框的标题
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/b2b2c/admin/storelevel!add.do', 	 //对话框所引用的html页面
+	　　		modal: true,
+	　　		buttons: [{					//创建按钮
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 addlevelForm(savebtn);
+		　　			 }	
+	　　			}
+	　　		}]
+	　　	});
+}
+function edit(level_id){
+	 $("#levelinfo").show();
+	　　	$('#levelinfo').dialog({
+	　　		title: '修改店铺等级',			//对话框的标题
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/b2b2c/admin/storelevel!edit.do?level_id='+level_id, 	 //对话框所引用的html页面
+	　　		modal: true,
+	　　		buttons: [{					//创建按钮
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 editlevelForm(savebtn);
+		　　			 }	
+	　　			}
+	　　		}]
+	　　	});
+}
+function addlevelForm(savebtn){
+	var formflag= $("#levelForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");	
+		var options = {
+				url : "${ctx}/b2b2c/admin/storelevel!addStoreLevel.do",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#levelinfo").dialog('close');
+						$('#leveldata').datagrid('reload');
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		savebtn.linkbutton("enable");
+				}
+			};
+		$('#levelform').ajaxSubmit(options);	
+	}
+	
+}
+function editlevelForm(savebtn){
+	var formflag= $("#levelForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");	
+		var options = {
+				url : "${ctx}/b2b2c/admin/storelevel!editStoreLevel.do",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#levelinfo").dialog('close');
+						$('#leveldata').datagrid('reload');
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		savebtn.linkbutton("enable");
+				}
+			};
+		$('#levelform').ajaxSubmit(options);	
+	}
+}
+function del(){
+	var rows = $('#leveldata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error('请选择要删除的店铺等级');
+		return;
+	}
+	if(!confirm("确认要删除店铺等级吗？")){	
+		return ;
+	}
+	 var options = {
+		url : "${ctx}/b2b2c/admin/storelevel!delStoreLevel.do",
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if(result.result==1){
+				var rows = $('#leveldata').datagrid("getSelections"); 
+				for(var i =0;i<rows.length;i++){      
+					var index = $('#leveldata').datagrid('getRowIndex',rows[i]); 
+					$('#leveldata').datagrid('deleteRow',index);      
+				}
+			}
+			if(result.result==0){ 
+				$.Loading.error(result.message);
+			}
+		},
+		error : function(e) {
+			$.Loading.error("出现错误 ，请重试");
+		}
+	};
+	$('#storelevelform').ajaxSubmit(options);	
+}
+</script>
+
+
+<#include '/admin/footer.html' >

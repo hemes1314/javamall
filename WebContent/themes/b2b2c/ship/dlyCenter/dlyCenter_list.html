@@ -1,0 +1,226 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<#assign dlyCenterListTag=newTag("dlyCenterListTag") />
+<#assign dlyCenterList=dlyCenterListTag() />
+<div class="layout">
+	<#include '/left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="path">
+					<div>
+						<a href="${ctx}/store.html">商家中心</a> <span>&gt;</span> 
+						<a href="javascript:void(0);">发货设置 </a>
+					</div>
+				</div>
+				<div class="tabmenu">
+					<ul class="tab pngFix">
+						<li class="active"><a href="javascript:void(0);">地址库</a></li>
+						<li class="normal"><a href="${ctx}/ship/transaction/transport.html">物流工具</a></li>
+						<li class="normal"><a href="${ctx}/ship/logiCompany/logi_company_list.html">物流公司</a></li>
+					</ul>
+					<a href="javascript:void(0);" id="addDlyCenter" class="user-btn3"  title="新增地址">新增地址</a>
+				</div>
+				<div id="postage-tpl" style="padding: 20px 0;">
+		  			<div id="J_TemplateList" class="manage-list">
+		  				<div class="tbl-head">
+	        				<table cellspacing="0" cellpadding="0" border="0"  width="100%">
+								<tbody>
+									<tr>
+										<th >是否默认</th>
+										<th> 发货点名称</th>
+										<th >联系人</th>
+										<th >发货地址</th>
+										<th >电话</th>
+										<th >操作</th>
+									</tr>
+								</tbody>
+							</table>
+		            	</div>
+						<#if dlyCenterList?size!=0>
+							 <div class="entity">
+							 	<table cellspacing="0" cellpadding="0" border="0" >
+	        						<tbody>
+										<#list dlyCenterList as dlyCenter>
+											<tr>
+												<td>
+													<input type="radio" name="is_default" dlyid="${dlyCenter.dly_center_id}" <#if dlyCenter.disabled=='true'> checked="checked"  </#if> />
+												</td>
+												<td>
+													${dlyCenter.name}
+												</td>
+												<td>
+													${dlyCenter.uname}	
+												</td>
+												<td>
+													${dlyCenter.province} - ${dlyCenter.city}-${dlyCenter.region}
+												</td>
+												<td>
+													${dlyCenter.phone}
+												</td>
+												<td>
+													<a href="javascript:void(0);" name="dlyCenterInfo" dlyid="${dlyCenter.dly_center_id}">编辑</a> &nbsp;
+													<a href="javascript:void(0);" class="delete" dlyid="${dlyCenter.dly_center_id}"> 删除</a>
+												</td>
+											</tr>
+										</#list>
+				    				</tbody>
+				      			</table>
+							</div>
+      					</#if>
+      					
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#addDlyCenter").click(function(){
+		dialog = $.dialog({
+			title : "新增地址",
+			width : 475,
+			height : 312,
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "dlyCenter_add.html",
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '新增',
+					callback : function() {
+						addDlyCenter();
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				$.alert("出现错误，请重试");
+			},
+			cache : false
+		});	
+	});
+	$("a[name='dlyCenterInfo']").click(function(){
+		dialog = $.dialog({
+			title : "发货设置",
+			width : 475,
+			height : 312,
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "dlyCenter_edit.html?dlyid="+$(this).attr("dlyid"),
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '修改',
+					callback : function() {
+						editDlyCenter();
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				$.alert("出现错误，请重试");
+			},
+			cache : false
+		});	
+	});
+	
+	
+	function addDlyCenter(){
+		if(!$("#dlyCenterForm").checkall())
+			return false;
+		var options = {
+				url : "${ctx}/api/b2b2c/storeDlyCenter!add.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					$.Loading.message(json.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#dlyCenterForm").ajaxSubmit(options);
+	}
+	function editDlyCenter(){
+		if(!$("#dlyCenterForm").checkall())
+			return false;
+		var options = {
+				url : "${ctx}/api/b2b2c/storeDlyCenter!edit.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					$.Loading.message(json.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#dlyCenterForm").ajaxSubmit(options);
+	}
+
+	$(".delete").click(function(){
+		if( !confirm("确认删除?") ){
+			return false ;
+		}
+		var dlyid = $(this).attr("dlyid");
+		$.Loading.show("正在删除...");
+		
+		$.ajax({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/b2b2c/storeDlyCenter!delete.do",
+			data:"dly_center_id="+dlyid,
+			success:function(json){
+				if(json.result==1){
+					$.Loading.message(json.message);
+					location.reload();
+				}else{
+					$.Loading.message(json.message);
+				}
+			},
+			error:function(){
+				alert("出现意外错误");
+			}
+			
+		});
+		$.Loading.hide();
+	});
+	$("input[name='is_default']").change(function(){
+		$.Loading.show("正在保存...");
+		var dlyid = $(this).attr("dlyid");
+		
+		$.ajax({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/b2b2c/storeDlyCenter!siteDefault.do",
+			data:"dly_center_id="+dlyid,
+			success:function(json){
+				if(json.result==0){
+					$.Loading.message(json.message);
+					location.reload();
+				}
+			},
+			error:function(){
+				alert("出现意外错误");
+			}
+			
+		});
+		$.Loading.hide();
+	});
+});
+</script>
+<#include '/common/footer.html' />

@@ -1,0 +1,126 @@
+<#include '/admin/header.html' >
+<style>
+<!--
+ 
+
+#progress-wrap{padding:20px}
+-->
+</style>
+
+<script ype="text/javascript" src="${ctx}/adminthemes/new/js/Progress.js"></script>
+<script ype="text/javascript" src="${ctx}/adminthemes/new/js/jquery.timers-1.2.js"></script>
+
+<div class="main">
+<form id="createform">
+	 <div class="buttonArea">
+		<a href="javascript:void(0)" id="createBtn" class="easyui-linkbutton" >生成</a>
+	</div>
+	
+	<table class="form-table" style="width: 100%;">
+	<tr>
+		<td>请选择要生成的页面：</td>
+		 
+	</tr>
+	<tr>
+		<td style="text-align: left;">
+		<input type="checkbox" name="choose_pages" value="index">首页&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="checkbox" name="choose_pages" value="login">登陆页&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="checkbox" name="choose_pages" value="register">注册页&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="checkbox" name="choose_pages" value="goods">商品页&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="checkbox" name="choose_pages" value="help">帮助中心&nbsp;&nbsp;&nbsp;&nbsp;
+		</td>
+	</tr>
+	</table>
+	
+	<div class=" " id="progress-wrap">
+	 	正在检测是否有任务进行中...
+	 
+	</div>
+	</form>
+</div>
+
+
+
+
+<script type="text/javascript">
+<!--
+function create(){
+	$("#createform").ajaxSubmit({
+		url:'${ctx}/page/admin/page-create!create.do',
+		dataType:"json",
+		success:function(json){
+			if(json.result==1){
+				$("#createBtn").linkbutton("disable");  //使按钮禁用
+				loadTask();
+			}else{
+				alert(json.message)
+			}
+		},
+		error:function(){
+			alert("error");
+		}
+	});
+}
+
+function taskFinished(status){
+	if(status=='error'){
+		alert("生成出错");
+	}
+	if(status=='success'){
+		alert("生成成功");
+		
+	}
+	$("#createBtn").linkbutton("enable");    //使按钮可用
+}
+
+function loadTask(){
+	var self = this;
+	var config ={url:"${ctx}/core/admin/progress!viewProgress.do?progressid=page_create",onFinished:taskFinished}
+	var progress=  new Progress(config);
+	progress.show();
+	 
+}
+function checkStatus(){
+	
+	$.ajax({
+		url:'${ctx}/core/admin/progress!hasTask.do?progressid=page_create',
+		dataType:"json",
+		success:function(json){
+			if(json.result==1){
+			 	if(json.hastask==1){
+			 		$("#createBtn").linkbutton("disable");  //使按钮禁用
+			 		loadTask();
+			 	}else{
+			 		$("#progress-wrap").text("暂无页面生成任务，请点击生成按钮生成所有静态页。");
+			 	}
+			 		bindCreateEvent();
+			 	
+			}else{
+				alert("json message error")
+			}
+		},
+		error:function(){
+			alert("error");
+		}
+	});
+}
+
+function bindCreateEvent(){
+	$("#createBtn").click(function(){
+		//判断linkbutton是否已禁用，如果禁用则跳过
+	 	var disabled=  $(this).hasClass("l-btn-disabled");
+		if( !disabled ){
+		 	if(confirm("确认重新生成所有静态页面吗？")){
+		 		create();
+		 	}
+		}
+	});	
+
+}
+
+$(function(){
+	checkStatus();
+});
+//-->
+</script>
+<#include '/admin/footer.html' >

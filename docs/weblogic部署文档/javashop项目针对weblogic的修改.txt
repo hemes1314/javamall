@@ -1,0 +1,33 @@
+﻿WEB-INF下加入weblogic.xml, 解决
+1.需要通过/javashop访问的问题，改为直接访问/
+2.Spring的log4j listener无法启动的问题
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app">
+	<context-root>/</context-root>
+	<container-descriptor>
+		<!-- WebLogic's classloader在有重名类时，优先加载Web应用中WEB-INF内的类。 -->
+		<prefer-web-inf-classes>true</prefer-web-inf-classes>
+		<!-- 解决Log4jConfigListener的问题 -->
+		<!-- http://ananthkannan.blogspot.com/2009/12/servletcontextgetrealpath-returns-null.html -->
+		<!-- http://blog.csdn.net/z69183787/article/details/8598547 -->
+		<show-archived-real-path-enabled>true</show-archived-real-path-enabled>
+	</container-descriptor>
+</weblogic-web-app> 
+
+================================================================
+resource\struts.xml 修改
+<constant name="struts.convention.action.includeJars" value=".*/component-.*?jar(!/)?, .*?/_wl_cls_gen.*?jar(!/)?" /> 
+<constant name="struts.convention.exclude.parentClassLoader" value="false" />
+<constant name="struts.convention.action.fileProtocols" value="jar,zip,vfsfile,vfszip,code-source" />
+
+其中第1、3行是和weblogic相关，第二行是为了在嵌入tomcat或者jetty的情况下能正常启动。注意：如果是jboss，可能第二行需要为true。
+================================================================
+
+参考:
+Jetty (embedded)
+https://struts.apache.org/docs/convention-plugin.html 
+
+注意在jboss下可能这个必须是true
+http://www.cnblogs.com/yjmyzz/p/4001790.html

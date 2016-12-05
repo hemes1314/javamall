@@ -1,0 +1,237 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<#assign storeConsultListTag=newTag("storeConsultListTag")>
+<#assign storeConsult=storeConsultListTag("'type':2")>
+<style>
+.detailFind{
+	margin-right: 10%;
+}
+</style>
+<div class="layout">
+	<#include '../left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="path">
+					<div>
+						<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span>咨询管理
+					</div>
+				</div>
+				
+				<div class="tabmenu">
+	  				<ul class="tab pngFix">
+	  					<li class="active"><a href="javascript:void(0);">评论列表</a></li>
+	  				</ul>
+	  				<table>
+	  					<tr>
+	  						<td><a class="user-btn3 " name="stype" stype="0"  href="javascript:void(0);">模糊搜索 </a> </td>
+	  						<td><a class="user-btn3 detailFind" name="stype" stype="1" href="javascript:void(0);">详细搜索 </a> 
+	  							<input type="hidden" id="stype" value="${storeConsult.stype}"/>
+	  						</td>
+	  					</tr>
+	  				</table>
+	  			</div>
+	  			<table class="search-form"  id="keywordFind" <#if storeConsult.stype=="1"> style="display: none;" </#if>>
+			  		<tbody>
+			  			<tr>
+		  					<th >模糊搜索：</th>
+			  				<td >
+			  					模糊搜索：<input type="text" class="input_text" name="keyword" value="${storeConsult.keyword!''}"/> (可按商品名称、会员名称、咨询内容搜索)
+							</td>
+							<td>
+								<input type="button" class="submit"  name="searchComment" value="搜索" />
+							</td>
+		  				</tr>
+		  			</tbody>
+		  		</table>
+		  		
+		  		<table class="search-form"  id="detailFind" <#if storeConsult.stype=="0"> style="display: none;" </#if> >
+		  			<tbody>
+						<tr>
+		  					<th>会员名称：</th>
+       						<td ><input type="text" class="input_text" name="mname" value="${storeConsult.mname!''}"/></td>
+       						<th>商品名称：</th>
+       						<td> <input type="text" class="input_text" name="gname" value="${storeConsult.gname!''}"/> </td>
+       						<th>内容：</th>
+       						<td> <input type="text" class="input_text" name="content" value="${storeConsult.content!''}"/></td>
+       					</tr>
+       					<tr>
+		  					<th>回复状态：</th>
+		  					<td>
+		  						<select id="replyStatus">
+									<option value="0">--全部 --</option>
+									<option value="1">已回复</option>
+									<option value="2">未回复</option>
+								</select>
+		  					</td>
+							<td><input type="button" class="submit"  name="searchComment" value="搜索" /></td>
+		  				</tr>
+			  		</tbody>
+			  	</table>
+		  		
+				
+				<div id="postage-tpl" style="padding: 20px 0;">
+		  			<div id="J_TemplateList" class="manage-list">
+		            	<div class="section J_Section">
+		            		<h3 class="J_Title"> 咨询列表 </h3>
+		            	</div>
+		            	<div class="tbl-head">
+		        			<table cellspacing="0" cellpadding="0" border="0"  width="100%">
+		        				<tbody>
+			        				<tr>
+									    <th>咨询商品</th>
+										<th>咨询用户</th>
+										<th>咨询时间</th>
+										<th>咨询内容</th>
+										<th>操作</th>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<form id="commentForm">
+							<div class="entity">
+								<div class="entity">
+				        			<table cellspacing="0" cellpadding="0" border="0" >
+				        				<tbody>
+											<#list storeConsult.cmmentList.result as comment>
+												<tr>
+													<td>${comment.goods_name}</td>
+													<td>${comment.uname}</td>
+													<td><@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+													<td>${comment.content!''}</td>
+													<td>
+														<a class="reply" commentId="${comment.comment_id}" href="javascript:void(0)">回复</a>
+													</td>
+												</tr>	
+											</#list>
+										</tbody>
+								</table>
+							</div>
+							<@pager pageno="${storeConsult.page}" pagesize="${storeConsult.pageSize}" totalcount="${storeConsult.totalCount}" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#replyStatus").find("option[value='${storeConsult.replyStatus}']").attr("selected",true);
+	
+	
+	$("a.reply").click(function(){
+
+		dialog = $.dialog({
+			title : "回复咨询",
+			width : 475,
+			height : 312,
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "reply_comment.html?comment_id="+$(this).attr("commentId")+"&type=2",
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '修改',
+					callback : function() {
+						reply();
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				$.alert("出现错误，请重试");
+			},
+			cache : false
+		});	
+	});
+	$("a.del").click(function(){
+		$.ajax({
+			url : "${ctx}/api/b2b2c/commentApi!del.do?comment_id="+$(this).attr("commentId"),
+			dataType:'json',
+			type : "POST",
+			cache : false,
+			success : function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function() {
+				$.alert("出现错误，请重试");
+			}
+		});
+	});
+	$("a[name='stype']").click(function(){
+		var stype=$(this).attr("stype");
+		$("#stype").val(stype)
+		if(stype==0){
+			$("#keywordFind").show();
+			$("#detailFind").hide();
+		}else{
+			$("#detailFind").show();
+			$("#keywordFind").hide();
+		}
+	});
+	$("input[name='searchComment']").click(function(){
+		var replyStatus=$("#replyStatus").val();
+		var stype=$("#stype").val();
+		if(stype=="0"){
+			var keyword=$("input[name='keyword']").val();
+			
+			location.href="StoreConsultList.html?type=1&keyword="+keyword+"&replyStatus="+replyStatus+"&stype="+stype;
+		}else{
+			var mname=$("input[name='mname']").val();
+			var gname=$("input[name='gname']").val();
+			var content=$("input[name='content']").val();
+			location.href="StoreConsultList.html?type=1&stype="+stype+"&mname="+mname+"&gname="+gname+"&content="+content+"&replyStatus="+replyStatus;
+		}
+	});
+	$("#deleteComment").click(function(){
+		alert($("input[name='commentId']:checked").size());
+		if(!confirm("确定删除吗？"))
+			return false;
+		if($("input[name='commentId']:checked").size()==0){
+			alert("至少需要选择一条数据");
+			return false;
+		}
+		var options = {
+				url : "${ctx}/api/b2b2c/commentApi!delComment.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#commentForm").ajaxSubmit(options);
+	});
+	})
+function reply(){
+	var options = {
+			url : "${ctx}/api/b2b2c/storeCommentApi!edit.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {	
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+	$("#replyForm").ajaxSubmit(options);
+}
+</script>
+<#include '/common/footer.html' />

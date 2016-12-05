@@ -1,0 +1,26 @@
+<#if member?? > 
+  <dt><span class="ico"></span>我的商城<i class="arrow"></i></dt>
+        <dd>
+          <div class="my_carttitle">
+            <h4>
+            	${member.uname!''}
+            </h4>
+            <a href="${ctx}/member/member.html" class="arrow">我的会员中心<i></i></a></div>
+          <div class="user-centent-menu">
+            <ul>
+              <li><a href="${ctx}/member/address.html" class="arrow">我的地址<i></i></a></li>
+              <li><a href="${ctx}/member/order.html" class="arrow">我的订单<i></i></a></li>
+              <li><a href="${ctx}/member/comments.html" class="arrow">我的评论<i></i></a></li>
+              <li><a href="${ctx}/member/favorite.html" class="arrow">我的收藏<i></i></a></li>
+              <li><a href="${ctx}/member/ask.html" class="arrow">我的咨询<i></i></a></li>
+                <!-- <li><a href="${ctx}/member/point.html" class="arrow">我的积分<i></i></a></li>-->
+             </ul>
+          </div>
+          <div class="browse-history">
+	            <div class="part-title">
+	              <h4>商家请点击这里</h4>
+	             	<a href="${ctx}/store/business_center.html?menu=store_index">进入商家中心</a>
+	            </div>
+          </div>
+        </dd>
+ </#if>        

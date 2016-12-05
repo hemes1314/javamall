@@ -1,0 +1,89 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+
+<#assign storeTagsListTag=newTag("storeTagsListTag")/>
+<#assign storeTagsList=storeTagsListTag()!''/>
+<div class="layout">
+	<#include '/left_menu.html'/>
+	<div class="right-content">
+	<div class="main">
+		<div class="wrap">
+			<div class="path">
+				<div>
+					<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span>标签列表
+				</div>
+			</div>
+			<form id="goodsTagForm">
+			<!-----------------list begin------------------------>
+				<div id="postage-tpl" style="padding: 20px 0;">
+		  			<div id="J_TemplateList" class="manage-list">
+		            	<div class="section J_Section">
+		            		<h3 class="J_Title"> 标签列表 </h3>
+		            	</div>
+		            	<div class="tbl-head">
+		        			<table cellspacing="0" cellpadding="0" border="0"  width="100%">
+		        				<tbody>
+			        				<tr>
+								    <th>标签名称</th>
+								    <th>操作</th>
+								  </tr>
+								</tbody>
+							</table>
+		            	</div>
+		        		<#if storeTagsList??>
+							<div class="entity">
+			        			<table cellspacing="0" cellpadding="0" border="0" >
+			        				<tbody>
+										<#list storeTagsList as storeTag>
+										  <tr>
+											  <td>${storeTag.tag_name}</td>
+											  <td>
+											    	<a href="javascript:void"  value="${storeTag.tag_id}"></a>
+											    	<a href="tagGoodsShow.html?tagid=${storeTag.tag_id}&mark=${storeTag.mark}" name="showInfo" >标签商品设置</a>
+											  </td>
+										  </tr>	
+										</#list>
+			        				</tbody>
+			        			</table>
+			        		</div>
+						</#if>
+	        		</div>
+	        	</div>	
+			</form>
+			</div>
+	</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	
+	$("a[name='edit']").click(function(){
+		dialog = $.dialog({
+			title : "编辑标签",
+			width : 475,
+			height : 312,
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "${ctx}/goods/tagInfo.html?type=2&tag_id="+$(this).attr("tag_id"),
+			cache : false,
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '修改',
+					callback : function() {
+						tagInfo("2");
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			}
+		});	
+	});
+})
+</script>
+<#include '/common/footer.html' />

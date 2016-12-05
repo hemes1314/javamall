@@ -1,0 +1,53 @@
+<#assign dataformat="com.enation.framework.directive.DateformateDirective"?new()/>
+<style>
+.input_text{
+	width: 200px;
+}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form method="post" class="validate" id="giftcardTypeForm">
+			<table>
+				<tr>
+					<th><label class="text">类型名称：</label></th>
+					<td><input class="easyui-validatebox input_text type_name"
+						data-options="required:true" type="text"
+						name="giftcardType.type_name" maxlength="20" 
+						isrequired="true" onblur="giftcard_add()" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">礼品卡面值：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text"
+						name="giftcardType.money" dataType="float" isrequired="true" />
+						
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">售价:</label></th>
+					<td><input type="text" name="giftcardType.price"
+						class="easyui-numberbox input_text" data-options="required:true" /> 
+					
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">礼品卡图片</label></th>
+					<td><input type="file" name="image" data-options="required:true"/></input>
+					</td>
+				</tr>	
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+function giftcard_add()
+{
+	if($(".type_name").val().length > 15){
+		alert("名称字数不能超过15个字符");
+		$(".type_name").val("");
+		$(".type_name").focus();
+		return false;
+	}
+}
+</script>

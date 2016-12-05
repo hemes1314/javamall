@@ -1,0 +1,5 @@
+<processors>
+<processor url="/api/*" id=""></processor>
+<processor url="/w+/admin/*" id=""></processor>
+<processor url="*.html" id=""></processor>
+</processors>

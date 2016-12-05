@@ -1,0 +1,140 @@
+<#include '/store/store_header.html' />
+
+<#-- 创建商品分类标签 --> 
+<#assign storeTransportListTag= newTag("storeTransportListTag") > 
+<#-- 查询商品分类列表 0表示查子分类 -->
+<#assign storeTransportList = storeTransportListTag()!''>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			交易管理<span>></span>物流工具
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="normal">
+						<a href="${ctx}/store/ship/logiCompany/logi_company_list.html?menu=transaction" >物流公司</a>
+					</li>
+					<li class="active">
+						<a href="#">运费模版</a>
+					</li>
+				</ul>
+				<a class="ncu_btn3" href="transport_add.html?menu=transaction">新增运费模板 </a>
+			</div>
+			<!-- 物流模版 -->
+			<div class="transport_list">
+				<table cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th style="width:150px">运送方式</th>
+							<th style="width:380px;text-align:left;padding:10px;">运送到</th>
+							<th>首重(g)</th>
+							<th>运费(元)</th>
+							<th>续重(g)</th>
+							<th>运费(元)</th>
+						</tr>
+					</thead>
+					<tbody>
+						<#list storeTransportList as stl>
+							<tr>
+								<th colspan="20">
+									<p><i>模版名称：</i>${stl.name!''}</p>
+									<div class="transport">
+										<#if stl.def_temp==1 >
+										<span class="J_LastModified"><i></i>默认模板</span> |
+										<#else>
+											<a data-id="4" href="javascript:void(0)" class="J_Clone" onclick="setDefTemp(${stl.id})" ><i></i>设置默认模板</a> |
+										</#if>
+										<a href="transport_edit.html?tempid=${stl.id}&menu=transaction"><i></i>修改</a> | 
+										<a  href="javascript:void(0)" class="J_Delete" onclick="delTemp(${stl.id});" ><i></i>删除</a>
+									</div>
+								</th>
+							</tr>
+							<#list stl.dlylist as dl>
+								<tr>
+									<td class="left_td">${dl.name}</td>
+									<td class="cell_area">${dl.area}</td>
+									<td>${dl.dlyConfig.firstunit}</td>
+									<td>${dl.dlyConfig.firstprice}</td>
+									<td>${dl.dlyConfig.continueunit}</td>
+									<td>${dl.dlyConfig.continueprice}</td>
+								</tr>
+								<#list dl.arealist as al>
+								<tr>
+									<td class="left_td">${dl.name!''}</td>
+									<td class="cell_area">${al.area!''}</td>
+									<td>${(al.areaConfig.firstunit)!''}</td>
+									<td>${(al.areaConfig.firstprice)!''}</td>
+									<td>${(al.areaConfig.continueunit)!''}</td>
+									<td>${(al.areaConfig.continueprice)!''}</td>
+								</tr>
+								</#list> 
+								</#list>
+								<tr><td colspan="20" style="border:0px none;"></td></tr>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+		</div>	
+	</div>
+</div>	
+
+<script>
+function delTemp(tempid){
+	if(!confirm("确认删除吗？")){
+		return false;
+    }else{
+    	
+    	$.ajax({
+			url : "${ctx}/api/b2b2c/transport!del.do?tempid="+tempid,
+			type : "post",
+			dataType : 'json',
+			cache : false,
+			success : function(result) {
+				if (result.result == 1) {
+					location.reload();
+				}
+				if (result.result == 0) {
+					alert(result.message);
+				}
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			}
+		});
+    }
+	
+}
+
+function setDefTemp(tempid){
+	
+	$.ajax({
+		url : "${ctx}/api/b2b2c/transport!setDefTemp.do?tempid="+tempid,
+		type : "post",
+		dataType : 'json',
+		cache : false,
+		success : function(result) {
+			if (result.result == 1) {
+				location.reload();
+			}
+			if (result.result == 0) {
+				alert(result.message);
+			}
+		},
+		error : function() {
+			alert("出现错误，请重试");
+		}
+	});
+	
+}
+
+</script>
+	<script>
+		$(function(){
+				selectMenu(2);
+		})
+	</script>
+<#include '/common/footer.html' />

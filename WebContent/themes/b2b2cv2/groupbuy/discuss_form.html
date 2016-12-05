@@ -1,0 +1,129 @@
+<#include 'discuss_list.html'/>
+
+<#-- 创建会员评论标签 -->
+<#assign memberIsCommentTag= newTag("memberIsCommentTag")>
+<#assign isComment = memberIsCommentTag("{'goods_id':${goodsid}}") >	
+<div id="discuss_form_wrapper">
+	<h1>宝贝评价</h1>
+	<form action="#" method="post" id="discussForm">
+		<div class="discuss_issue">
+			<div class="discuss_score">
+				<h6>商品动态评分</h6>
+				<div>
+					<h2>
+						<b>描述相符：</b> 
+						<span class="grade" style="margin:7px 0px 0px 0px;"> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >1</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >2</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >3</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >4</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >5</a></span> 
+							<input type="hidden" name="store_desccredit" id="store_desccredit" value="5">
+						</span> 
+						<span class="value_wrapper">
+							<span style="font-weight: bold; font-size: 14px; color: #a90000;" name="gradevalue" status="store_desccredit">5</span>分
+						</span>
+					</h2>
+					
+					<h2>
+						<b>服务态度：</b> 
+						<span class="grade" style="margin:7px 0px 0px 0px;"> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">1</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">2</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">3</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">4</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">5</a></span> 
+							<input type="hidden" name="store_servicecredit" id="store_servicecredit" value="5">
+						</span> 
+						<span class="value_wrapper">
+							<span style="font-weight: bold; font-size: 14px; color: #a90000;" name="gradevalue" status="store_servicecredit">5</span>分
+						</span>
+					</h2>
+					
+					<h2>
+						<b>发货速度：</b> 
+						<span class="grade" style="margin:7px 0px 0px 0px;"> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">1</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">2</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">3</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">4</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">5</a></span> 
+							<input type="hidden" name="store_deliverycredit" id="store_deliverycredit" value="5">
+						</span> 
+						<span class="value_wrapper">
+							<span style="font-weight: bold; font-size: 14px; color: #a90000;" name="gradevalue" status="store_deliverycredit">5</span>分
+						</span>
+					</h2>
+					</div>
+				</div>
+				<div class="discuss_form">
+				<h2>
+					<b>评分：</b>
+					<label><input type="radio" name="grade" value="3" checked="checked"/><i class="score_fine"></i></label>		
+					<label><input type="radio" name="grade" value="2"/><i class="score_middle"></i></label>
+					<label><input type="radio" name="grade" value="1"/><i class="score_no"></i></label>
+				</h2>
+				<textarea name="content" id="discuss_content">请在此处输入您的评论</textarea>
+				<input type="file" name="file">
+				<p>[宽度小于600像素，文件小于200K，支持jpg、gif]</p>
+				
+				<input type="hidden" name="goods_id" value="${goodsid}" />
+				<input type="hidden" name="commenttype" value="1" />
+				
+				</div>
+				<div class="discuss_ok"> 
+					<input class="regis_ent" type="button" value="发表评论" id="discussBtn"/>	
+				</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+$(function(){	
+	$("#discuss_content").focus(function(){
+		if(this.value=="请在此处输入您的评论"){
+			this.value="";	
+		}
+	}).blur(function(){
+		if( $.trim(this.value)==""){
+			this.value="请在此处输入您的评论";
+		}
+	});
+	
+	$("#discussBtn").click(function(){
+		<#if !isComment.isLogin >
+			alert("请您先登录，然后再进行评论！");
+			return;
+		<#else>
+			<#if !isComment.isBuy>
+				alert("您只有购买该商品后才能进行评论！");
+				return;
+			<#else>
+				<#if isComment.isCommented>
+					alert("对不起，您已经评论过此商品！");
+					return;
+				<#else>
+					var cval = $('#discuss_content').val();
+					
+					//屏蔽敏感词汇
+					var patt1 = new RegExp("(吸毒|法轮功|卖淫|催情药|大鸡巴|仿真枪|和狗交|乱奸|迷情药)");
+					
+					if(cval == '' ||cval=='请在此处输入您的评论' ){
+						alert("请输入您的评论内容！");
+						return;
+					}
+					else if(cval.length>1000){
+						alert("请您输入1000字以内的评论");
+						return;
+					}
+					else if(patt1.test(cval)){
+					     alert( "该评论中有限制级词语，系统已经过滤！" ); 
+					     return;
+					}
+					CommentForm.formSubmit($(this),$("#discussForm"));
+				</#if>
+			</#if>
+		</#if>
+	});
+});
+</script>
+

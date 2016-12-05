@@ -1,0 +1,31 @@
+<!-- 创建菜单标签 -->
+<#assign menuTag= newTag("menuTag")>
+<!-- 调用菜单信息 -->
+<#assign menuList = menuTag()!'' >
+<ul class="site_menu">
+	<#list menuList as menu >
+		<#assign haschild=false />
+		<#assign first=false />
+		<#assign last=false />
+		<#if menu.hasChildren ><#assign haschild=true /></#if>
+		<#if menu_index==0><#assign first=true /></#if>
+		<#if !menu_has_next><#assign last=true /></#if> 
+		<li class="<#if menu_index==0>first</#if><#if !menu_has_next>last</#if><#if haschild > haschild</#if>" >
+			<em <#if first>class="first"</#if> ></em>
+			<a href="${menu.url}" >${menu.name!''}</a>	 
+			<span ></span> 
+			<em  <#if last>class="last"</#if> ></em>
+			<#if haschild  >
+				<ul class="child">
+					<#list menu.children as child>
+					   <li <#if !child_has_next>class="last"</#if> ><a href="${child.url!''}" )>${child.name!''}</a></li>
+				    </#list>
+				</ul>
+			</#if>
+		</li>
+	</#list>
+	<li><a href="${ctx}/sirendingzhi/sirendingzhi.html" target="_blank">私人订制</a></li>
+    <li><a href="${ctx}/culture/index.html" target="_blank">文化</a></li>
+    <!--<li><a href="${ctx}/finance/index.html" target="_blank">金融</a></li>-->
+    <li><a href="${ctx}/sommelier/index.html" target="_blank">品酒师</a></li>
+</ul>

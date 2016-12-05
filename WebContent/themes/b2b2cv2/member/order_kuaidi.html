@@ -1,0 +1,14 @@
+<div >
+	<ul>
+	 <#if kuaidiResult?exists>
+        <#if kuaidiResult.data?exists>
+	         <#list kuaidiResult.data as kd>
+	       	  	<li style="color: red">${kd.time!''}:&nbsp;&nbsp;&nbsp;&nbsp;${kd.context!''}</li>
+	       	  	<li></li>
+	         </#list>
+         </#if>
+        <#else>
+        <h2>出现错误，请稍后重试</h2>
+      </#if>
+      </ul>
+</div>

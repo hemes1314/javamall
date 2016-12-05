@@ -1,0 +1,70 @@
+<style>
+.selectgoods
+{
+  float:left;position:absolute;
+  top:10px;
+  left:10px;
+  display:block;
+  width:800px;
+  height:600px;
+}
+.input_text {
+	width: 150px;
+}
+body,table{
+font-size:12px;
+}
+table{
+table-layout:fixed;
+empty-cells:show;
+border-collapse: collapse;
+}
+h1,h2,h3{
+font-size:12px;
+margin:0;
+padding:0;
+}
+.table{
+border:1px solid #cad9ea;
+color:#666;
+}
+.table th {
+background-repeat:repeat-x;
+height:30px;
+}
+.table td,.table th{
+border:1px solid #cad9ea;
+padding:0 1em 0;
+}
+.table tr.alter{
+background-color:#f5fafe;
+} 
+.input_text {
+	width: 150px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+			 <table class="table" style="float:left; width:98%">
+				<tr>
+					<th style="width:60px; height:40px;">商品名称</th>
+					<td>${virtualProduct.name!''}</td>
+				</tr>
+                <tr>
+					<th style="width:60px; height:40px;">商品价格</th>
+					<td>${virtualProduct.price!''}</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:40px;">商品描述</th>
+					<td style="line-height:25px;">${virtualProduct.intro!''}</td>
+				</tr>
+				<tr>
+					<th style="width:60px;">商品图片</th>
+					<td style="height:80px;">
+					<img src="${virtualProduct.images!''}" width="60" height="60">
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="virtualProduct.id" value="${virtualProduct.id!''}">
+	</div>
+</div>

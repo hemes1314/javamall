@@ -1,0 +1,329 @@
+<#include 'member_header.html' />
+<#--创建“订单货物列表”标签-->
+<#assign orderChildItemListTag = newTag("orderChildItemListTag")>
+<#--调用“订单货物列表”标签，并传递参数-->
+<#assign map = orderChildItemListTag("{'orderid':${order_id}}")>
+<#--创建"支付列表"标签-->
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag()>
+
+<#assign orderItemList = map.itemList />
+
+<#assign orderChildItemList = map.childItemList />
+
+<div class="data">
+	<h2>申请退货</h2>
+</div>	
+
+<!--温馨提示-->
+<div class="tip">
+	<div class="top"></div>
+	<div class="body">
+		<@image src="${ctx}/themes/default/images/gth.jpg"/>
+	
+		<div>
+			<h2>温馨提示</h2>
+			<p>1、退货提示。</p>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<!--温馨提示结束-->
+<div class="tab">
+	<ul >
+		<li class="curr"><a href="javascript:void(0);"><span>申请退货</span></a></li>
+	</ul>
+</div>
+<div class="box">
+	<div class="top"></div>
+	<div class="body">
+		<form id="returnForm">
+				<input type="hidden" name="orderId" value="${order_id}" />
+				<input type = "hidden" id = "packDetailJson" name = "packDetailJson" />
+			<table cellspacing="0" cellpadding="0" width="100%">
+			<thead>
+				<tr>
+					<th>是否退货</th>
+					<th>部分退货</th>
+					<th>商品图片</th>
+					<th>商品名称</th>
+					<th>单价</th>
+					<th>购买数量</th>
+					<th>退货数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list orderItemList as item>		       
+					<tr>
+						<td>
+							<#if item.state==0 >
+								<input type="checkbox" name="gid" value="${item.goods_id}" goods_id="${item.goods_id}" payNum="${item.num}"/>
+							<#else>
+					 		&nbsp;&nbsp;
+							</#if>
+						</td>
+						<td>
+							<#if item.is_pack == 1>
+							<input type="checkbox" id="return_type_${item.goods_id}" value="0" class="pack_gid" name="return_type_${item.goods_id}"  goods_id="${item.goods_id}" style="display:none;" />
+							<#else>
+							&nbsp;&nbsp;
+							</#if>
+						</td>
+						<td style="width:50px">
+							<a target="_blank" href="../goods-${item.goods_id}.html">
+								<span style="display: block; height: 50px;" class="cart-product-img">
+									<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+								</span>
+							</a>				
+						</td>
+						<td style="width:300px;"><a target="_blank" href="../goods-${item.goods_id}.html">${item.name}</a></td>
+						<td>${item.price?string.currency}</td>
+						<td>
+							${item.num}
+							<input type="hidden" name="payNum" value="${item.num}"/> 
+							<input type="hidden" name="productId" value="${item.product_id}" />
+							<input type="hidden" name="goodsId" value="${item.goods_id}" />
+					
+							<input type="hidden" name="price" value="${item.price}" />
+						</td>
+						<#if item.is_pack == 1>
+							<td>
+								<input name="goodsNum" type="text" value="${item.num}" disabled="disabled" id="${item.goods_id}" />
+								<input name="isPack_${item.goods_id}" type="hidden" value="1" />
+							</td>
+						<#else>
+							<td>
+								<input name="goodsNum"  type="text" value="${item.num}" disabled="disabled" id="${item.goods_id}" class="input_text"  style="width:30px" />
+								<input name="isPack_${item.goods_id}" type="hidden" value="0" />
+							</td>
+						</#if>
+						
+					</tr>
+					<#if item.is_pack == 1>
+					<tr id="child_${item.goods_id}" style="display:none;">
+						<td></td>
+						<td colspan="6">
+							<table cellspacing="0" cellpadding="0" width="100%">
+								<thead>
+									<tr>
+										<th>是否退货</th>
+										<th>商品名称</th>
+										<th>购买数量</th>
+										<th>退货数量</th>
+									</tr>
+								</thead>
+								<tbody>
+									<#list orderChildItemList as childItem>
+										<tr>
+											<td>
+												<input type="checkbox" value="${childItem.goodsid }" parentId = "${item.goods_id}" checked="" name="cGoodsId" />
+												<input type="hidden" value="${childItem.productid}" id="cProductId_${item.goods_id}${childItem_index}" />
+											</td>
+											<td>${childItem.name}
+												
+											</td>
+											<td>${childItem.num}<input type="hidden" id="cPayNum_${item.goods_id}${childItem_index}" value="${childItem.num }" /></td>
+											<td><input id="${item.goods_id}${childItem_index}" name="cGoodsNum_${item.goods_id}" value="${childItem.num }" type="text" class="input_text"  style="width:30px" /></td>
+										</tr>
+									</#list>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					</#if>
+				</#list>
+			</tbody>
+		</table>
+			<table width="100%" cellspacing="0" cellpadding="0"	class="perfection">
+				<tr>
+					<td>退款方式</td>
+					<td>
+						<select name="refund_way"> 
+							<option value="0">-- 请选择退款方式 --</option>
+							<#list paymentList as payment  >
+								<#if payment.type!="cod">
+									<option value="${payment.name}"> ${payment.name} </option>
+								</#if>
+							</#list>
+						</select>
+					</td>
+					<td>退款账号</td>
+					<td><input type="text" name="return_account" /> </td>
+				</tr>
+				<tr>
+					<td width="10%">问题描述</td>
+					<td colspan="3"><textarea name="remark"   style="resize:none;width:90%;height:80px"></textarea> </td>
+				</tr>
+				<!-- 
+				<tr>
+					<td width="10%">上传图片</td>
+					<td colspan="3"><input type="file" name="file"> </td>
+				</tr>
+				 -->	
+			</table>
+		</form>
+		<div class="mc-mdOper">
+			<div class="btn">
+				<input type="button" name="btnSubmit" value="申请退货" id="btnSubmit" class="yellow_btn" />
+			</div>
+		</div>
+		<div class="pager_border">
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="bottom"></div>
+</div>
+<div class="clear"></div>
+<div class="helper">
+	<h2>小贴士</h2>
+	<ul>
+		<li><a href="${ctx}/help-23-14.html" target="_blank">我怎么进行退换货？</a></li>
+	</ul>
+</div>
+<div class="rr_bottom"></div></div>
+<!--会员中心首页右侧结束-->
+<script type="text/javascript">
+$(function(){
+	$("#btnSubmit").click(function(){
+		
+		if($("input[name='gid']").length==0){
+			alert("此订单所有商品均已申请过退货");
+			return false;
+		}
+		
+		if($("input[name='gid']").filter(":checked").length==0){
+			alert("请选择要退货的商品");
+			return false;
+		}
+		var choose=false;
+		$("input[name='gid']:checked").filter(function(index){
+			if($("#"+$(this).attr("goods_id")).val()<=0){
+				alert("退货数量不能为0");
+				choose=true;
+			}else if(isNaN($("#"+$(this).attr("goods_id")).val())){
+				alert("请输入数字");
+				choose=true;
+			}else if($("#"+$(this).attr("goods_id")).val()>$(this).attr("payNum")){
+				alert("退货数量大于购物数量");
+				choose=true;
+			}
+		});
+		if(choose) return false;
+		if(choose){
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
+		if($("select[name='refund_way']").val()=="0"){
+			alert("请选择支付方式");
+			return false;
+			
+		}
+		if($("input[name='return_account']").val()==""){
+			alert("请填写退款账号");
+			$("#btnSubmit").removeAttr("disabled");
+			return false;
+		}
+		
+		var vai =  true;
+		var jsonArray = [];
+		//第一次遍历验证输入内容
+		var index = 0;
+		$("input[name='cGoodsId']").each(function(){
+			var parentId = $(this).attr("parentId");
+			var display = $("#child_" + parentId).css("display");
+			//如果没有勾选就跳过
+			if("none" == display){
+				return true;
+			}
+			//验证输入数量
+			var $num = $("#" + parentId + index);
+			if (!isNaN($("#" + parentId + index).val())) {
+				var $payNum = $("#cPayNum_" + parentId + index);
+				if(parseInt($num.val()) > parseInt($payNum.val()) && vai){
+					$num.focus();
+					alert("您输入的退货数量超过了购买数量!");
+					vai = false;
+					return false;
+				}
+			} else {
+				$num.focus();
+				alert("您输入的退货数量必须为数字");
+				vai = false;
+				return false;
+			}
+			
+			index ++;
+		});
+		if(!vai){
+			return false;
+		}else{
+			//验证通过后 进行第二次遍历  组织json 数据
+			var index = 0;
+			$("input[name='cGoodsId']").each(function(){
+				var parentId = $(this).attr("parentId");
+				var display = $("#child_" + parentId).css("display");
+				if("none" == display){
+					index++;
+					return true;
+				}
+				var goodsId = $(this).val();
+				var num = $("#" + parentId + index).val();
+				var productId = $("#cProductId_" + parentId + index).val();
+				var payNum = $("#cPayNum_" + parentId + index).val();
+				var json = {"goodsId" : goodsId,"num" : num,"packGoodsId":parentId,
+							"productId":productId,"payNum":payNum};
+				/* var json = {"goodsId" : goodsId,"num" : num,"packGoodsId":packGoodsId,
+							"productId":productId,"price":price,"payNum":payNum}; */
+				jsonArray.push(json);
+				index++;
+			});
+		}
+		$("#packDetailJson").val(JSON.stringify(jsonArray));
+		
+		var options = {
+				url : "${ctx}/api/shop/sellBack!save.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1){
+						alert(result.message);
+						location.href="return_list.html"
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#returnForm').ajaxSubmit(options);
+	});
+	$("input[name='gid']").change(function(){
+		
+		var goods_id = $(this).attr("goods_id");
+		
+		$("#"+goods_id ).attr("disabled",!this.checked);
+		
+		if(this.checked){
+			$("#return_type_" + goods_id).show();
+		}else{
+			$("#return_type_" + goods_id).hide();
+		}
+		
+	});
+	$("input.pack_gid").change(function(){
+		var goods_id = $(this).attr("goods_id");
+		if(this.checked){
+			this.value = "1";
+			$("#child_" + goods_id).show();
+			$("#"+goods_id ).hide();
+		}else{
+			this.value = "0";
+			$("#child_" + goods_id).hide();
+			$("#"+goods_id ).show();
+		}
+	});
+})
+
+
+</script>
+<#include '../common/footer.html'/>

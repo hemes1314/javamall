@@ -1,0 +1,70 @@
+<#assign storeBillSellBackListTag=newTag("storeBillSellBackListTag")>
+<#assign storeOrderList=storeBillSellBackListTag()>
+	<#assign orderItemListTag = newTag("orderItemListTag")>
+
+
+
+
+<!-- 退货申请订单列表详细 -->
+<table class="s_orderlist"  cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="s_orderlist_title">
+			<th >退货单号</th>
+			<th >原订单号</th>
+			<th >申请时间</th>
+			<th >佣金</th>
+			<th >红包</th>
+			<th >退款金额</th>
+			<th >退款时间</th>
+
+		</tr>
+	</thead>
+ 	<#if storeOrderList.totalCount != 0 >
+ 		<tbody>
+ 		<#list storeOrderList.storeOrder.result as order>
+  		<tr>
+			<td>${order.tradeno}</td>
+			<td>${order.ordersn}</td>
+			<td>
+				<@dateformat time="${order.regtime?c}" pattern="yyyy-MM-dd HH:mm"/>
+			</td>
+			<td>
+				<#assign orderItemList = orderItemListTag("{'orderid':${order.orderid}}") />
+				<#assign sum=0>
+					<#list orderItemList as item>
+						<#if item.commission??>
+							<#assign sum=sum +item.commission>
+						</#if>
+					</#list>
+					${sum?string.currency}
+			</td>
+			<td>
+				<#assign orderItemList = orderItemListTag("{'orderid':${order.orderid}}") />
+				<#assign sum_red_packets_proportion=0>
+					<#list orderItemList as item>
+						<#if item.commission??>
+							<#assign sum_red_packets_proportion=sum_red_packets_proportion +item.red_packets_proportion>
+						</#if>
+					</#list>
+					${sum_red_packets_proportion?string.currency}
+			</td>
+			<td>
+				${order.alltotal_pay?string.currency}
+			</td>
+			<td>
+				<#if order.return_time?c != '0' >
+					<@dateformat time="${order.return_time?c}" pattern="yyyy-MM-dd HH:mm"/>
+					<#else>
+						-
+				</#if>
+			</td>
+		</tr>
+		</#list>
+		<tr>
+		</tr>
+		</tbody>
+	</table>
+	<@ajaxpager pageno="${storeOrderList.page!'1'}" pagesize="${storeOrderList.pageSize}" totalcount="${storeOrderList.totalCount}" />
+	<#else>
+	</table>
+	<p class="no_blank">暂无符合条件的数据记录</p></#if>

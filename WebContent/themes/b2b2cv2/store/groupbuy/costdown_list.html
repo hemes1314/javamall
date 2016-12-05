@@ -1,0 +1,148 @@
+<#include '/store/store_header.html' />
+<#assign groupBuyListTag=newTag("myCostDownListTag")> 
+<#assign gbPage=groupBuyListTag()>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			促销管理<span>></span>直降
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="costdown_list.html?menu=promotion">直降列表</a>
+					</li>
+					<li class="normal">
+						  <a href="costdown_add.html?menu=promotion"  title="新增直降">新增直降</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- 搜索 -->
+		<form>
+			<input type="hidden" name="menu" value="promotion">
+	  		<table class="search_form"  id="detailFind">
+		  		<tbody>
+					<tr>
+		  				<td style="width:450px;">&nbsp;</td>
+       					<th>直降商品名称：</th>
+       					<td><input class="text input_text" type="text" name="gb_name" value="${gb_name!''}"></td>
+		  				<th>活动状态：</th>
+		  				<td style="width:60px;">
+		  				<#if !gb_status?? >  <#assign gb_status='-1'  />  </#if>
+				        <select name="gb_status" class="w90">
+				               <option value="" >全部直降</option>
+				                <option value="0" <#if gb_status=='0'>selected="selected"</#if> >未审核</option>
+				                <option value="1" <#if gb_status=='1'>selected="selected"</#if>>已通过</option>
+				                <option value="2" <#if gb_status=='2'>selected="selected"</#if>>审核失败</option>
+				                <option value="3" <#if gb_status=='3'>selected="selected"</#if>>已结束</option>
+				         </select>
+		  				</td>
+						<td style="width:70px;text-align:right;"><input type="submit" class="submit" value="搜索"></td>
+       				</tr>
+			  	</tbody>
+			  </table>
+		</form>
+		<!-- 直降列表 -->
+		<div class="s_commont_list">
+			 <#assign  gbList = gbPage.result />
+       			<#if gbList?size==0>
+       				<p class="no_blank">暂无符合条件的数据记录</p>
+       			<#else>	
+				<table cellpadding="0" cellspacing="0" class="goodslist_bystore groupbuy_list_table" style="border:0px none;">
+					<thead>
+						<tr>
+							<th colspan="2" style="width:180px;">名称</th>
+							<th >活动</th>
+							<th >已直降</th>
+							<th >活动状态</th>
+							<th >操作</th>
+						</tr>
+					</thead>	
+					   <#list gbList as gb >
+					       	<tr>
+					       		<td>
+					       			<a target="_blank" href="${ctx}/goods-${gb.goods_id}.html">
+					       				 <img width="60" height="60"  onload="javascript:DrawImage(this,60,60);" src="<@imgurl pic="${gb.img_url!''}" />" >
+					       			</a>
+					       		</td>
+					       		<td style="text-align:center">
+					       			<a href="${ctx}/goods-${gb.goods_id}.html" target="_blank" style="color:#005ea6;display:block;line-height:23px;">${gb.gb_name!''}</a>
+					       			<a href="#" target="_blank" class="subtitle" style="color:#999;display:block;line-height:23px;">${gb.gb_title!''}</a>
+					       		</td>
+					       		<td>
+					       			<strong>${gb.act_name}</strong>
+							        <p class="goods-time">
+										<@dateformat time="${gb.start_time}" pattern="yyyy-MM-dd"/>-
+										<@dateformat time="${gb.end_time}" pattern="yyyy-MM-dd"/>
+									</p>
+					       		</td>
+					       		<td>${gb.buy_num!0}</td>
+						        <td>
+									<#if gb.gb_status==0 >未审核</#if>
+									<#if gb.gb_status==1 >已审核</#if>
+									<#if gb.gb_status==2 >已拒绝</#if>
+									<#if gb.gb_status==3 >已结束</#if>
+								</td>
+								<td class="storegoodslist_tools">
+									<#-- 活动开始时间以前及未审核均可以编辑 -->
+									<#if gb.gb_status==0 && (.now?long lt (gb.start_time*1000) || .now?long gt (gb.end_time*1000))>
+							        	<a href="costdown_edit.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}&menu=promotion" class="tool4"><i></i>编辑</a>
+							         	<a class="delete tool2" gbid="${gb.gb_id}" href="javascript:void(0);"><i></i>删除</a>
+							        </#if>	
+								</td>
+					       	</tr>
+					       	</#list>
+					    </tbody>
+						</table>
+						<@pager pageno="${gbPage.page!'1'}" pagesize="${gbPage.pageSize}" totalcount="${gbPage.totalCount}" />	
+						</#if>
+			</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+$(function(){
+	$(".delete").click(function(){
+		if( !confirm("确认删除?") ){
+			return false ;
+		}
+		var gbid = $(this).attr("gbid");
+		$.Loading.show("正在删除...");
+		
+		$.ajax({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/b2b2c/cost-down!delete.do",
+			data:"gb_id="+gbid,
+			success:function(json){
+				$.Loading.hide();
+				if(json.result==1){
+					alert("删除成功")
+					location.href="costdown_list.html?menu=promotion";
+				}else{
+					alert(json.message);
+				}
+			},
+			error:function(){
+				$.Loading.hide();
+				alert("出现意外错误");
+			}
+			
+		});
+
+		
+	});
+});
+
+</script>
+	<script>
+		$(function(){
+				selectMenu(3);
+		})
+	</script>
+<#include '/common/footer.html' />

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="shop_default" extends="eop_default" namespace="/shop"></package>
+	<!-- 后台action -->	
+	<package name="admin" extends="shop_default" namespace="/shop/admin">
+		<action name="groupBuy" class="groupBuyAction">
+			<result name="list">group/group_list.jsp</result>
+			<result name="input">group/group_input.jsp</result>
+			<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">1048576</param>
+        	</interceptor-ref>			
+		</action>	
+		<action name="limitBuy" class="limitBuyAction">
+			<result name="list">limitbuy/limitbuy_list.jsp</result>
+			<result name="input">limitbuy/limitbuy_input.jsp</result>
+			<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">1048576</param>
+        	</interceptor-ref>				
+		</action>			
+ 
+		<action name="printTmpl" class="printTmplAction">
+	 		<result name="edit" type="freemarker">printTmpl/edit.html</result>
+	 		<result name="add"  type="freemarker">printTmpl/add.html</result>
+	 		<result name="list" type="freemarker">printTmpl/list.html</result>
+	 		<result name="trash">printTmpl/trash.jsp</result>
+			<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">1048576</param>
+        	</interceptor-ref>
+		</action>
+		
+		<action name="payment" class="paymentAction">
+			<result name="pay_dialog" type="freemarker">order/dialog/pay.html</result>
+			<result name="refund_dialog">order/dialog/refund.jsp</result>
+			<result name="pay_log_dialog">order/dialog/pay_log.jsp</result>
+		</action>
+		
+		<action name="ship" class="deliveryAction">
+			<result name="allocation_dialog">order/dialog/allocation.jsp</result>
+			<result name="product_store">order/dialog/product_store.jsp</result>
+			<result name="view_product_store">order/dialog/view_product_store.jsp</result>
+			<result name="ship_dialog">order/dialog/shipping.jsp</result>
+			<result name="return_dialog">order/dialog/returned.jsp</result>	
+			<result name="change_dialog">order/dialog/change.jsp</result>		
+		</action>	
+	 	<action name="brand" class="brandAction">
+	 		<result name="edit" type="freemarker">brand/brand_edit.html</result>
+	 		<result name="add" type="freemarker">brand/brand_add.html</result>
+	 		<result name="list" type="freemarker">brand/brand_list.html</result>
+	 		<result name="trash_list">brand/brand_trash.jsp</result>
+			<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">1048576</param>
+        	</interceptor-ref>
+		</action>
+
+		<action name="freeOffer" class="freeOfferAction">
+	 		<result name="list">activities/freeoffer_list.jsp</result>
+	 		<result name="edit">activities/freeoffer_edit.jsp</result>
+	 		<result name="add">activities/freeoffer_add.jsp</result>
+	 		<result name="trash_list">activities/freeoffer_trash.jsp</result>
+	 		<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">1048576</param>
+        	</interceptor-ref>
+		</action>
+		<action name="freeOfferCategory" class="freeOfferCategoryAction">
+	 		<result name="list">activities/freeoffercategory_list.jsp</result>
+	 		<result name="edit">activities/freeoffercategory_edit.jsp</result>
+	 		<result name="add">activities/freeoffercategory_add.jsp</result>
+	 		<result name="trash_list">activities/freeoffercategory_trash.jsp</result>
+		</action>
+		
+		
+		<!-- 优惠券
+		<action name="coupon" class="couponAction">
+			<result name="list">activities/couponlist.jsp</result>
+			<result name="detail">activities/coupondetail.jsp</result>			
+			<result name="add">activities/couponadd.jsp</result>
+			<result name="edit">activities/couponedit.jsp</result>
+			
+			<result name="exlist">activities/excouponlist.jsp</result>
+			<result name="addExchange">activities/excouponadd.jsp</result>
+			<result name="editExchange">activities/excouponedit.jsp</result>
+	 		<result name="select_plugin">promotion/select_plugin.jsp</result>
+	 		<result name="select_condition">promotion/select_condition.jsp</result>	 			
+		</action>
+		
+		-->
+		
+		
+		<!-- 促销规则-->
+		<action name="promotion" class="promotionAction">
+	 		<result name="list">promotion/promotion_list.jsp</result>
+	 		<result name="select_plugin">promotion/select_plugin.jsp</result>
+	 		<result name="select_condition">promotion/select_condition.jsp</result>
+		</action>
+		
+		<action name="orderReport" class="orderReportAction">
+			<result name="allocationList">orderReport/allocation_list.jsp</result>
+			<result name="paymentLogs">orderReport/paymentLogs.jsp</result>
+			<result name="paymentDetail">orderReport/payment_detail.jsp</result>
+			<result name="refundLogs">orderReport/refundLogs.jsp</result>
+			<result name="refundDetail">orderReport/refund_detail.jsp</result>
+			<result name="shippingDetail">orderReport/shipping_detail.jsp</result>
+			<result name="returnedDetail">orderReport/returned_detail.jsp</result>
+			<result name="paymentList" type="freemarker">orderReport/payment_list.html</result>
+			<result name="refundList" type="freemarker">orderReport/refund_list.html</result>
+			<result name="shippingList" type="freemarker">orderReport/shipping_list.html</result>
+			<result name="returnedList" type="freemarker">orderReport/returned_list.html</result>
+			<result name="returned" type="freemarker">orderReport/returned_sellback.html</result>
+		</action>
+		<action name="statistics" class="statisticsAction">
+			<result name="monthamount">statistics/monthamount.jsp</result>
+			<result name="payment">statistics/payment.jsp</result>
+			<result name="ship">statistics/ship.jsp</result>
+		</action>
+		<action name="rank" class="rankAction">
+			<result name="success">statistics/rank.jsp</result>
+			<result name="rankmember">statistics/rankmember.jsp</result>
+			<result name="rankbuy">statistics/rankbuy.jsp</result>
+			<result name="rankall">statistics/rankall.jsp</result>
+		</action>
+		
+	 	<action name="article" class="articleAction">
+	 		<result name="add_input" type="freemarker">article/article_add.html</result>
+	 		<result name="edit_input" type="freemarker">article/article_edit.html</result>
+	 		<result name="list">article/article_list.jsp</result>
+		</action>
+	 
+	 	<action name="cat" class="catAction">
+	 		<result name="cat_list" type="freemarker">cat/cat_list.html</result>
+	 		<result name="cat_add" type="freemarker">cat/cat_add.html</result>
+	 		<result name="cat_edit" type="freemarker">cat/cat_edit.html</result>
+	 		<result name="children_add" type="freemarker">cat/cat_add_children.html</result>
+	 		<interceptor-ref name="defaultStack">
+        		<param name="fileUpload.maximumSize">1048576</param>
+        	</interceptor-ref>
+		</action>		
+		
+		<action name="selector" class="selectorAction">
+		    <result name="cat" type="freemarker">selector/cat_selector.html</result>
+		    <result name="tag">selector/tag_selector.jsp</result>
+		 	<result name="goods">selector/goods_selector.jsp</result>
+		 	<result name="product">selector/product_selector.jsp</result>
+		 	<result name="gift">selector/gift_selector.jsp</result>
+		</action>
+		<action name="bind" class="bindAction">
+		 	<result name="bindlist">bind/bind_list.jsp</result>
+		 	<result name="add">bind/bind_add.jsp</result>
+		 	<result name="edit">bind/bind_edit.jsp</result>
+		</action>
+		
+		
+		<action name="goodsSpec" class="goodsSpecAction">
+		     <result name="select">spec/spec_select.jsp</result>
+		     <result name="values">spec/spec_values.jsp</result>
+		     <result name="add_one">spec/value_one.jsp</result>
+		     <result name="add_all">spec/value_all.jsp</result>
+		</action>
+		
+		
+		
+		<!-- 仓库监控 -->
+		<action name="depotMonitor" class="depotMonitorAction">
+			<result name="listtask">depot/task_list.jsp</result>
+			<result name="listallocation">depot/allocation_list.jsp</result>
+			<result name="listsend">depot/send_list.jsp</result>
+			<result name="listorder">depot/order_list.jsp</result>
+			<result name="liststock">depot/stock_list.jsp</result>
+			<result name="depotstock">depot/depot_stock.jsp</result>
+			<result name="storewarn">depot/store_warn.jsp</result>
+			<result name="listsell">depot/sell_list.jsp</result>
+			<result name="listsellnum">depot/sellnum_list.jsp</result>
+			<result name="liststocklog">depot/stocklog_list.jsp</result>
+		</action>
+		
+		<action name="warnTask" class="warnTaskAction">
+			<result name="goodslist">warn/goods_list.jsp</result>
+			<result name="list">warn/list.jsp</result>
+			<result name="addtask">warn/add_task.jsp</result>
+			<result name="listdepot">warn/depot_list.jsp</result>
+			<result name="maintaintask">warn/maintain_task.jsp</result>
+		</action>
+		
+	</package>
+	
+
+	
+</struts>

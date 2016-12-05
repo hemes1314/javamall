@@ -1,0 +1,85 @@
+<#include '/store/store_header.html' />
+<#assign storeTagsListTag=newTag("storeTagsListTag")/>
+<#assign storeTagsList=storeTagsListTag()!''/>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#"> 商品管理 </a><span>></span>标签列表
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a hre="#">标签列表</a>
+					</li>
+				</ul>
+			</div>
+			<#if storeTagsList??>
+			<table cellspacing="0" cellpadding="0" border="0"  width="100%" class="store_taglist">
+				<thead>
+					<tr>
+						<th style="width:500px;">标签名称</th>
+						<th style="width:200px;">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list storeTagsList as storeTag>
+						<tr>
+							 <td style="width:500px;">${storeTag.tag_name}</td>
+							  <td style="width:200px;">
+							    <!-- 	<a href="javascript:void"  value="${storeTag.tag_id}" name="edit" tag_id="${storeTag.tag_id}"></a> -->
+							    	<a href="tagGoodsShow.html?tagid=${storeTag.tag_id}&mark=${storeTag.mark}&menu=store_goods" name="showInfo" >标签商品设置</a>
+							  </td>
+						</tr>
+					</#list>
+				</tbody>
+			</table>
+			<#else>
+		  		<p class="no_blank">暂无符合条件的数据记录</p>
+		  	</#if>
+		</div>
+	</div>
+</div>		
+<!--  
+<script type="text/javascript">
+$(function(){
+	
+	$("a[name='edit']").click(function(){
+		dialog = $.dialog({
+			title : "编辑标签",
+			width : 475,
+			height : 312,
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "${ctx}/goods/tagInfo.html?type=2&tag_id="+$(this).attr("tag_id"),
+			cache : false,
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '修改',
+					callback : function() {
+						tagInfo("2");
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			}
+		});	
+	});
+})
+</script>
+-->
+<script>
+	$(function(){
+		selectMenu(4);
+	})
+</script>
+<#include '/common/footer.html' />

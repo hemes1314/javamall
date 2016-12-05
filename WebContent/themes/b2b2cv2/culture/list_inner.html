@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>culture</title>
+<#assign dataDetailTag = newTag("dataDetailTag") />
+<#assign detail= dataDetailTag() />
+<#assign cmsCatListTag = newTag("cmsCatListTag")/>
+<#assign cmslist = cmsCatListTag()/>
+<link href="${ctx}/themes/b2b2cv2/culture/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+   <div class="Header">
+      <div class="Header-text">
+         <div class="Header-logo"><img src="${ctx}/themes/b2b2cv2/culture/images/logo.png" width="355" height="110" alt=""/></div>
+        <div class="Header-shop"></div>
+      </div>
+     <div class="Header-menu">
+        <ul>
+          <li class="left" style="letter-spacing:1px;">GOME Cellar和您一起了解酒文化 <!--<a href="#"> GOME Cellar</a> [ <a href="#">登录</a> ]--><span></span><span></span></li>
+          <li class="right">
+             <a href="index.html">首页</a>
+             <a href="list.html?cat_id=canjiudapei">餐酒搭配</a>
+             <a href="list.html?cat_id=jiuzhuanglishi">酒庄历史</a>
+             <a href="list.html?cat_id=chuanqirenwu">传奇人物</a>
+       		 <a href="list.html?cat_id=gedijiuling">各地酒令</a>
+             <!-- <a href="list.html?cat_id=jingxuancanba">精选餐吧</a> -->
+             <a href="list.html?cat_id=chanqufengqing">产区风情</a>
+             <!-- <a href="list.html?cat_id=zaixianjiangjiu">在线讲酒</a> -->
+             <!-- <a href="list.html?cat_id=shijiuliyi">侍酒礼仪</a> -->
+          </li>
+        </ul>
+     </div>
+   </div> 
+   <div class="List-content">
+     
+      <ul>
+        <li class="left">
+           <h1>${detail.name!''}<p><a href="index.html">首页</a> > <a href="list.html?cat_id=${detail.cat_id}">${detail.name!''}</a><p></h1>
+           <h2>${detail.page_title!''}<span style="float: right;font-size: 14px;">${detail.source!''}</span></h2>
+
+           ${detail.page_description!''}
+
+        </li>
+        <li class="right">
+          <h2>栏目导航</h2>
+          <dl>
+
+            <dt><a href="list.html?cat_id=canjiudapei">餐酒搭配</a></dt>
+            <dt><a href="list.html?cat_id=jiuzhuanglishi">酒庄历史</a></dt>
+            <dt><a href="list.html?cat_id=chuanqirenwu">传奇人物</a></dt>
+            <dt><a href="list.html?cat_id=gedijiuling">各地酒令</a></dt>
+            <dt><a href="list.html?cat_id=jingxuancanba">精选餐吧</a></dt>
+            <dt><a href="list.html?cat_id=chanqufengqing">产区风情</a></dt>
+            <dt><a href="list.html?cat_id=zaixianjiangjiu">在线讲酒</a></dt>
+            <dt><a href="list.html?cat_id=shijiuliyi">侍酒礼仪</a></dt>
+          	 
+          </dl>
+          <h2>热文推荐</h2>
+          <dl>
+           
+          <#list cmslist.result as cmsCat>
+           <dt class="news-img"><img src="${cmsCat.image!''}" width="100%" height="100%" alt=""/></dt>
+            <dt class="news-text">
+              <a href="list_inner.html?cat_id=${cmsCat.cat_id}&id=${cmsCat.id}">${cmsCat.page_title}</a>
+              <p><@dateformat time="${cmsCat.add_time}" pattern="yyyy-MM-dd"/></p>
+            </dt>
+          	<#if cmsCat_index==2><#break></#if>
+          </#list >
+
+          </dl>
+        </li>
+      </ul>
+   </div>
+<div class="Footer">Copyright © 2015-2016 GOME Cellar 版权所有</div> 
+</body>
+</html>

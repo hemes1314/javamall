@@ -1,0 +1,96 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<style>
+	#navigation_add {margin-right: 10%;}
+</style>
+<div class="layout">
+	<#include '../left_menu.html' />
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<#-- 创建商品分类标签 --> 
+				<#assign storeNavigationTag= newTag("storeNavigationTag") > 
+				<#-- 查询商品分类列表 0表示查子分类 --> 
+				<#assign storeNavigation= storeNavigationTag()!''>
+				<div class="tabmenu">
+		  			<ul class="tab pngFix">
+		  				<li class="active"><a href="javascript:void(0);">新增导航</a></li>
+		  			</ul>
+				</div>
+				<div class="user-form-style">
+					<form id="add_form" >
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em>导航名称：
+							</dt>
+							<dd>
+								<input type="text" value="" name="name" class="w150 text" maxlength="5" >
+								<p class="hint">最多五位汉字</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt>是否显示：</dt>
+							<dd>
+								<input type="radio" checked="checked" value="1" name="disable"> 是 
+								<input type="radio" value="0" name="disable"> 否
+							</dd>
+						</dl>
+						<dl>
+							<dt>排序：</dt>
+							<dd>
+								<input type="text" value="255" name="sorts" class="w50 text">
+							</dd>
+						</dl>
+						<dl>
+							<dt>URL：</dt>
+							<dd>
+								<p>
+									<input type="text" name="nav_url" class="w300 text">
+								</p>
+								<p class="hint">请填写包含http://的完整URL地址,如果填写此项则点击该导航会跳转到外链</p>
+							</dd>
+						</dl>
+						<dl>
+							<dt>新窗口打开：</dt>
+							<dd>
+								<input type="radio" checked="checked" value="1" name="target"> 是&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="radio" value="0" name="target"> 否
+							</dd>
+						</dl>
+						<dl class="bottom">
+							<dt>&nbsp;</dt>
+							<dd>
+								<input type="button" value="提交" id="form_submit" class="submit">
+							</dd>
+						</dl>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	$("#form_submit").click(function(){
+		var options = {
+			url : "${ctx}/api/b2b2c/navigation!add.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.href="store_navigation.html";
+				}
+				if (result.result == 0) {
+					
+				}
+			},
+			error : function(e) {
+				alert("出现错误，请重试！");
+			}
+		};
+		$('#add_form').ajaxSubmit(options);
+	});
+})
+</script>
+
+<#include '/common/footer.html' />

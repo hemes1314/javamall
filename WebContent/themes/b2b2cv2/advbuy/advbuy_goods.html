@@ -1,0 +1,255 @@
+<#include '/common/header.html' />
+<#include '/common/reception_header.html'/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/advbuy/css/home_group.css" />
+<!-- 预售活动 -->
+<#assign advBuyActTag=newTag("advBuyActTag")>
+<#assign advBuyAct=advBuyActTag("{'act_id':${act_id} }")>
+
+<!-- 预售标签 -->
+<#assign advBuyTag=newTag("storeAdvBuyTag")>
+<#assign advBuy=advBuyTag("{'goodsid':${goodsid},'act_id':${act_id} }")>
+
+<#if advBuy==''>
+	<div style="width:100%;height:200px;text-align:center;margin:30px 0px;">
+		<@image src="${ctx}/themes/b2b2cv2/images/new404.jpg" alt="未找到页面"/>
+	</div>
+<#else>
+
+<!--获取商品店铺信息 -->
+<#assign storeInfoTag=newTag("myStoreDetailTag")>
+<#assign storeInfo=storeInfoTag("{'store_id':${advBuy.store_id},'type':1 }")>
+
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<#assign goodsList=goodsListTag("'tagid':'${advBuyAct.act_tag_id}','goodsnum':'5'")>
+<!-- 预售时间 -->
+<#assign advBuyActSurplusTag=newTag("advBuyActSurplusTag")>
+<#assign advBuyActSurplus=advBuyActSurplusTag("{'end_time':${advBuyAct.end_time},'start_time':${advBuyAct.start_time} }")>
+<div class="clear"></div>
+<div class="group_title">
+	<div class="breadcrumb wrapper">
+		<span><a href="${ctx}/index.html">首页</a></span>
+		<span class="arrow">&gt;</span>
+		<span>预售</span>
+	</div>
+</div>
+<div class="group_goods_detail_outside" style="background:#fff;overflow:hidden;">
+<div class="group_goods_detail">
+	<div class="group_detail_left">
+		<!-- 预售详细介绍 -->
+		<div class="advbuy_goods_intro">
+			  <h2>${advBuy.gb_name}</h2>
+		      <h3>${advBuy.gb_title!''}</h3>
+		      <div class="advbuy_intro_important">
+		      	<div class="important_left">
+		      		<div class="important_left_price">
+		      			<#if advBuyAct.act_status==0>
+			      			<div class="close">
+		          				即将开始
+		          			</div>
+	          			</#if>
+		      			<#if advBuyAct.act_status==2>
+			      			<div class="close_end">
+		          				已经结束
+		          			</div>
+	          			</#if>
+	          			<#if advBuyAct.act_status==1>
+          				<div class="button">
+	          				<span>¥<em>${advBuy.price}</em></span>
+	          				<#if advBuy.goods_num==0>
+								<a href="javascript:;">已售罄</a>
+	          					<#else>
+	          					<a href="${ctx}/goods.html?goodsid=${advBuy.goods_id}" class="addcart" id="addcart">我要买</a>
+	          				</#if>
+          				</div>
+          			</#if>
+	          		</div>
+					<div class="advbuy_info_left">
+						<div class="prices">
+							<dl>
+								<dt>市场价</dt>
+								<dd>
+									<del>${advBuy.storeGoods.price}</del>
+								</dd>
+							</dl>
+							<dl>
+								<dt>折扣</dt>
+								<dd>
+									<em>${advBuy.price/advBuy.storeGoods.price*10}折</em>
+								</dd>
+							</dl>
+							<dl>
+								<dt>立省</dt>
+								<dd>
+									<em>¥${advBuy.storeGoods.price-advBuy.price}</em>
+								</dd>
+							</dl>
+						</div>
+						<div class="trim"></div>
+						<div class="require">
+						<#if advBuyAct.act_status==1>
+							<h4>
+								本商品已被预售 <em>${advBuy.buy_num+advBuy.visual_num}</em>
+							</h4>
+							<p>预售活动正在进行</p>
+						<#else>
+							<br><br>
+						</#if>
+						</div>
+						<div class="time">
+						<#if advBuyAct.act_status==0>
+							<!-- 倒计时 距离本期开始 -->
+							离开始还有：
+						<#else>
+							<!-- 倒计时 距离本期结束 -->
+							距结束还有：
+						</#if>
+							<span id="d1"></span><strong>天</strong> <span id="h1"></span><strong>小时</strong>
+							<span id="m1"></span><strong>分</strong> <span id="s1"></span><strong>秒</strong>
+
+							<script type="text/javascript">
+								tms[tms.length] = "<#if advBuyAct.act_status==0>${advBuyActSurplus.cha0}<#else>${advBuyActSurplus.cha}</#if>";
+								day[day.length] = "d1";
+								hour[hour.length] = "h1";
+								minute[minute.length] = "m1";
+								second[second.length] = "s1";
+							</script>
+						</div>
+					</div>
+				</div>
+		      	<div class="important_right">
+		      		<a href="${ctx}/goods.html?goodsid=${advBuy.goods_id}" class="addcart" id="addcart"><@image border="0" src="${advBuy.img_url!''}"  alt="${advBuy.gb_name!''}" /></a>
+		      	</div>
+		      </div>
+		</div>
+		<!-- 商品信息、商品评价 -->
+		<div class="advbuy_detail_tab">
+			<div class="advbuy_detail_tab_title">
+				<ul>
+					<li id="info" class="selected">
+						<a href="javascript:void(0);">商品信息</a>
+					</li>
+					<li id="transaction" class="">
+						<a href="javascript:void(0);">最近购买记录</a>
+					</li>
+				</ul>
+			</div>
+			<div class="advbuy_detail_tab_contont">
+				<div class="advbuy_detail_tab_info">
+					${advBuy.remark!''} 
+				</div>
+				<div class="advbuy_detail_tab_data" style="display:none">
+							    <!-- 成交记录标签 -->
+				<#assign recordListTag = newTag("recordListTag")>
+				<!--调取"成交记录"标签，并传递参数,获取Page对象-->
+				<#assign recordList = recordListTag("{'goods_id':${advBuy.goods_id},'pageSize':20}")>
+				<table class="g_record t_goods" cellspacing="0" cellpadding="0">
+					<#if recordList.totalCount != 0 >
+						<tr>
+							<th class="w300">买家</th>
+							<th class="w200">价格</th>
+							<th class="w200">数量</th>
+							<th class="w300">付款日期</th>
+						</tr>
+						<#list recordList.result as record>  
+							<tr>
+								<td>${record.uname}</td>
+								<td class="goods_p">${record.price}</td>
+								<td>${record.goods_num!'0'}</td>
+								<td><@dateformat time="${record.rog_time?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+							</tr>
+						</#list>
+					<#else>
+						 <tr><td  style="width:100%;height:30px;line-height:30px;">暂无购买记录。</td></tr> 
+					</#if>
+				</table>
+				<div class="goods_page">
+					<@ajaxpager  pageno="${recordList.currentPageNo}" pagesize="${recordList.pageSize}" totalcount="${recordList.totalCount}" />
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 店铺信息、推荐预售 -->
+	<div class="group_detail_right">
+		<!-- 店铺信息 -->
+		<div class="advbuy_detail_store">
+			<div class="advbuy_detail_store_title">店铺信息</div>
+			<div class="advbuy_detail_store_contont">
+				<dl>
+	            	<dt>商　　家：</dt>
+	            	<dd> ${storeInfo.store_name} </dd>
+	          </dl>
+	          <dl>
+	            <dt>综合评分：</dt>
+	            <dd>
+	              <!--div class="rating"><span style="width:${(storeInfo.store_desccredit+storeInfo.store_servicecredit+storeInfo.store_deliverycredit)/3}0%;"></span></div-->
+	              <em>${(storeInfo.store_desccredit+storeInfo.store_servicecredit+storeInfo.store_deliverycredit)/3}</em>分
+	            </dd>
+	          	</dl>
+	          	<div class="detail_rate">
+		            <ul class="rate">
+		              	<li>
+		              		<h5>描述</h5><div class="equal">${storeInfo.store_desccredit!'5'}</div></span>
+		              	</li>
+		              <li>
+		              		<h5>服务</h5><div class="equal">${storeInfo.store_servicecredit!'5'}</div></span>
+		              </li>
+		              <li>
+		              		<h5>发货</h5><div class="equal">${storeInfo.store_deliverycredit!'5'}</div></span>
+		              </li>
+		            </ul>
+	          </div>
+	           <div class="goto"> 
+	          		<a href="${ctx}/home.html?show_c=1&store_id=${storeInfo.store_id}" target="_blank">进入商家店铺</a>
+	          </div>
+			</div>
+		</div>
+		<!-- 热门预售 -->
+		<div class="advbuy_hot_list">
+			<h1>热门预售</h1>
+			<div class="advbuy_hot_list_all">
+				<#list goodsList as goods>
+					<dl>
+						<!--商品图片-->
+						<dd class="advbuy_hot_img">
+							<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&act_id=${act_id}"> 
+								<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+						</dd>
+						<!--商品名称-->
+						<dd class="advbuy_hot_name">
+							<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&act_id=${act_id}" title="${goods.name}">${goods.name}</a>
+						</dd>
+						<dd class="advbuy_hot_item">
+							<span class="price">商城价：${goods.price?string.currency}</span>
+							<a target="_blank" href="${ctx}/goods.html?goodsid=${goods.goods_id}&act_id=${act_id}" title="${goods.name}">抢购</a>
+						</dd>
+					</dl>
+				</#list>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+
+<script>
+	$(function(){
+		$("#info").click(function(){
+			$(".advbuy_detail_tab_title ul li").removeClass("selected");
+			$(this).addClass("selected");
+			$(".advbuy_detail_tab_info").show();
+			$(".advbuy_detail_tab_data").hide();
+		})
+		$("#transaction").click(function(){
+			$(".advbuy_detail_tab_title ul li").removeClass("selected");
+			$(this).addClass("selected");
+			$(".advbuy_detail_tab_info").hide();
+			$(".advbuy_detail_tab_data").show();
+		})
+	})
+</script>
+
+</#if>	
+<!-----footer------>
+<#include '/common/footer.html'/>

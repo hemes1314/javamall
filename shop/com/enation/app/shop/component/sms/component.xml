@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="国美酒窖短信组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="会员注册发送短信插件" id="memberRegisterSendSmsPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+ 		<plugin name="订单短信插件" id="orderSmsPlugin">
+ 			<bundle id="orderPluginBundle"></bundle>
+ 		</plugin>
+	</plugins>
+
+	
+</component>

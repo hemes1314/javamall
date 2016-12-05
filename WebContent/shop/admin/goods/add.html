@@ -1,0 +1,67 @@
+<script	type="text/javascript" src="/editor/ckeditor362/ckeditor.js"></script>
+<script	type="text/javascript" src="/editor/ckeditor362/adapters/jquery.js"></script>
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="addTypeForm" method="post" >
+			<table>
+				<tr>
+					<td>商品名称</td>
+					<td><input class="easyui-validatebox" type="text" id="" name="" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>商品编号</td>
+					<td><input class="easyui-validatebox" type="text" id="" name="" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr><td>是否上架销售：</td>
+					<td><input class="easyui-validatebox" type="radio" id="" name="" data-options="required:true" value="1">是</input>
+						<input class="easyui-validatebox" type="radio" id="" name="" data-options="required:true" value="0">否</input>
+					</td>
+				 </tr>
+				<tr>
+					<td>市场价格：</td>
+					<td><input class="easyui-validatebox" type="text" id="" name="" data-options="required:true"></input>
+					</td>
+				</tr>
+				
+				<tr>
+					<td>获得积分：</td>
+					<td><input class="easyui-validatebox" type="text" id="" name="" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>详细描述：</td>
+					<td>
+					<textarea rows="40" cols="20" id="intro"></textarea>
+					</td>
+				</tr>
+				
+				
+			</table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$(function() {
+	　　var instance = CKEDITOR.instances['intro']; //$#brief 为textarea便签的id
+	　　if (instance) { CKEDITOR.remove(instance); }
+	　　$('#intro').ckeditor();  //$('#brief')为textarea便签的id
+		});
+
+function submitForm(){
+	$(function(){
+		 var options = {
+					url : "type!step2.do?ajax=yes",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+				 		},
+				 	error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+				};
+				$('#addTypeForm').ajaxSubmit(options);	
+			});
+}
+</script>

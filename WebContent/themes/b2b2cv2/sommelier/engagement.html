@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>GOME Cellar - 品酒师</title>
+<script src="${ctx}/themes/b2b2cv2/sommelier/js/jquery-1.8.3.min.js"></script>
+<link href="${ctx}/themes/b2b2cv2/sommelier/css/date.css" type="text/css" rel="stylesheet" />
+<link href="${ctx}/themes/b2b2cv2/sommelier/css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/sommelier/css/timepicki.css"/>
+<#assign sommelierOrderTag = newTag("sommelierOrderTag")>
+<#assign sommelierOrderDetail = sommelierOrderTag() />
+<#assign sommelierOrderTypeTag = newTag("sommelierOrderTypeTag")>
+<#assign sommelierOrderType = sommelierOrderTypeTag() />
+<script>
+$(document).ready(function(){
+  
+  $(".orderbutton").click(function(){
+	  var orderPrice = 0;
+	  $("input[name='checkbox']:checkbox").each(function(){ 
+	     if($(this).attr("checked")){
+	    	 orderPrice += parseFloat($(this).val());
+            }
+       })
+       $(".orderprice").text(orderPrice);
+	  if(orderPrice == 0)
+	  {
+		alert("请选择预约侍酒服务内容选项"); 
+      }
+  });
+});
+</script>
+</head>
+<body>
+   <div class="Header">
+     <div class="Header-left">
+        <div class="Header-logo"><img src="${ctx}/themes/b2b2cv2/sommelier/images/logo.png" width="355" height="110" alt=""/></div>
+     </div> 
+     <div class="Header-right">
+        <div class="Header-shop"></div>
+     </div>
+   </div>
+   <div class="Header-menu">
+      <div class="Header-menu-left">
+         您好，欢迎来到 <a href="#"> GOME Cellar</a> [ <a href="#">登录</a> ]
+      </div>
+      <div class="Header-menu-right"><a class="active" href="index.html">首页</a></div>
+   </div>
+   <div class="Center">
+      <div class="Engagement">
+         <ul>
+           <li class="photo">
+             <img src="${sommelierOrderDetail.sommelier_face!''}" width="270" height="200" alt=""/>
+             <h2>${sommelierOrderDetail.sommelier_name!''}</h2>
+             <p>支付费用：<font><lable class="orderprice">￥1000.00</label></font></p>
+             <a href="#">确 定</a>
+           </li>
+           <li class="date">
+            <div class="aboluo-w-500">
+            <div class="aboluo-tools">
+            <div class="aboluo-calendar-select-year"></div>
+            <div class="aboluo-calendar-month">
+            <a class="aboluo-month-a-perv" href="javascript:;">&lt; </a>
+            <a class="aboluo-month-a-next" href="javascript:;"> &gt;</a>
+            </div>
+            <input type="button" class="aboluo-toToday" value="返回今天" />
+            </div>
+            <div class="aboluo-rilidiv">
+            <table class="aboluo-rilitable" cellspacing="0" cellpadding="0" >
+            <thead class="aboluo-rilithead">
+                <tr>
+                    <th>一</td>
+                    <th>二</td>
+                    <th>三</td>
+                    <th>四</td>
+                    <th>五</td>
+                    <th style="color:red;">六</td>
+                    <th style="color:red;">日</td>
+                </tr>
+            </thead>
+            </table>
+            </div>
+            </div>
+			<script src="${ctx}/themes/b2b2cv2/sommelier/js/jquery.js"></script>
+            <script src="${ctx}/themes/b2b2cv2/sommelier/js/date.js"></script>
+           </li>
+           <li class="time">
+              <dl>
+                <form>
+                  <h2>预约时间段：<lable class="orderlable">AM8:00 - PM12:00</label></h2>
+                  <input type="text" name="time" class="time_add" />
+                   <label style="float:left; width:30px; height:30px; line-height:30px; text-align:center;">—</label>
+                  <input type="text" name="time2" class="time_add"/>
+                  
+                  <input type="button" value="预约" style="clear:both" class="orderbutton"/>
+                  <h2>预约事件：</h2>
+                  <#list sommelierOrderType as orderType>
+                  <lable>${orderType.order_type_name!''}</label> <input class="typePrice" name="checkbox" type="checkbox"  value="${orderType.order_type_price!''}" />&nbsp; &nbsp; &nbsp; 
+                  </#list>
+                  <h2>已约时间段：</h2>
+                  <p>${sommelierOrderDetail.orderTimeSection!''}16:30-19:20，11:30-13:20</p>
+                </form>
+                <script src="${ctx}/themes/b2b2cv2/sommelier/js/timepicki.js"></script>
+				<script>
+                    $(".time_add").timepicki();
+                </script>
+              </dl>
+           </li>
+         </ul>
+      </div>
+   </div>
+              <div class="aboluo-rightdiv">
+           </div>
+   <div class="Footer">Copyright © 2015-2016 GOME Celler 版权所有</div> 
+</body>
+</html>

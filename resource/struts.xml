@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+<constant name="struts.objectFactory" value="spring"  />
+<constant name="struts.action.extension" value="do"  />
+<constant name="struts.multipart.saveDir" value="c:/temp"  />
+<constant name="struts.multipart.maxSize" value="20480000"  />
+<constant name="struts.action.excludePattern" value=".*validcode.*"/>
+<constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+<constant name="struts.convention.action.packages" value="com.enation.app.shop.component" /> 
+<constant name="struts.convention.action.includeJars" value=".*/component-.*?jar(!/)?, .*?/_wl_cls_gen.*?jar(!/)?" /> 
+
+<!-- https://struts.apache.org/docs/convention-plugin.html Jetty (embedded) -->
+<!-- 注意，部署到weblogic和jboss的时候，这个参数可能不同 -->
+<!-- http://www.cnblogs.com/yjmyzz/p/4001790.html 注意在jboss下可能这个必须是true，未试验过-->
+<constant name="struts.convention.exclude.parentClassLoader" value="false" />
+<constant name="struts.convention.action.fileProtocols" value="jar,zip,vfsfile,vfszip,code-source" />
+
+	<include file="struts-default.xml" />	
+
+	<package name="eop_default" extends="struts-default" namespace="/">
+	
+		<interceptors>
+			<interceptor name="fileUpload"
+				class="org.apache.struts2.interceptor.FileUploadInterceptor">
+				<param name="maximumSize">20480000</param>
+			</interceptor>
+			
+			<interceptor-stack name="fileUploadStack">
+				<interceptor-ref name="fileUpload" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		 </interceptors>
+		 
+		<global-results> 
+			<!-- 后台信息提示页 -->
+			<result name="message" type="freemarker">
+				<param name="location">/admin/message.html</param>
+			</result>
+			<result name="error" type="freemarker">
+				<param name="location">/admin/error_message.html</param>
+			</result>	
+			<result name="json_message" type="freemarker">
+				<param name="location"  >/admin/json_message.html</param>
+			</result>
+			<result name="input" >
+				<param name="location"  >/commons/valid_error.jsp</param>
+			</result>
+			<result type="stream" name="download">
+                  <param name="contentType">application/octet-stream</param>
+                  <param name="inputName">inputStream</param>
+                  <param name="contentDisposition">attachment;filename="${fileName}"</param>
+                  <param name="bufferSize">4096</param>
+           </result>
+		</global-results>
+		<global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+        </global-exception-mappings>
+		
+	</package>
+	 
+		
+	<include file="struts-base.xml" />
+	<include file="struts-shop.xml" />
+	<include file="struts-cms.xml" />
+</struts>

@@ -1,0 +1,134 @@
+<#include '/admin/header.html' > 
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<div class="main">
+	<div class="shadowBoxWhite  whiteBox detail input">
+		<form method="post" name="theForm" id="theForm">
+		<input type="hidden" name="costDown.gb_id" value="${costDown.gb_id}" /> 
+		<table cellspacing="0" cellpadding="0" border="0" id="data" style="width: 99%">
+			<tr>
+				<th class="title" colspan="2">直降基本信息</th>
+			</tr>
+			
+			<tr>
+				<td style="width: 100px;">直降活动：</td>
+				<td>${costDownActive.act_name}</td>
+			</tr>
+			<tr>
+				<td>活动时间：</td>
+				<td>${costDownActive.add_time_str} - ${costDownActive.end_time_str}</td>
+			</tr>
+			
+			<tr>
+				<td>直降名称：</td>
+				<td>
+					<input class="easyui-validatebox input_text" type="text" name="costDown.gb_name" value="${costDown.gb_name}" data-options="required:true" isrequired="true"   />
+					<input type="hidden" name="costDown.goods_id"  id="goods_id" value="${costDown.goods_id}"/>
+					<input type="hidden" name="costDown.product_id"  id="product_id" value="${costDown.product_id}"/>
+					<input type="hidden" name="costDown.original_price"  id="original_price" value="${costDown.original_price}"/>
+					<input type="hidden" name="costDown.gb_status"  id="0" value="${costDown.gb_status}"/>
+					<input type="hidden" name="costDown.act_id"  value="${costDown.act_id}"/>
+				</td>
+			</tr>
+			<tr>
+				<td>直降副标题：</td>
+				<td><input class="easyui-validatebox input_text" type="text" name="costDown.gb_title" value="${costDown.gb_title!''}" data-options="required:true" isrequired="true"   /></td>
+			</tr>
+			<!-- 
+			<tr>
+				<td>选择商品：</td>
+				<td><a herf='javascript:void(0);' onclick='openGoodsSearchDlg(getGoods, 0)'>选择商品</a></td>
+			</tr>
+			 -->
+			<tr>
+				<td>商品名称：</td>
+				<td id="product_name">${goods.name}</td>
+			</tr>
+			
+			<tr>
+				<td>商品价格：</td>
+				<td id="price">${costDown.original_price?string("currency")}</td>
+			</tr>
+			<tr>	
+				<td>商品库存：</td>
+				<td id="store">${goods.store}</td>
+			</tr>
+			
+			<tr>
+				<td>直降价格：</td>
+				<td><input class="input_text" type="text" name="costDown.price" data-options="required:true" isrequired="true"  value="${costDown.price}" /></td>
+			</tr>
+			<tr>
+				<td>直降数量：</td>
+				<td><input class="easyui-numberbox input_text" type="text" name="costDown.goods_num" data-options="required:true" isrequired="true" value="${costDown.goods_num}"  /></td>
+			</tr>
+			
+			<tr>
+				<td>直降图片：</td>
+				<td>
+					<img alt="直降图片" src="${image_src}" style="width: 200px;height: 200px;">
+				</td>
+			</tr>
+			<tr>	
+				<td>虚拟数量：</td>
+				<td><input class="easyui-numberbox input_text" type="text" name="costDown.visual_num" data-options="required:true" isrequired="true" value="${costDown.visual_num}"  /></td>
+			</tr>
+			
+			<tr>
+				<td>直降介绍：</td>
+				<td >
+					<textarea id="remarks" name="costDown.remark" cols="100" rows="8" style="width: 98%; height: 300px;">${costDown.remark!''}</textarea>
+				</td>
+			</tr>
+		</table>
+		</form>
+		<div class="buttonWrap">
+			<a href="javascript:;" id="saveAdd" class="easyui-linkbutton">确定</a>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	window.onload=function(){
+		bindFileEvent();
+	 }
+	var app_path="";
+	$('#remarks').ckeditor();	
+	function getGoods(goods) {
+		$("#product_name").html(goods["name"]+"  "+goods["specs"]);
+		$("#price").html("￥"+goods["price"]);
+		$("#store").html(goods["store"]);
+		$("#goods_id").val(goods["goods_id"]);
+		$("#product_id").val(goods["product_id"]);
+		$("#original_price").val(goods["price"]);
+	};
+	$("#saveAdd").click(function(){
+		var formflag= $("#theForm").form().form('validate');
+		if($("input[name='image']").val()==""){
+			$.Loading.error('请选择直降图片');
+			return false;
+		}
+		if(formflag){
+			$.Loading.show("正在保存请稍后...");
+			var options = {
+					url : "${ctx}/shop/admin/cost-down!saveEdit.do",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						if(result.result==1){
+							parent.CloseTabByTitle("添加直降");
+							$.Loading.success(result.message);
+						}else{
+							$.Loading.error(result.message);
+						}
+				 	},
+				 	error : function(e) {
+				 		$.Loading.error('出现错误，请重试');
+					}
+				};
+			$('#theForm').ajaxSubmit(options);	
+		}
+		
+	});	
+</script>
+
+<#include '/admin/footer.html' > 

@@ -1,0 +1,45 @@
+<!-- 获取店铺评论、咨询实体 -->
+<#assign storeCommentTag=newTag("storeCommentTag")>
+<#assign storeComment=storeCommentTag()/>
+<div class="reply_form">
+	<form id="replyForm">
+		<table>
+			<tr>
+				<th>当前状态：</th>
+				<td>
+					<#if storeComment.status==0>未审核</#if>
+					<#if storeComment.status==1>审核通过</#if>
+					<#if storeComment.status==2>审核拒绝</#if>
+				</td>
+			</tr>
+			<#if storeComment.status==0>
+				<tr>
+					<th>审核：</th>
+					<td>
+						<input type="radio" name="status" value="1" checked="checked"/>通过 
+						<input type="radio" name="status" value="2"/>拒绝	
+					</td>
+				</tr>
+				<#else>
+				<input type="hidden" name="status" value="${storeComment.status}"/></element>	
+			</#if>
+			<tr>		
+				<#if type=="2">
+					<th>咨询内容：</th>
+				<#else>
+					<th>评论内容：</th>
+				</#if>
+				<td>${storeComment.content!''}
+					<input type="hidden" name="comment_id" value="${storeComment.comment_id}">
+				</td>
+			</tr>
+			<tr>
+				<th>回复内容：</th>
+				<td>
+					<textarea name="reply" id="replycontent">${storeComment.reply!''}</textarea>
+				</td>
+			</tr>
+			
+		</table>
+	</form>
+</div>

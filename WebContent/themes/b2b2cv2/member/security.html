@@ -1,0 +1,119 @@
+<#assign  title="修改密码" />
+<#include 'member_header.html' />
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="security.html"><span>修改密码</span></a></li>
+		</ul>
+	</div>
+	<!-- 修改密码提示 -->
+	<div class="password_explain">
+		<h2>温馨提示</h2>
+		<ul>
+			<li>1、密码只能为6--16个英文字母或数字</li>
+			<li>2、为了您的账号安全，必须正确输入旧密码才能修改。</li>
+		</ul>
+	</div>
+	<div class="password_change">
+		<form class="validate" action="" method="post">
+			<dl>
+				<dt>旧的密码：</dt>
+				<dd><input type="password" name="oldpassword" dataType="string"	isrequired="true" class="input_text"  fun="isPasswd" id="useroldpwd"/></dd>
+			</dl>
+			<dl>
+				<dt>新的密码：</dt>
+				<dd><input type="password" name="newpassword" dataType="string" id="password" isrequired="true" class="input_text" fun="isPasswd" /></dd>
+			</dl>
+			<dl>
+				<dt>确认新密码：</dt>
+				<dd><input class="input_text" type="password" name="re_passwd" dataType="string" id="passwd_re"	isrequired="true" fun='checkpwd'/></dd>
+			</dl>
+			<dl class="table_bottom">
+				<dt>&nbsp;</dt>
+				<dd><input type="button" name="btnReg" value="确定修改" class="yellow_btn change_ok" /></dd>
+			</dl>
+		</form>
+	</div>
+</div>	
+
+<script>
+	$(function(){
+		$(".yellow_btn").click(function(){
+			var useroldpwd = $("#useroldpwd").val();
+			var usernewpwd = $("#password").val();
+			var useraffirmpwd = $("#passwd_re").val();
+			if($("#useroldpwd").val() == ""){
+				alert("请输入原始密码");
+				return;
+			} 
+			else if($("#password").val() == ""){
+				alert("请输入新密码");
+				return;
+			}
+			if($("#password").val().length < "6" || $("#password").val().length > "16"){
+				alert("密码只能为6-16位");
+				return false;
+			}
+			var strss = "[@/'\"#$%&^*+]";
+			var reg = new RegExp(strss);
+			if($("#password").val().match(reg)!=null){
+				alert("有特殊字符，请重新输入");
+				$("#password").focus();
+				$("#password").val("");
+				$("#passwd_re").val("");
+				return false;
+			}
+			$(".validate").ajaxSubmit({
+				url:"${ctx}/api/shop/member!changePassword.do?ajax=yes",
+				dataType : 'json',
+				success:function(result){
+					if(result.result==1){
+						alert("修改成功，请谨记密码");
+						//退回到首页，重新登录
+						$.ajax({
+							url:"../api/shop/member!logout.do?ajax=yes",
+							dataType:"json",
+							cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+							success:function(result){
+								if(result.result==1){
+									location.href="${ctx}/index.html";
+									
+								}else{
+									$.alert(result.message);
+								}	
+								$.Loading.hide();
+							},
+							error:function(){
+								$.Loading.hide();
+								$.alert("出错了:(");
+							}
+						});
+					}
+					else{
+						alert(result.message);
+					}
+				}
+			})
+			
+		})
+	})
+</script>
+<script>
+function isPasswd(s){  
+	//var patrn=/^(\w){6,20}$/;
+	var patrn=/^(\w){6,16}$/;
+	if (!patrn.exec(s)) return "密码格式不正确"  
+	return true  
+}
+function checkpwd(){
+	if( $("#passwd_re").val()==$("#password").val()){
+		return true;
+	}
+	else{ 
+		return "密码不一致";
+	}
+}
+</script>
+
+</div>
+<#include '../common/footer.html'/>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>GOME Cellar - 品酒师</title>
+<script src="${ctx}/themes/b2b2cv2/sommelier/js/jquery-1.8.3.min.js"></script>
+<script src="${ctx}/themes/b2b2cv2/sommelier/js/over.js"></script>
+<script src="${ctx}/themes/b2b2cv2/sommelier/js/glDatePicker.js"></script>
+<link href="${ctx}/themes/b2b2cv2/sommelier/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<!-- 获取品酒师列表标签 -->
+<#assign sommelierListTag = newTag("sommelierListTag")>
+<#assign sommelierListTag3 = newTag("sommelierListTag3")>
+<#assign sommelierList = sommelierListTag("'from':'1','to':'6'") />
+<#assign sommelierList3 = sommelierListTag3() />
+<body>
+   <div class="Header">
+     <div class="Header-left">
+        <div class="Header-logo"><a href="${ctx}/index.html"><img src="${ctx}/themes/b2b2cv2/sommelier/images/logo.png" width="355" height="110" alt=""/></div>
+     </div> 
+     <div class="Header-right">
+        <div class="Header-shop"></div>
+     </div>
+   </div>
+   <div class="Header-menu">
+      <div class="Header-menu-left" style="letter-spacing:1px;">
+         GOME Cellar为您提供最权威的品酒师 <!--<a href="/store/login.html"> GOME Cellar</a> [ <a href="/store/login.html">登录</a> ]-->
+      </div>
+      <div class="Header-menu-right"><a class="active" href="index.html">首页</a></div>
+   </div>
+   <div class="Center">
+      <div class="Recommend">
+         <h2>人气品酒师</h2>
+         <ul>
+           <li style="width:100%">
+             <dl>
+             <#list sommelierList as sommelier>
+               <dt class="box1">
+                <!--<img src="./images/pj_pic01.jpg" width="175" height="180" alt=""/>-->
+                  <img src="${sommelier.img_url!''}" width="175" height="180" alt=""/>
+                <a href="index_inner.html?user_id=${sommelier.userid}">
+                <h3>${sommelier.name}</h3>
+	            <p>简介：${sommelier.introduce}</p>
+                </a>
+               </dt>
+              </#list>
+             </dl>
+           </li>
+         </ul>
+       </div>
+       <div class="Profession">
+          <h2>专业品酒师</h2>
+          <ul> 
+            <#list sommelierList3.result as sommelier3>
+            <#if sommelier3.userid != 0>
+            <li class="zhuan">
+            <a href="index_inner.html?user_id=${sommelier3.userid}">
+				<#if sommelier3.img_url == ''>
+					<img src="${ctx}/themes/b2b2cv2/sommelier/images/default.jpg" style="height:170px" alt=""/>
+				<#else>
+					<img src="${sommelier3.img_url!''}"  style="height:170px"  alt=""/>
+				</#if>
+			</a>
+            <h3>${sommelier3.name}</h3>
+             <p style='height:80px;'><@substring title="${sommelier3.introduce}" length="48" dot="..." /></p>
+            <a class="more" href="index_inner.html?user_id=${sommelier3.userid}">详情展示</a>
+            </li>
+            </#if>
+            </#list>
+	            <li class="page">  
+	            <#if sommelierList3.totalPageCount!=0>
+	       		  <#if sommelierList3.currentPageNo!=1>
+					<a href="index.html?page=${sommelierList3.currentPageNo-1}">上一页</a> 
+				  </#if>
+	       		    <a href="index.html?page=${sommelierList3.currentPageNo}">第${sommelierList3.currentPageNo}页</a> 
+	       		   <#if sommelierList3.currentPageNo!=sommelierList3.totalPageCount>   
+	       		    <a href="index.html?page=${sommelierList3.currentPageNo+1}">下一页</a> 
+	       		   </#if>
+	       	    </#if>
+	            </li>
+          </ul>
+          <input  id="pagecount" type="hidden" value="${sommelierList3.totalPageCount}"/>
+       </div>
+   </div>
+   <div class="Footer">Copyright © 2015-2016 GOME Cellar 版权所有</div> 
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<style>
+h2{
+	font-size: 18px;font-weight: bold;
+}
+#orderinfo tr {
+	line-height: 35px;
+}
+#orderinfo tr td{
+	padding-left: 10px;
+}
+#orderinfo tr td textarea{
+	width: 250px;
+	height: 70px;
+	resize: none;
+}
+</style>
+<div class="edit_order">
+	<h2>收货人信息</h2>
+	<form id="orderInfo" class="validate">
+		<input type="hidden" name="orderId" value="${orderDetail.order_id}">
+	<table cellspacing="0" cellpadding="0" width="100%" id="orderinfo">
+		<tr>
+			<th>收货人：</th>
+			<td><input type="text" name="ship_name" isrequired="true" id="ship_name" value="${orderDetail.ship_name!''}" /></td>
+		</tr>
+		<#if orderDetail.ship_mobile?exists && orderDetail.ship_mobile != ''>
+			<tr>
+				<th>手机：</th>
+				<td>
+					<input type="text" name="ship_mobile" id="ship_mobile" value="${orderDetail.ship_mobile!''}" />
+				</td>
+			</tr>
+		</#if> 
+		<#if orderDetail.ship_tel?exists && orderDetail.ship_tel != ''>
+			<tr>
+				<th>联系电话：</th>
+				<td>
+					<input type="text" name="ship_tel" value="${orderDetail.ship_tel!''}" />
+				</td>
+			</tr>
+		</#if>
+		<tr>
+			<th>配送地区：</th>
+			<td>
+				<@regionSelect province_id="${orderDetail.ship_provinceid}" city_id="${orderDetail.ship_cityid}" region_id="${orderDetail.ship_regionid}" />
+			</td>
+		</tr>
+		<tr>
+			<th>详细地址：</th>
+			<td><input type="text" name="ship_addr" isrequired="true" value="${orderDetail.ship_addr!''}"/>  </td>
+		</tr>
+		<tr>
+			<th>邮编：</th>
+			<td>
+				<input type="text" name="ship_zip" id="ship_zip" value="${orderDetail.ship_zip!''}" />
+			</td>
+		</tr>
+		<tr>
+			<th>送货时间：</th>
+			<td>
+				<select	name="ship_day" class="inputstyle">
+					<option value="任意日期" <#if orderDetail.ship_day=="任意日期" >selected="selected"</#if> 	>任意日期</option>
+					<option value="仅工作日" <#if orderDetail.ship_day=="仅工作日" >selected="selected"</#if>		>仅工作日</option>
+					<option value="仅休息日" <#if orderDetail.ship_day=="仅休息日" >selected="selected"</#if> 	>仅休息日</option>
+				</select>&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<th>订单备注:</th>
+			<td>
+				<textarea rows="5" cols="20" name="remark">${orderDetail.remark!''}</textarea>
+			</td>
+		</tr>
+	</table>
+	</form>
+</div>
+<script type="text/javascript">
+//地区联动选择-选择最后一级（区）时自动设置邮编
+RegionsSelect.regionChange=function(regionid,name,zipcode){
+	$("#ship_zip").val(zipcode);
+};
+</script>

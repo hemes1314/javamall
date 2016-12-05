@@ -1,0 +1,208 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueBlue" data-options="iconCls:'icon-add',plain:true" onclick="openAddDlg()">新增</a>
+		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="batchDel()">删除</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="gridform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/groupBuyArea!list_json.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="catdata">
+				<thead>
+					<tr>
+						<th data-options="field:'area_id',checkbox:true,width:100"></th>
+				   	 	<th  data-options="field:'area_name',width:100">地区名称</th>
+				   	 	<th  data-options="field:'area_order',width:100">排序</th>
+				   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+	</div>
+</div>
+
+<div id="divdia"></div>
+
+<script type="text/javascript">
+
+function formatAction (value,row,index){
+	var val="<a href='javascript:void(0);' class='edit' onclick='javascript:openEditDlg("+row.area_id+")'  title='修改'></a>  "
+	// val+="<a href='javascript:void(0);' class='delete' onclick='javascript:deleteCat("+row.catid+")'  title='删除'></a>  "
+	return val;
+}
+
+
+function batchDel(actid){
+	
+	var rows = $('#catdata').datagrid("getSelections");
+	if (rows.length < 1) {
+		$.Loading.error('请选择要删除的地区');
+		return;
+	}
+	
+	if(!confirm("确认删除吗？")){
+		return ;
+	}
+	
+	$.Loading.show("正在删除请稍后...");
+	$("#gridform").ajaxSubmit({
+		url:"${ctx}/shop/admin/groupBuyArea!batchDelete.do",
+		type:"post",
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				$.Loading.success("删除成功");
+				$("#catdata").datagrid('reload');
+			}
+			else{
+				$.Loading.error(data.message);
+			}
+		},error:function(){
+			$.Loading.error("删除出现意外错误");
+		}
+	});
+}
+
+
+function deleteCat(actid){
+	if(!confirm("确认删除吗？")){
+		return ;
+	}
+	
+	$.Loading.show("正在删除请稍后...");
+	$.ajax({
+		url:"${ctx}/shop/admin/groupBuyArea!delete.do?catid="+actid,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				$.Loading.success("删除成功");
+				$("#catdata").datagrid('reload');
+			}
+			else{
+				$.Loading.error(data.message);
+			}
+		},error:function(){
+			$.Loading.error("删除出现意外错误");
+		}
+	});
+}
+
+
+function openEditDlg(catid) {
+	$("#divdia").dialog({
+		title : "修改地区",
+		width : 500,
+		height : 280,
+		closed : false,
+		cache : false,
+		href : "groupBuyArea!edit.do?area_id="+catid,
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					saveEdit(savebtn);
+				}
+			}
+		}]
+	});
+}
+
+
+
+
+function openAddDlg() {
+	$("#divdia").dialog({
+		title : "添加地区",
+		width : 500,
+		height : 280,
+		closed : false,
+		cache : false,
+		href : "groupBuyArea!add.do",
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					saveAdd(savebtn);
+				}
+			}
+		}]
+	});
+}
+
+function saveAdd(savebtn){
+	
+	var formflag = $("#catForm").form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");
+		var options = {
+			url :  "groupBuyArea!saveAdd.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success("添加成功");
+					$("#divdia").dialog('close');
+					$("#catdata").datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$("#catForm").ajaxSubmit(options);
+	}
+}
+  
+
+function saveEdit(savebtn){
+	
+	var formflag = $("#catForm").form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");
+		var options = {
+			url :  "groupBuyArea!saveEdit.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success("修改成功");
+					$("#divdia").dialog('close');
+					$("#catdata").datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$("#catForm").ajaxSubmit(options);
+	}
+}
+//清空
+function clearForm(map) {
+	$(map["formId"]).form('clear');
+}
+
+</script>
+<#include '/admin/footer.html' >

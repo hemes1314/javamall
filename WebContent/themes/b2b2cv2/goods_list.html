@@ -1,0 +1,476 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/layout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/goods_list.css" />
+<style type="text/css">
+.category { display: block !important;}
+</style>
+
+<script src="${ctx}/themes/b2b2cv2/js/jquery.raty.min.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/waypoints.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_category_menu.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_goods.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/class_area_array.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.datalazyload.js" ></script>
+
+
+<#-- 创建选择器标签 -->
+<#assign searchSelectorTag= newTag("searchSelectorTag") >
+
+<#-- 获取选择器 -->
+<#assign goodsSelector = searchSelectorTag() >
+
+<#-- 创建商品搜索标签 -->
+<#assign goodsSearchTag= newTag("goodsSearchTag") >
+<#-- 获取搜索结果 -->
+<#assign webpage = goodsSearchTag('{"pageSize":16}') >
+
+<#assign goodsParametersTag= newTag("goodsParametersTag")>
+
+<#-- 各种选中的选择器 -->
+<#assign selected_prop= goodsSelector.selected_prop >
+<#assign selected_cat= goodsSelector.selected_cat >
+<#assign selected_brand= goodsSelector.selected_brand >
+<#assign selected_price= goodsSelector.selected_price![] >
+
+<#-- 各种未选中的选择器 -->
+<#assign propMap= goodsSelector.prop >
+<#assign catList= goodsSelector.cat >
+<#assign brantrist= goodsSelector.brand >
+<#assign sortList= goodsSelector.sort![] >
+<#assign priceList= goodsSelector.price![] >
+
+
+	<!-- 加入购物车效果
+    <style>
+    #box {
+        background: #FFF;
+        width: 238px;
+        height: 410px;
+        margin: -390px 0 0 0;
+        display: block;
+        border: solid 4px #D93600;
+        position: absolute;
+        z-index: 999;
+        opacity: .5
+    }
+    .shopMenu {
+        position: fixed;
+        z-index: 1;
+        right: 25%;
+        top: 0;
+    }
+    </style>
+    -->
+<div class="clear"></div>
+<div class="goodslist_nav">
+	<div class="breadcrumb wrapper">
+        <div class="goods_tuijian">
+          <!-- 获取商品列表标签 -->
+          <#assign goodsListTag = newTag("goodsListTag")>
+          <div class="floor_list middle_goodslist tabs-panel">
+              <ul>
+                  <#assign goodsList=goodsListTag("'tagid':'900','goodsnum':'4'")>
+                  <#list goodsList as goods>
+                <li>
+                          <dl>
+                              <dt class="goods_name">
+                                  <a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">${goods.name!''}</a>
+                              </dt>
+                              <dd class="goods_img">
+                                  <a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+                                      <@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+                                  </a>
+                              </dd>
+                              <dd class="goods_price">
+                                  <em>${goods.price?string.currency}</em>
+                                  <span class="original">${goods.mktprice?string.currency}</span>
+                              </dd>
+                          </dl>
+                      </li>
+				  </#list>
+              </ul>
+          </div>
+        </div>
+		<div class="goods_selected_all">
+            <div class="goods_nav_span">
+              <span>
+                  <a href="index.html">首页</a>
+              </span>
+              <span class="arrow">&gt;</span>
+              <span>搜索结果</span>
+              <span class="arrow">&gt;</span>
+              <span>
+                  ${keyword!''}
+                  ${namekeyword!''}
+              </span>
+			</div>
+			<#if selected_cat?size gt 0>
+			<div class="have_chosen have_chosen_cat">
+				<ul class="have_chosen_goods top_have_chosen_goods">
+					<#list selected_cat as selector >
+						<li class="have_chosen_goods_list <#if selector_index == 0>cur</#if><#if !selector_has_next> last</#if>" rel="<#if !selector_has_next> last</#if>">
+							<span class=""><a href="${selector.url!''}" >${selector.name}</a></span>
+							<i class="chosen_cat_middle"></i>
+							<b></b>
+							<div class="ul_border" style="display:none;"></div>
+							<ul style="display:none;" class="goods_list_other">
+								<#list  selector.otherOptions as  other >
+									<li>
+										<a href="${other.url!''}" >${other.name}</a>
+									</li>
+								</#list>
+							</ul>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_prop?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same">
+					<#list selected_prop as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" class="dddd">${selector.name}：${selector.value}<strong></strong></a></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_brand?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same">
+					<#list selected_brand as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" >${selector.name}<strong></strong></a><#if selected_cat?size gt 0></#if></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_price?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same" >
+					<#list selected_price as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" >${selector.name}<strong></strong></a></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+
+		</div>
+	</div>
+</div>
+<div style="width:1200px;height:1px;margin:0px auto;clear:both;"></div>
+<div class="goods_clear"></div>
+<!-- 新版检索html -->
+<div class="goodssearch_new_bg">
+<div class="goodssearch_new">
+<!-- 已选择 -->
+<#if brantrist?exists && brantrist?size gt 0>
+	<table class="wait_select">
+		<tr>
+			<th>按品牌：</th>
+			<td>
+				<ul class="brand_goods_search">
+					<#list brantrist as selector >
+						<li class="cat_brand_img"><a href="${selector.url!''}" ><span style="display:none;">${selector.name}</span><@image src="${selector.value!''}" /></a></li>
+					</#list>
+				</ul>
+				<span class="brand_goods_search_more">更多</span>
+			</td>
+		</tr>
+	</table>
+</#if>
+<script>
+	$(function(){
+		$(".brand_goods_search_more").click(function(){
+			var listhidden = $(this).attr("class");
+			if(listhidden=="brand_goods_search_more"){
+				$(this).prev().css("height","auto");
+				$(this).removeClass("brand_goods_search_more");
+				$(this).addClass("brand_goods_search_more1");
+				$(this).text("收起");
+			}else{
+				$(this).prev().css("height","52px");
+				$(this).removeClass("brand_goods_search_more1");
+				$(this).addClass("brand_goods_search_more");
+				$(this).text("更多");
+			}
+
+		})
+
+		if($(".goods_list_other li a").eq(0).text() == "一键选酒"){
+
+			$(".goods_list_other li").eq(0).hide();
+
+		}
+
+	})
+</script>
+<#if catList?exists && catList?size gt 0>
+	<table class="wait_select">
+		<tr>
+			<th>按分类：</th>
+			<td>
+				<ul>
+					<#list catList as selector >
+						<li><a href="${selector.url!''}" >${selector.name}</a></li>
+					</#list>
+				</ul>
+			</td>
+		</tr>
+	</table>
+</#if>
+<#if priceList?exists && priceList?size gt 0>
+	<table class="wait_select">
+		<!--<tr>
+			<th>按价格：</th>
+			<td>
+				<ul>
+					<#list priceList as selector >
+						<li><a href="${selector.url!''}" >${selector.name}</a></li>
+					</#list>
+				</ul>
+			</td>
+		</tr>-->
+	</table>
+</#if>
+<#if  propMap?keys?exists &&  propMap?keys?size gt 0>
+	<table class="wait_select_other">
+		<#list propMap?keys as propname>
+			<tr>
+				<th>按${propname}：</th>
+				<td>
+					<ul>
+						<#list propMap[propname] as selector >
+							<li><a href="${selector.url!''}" >${selector.name}</a></li>
+						</#list>
+					</ul>
+                    <p class="show_more">更多</p>
+				</td>
+			</tr>
+		</#list>
+	</table>
+</#if>
+</div>
+<div class="goodssearch_new_show"><p>展开</p></div>
+<script type="text/javascript">
+   $(function(){
+		if($(".wait_select_other tbody tr").children().height()==null){
+			$(".goodssearch_new_show").hide();
+			$(".goodssearch_new").css("height","36");
+		}
+	})
+
+   $(".goodssearch_new_show p").click(function(){
+	    if($(".goodssearch_new_show p").html() =="展开"){
+			$(".goodssearch_new").css("height","auto");
+			$(".goodssearch_new_show p").html("收起");
+		}else
+		{
+			$(".goodssearch_new").css("height","149");
+			$(".goodssearch_new_show p").html("展开");
+			$(".goodssearch_new table td ul").css("height","22");
+		}
+   });
+
+   $(".show_more").click(function(){
+	   $(this).parent().find("ul").css("height","auto");
+   });
+</script>
+<script>
+		$(function(){
+			//搜索结果
+
+			$(".top_have_chosen_goods .have_chosen_goods_list").mouseover(function(){
+				var ulwidth = $(this).width()
+				var ulwidth_white = parseInt(ulwidth)+parseInt("30");
+				var ulborder_width = parseInt(ulwidth)+parseInt("141")   //减去ul的2像素边框
+				$(".top_have_chosen_goods .have_chosen_goods_list").find(".goods_list_other").hide();
+				$(".top_have_chosen_goods .have_chosen_goods_list").find(".ul_border").hide();
+				$(this).find(".goods_list_other").show();
+				$(this).find(".ul_border").show();
+				$(this).find(".goods_list_other").css("width",ulborder_width);
+				$(this).find(".ul_border").css("width",ulwidth_white);
+				$(this).css({"border":"1px solid #e4393e","border-bottom":"0px none"});
+			})
+
+			$(".top_have_chosen_goods .have_chosen_goods_list").mouseleave(function(){
+				$(this).find(".goods_list_other").hide();
+				$(this).find(".ul_border").hide();
+				$(this).css("border","1px solid #ccc");
+			})
+
+			//等待搜索品牌悬停
+			$(".cat_brand_img").mouseover(function(){
+				$(this).find("img").hide();
+				$(this).find("span").show();
+				$(this).css({"border":"2px solid #e4393e","padding":"1px"});
+			})
+			$(".cat_brand_img").mouseleave(function(){
+				$(this).find("img").show();
+				$(this).find("span").hide();
+				$(this).css({"border":"1px solid #ccc","padding":"2px"});
+			})
+
+			//自营店过滤add by Tension
+			$("#self_store").click(function() {
+				url = window.location.href;
+				if ($(this).attr("checked")) {
+					if (<#if self_store??>"true"<#else>"false"</#if> == "true") {
+						url = url.replace(/&self_store=1/, "");
+					} else {
+						url += "&self_store=1";
+					}
+				} else {
+					url = url.replace(/&self_store=1/, "");
+				}
+				window.location.href=url;
+			})
+		})
+	</script>
+</div>
+
+<div class="container wrapper" >
+	<div class="left">
+		<h1>为您推荐</h1>
+   		<#assign goodsListTag = newTag("goodsListTag")>
+   		<#assign goodsList=goodsListTag("'tagid':'277','goodsnum':'10'")>
+   		<ul class="goods_list_comment">
+		<#list goodsList as goods>
+			<#if goods_index lte 3>
+				<li>
+				<div class="goodslist_pic">
+					<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">
+						<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" />
+					</a>
+				</div>
+				<h2><a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"><@substring	title="${goods.name}" length="28" dot="..." /></a></h2>
+				<h3>${goods.price?number?string('0.00')}</h3>
+			</li>
+			</#if>
+		</#list>
+	</ul>
+	</div>
+
+	<div class="right" id="result">
+  		<#if webpage.totalCount == 0>
+  			<div style="width:100%;height:300px;text-align:center;margin:66px 0px;">
+					<@image src="${ctx}/themes/b2b2cv2/images/no_search.jpg" alt="抱歉，没有找到您要的搜索结果"/>
+				    <p style="padding:50px 0;">
+				    <a href="/index.html" style="text-align:center; padding:15px 30px; background:#c40000; color:#fff; font-family:微软雅黑; font-size:20px; margin-left:10px;">去首页逛逛~</a>
+				    </p>
+				</div>
+			<#else>
+				<div class="shop_list" >
+      		<nav class="goods_bar">
+        		<div class="sorting_goods"> 排序方式：
+        		<ul>
+        			<#list sortList as selector >
+						<li><a href="${selector.url!''}" <#if selector.isSelected>class="selected ${selector.value}"</#if> >${selector.name}</a></li>
+					</#list>
+                    <li style="height:25px; padding:10px 10px 0 10px; border-left:solid 1px #E6E6E6;">
+                    <label>
+						<input id="self_store" type="checkbox" name="self_store" value="自营店"
+						<#if self_store?? && self_store == '1'>checked="check"</#if>
+						/>
+                    自营店
+                    </label>
+                   </li>
+		     	</ul>
+        		</div>
+				<!--
+                <div class="sortbar-owner">商品类型：
+                    <span>
+                        <a href="javascript:void(0)" onClick="" title="不限"class="selected">
+                        <i></i>全部</a>
+                    </span>
+                    <span>
+                        <a href="javascript:void(0)" onClick="" title="限时折扣">
+                        <i></i>限时折扣</a>
+                    </span>
+                    <span>
+                        <a href="javascript:void(0)" onClick="" title="团购">
+                        <i></i>团购</a>
+                    </span>
+                </div>
+                -->
+      		</nav>
+      		<!-- 商品列表循环  -->
+			<div id="circulate" >
+				<textarea class="goodslist_bycat" id="circulate" style="display: none;">
+					<div class="squares" nc_type="current_display_mode">
+					    <ul class="goodslist_all ">
+<#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+					    	<#list webpage.result as goods>
+<#assign goods= goodsBaseDataTag("'goodsid':${goods.goods_id!0}") >
+<#assign goodsTitle = ''>
+<#assign goodsPara= goodsParametersTag("'goodsid':${goods.goods_id!''}")!'' >
+	
+<#-- 获得商品参数的参数组 -->
+<#if goodsPara.hasParam==true>
+	<#list goodsPara.paramList as parameters>
+        <!-- 获得 paramList下的json数组，使用第二层list循环-->
+        <#list parameters.paramList as gparam>
+            <#assign goodsTitle = goodsTitle + gparam.value!''>
+        </#list>
+    </#list>
+    <#if goodsTitle == ''><#assign goodsTitle = goods.name></#if>
+</#if>
+						        <li class="item">
+						      		<div class="goodslist" nctype_goods="1" nctype_store="2">
+						        		<div class="goodslist_img">
+						        			<a href="${ctx}/goods-${goods.goods_id}.html" target="_blank" title="${goodsTitle!''}">
+						        				<@image border="0" src="${goods.thumbnail!''}"  alt="${goods.name!''}" />
+						        			</a> 
+						        		</div>
+							       	 	<div class="goodslist_intro" style="top: 230px;">
+											<div class="goodslist_photo">
+												<ul>
+						              				<li>
+						              					<a href="${ctx}/goods-${goods.goods_id}.html">
+						              					<@image border="0" src="${goods.thumbnail!''}" width="60" height="60" alt="${goods.name!''}" />
+						              					</a>
+						              				</li>
+						                        </ul>
+											</div>
+						         				<div class="goodslist_name">
+						         					<a href="${ctx}/goods-${goods.goods_id}.html" target="_blank" title="${goods.name!''}">${goods.name!''}</a>
+						         				</div>
+											<div class="goodslist_price">
+												<em class="sale-price" title="原价：&yen;${goods.price?number?string('0.00')}">&yen;${goods.price?number?string('0.00')}</em>
+												
+						     				</div>
+                                            
+						         			<div class="goodslist_sell">
+								            	<ul>
+										             <li><p class="status">${goods.buy_count!'0'}</p><p>商品销量</p></li>
+										             <li><p class="comment">${goods.comment_num!'0'}</p><p>用户评论</p></li>
+						          				</ul>
+						         			</div>
+						         			<div class="store_goods_list"><a href="${ctx}/home.html?show_c=1&store_id=${goods.store_id}" class="name" title="${goods.store_name!''}">${goods.store_name!''}</a></div>
+											<!--
+											<div class="goodslist_add"><a href="javascript:void(0);" class="add_cart" rel="${goods.goods_id}" store="${goods.store_id}">加入购物车</a></div>
+						       				 -->
+						       			</div>
+						      		</div>
+						    	</li>
+					    	</#list>
+						    <div class="clear"></div>
+					  	</ul>
+					</div>	      
+				</textarea>
+      		</div>
+      		<div>
+        			<@pager pageno="${webpage.currentPageNo!'1'}" pagesize="${webpage.pageSize}" totalcount="${webpage.totalCount}" />
+      		</div>
+    	</div>
+  		</#if>
+  	</div>
+</div>
+<div style="width:100%;height:1px;clear:both;display:block;"></div>
+<#include 'common/footer.html'/>

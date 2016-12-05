@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="国美酒窖预售组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="预售活动插件" id="advBuyActPlugin">
+	 		<bundle id="jobExecutePluginsBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="预售商品插件" id="advBuyGoodsPlugin">
+	 		<bundle id="orderPluginBundle"></bundle>
+	 		<bundle id="goodsPluginBundle"></bundle>
+	 		<bundle id="advbuyPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="预售活动标签插件" id="advBuyActTagPlugin">
+	 		<bundle id="advbuyPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="预售购物车插件" id="advGoodsCartPlugin">
+	 		<bundle id="cartPluginBundle"></bundle>
+	 	</plugin>
+	</plugins>
+</component>

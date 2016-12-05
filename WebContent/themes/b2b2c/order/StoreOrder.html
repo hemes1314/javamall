@@ -1,0 +1,112 @@
+<#include '/common/header.html'/>
+<#include '/store/center_header.html' />
+<script  src="${ctx}/themes/b2b2c/js/My97DatePicker/WdatePicker.js"  ></script>
+<!-- 获取店铺订单标签 -->
+<#assign storeorderList=newTag("storeOrderListTag")/>
+<#assign orderList=storeorderList()/>
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<div class="layout">
+	<#include '../left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="path">
+					<div>
+						<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span>订单管理
+					</div>
+				</div>
+				<div class="tabmenu">
+					<input type="hidden" id="order_state" value="${orderList.order_state!''}" />
+			    	<ul class="tab pngFix">
+			  			<li <#if order_state?? && order_state=="all"> class="active"  <#else> class="normal"  </#if> ><a href="javascript:void(0);" order_state="all" name="order_state">所有订单</a></li>
+			  			<li <#if order_state?? && order_state=="0"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="0" name="order_state">等待付款</a></li>
+			  			<li <#if order_state?? && order_state=="wait_pay"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_pay" name="order_state">等待收款</a></li>
+			  			<li <#if order_state?? && order_state=="wait_ship"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_ship" name="order_state">等待发货</a></li>
+			  			<li <#if order_state?? && order_state=="wait_rog"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_rog" name="order_state">等待收货</a></li>
+			  			<li <#if order_state?? && order_state=="7"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="7" name="order_state">已完成</a></li>
+			  			<li <#if order_state?? && order_state=="8"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="8" name="order_state">已取消</a></li>
+			  		</ul>
+			  	</div>
+			  	<table class="search-form">
+			  		<tbody>
+			  			<tr>
+			  				<th >订单编号：</th>
+			  				<td ><input type="text" class="text" name=keyword value="${orderList.keyword!''}"></td>
+			  				<th>买家：</th>
+        					<td ><input type="text" class="text" name="buyerName" value="${orderList.buyerName!''}"></td>
+			  				<th >下单时间：</th>
+			  				<td >
+			  					<input class="text hasDatepicker" type="text" name="startTime" onClick="WdatePicker()" value="${orderList.startTime!''}" />
+			  					-<input class="text hasDatepicker" type="text" name="endTime" onClick="WdatePicker()" value="${orderList.endTime!''}" >
+			  				</td>
+			  				<td class="w90 tc"><input type="button" class="submit" id="btnSearch" value="搜索"></td>
+			  			</tr>
+			  		</tbody>
+			  	</table>
+				<!-----------------list begin------------------------>
+				<div id="postage-tpl" style="padding: 20px 0;">
+		  			<div id="J_TemplateList" class="manage-list">
+		            	<div class="section J_Section">
+		            		<h3 class="J_Title">订单管理 </h3>
+		            	</div>
+			            <div class="tbl-head">
+		        			<table cellspacing="0" cellpadding="0" border="0"  width="100%">
+		        				<tbody>
+		        					<tr>
+					        			<th width="120">订单编号</th>
+										<th>下单时间</th>
+										<th>订单状态</th>
+										<th>收货人</th>
+										<th>订单金额</th>
+										<th>支付方式</th>
+										<th>查看订单</th>
+								  	</tr>
+								</tbody>
+							</table>
+			            </div>
+			            <#if orderList.totalCount != 0 >
+							<div class="entity">
+			        			<table cellspacing="0" cellpadding="0" border="0" >
+			        				<tbody>
+			        					<#list orderList.storeOrder.result as order>
+											<tr>
+												<td width="120">${order.sn}</td>
+												<td><@dateformat time="${order.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+												<td><@orderstatus status="${order.status}" type="order" /></td>
+												<td>${order.ship_name!''}</td>
+												<td>${order.order_amount?string.currency}</td>
+												<td>${order.payment_name}</td>
+												<td><a target="_blank" href="order_detail.html?ordersn=${order.sn}">查看订单</a> </td>
+											</tr>
+										</#list>
+									</tbody>
+								</table>
+							</div>
+						</#if>
+			       	</div>
+			       	<div class="list-attach">
+			     		<@pager pageno="${orderList.page!'1'}" pagesize="${orderList.pageSize}" totalcount="${orderList.totalCount}" />
+			    	</div>
+		       	</div>
+	      	</div>
+		</div>
+    </div>
+</div>
+	<script type="text/javascript">
+		$("#btnSearch").click(function(){
+			search();
+		});
+		$("a[name='order_state']").click(function(){
+			$("#order_state").val($(this).attr("order_state"));
+			search();
+		});
+		function search(){
+			var keyword=$("input[name='keyword']").val();
+			var buyerName=$("input[name='buyerName']").val();
+			var startTime=$("input[name='startTime']").val();
+			var endTime=$("input[name='endTime']").val();
+			var order_state=$("#order_state").val();
+			location.href="StoreOrder.html?keyword="+keyword+"&buyerName="+buyerName+"&startTime="+startTime+"&endTime="+endTime+"&order_state="+order_state;
+		}
+	</script>
+<#include '/common/footer.html'/>

@@ -1,0 +1,82 @@
+<#assign title="我的礼品卡" /> <#include 'member_header.html' />
+
+<!-- 获得会员礼品卡列表标签 -->
+<#assign b2b2cMemberGiftcardListTag = newTag("b2b2cMemberGiftcardListTag")>
+<!-- 调用会员礼品卡列表标签 -->
+<#assign cardresult = b2b2cMemberGiftcardListTag()> 
+<#assign cardlist = cardresult.cardList>
+<div class="member_center">
+	<div class="address">
+		<ul>
+			<li class="selected"><a href="giftcard.html"><span>我的礼品卡</span></a></li>
+		</ul>
+		<a href="javascript:;" class="add_address buy"><span>购买礼品卡</span></a>
+	</div>
+	<!-- 礼品卡明细 -->
+	<div class="address_list">
+		<#if cardlist?size gt 0 >
+		<table style="width: 100%" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="date">购买时间</th>
+				<th class="title">礼品卡类型</th>
+				<th class="money">礼品卡面值</th>
+				<th class="money">价格</th>
+				<th class="sn">卡号</th>
+				<th class="pw">密码</th>
+				<th class="date">使用时间</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list cardlist as card>
+			<tr>
+				<td><@dateformat time="${card.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+				<td>${card.type_name}</td>
+				<td>${card.money?string('currency')}</td>
+				<td>${card.price?string('currency')}</td>
+				<td <#if card.used==1>style="text-decoration:line-through"</#if>>${card.card_sn}</td>
+			<#if (card.card_pw!'')?length != 6>
+				<td>未支付</td>
+			<#else>
+				<td title="${card.card_pw!''}">******</td>
+			</#if>
+			
+			<#if (card.card_pw!'')?length != 6>
+				<td style="text-align:center">
+					<a href="/api/b2b2c/buyGiftcardApi!pay.do?id=${card.card_id}" target="_blank" style="background:#59c;color:#fff;padding:8px;width:auto;height:auto;display:inline;float:none">去支付</a>
+				</td>
+			<#elseif card.used==0>
+				<td>未使用</td> 
+			<#else>
+				<td>
+					<@dateformat time="${card.used_time?c}" pattern="yyyy-MM-dd HH:mm"/>
+				</td> 
+			</#if>
+			</tr>
+			</#list>
+		</tbody>
+		</table>
+		<#else>
+		<div class="empty">您暂时没有礼品卡记录</div>
+		</#if>
+	</div>
+	
+	<div class="buy-box" style="overflow:hidden;">
+	</div>
+</div>
+
+</div>
+
+<script>
+$(function(){
+	$(".buy").click(function(){
+		$(".buy-box").load("buy-giftcard.html",function(){
+			$(".address_list").hide();
+			$(".grey_top").hide();
+			$(this).show();
+		});
+	});
+});		
+</script>
+<#include '../common/footer.html'/>
+

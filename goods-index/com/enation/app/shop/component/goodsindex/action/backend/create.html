@@ -1,0 +1,110 @@
+<#include '/admin/header.html' >
+<style>
+<!--
+ 
+
+#progress-wrap{padding:20px}
+-->
+</style>
+
+<script ype="text/javascript" src="${ctx}/adminthemes/new/js/Progress.js"></script>
+<script ype="text/javascript" src="${ctx}/adminthemes/new/js/jquery.timers-1.2.js"></script>
+
+<div class="main">
+<form id="createform">
+	 <div class="buttonArea">
+		<a href="javascript:void(0)" id="createBtn" class="easyui-linkbutton" >生成</a>
+	</div>
+ 
+	<div class=" " id="progress-wrap">
+	 	正在检测是否有任务进行中...
+	 
+	</div>
+	</form>
+</div>
+
+
+
+
+<script type="text/javascript">
+<!--
+function create(){
+	$("#createform").ajaxSubmit({
+		url:'${ctx}/shop/admin/goods-index!create.do',
+		dataType:"json",
+		success:function(json){
+			if(json.result==1){
+				$("#createBtn").linkbutton("disable");  //使按钮禁用
+				loadTask();
+			}else{
+				alert(json.message)
+			}
+		},
+		error:function(){
+			alert("error");
+		}
+	});
+}
+
+function taskFinished(status){
+	if(status=='error'){
+		alert("生成出错");
+	}
+	if(status=='success'){
+		alert("生成成功");
+		
+	}
+	$("#createBtn").linkbutton("enable");    //使按钮可用
+}
+
+function loadTask(){
+	var self = this;
+	var config ={url:"${ctx}/core/admin/progress!viewProgress.do?progressid=lucene_create",onFinished:taskFinished}
+	var progress=  new Progress(config);
+	progress.show();
+	 
+}
+function checkStatus(){
+	
+	$.ajax({
+		url:'${ctx}/core/admin/progress!hasTask.do?progressid=lucene_create',
+		dataType:"json",
+		success:function(json){
+			if(json.result==1){
+			 	if(json.hastask==1){
+			 		$("#createBtn").linkbutton("disable");  //使按钮禁用
+			 		loadTask();
+			 	}else{
+			 		$("#progress-wrap").text("暂无索引生成任务，请点击生成按钮生成所有商品的索引。");
+			 	}
+			 		bindCreateEvent();
+			 	
+			}else{
+				alert("json message error")
+			}
+		},
+		error:function(){
+			alert("error");
+		}
+	});
+}
+
+function bindCreateEvent(){
+	$("#createBtn").click(function(){
+		//判断linkbutton是否已禁用，如果禁用则跳过
+	 	var disabled=  $(this).hasClass("l-btn-disabled");
+		if( !disabled ){
+		 	if(confirm("确认重新生成所有索引吗？")){
+		 		create();
+		 	}
+		}
+	});	
+
+}
+
+$(function(){
+	checkStatus();
+});
+//-->
+</script>
+<#include '/admin/footer.html' >

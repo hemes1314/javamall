@@ -1,0 +1,88 @@
+<#assign  title="微信扫码支付" />
+<#include 'common/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/cart.css" />
+<!--正文-->
+<#--创建订单详细标签-->
+<#assign orderDetailTag = newTag("orderDetailTag") />
+<#--获取订单详细，传递参数orderid-->
+<#assign order = orderDetailTag("'orderid':${order_id}") />
+<#--创建订单状态标签-->
+<#assign orderStautsTag= newTag("orderStautsTag") />
+<#--获取订单状态 -->
+<#assign orderStauts= orderStautsTag() />
+<!-- 购物流程 -->
+<div class="flow_path">
+	<div class="cart_logo">
+		<a href="${ctx}/index.html"><img src="${ctx}/adminthemes/new/images/logo.png" class="pngFix" style="width:240px;height:100px;"></a>
+	</div>
+	<div class="flow_pathlist">
+		<ul>
+			<li class="">
+				<i class="process1"></i>
+				<span></span>
+				<p>我的购物车</p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process2"></i>
+				<span></span>
+				<p>填写核对信息单</p>
+				<strong></strong>
+			</li>
+			<li class="selected">
+				<i class="process3"></i>
+				<span></span>
+				<p>订单支付</p>
+				<strong></strong>
+			</li>
+		</ul>
+	</div>
+</div>
+<!-- 订单确认，并引导支付 -->
+<div class="confirmation">
+	<div class="con_img" style="width:100%; height:200px; text-align:center">
+		<img src="${wxpayqcode!''}" alt="微信扫码支付二维码图片" style="float:none; height:200px; width:200px;" />
+	</div>
+	<div class="con_img" style="width:100%; text-align:center; height:50px;">
+		<span style="font-size:14px;">请扫描上方二维码进行支付</span>
+	</div>
+	<div class="go_tools" style="width:100%; text-align: center;">
+		<#if order.member_id?exists  >
+			<a href="member/order.html" class="go_state" style="margin:0 175px 0 165px">我的订单>></a>
+		<#else>
+			<a href="orderdetail.html?ordersn=${order.sn}" class="go_state">查看订单状态>></a>	
+		</#if>
+	</div>
+</div>
+
+<script type="text/javascript">
+//鼠标触及更替li样式
+var _checkPayStatusInterval = null;
+$(document).ready(function(){
+   	_checkPayStatusInterval=setInterval(checkPayStatus, 2000);
+});
+function checkPayStatus() {
+	$.ajax({
+        type:'post',
+        url:"${ctx}/api/shop/payment!checkWxpayStatus.do?orderid=${order.order_id}",
+        datatype: 'json',
+        async:false,
+        success:function(result){
+        	if(null!=result&&result!=''){
+        		var json = eval('(' + result + ')');
+				if (json.result == 1) {
+					clearInterval(_checkPayStatusInterval);
+					location.href="order_weixin_success.html?orderid=${order.order_id}";
+				}
+        	}
+        },
+        error: function(){
+        	alert("出现错误 ，请重试");
+        }
+	});
+}
+</script>
+
+	<!--正文结束-->
+<#include 'common/footer.html' />

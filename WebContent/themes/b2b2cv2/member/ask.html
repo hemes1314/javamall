@@ -1,0 +1,65 @@
+<#assign  title="我的咨询" />
+<#include 'member_header.html' />
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<!-- 调用会员咨询列表标签 -->
+<#assign memberAskList = memberAskListTag()>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="ask.html"><span>我的咨询</span></a></li>
+		</ul>
+	</div>
+	<!-- 我的咨询，与评论样式相同 -->
+	<div class="user_comment">
+		<h1>我的咨询</h1>
+		<#if memberAskList?size gt 0 >
+		<ul>
+			<#list memberAskList.commentsList as comment>
+				<li>
+					<div class="comment_title">
+						<span><a href="${ctx}/goods-${comment.goods_id}.html" target="_blank">${comment.name}</a></span>
+						<span><@dateformat time="${comment.dateline?c}" pattern="yy-MM-dd HH:mm"/></span>
+						<em>
+						<#if comment.status == 1> 
+							审核通过
+						<#elseif comment.status == 2> 
+							审核拒绝
+						 <#else>
+						 	 待审核
+						 </#if>
+						</em>
+					</div>
+					<div class="comment_inpro">
+						<strong>我的咨询：</strong>
+						<span>
+							<p>${comment.content}</p>
+							<i class="comment_img">
+							<#if comment.img?? && comment.img!= '' && comment.img!='null'>
+								<img src="${comment.img}"  />
+							</#if>	
+							</i>	
+						</span>
+					</div>
+					<#if comment.replystatus == 1>
+						<div class="comment_reply">
+							<strong style="color:#666">客服回复：</strong><span style="color:#999">${comment.reply}</span>
+						</div>
+					</#if>
+				</li>
+			</#list>
+		</ul>
+		
+		<#else>
+			<p class="no_commont">暂无咨询</p>
+		</#if>
+		
+	</div>
+	<!-- add by lxl -->
+	<div >
+			<@pager pageno="${memberAskList.page}" 	pagesize="${memberAskList.pageSize}" totalcount="${memberAskList.totalCount}" />
+	</div>
+</div>	
+
+	</div>
+		<#include '../common/footer.html'/>

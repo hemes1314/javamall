@@ -1,0 +1,169 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton"
+			onclick="append()">添加</a> <a href="javascript:void(0)" class="button"
+			onclick="del()">删除</a>
+	</div>
+
+	<div class="shadowBoxWhite tableDiv">
+		<form id="advform">
+			<table class="easyui-datagrid" 
+				data-options="url:'app-adv!listJson.do',pageList: [10,15,19,30],pageSize:10,fitColumns:'true',onLoadSuccess:inits"
+				pagination="true" id="advdata">
+				<thead>
+					<tr>
+						<th data-options="field:'aids',checkbox:true"></th>
+						<th data-options="field:'aids',width:70">ID</th>
+						<th data-options="field:'imgTypeFmt',width:100">类型</th>
+						<th data-options="field:'introduce',width:200">标题</th>
+						<th data-options="field:'detailFmt',width:200">字段1</th>
+						<th data-options="field:'propFmt',width:200">字段2</th>
+						<th data-options="field:'imgUrl',width:200">图片地址</th>
+						<th data-options="field:'action',width:100,align:'center'"
+							formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+		<div id="divdia" style="display: none;"></div>
+	</div>
+</div>
+<script type="text/javascript">
+
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "app-adv!add.do";
+			map["formId"] = "#addForm";
+			map["url"] = "app-adv!save.do?ajax=yes";
+			map["title"] = "添加广告";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "app-adv!edit.do?aid=" + id;
+			map["formId"] = "#editForm";
+			map["url"] = "app-adv!update.do?ajax=yes";
+			map["title"] = "修改广告";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#advdata";
+
+		//需要验证的参数
+		//map["nameId"]="#name";
+
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 800,
+			height : 500,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+						submitForm(map,savebtn);
+					}
+				}
+			}, {
+				text : '清空',
+				handler : function() {
+					clearForm(map);
+				}
+			} ]
+		});
+	}
+	function submitForm(map,savebtn) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			savebtn.linkbutton("disable");
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append("
+				+ row.aid + ")' ></a>";
+
+		return val;
+	}
+
+	function formatIsclose(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = '已开启&nbsp;<input type="button" class="stop button" aid="'+row.aid+'" value="停用" />';
+		} else if (value == 1) {
+			val = '已停用&nbsp;<input type="button" class="start button" aid="'+row.aid+'" value="开启" />';
+		}
+		return val;
+		alert("123");
+	}
+
+	function del() {
+		var rows = $('#advdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择删除广告");
+			return;
+		}
+		if (!confirm("确认要删除广告吗？")) {
+			return;
+		}
+		$.Loading.show("正在删除......");
+		var options = {
+			url : "app-adv!delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				$("#advdata").datagrid('reload');
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#advform').ajaxSubmit(options);
+	}
+	
+	function inits() {
+	}
+
+</script>
+<#include '/admin/footer.html' >

@@ -1,0 +1,80 @@
+<#include '/common/header.html' >
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>
+<!--退货申请标签 -->
+<#assign storeSellBackTag=newTag("storeSellBackTag")>
+<#assign storeSellBack=storeSellBackTag("{'id': ${id} }")>
+<!-- 退货申请 -->
+<#assign sellBack=storeSellBack.sellBack>
+<!-- 退货订单 -->
+<#assign orderinfo=storeSellBack.orderinfo>
+<!-- 退货商品列表 -->
+<#assign goodsList=storeSellBack.goodsList>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member_store.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member.css" />
+<div class="layout">	
+	<div class="wrap-shadow">
+		<div class="wrap-all user-order-view">
+			<h2>退货单基本信息</h2>
+			<div class="item-publish">
+				<form method="post" id="theForm"  class="validate">
+					<input type="hidden" value="${sellBack.id}" name="id"/>
+					<dl>
+			        		<dt>退货单号：</dt>
+			        			<dd>${sellBack.tradeno }</dd>
+			        		<dt>关联订单号：</dt>
+			        			<dd> ${orderinfo.sn }</dd>
+			        		<dt>已支付：</dt>
+			        			<dd>${orderinfo.paymoney?string("currency")}</dd>
+			        	</dl>
+			        	<dl>
+			        		<dt>退&nbsp;&nbsp;货&nbsp;人：</dt>
+			        			<dd>${orderinfo.ship_name }</dd>
+			        		<dt>退&nbsp;货&nbsp;状&nbsp;态：</dt>
+			        			<dd>
+			        				<#if sellBack.tradestatus==2>
+									已审核
+								<#elseif sellBack.tradestatus==3>
+									已完成
+								<#elseif sellBack.tradestatus==3>
+									已取消
+								</#if>
+			        			</dd>
+					</dl>
+					
+					<h3>退货单商品</h3>
+		      		<table class="table-style">
+		       			<thead>
+		         			<tr>
+		         				<th>商品名称</th>
+								<th>金额</th>
+								<th>购买数量</th>
+								<th>退货数量</th>
+		         			</tr>
+		       			</thead>
+		       			<tbody>
+			       			<#list goodsList as data>
+									<tr class="bd-line">				
+										<td>
+											${data.name }
+										</td>
+										<td>
+											${data.price?string.currency}
+										</td>
+										<td>
+											${data.num }
+										</td>
+										<td>${data.ship_num!0}</td>
+									</tr>
+							</#list>
+						</tbody>
+			        </table>
+		          	<ul class="order_detail_list">
+		          		<li>退货原因：${sellBack.remark!''}</li>
+		          		<li>审核备注：${sellBack.seller_remark!'' }</li>
+		          	</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<#include '/common/footer.html' >

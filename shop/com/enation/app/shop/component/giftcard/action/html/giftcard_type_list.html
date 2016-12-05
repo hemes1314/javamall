@@ -1,0 +1,178 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<div class='buttonArea'>
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="append()">添加</a> <a href="javascript:void(0)"
+			class="easyui-linkbutton" onclick="del()">删除</a>
+	</div>
+	
+	<form id="giftcardform">
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'giftcard-type!listJson.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="giftcarddata">
+				<thead>
+					<tr>
+						<th data-options="field:'type_id',checkbox:true,width:100" ></th>
+						<!--th data-options="field:'type_image',width:50">图片</th-->
+						<th data-options="field:'type_name',width:150">类型名称</th>
+						<th data-options="field:'money',width:70">礼品卡面值</th>
+						<th data-options="field:'price',width:70">售价</th>
+						<th data-options="field:'action',width:50" formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	
+	<div id="divdia" style="display: none;"></div>
+	
+</div>
+<script type="text/javascript">
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "giftcard-type!add.do";
+			map["formId"] = "#giftcardTypeForm";
+			map["url"] = "giftcard-type!saveAdd.do?ajax=yes";
+			map["title"] = "添加礼品卡类型";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "giftcard-type!edit.do?typeid=" + id;
+			map["formId"] = "#editGiftcardTypeForm";
+			map["url"] = "giftcard-type!saveEdit.do?ajax=yes";
+			map["title"] = "修改礼品卡类型";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#giftcarddata";
+
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 750,
+			height : 400,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					submitForm(map);
+				}
+			}, {
+				text : '清空',
+				handler : function() {
+					clearForm(map);
+				}
+			} ]
+		});
+	}
+	function submitForm(map) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+	
+	function removeGiftcardType(typeid){
+		if (!confirm("确认要删除此礼品卡吗？")) {
+			return;
+		}
+		$.ajax({
+			url:"giftcard-type!delete.do?type_id="+typeid+"&ajax=yes",
+			dataType:"json",
+			success:function(res){
+				if(res.result==1){
+					$.Loading.success(res.message);
+					$('#giftcarddata').datagrid("reload");
+				}else{
+					$.Loading.error(res.message);
+				}
+			},
+			error:function(){
+				alert("删除出现意外错误");
+			}
+		});
+	}
+
+	function formatOperation(value, row, index) {
+		var val = "";
+		val += "<a class='edit' title='编辑' href='javascript:void(0);' onclick='append("
+				+ row.type_id + ")'></a>";
+		val += "<a class='delete' title='移除' href='javascript:void(0);' onclick='removeGiftcardType("+row.type_id+")' ></a>";
+
+		return val;
+	}
+	
+
+	//删除
+	function del() {
+		var rows = $('#giftcarddata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error('请选择要删除的礼品卡');
+			return;
+		}
+		if (!confirm("确认要将这些礼品卡删除吗？")) {
+			return;
+		}
+		var options = {
+			url : "giftcard-type!delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success('删除成功');
+					$('#giftcarddata').datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误，请重试");
+			}
+		};
+		$('#giftcardform').ajaxSubmit(options);
+	}
+
+	//获取今天的日期
+	$(function() {
+		var curr_time = new Date();
+		var strDate = curr_time.getFullYear() + "-";
+		strDate += curr_time.getMonth() + 1 + "-";
+		strDate += curr_time.getDate() + "-";
+		strDate += curr_time.getHours() + ":";
+		strDate += curr_time.getMinutes() + ":";
+		strDate += curr_time.getSeconds();
+	});
+</script>
+<#include '/admin/footer.html' >

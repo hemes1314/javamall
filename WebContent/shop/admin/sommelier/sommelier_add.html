@@ -1,0 +1,127 @@
+<style>
+.selectgoods
+{
+  float:left;position:absolute;
+  top:10px;
+  left:0;
+  display:block;
+  width:100%;
+  height:600px;
+}
+.input_text {
+	width: 150px;
+}
+body,table{
+font-size:12px;
+}
+table{
+table-layout:fixed;
+empty-cells:show;
+border-collapse: collapse;
+}
+h1,h2,h3{
+font-size:12px;
+margin:0;
+padding:0;
+}
+.table{
+border:1px solid #cad9ea;
+color:#666;
+}
+.table th {
+background-repeat:repeat-x;
+height:30px;
+}
+.table td,.table th{
+border:1px solid #cad9ea;
+padding:0 1em 0;
+}
+.table tr.alter{
+background-color:#f5fafe;
+} 
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addForm" method="post" class="validate">
+		<table class="table" style="float:left; width:99%;">
+			<tr>
+		        <th style="width:160px; height:40px;">用户名</th>
+				<td  ><input class="easyui-validatebox input_text" type="text" id="sommeliername"
+					name="sommelier.username" data-options="required:true" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" style="width:200px;" />用户名为字母，数字和下划线
+				</td>
+             </tr>
+             <tr>
+				<th style="width:60px; height:40px;">密码</th>
+				<td ><input class="easyui-validatebox input_text" type="password" id="sommelierpass"
+					name="sommelier.pass" data-options="required:true" style="width:200px;" />
+				</td>
+            </tr>
+             <tr>
+				<th style="width:60px; height:40px;">姓名</th>
+				<td><input class="easyui-validatebox input_text" style="width:200px;" type="text" id="sommeliername"
+					name="sommelier.name" data-options="required:true" />
+				</td>
+            </tr>
+            <tr>			
+		     	<th style="width:60px; height:40px;">性别</th>
+				<td ><select class="easyui-validatebox"name="sommelier.sex">
+						<option value="1">&nbsp;男&nbsp;</option>
+						<option value="0">&nbsp;女&nbsp;</option>
+				</select></td>
+			 </tr>
+			 <tr>
+				<th style="width:60px; height:40px;">移动电话</th>
+				<td ><input class="easyui-validatebox input_text" style="width:200px;" type="text" validType="mobile" id="sommeliermobile"
+					name="sommelier.mobile" data-options="required:true" />
+				</td>
+             </tr>
+             <tr>
+				<th style="width:60px; height:40px;">星级</th>
+				<td >
+				<select name="sommelier.grade"> 
+					    <option value="0">请选择</option> 
+						<option value="1">一级</option> 
+						<option value="2">二级</option> 
+						<option value="3">三级</option> 
+						<option value="4">四级</option> 
+				</select>
+				</td>
+             </tr>
+             <tr>
+			   	<th style="width:60px; height:40px;">Email</th>
+				<td ><input class="input_text easyui-validatebox" type="text" style="width:200px;"  name="sommelier.email"
+					data-options="required:true,validType:'email'" />
+				</td>
+		 	 </tr>
+		     <tr>
+			   	<th style="width:60px; height:40px;">头像</th>
+                <td ><input type="file" name="image" data-options="required:true" style="width:170px;"/>(请上传gif,jpg,bmp,png格式,2M以内的图片)</td>
+		     </tr>
+		     <tr>
+		        <th style="width:60px; height:190px;">简介（手机端使用）</th>
+				<td >
+		           <textarea class="easyui-validatebox input_text" style="height:150px; width:40%" type="text" id="introduce"
+					name="sommelier.introduce" data-options="required:true"></textarea>			
+				</td>
+             </tr>
+             <tr>
+		   	    <th style="width:60px; height:330px;">详情（PC端使用）</th>
+				<td>
+                <div style="width:80%">
+		           <textarea class="easyui-validatebox input_text" type="text" id="detail" name="sommelier.detail" ></textarea>
+                </div>			
+				</td>
+		    </tr>
+		  </table>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var instance = CKEDITOR.instances["detail"];
+		if (instance) {
+			CKEDITOR.remove(instance);
+		}		
+		$('#detail').ckeditor();
+	});
+</script>

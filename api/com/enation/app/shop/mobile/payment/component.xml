@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="移动APP支付组件" version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+		<plugin name="微信移动支付插件" id="wechatMobilePlugin">
+			<bundle id="paymentPluginBundle"></bundle>
+		</plugin>
+	</plugins>
+</component>

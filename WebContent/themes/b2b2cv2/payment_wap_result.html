@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+<title>支付成功</title>
+<!-- 框架 -->
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/apicloud/api.js"></script>
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/apicloud/jquery.js" ></script>
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/apicloud/jquery-eapi-1.0.js" ></script>
+<!-- 基本 -->
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/apicloud/config.js"></script>
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/apicloud/page_base.js"></script>
+</head>
+<body>
+	<!-- <header class="go_title">
+		<h1>支付成功</h1>
+		返回上一页操作，
+		<a id="back" href="javascript:void(0)" class="fallback"></a>
+	</header> -->
+	<#--创建支付结果标签-->
+	<#assign paymentResultTag = newTag("paymentWapResultTag")   />
+	<#--获取支付结果-->
+	<#assign paymentResult= paymentResultTag()   />
+	<article class="success_box">
+		<div class="deliver">
+			<#if paymentResult.result==1>
+				<@image src="${ctx}/themes/default/images/fukuan_cg.jpg" alt="支付成功" />
+			<#else>
+				<@image src="${ctx}/themes/default/images/fukuan_bcg.jpg" alt="支付失败" />
+			</#if>
+			<div>
+			<#if paymentResult.result==1>
+				<h1>恭喜,支付已成功!</h1>
+				<p >订单号：${paymentResult.ordersn!''}</p>
+				<span> 
+					<a id="back" class="go_index" href="javascript:void(0)">返回</a>
+				</span>
+			<#else>
+				<h1>非常抱歉，您本次支付未成功</h>
+				<p>失败是因为：${paymentResult.error!''}</p>
+				<span> 
+					<a id="back" class="go_index" href="javascript:void(0)">返回</a>
+				</span>
+			</#if>
+			</div>
+		</div>
+	</article>
+</body>
+<script>
+e$(function(){
+	
+	var param = e$.getParam();
+	
+	/**
+	 * 跳转回去  并且执行回调函数 
+	 */
+	$("#back").click(function(){
+		//alert(JSON.stringify(param));
+		if(param.script) {
+			e$.execScript(param.script);
+		}
+		
+		back();
+	});
+});
+</script>
+<style>
+body, dl, dt, dd, ol, ul, pre, form, field, input, blockquote, th, td,
+	h1, h2, h3, h4, h5, h6, div {
+	font-family: '微软雅黑', 'microsoft yahei', 宋体, Tahoma, Verdana, Arial,
+		Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	color: #4B4C4C;
+}
+/*高度自适应100%*/
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-flex-flow: column;
+	flex-flow: column;
+	width: 100%
+}
+
+ul, ol {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+	color: #4B4C4C;
+}
+
+body, img {
+	border: none;
+}
+
+a {
+	text-decoration: none;
+	color: #53a0be
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+.clear {
+	clear: both;
+	font-size: 0;
+	height: 1%;
+	line-height: 0;
+}
+
+.child {
+	display: none
+}
+
+.dashed_line {
+	border-bottom: 1px dashed #cdcdcd
+}
+
+.float {
+	float: left;
+}
+
+.b {
+	font-weight: bold;
+}
+
+input {
+	-webkit-appearance: none;
+}
+/******
+设置手机字体自适应
+****
+body {font: normal 100% Helvetica;background:#fff;}
+***/
+body {
+	font: normal 100% Helvetica;
+	background: #eceeeb;
+}
+/********首页广告******/
+.advone {
+	width: 100%;
+	margin: 0px auto;
+	height: 30%;
+	overflow: hidden;
+	max-height: 400px;
+}
+
+.advone ul {
+	width: 100%;
+	height: 100%;
+}
+
+.advone ul li {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.advone ul li img {
+	width: 100%;
+	height: 100%;
+}
+/***广告当前点****/
+#pagenavi {
+	width: 100%;
+	height: 10%;
+	display: block;
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	text-align: center
+}
+
+#pagenavi a {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 6px;
+	margin-right: 3px;
+}
+
+#pagenavi .active {
+	background: rgba(255, 99, 71, 0.7);
+}
+
+/*通用按钮*/
+.box {
+	padding: 5px;
+	border: 1px solid #dcdcdc;
+	background: #fff;
+	color: #515151;
+}
+
+.box-btn {
+	color: #515151;
+	height: 20px;
+	display: block;
+	line-height: 20px;
+	background-position: right -20px;
+	background-size: 20px;
+}
+
+.box-btn i {
+	font-style: normal;
+	color: #ff6600;
+}
+
+.box-content {
+	padding: 10px;
+	background: #fff;
+	color: #515151;
+	border-left: 1px solid #dcdcdc;
+	border-bottom: 1px solid #dcdcdc;
+	border-right: 1px solid #dcdcdc;
+}
+
+.box-content p {
+	line-height: 22px;
+}
+
+/*通用颜色*/
+.c51 {
+	color: #515151;
+}
+
+.cr {
+	color: #cc0000;
+}
+
+.cg {
+	color: #006600;
+}
+
+.co {
+	color: #F26400;
+}
+
+.cb {
+	color: #0066cc;
+}
+
+.c0 {
+	color: #000;
+}
+
+.c3 {
+	color: #333;
+}
+
+.c6 {
+	color: #666;
+}
+
+.c9 {
+	color: #999;
+}
+
+.cc {
+	color: #ccc;
+}
+
+.nav-menu {
+	width: 100%;
+	height: 90px;
+	display: block;
+	overflow: hidden;
+}
+
+.nav-menu li {
+	padding: 10px 0;
+	float: left;
+	width: 25%;
+	height: 70px;
+}
+
+.nav-menu li a {
+	display: block;
+}
+
+.nav-menu li a span.nav-icon {
+	width: 40px;
+	height: 40px;
+	display: block;
+	margin: 0 auto;
+}
+
+.nav-menu li a span.nav-text {
+	line-height: 30px;
+	font-size: 14px;
+	color: #000;
+	text-align: center;
+	display: block;
+}
+
+.box-hd {
+	width: 100%;
+	height: 30px;
+	display: block;
+	overflow: hidden;
+}
+
+.box-hd h2 {
+	line-height: 30px;
+	font-size: 14px;
+	color: #000;
+}
+
+.box-hd a {
+	line-height: 30px;
+	font-size: 14px;
+	color: #000;
+}
+
+.box-bd {
+	width: 100%;
+	display: block;
+}
+
+.product .dl-horizontal {
+	padding: 10px 0;
+	border-top: 1px solid #ddd;
+	width: 100%;
+	display: block;
+}
+
+.product .dl-horizontal dt {
+	clear: left;
+	float: left;
+	overflow: hidden;
+	text-align: left;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 90px;
+}
+
+.product .dl-horizontal dt img {
+	width: 80px;
+	border: none;
+}
+
+.product .dl-horizontal dd {
+	margin-left: 100px;
+	display: block;
+}
+
+.product .dl-horizontal dd a.pname {
+	display: block;
+	color: #000;
+	font-size: 14px;
+	line-height: 20px;
+	height: 40px;
+	overflow: hidden;
+}
+
+.product p.minprice {
+	padding: 5px 0;
+	display: block;
+}
+
+.product p.minprice span.fuhao, .product p.minprice strong {
+	color: #ba0e2d;
+	font-size: 16px;
+	padding-right: 2px;
+}
+
+.product p.minprice span.del {
+	color: #999;
+}
+
+/* Clearfix,避免因子元素浮动而导致的父元素高度缺失能问题 */
+.clearfix:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	line-height: 0;
+	visibility: hidden;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+
+*+html .clearfix {
+	height: 1%;
+}
+
+time {
+	color: #777;
+}
+/* 为旧版本浏览器格式化Html5元素  */
+article, aside, dialog, footer, header, section, footer, nav, figure,
+	menu {
+	display: block;
+}
+
+/*页面留白*/
+.blank {
+	height: 15px;
+	line-height: 15px;
+	clear: both;
+	visibility: hidden;
+}
+
+.blank5 {
+	height: 5px;
+	line-height: 5px; /* _margin:-3px 0;e c m o b a n*/
+	clear: both;
+	visibility: hidden;
+}
+
+.blank50 {
+	height: 50px;
+	line-height: 50px;
+	clear: both;
+	visibility: hidden;
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 5px;
+}
+
+/********公共搜索  假*********/
+.search {
+	height: 6%;
+	background: #da434e;
+	border: 1px solid #a3202a;
+	z-index: 99999;
+	overflow: hidden;
+	padding: 2% 0px;
+}
+
+.search .logo {
+	float: left;
+	margin: 0px 0px 0px 3%;
+	max-width: 131px;
+	max-height: 45px;
+	height: 100%;
+}
+
+.search .img_input {
+	color: #7d7676;
+	border: 1px solid #ccc;
+	padding-left: 10%;
+	background: url(../../images/fdj.jpg) no-repeat 2% center #faebec;
+	border-radius: 5px;
+	font-size: 1.0em;
+}
+
+.home_box {
+	width: 100%;
+	height: 91%;
+	overflow: auto;
+}
+
+/****公共头部***/
+.go_title {
+	width: 100%;
+	height: 9%;
+	line-height: 9%;
+	overflow: hidden;
+	background: #fff;
+	position: relative;
+	display: table;
+	border-bottom: 1px solid #aaa;
+}
+
+.go_title h1 {
+	width: 100%;
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 1.1em;
+	font-weight: normal;
+}
+
+.go_title .fallback {
+	width: 30%;
+	height: 100%;
+	display: block;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background: url(../../images/shangyiji.jpg) no-repeat 20% center;
+}
+
+/**回到顶部***/
+.go_top {
+	width: 37px;
+	height: 60px;
+	position: fixed;
+	bottom: 10px;
+	right: 2%;
+}
+
+.success_box {
+	width: 100%;
+	height: 94%;
+	overflow: auto;
+}
+
+.deliver {
+	width: 90%;
+	overflow: hidden;
+	padding: 20px 5%;
+	background: #fff;
+}
+
+.deliver img {
+	width: 20%;
+	overflow: hidden;
+	float: left;
+	display: inline;
+	margin-right: 5%
+}
+
+.deliver div {
+	width: 75%;
+	overflow: hidden;
+	float: left;
+	display: inline;
+}
+
+.deliver div h1 {
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+	margin: 10px 0px;
+	font-size: 1.0em;
+	font-weight: normal;
+}
+
+.deliver div p {
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+	font-size: 0.9em;
+	color: #757272;
+}
+
+.deliver div strong {
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+	font-size: 0.9em;
+	color: #757272;
+	font-weight: normal;
+	display: block;
+}
+
+.deliver div span {
+	display: block;
+	width: 100%;
+	height: 35px;
+	line-height: 35px;
+	margin: 10px 0px;
+}
+
+.deliver div span a {
+	display: block;
+	font-size: 0.85em;
+	font-weight: normal;
+	border-radius: 5px;
+	width: 26%;
+	padding: 0px 2%;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+	color: #fff;
+	background: #ff5367;
+	float: left;
+}
+
+.deliver div span .go_index {
+	background: #f79556;
+}
+
+.deliver div span .go_order {
+	background: #959da0
+}
+</style>
+</html>

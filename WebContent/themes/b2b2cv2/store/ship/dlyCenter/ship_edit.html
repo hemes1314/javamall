@@ -1,0 +1,89 @@
+<#assign regionSelectDirective="com.enation.app.base.component.widget.regions.RegionSelectDirective"?new()>
+
+<#-- 创建店铺发货地址标签 --> 
+<#assign storeDlyCenterTag= newTag("storeDlyCenterTag") > 
+<#-- 查询商品发货列表 --> 
+<#assign dlyCenter = storeDlyCenterTag("{'dly_id':${dly_id!0}}")!''>
+
+<#assign
+regionSelectDirective="com.enation.app.base.component.widget.regions.RegionSelectDirective"?new()>
+
+
+<div class="eject_con">
+	<div class="adds">
+		<div id="warning"></div>
+		<form id="add_form">
+		<input type="hidden" name="dly_center_id" value="${dlyCenter.dly_center_id}" >
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>发货点名称：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="name" value="${dlyCenter.name}" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>联系人：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="uname" value="${dlyCenter.uname}" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>所在地区：
+				</dt>
+				<dd>
+					<p>
+						<@regionSelectDirective  province_id="${dlyCenter.province_id!''}" city_id="${dlyCenter.city_id!''}" region_id="${dlyCenter.region_id!''}" />
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>街道地址：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="address" value="${dlyCenter.address}" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>邮编：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="zip" value="${dlyCenter.zip}" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>电话号码：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="cellphone" value="${dlyCenter.cellphone}" >
+					</p>
+				</dd>
+			</dl>
+			<dl>
+				<dt class="required">
+					<em class="pngFix"></em>手机号码：
+				</dt>
+				<dd>
+					<p>
+						<input type="text" name="phone" value="${dlyCenter.phone}" >
+					</p>
+				</dd>
+			</dl>
+		</form>
+	</div>
+</div>

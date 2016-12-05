@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+<head>
+	<title>Javashop API亲自试一试</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="${staticserver}/js/common/jquery-1.8.3.min.js"></script>
+<script src="${staticserver}/js/common/jquery-form-2.33.js"></script>
+<link href="../stylecss.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/gray/easyui.css"/>    
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/icon.css"/>  
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/easyui-lang-zh_CN.js"></script>
+
+</head>
+
+<body>
+<div class="diadiv" ></div>
+
+<div id="header">
+	<div class="header_top">
+		<h1><em>JavsShop</em>文档</h1>
+	</div>
+</div>
+<#assign  apiurl="" />
+<#if api?exists >
+<#if api=="cart-pro-add" >
+  <#assign  apiurl="/api/shop/cart!addProduct.do?productid=1&num=1" />
+</#if>
+<!--购物车-->
+<#if api=="cart-goods-add" >
+  <#assign  apiurl="/api/shop/cart!addGoods.do?goodsid=1&num=1" />
+</#if>
+<#if api=="getCartData" >
+  <#assign  apiurl="/api/shop/cart!getCartData.do?" />
+</#if>
+<#if api=="delete" >
+  <#assign  apiurl="/api/shop/cart!delete.do?cartid=1" />
+</#if>
+<#if api=="updateNum" >
+  <#assign  apiurl="/api/shop/cart!updateNum.do?cartid=2&num=1&productid=30" />
+</#if>
+<#if api=="getTotal" >
+  <#assign  apiurl="/api/shop/cart!getTotal.do?orderprice=100" />
+</#if>
+<!--购物车结束-->
+<!--收藏商品-->
+<#if api=="addCollect" >
+  <#assign  apiurl="/api/shop/collect!addCollect.do?goods_id=1" />
+</#if>
+<#if api=="cancelCollect" >
+  <#assign  apiurl="/api/shop/collect!cancelCollect.do?favorite_id=1" />
+</#if>
+<!--收藏商品结束-->
+<!--商品搜索-->
+<#if api=="search" >
+  <#assign  apiurl="/api/shop/goods!search.do?catid=2&brandid=1" />
+</#if>
+<!--商品搜索结束-->
+<!--发表评论-->
+<#if api=="add" >
+  <#assign  apiurl="/api/shop/commentApi!add.do?goods_id=1&commenttype=1&content=测试" />
+</#if>
+<!--发表评论结束-->
+<!--会员操作-->
+<#if api=="login" >
+  <#assign  apiurl="/api/shop/member!login.do?username=18611138651&password=123456" />
+</#if>
+<#if api=="logout" >
+  <#assign  apiurl="/api/shop/member!logout.do" />
+</#if>
+<#if api=="changePassword" >
+  <#assign  apiurl="/api/shop/member!changepassword.do?oldpassword=123456&newpassword=1234567" />
+</#if>
+<#if api=="password" >
+  <#assign  apiurl="/api/shop/member!password.do?oldpassword=123456" />
+</#if>
+<#if api=="member_search" >
+  <#assign  apiurl="/api/shop/member!search.do" />
+</#if>
+<#if api=="member_search" >
+  <#assign  apiurl="/api/shop/member!saveInfo.do" />
+</#if>
+<#if api=="returnAdd" >
+  <#assign  apiurl="/api/shop/returnorder!returnAdd.do?type=1&ordersn=20140220102237&goodsns=0018914288" />
+</#if>
+<!--会员操作结束-->
+
+<!-- 订单 -->
+<#if api=="create" >
+  <#assign  apiurl="/api/shop/order!create.do?addressId=10005&paymentId=1&typeId=1" />
+</#if>
+<#if api=="cancel" >
+  <#assign  apiurl="/api/shop/order!cancel.do?sn=20131024055602" />
+</#if>
+<#if api=="rogConfirm" >
+  <#assign  apiurl="/api/shop/order!rogConfirm.do?orderId=10001" />
+</#if>
+<!-- 缺货登记 -->
+
+<#if api=="gnotifyAdd" >
+  <#assign  apiurl="/api/shop/gnotify!add.do?goodsid=30" />
+</#if>
+
+<#if api=="gnotifyDel" >
+  <#assign  apiurl="/api/shop/gnotify!gnotifyDel.do?gnotify_id=1" />
+</#if>
+
+
+</#if>
+<div id="function">
+	<input type="button" value="登录" name="button" id="login"></input>
+	<input type="button" value="注销登录" id="logout"></input>	
+</div>
+<div id="api">
+<h1>API地址：</h1>
+<input type="text" id="url" style="width:600px" value="${apiurl!''}">
+<input type="button" value="提交" name="button"  id="prevBtn" class="prevbtn">
+</div>
+ 
+
+<div id="show">
+<h1>输出结果</h1>
+<textarea  id="frm" >
+</textarea>
+</div>
+
+<!--会员登录-->
+	<script>
+		$(function() {
+			$("#prevBtn").click(function(){
+				 var apiurl=$("#url").val();
+				$.ajax({
+					url:"${ctx}"+apiurl,
+					dataType:"html",
+					success:function(html){
+						 $("#frm").val(html)
+					},
+					error:function(){
+						alert("api地址错误，请检查");
+					}
+					
+				});
+			});
+			
+			$("#logout").click(function() {
+				var apiurl = "/api/shop/member!logout.do";
+				$.ajax({
+					url : "${ctx}" + apiurl,
+					dataType : "json",
+					success : function(bb) {
+						if (bb.result == 1) {
+							alert("恭喜注销成功")
+						} else {
+							alert("已经注销过了错误")
+						}
+					},
+					error : function() {
+						alert("api地址错误，请检查");
+					}
+
+				});
+			});
+			
+			$("#login").click(function(){
+				$(".diadiv").dialog({
+					title :'登录',
+					width : 400,
+					top:100,
+					closed : false,
+					href:"../the_login.html",
+					buttons : [ {
+						text : '保存',
+						handler : function() {
+							submitForm();
+						}
+					}]
+				});
+			})
+		})
+		
+		function submitForm(){
+			$("#loginForm").ajaxSubmit({
+				url:"${ctx}/api/shop/member!login.do?ajax=yes",
+				type:"post",
+				dataType:"json",
+				success:function(result){
+					 alert(result.message);
+				},
+				error:function(e){
+					alert("操作失败！");
+				}
+			});
+		}
+	</script>
+
+</body>
+</html>

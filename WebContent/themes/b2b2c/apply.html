@@ -1,0 +1,200 @@
+<#include '/common/header.html' />
+<!-- 调用地区标签 -->
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member_store.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/uploadify.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/common_02.css" />
+<script type="text/javascript" src="${ctx}/themes/b2b2c/js/jquery.uploadify.min.js"></script>
+
+
+<div class="layout">
+	<div class="wrap-shadow">
+		<div class="wrap-all">
+			<div class="user-form-style grade-shop">
+			<form id="applyForm" class="validate">
+
+				<dl>
+					 <dt class="required">
+					 	<em class="pngFix"></em>店铺名称：
+					 </dt>
+					 <dd>
+			            <p><input type="text" name="store.store_name"  class="text w400" isrequired="true" dataType="string"  autocomplete="off" fun="checkStoreName" /></p>
+			            <p class="hint">请控制在20个字符以内</p>
+			            
+		          	</dd>
+				</dl>
+		        <dl>
+		          	<dt class="required"><em class="pngFix"></em>所在地区：</dt>
+		        	<dd><@regionSelect/></dd>
+		        </dl>
+		        <dl>
+		        	<dt class="required"><em class="pngFix"></em>详细地址：</dt>
+		        	<dd><input type="text" name="store.attr" class="text w400" isrequired="true"/></dd>
+		        </dl>
+		        <dl>
+		        	<dt class="required"><em class="pngFix"></em>邮编：</dt>
+		        	<dd><input type="text" name="store.zip" class="text w200" id="store_zip" isrequired="true" dataType="post_code"/></dd>
+		        </dl>
+		        <dl>
+		        	<dt class="required"><em class="pngFix"></em>联系方式：</dt>
+		        	<dd><input type="text" name="store.tel" class="text w200" id="cellphone" isrequired="true" dataType="mobile" /></dd>
+		        </dl>
+		        <dl>
+		        	<dt class="required"><em class="pngFix"></em>身份证号：</dt>
+		        	<dd><input type="text" name="store.id_number" class="text w200" id="id_number" fun="checkIDNumber"/></dd>
+		        </dl>
+		        <dl>
+		        	<dt>上传身份证照片:<span id="id_imgText"></span></dt>
+		        	<dd>
+		        		<div class="apply_id_img" status="id_img">
+		        		</div>
+		        		<input type="file" id="id_img" status="id_img" />
+		        		&nbsp;&nbsp;<span class="applyPro">支持格式jpg,jpeg,png,gif，请保证图片清晰且文件大小不超过400KB</span>
+		        		<input type="hidden" name="store.id_img" id="id_imgImg"/>
+		        		<input type="hidden" name="store.name_auth" value="0" id="id_imgStatus">
+		        	</dd>
+		        </dl>
+		        <dl>
+		        	<dt>上传执照照片:<span id="license_imgText"></span></dt>
+		        	<dd>
+		        		<div class="apply_license_img" status="license_img">
+		        		</div>
+		        		<input type="file" id="license_img" status="license_img"/>
+		        		&nbsp;&nbsp;<span class="applyPro">支持格式jpg,jpeg,png,gif，请保证图片清晰且文件大小不超过400KB</span>
+		        		<input type="hidden" name="store.license_img" id="license_imgImg"/>
+		        		<input type="hidden" name="store.store_auth" value="0" id="license_imgStatus"/>
+		        	</dd>
+		        </dl>
+		        <dl class="bottom">
+		        	<dt>&nbsp;</dt>
+		        	<dd>  
+			        	<p class="mb10">
+			              <input type="button" class="submit" value="立即开店" id="apply"/>
+			            </p>
+		            </dd>
+		        </dl>
+		       </form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+$(function(){
+	window.onload=function(){
+		bindFileEvent($("#id_img"));
+		bindFileEvent($("#license_img"));
+	}
+	//地区联动选择-选择最后一级（区）时自动设置邮编
+	RegionsSelect.regionChange=function(regionid,name,zipcode){
+		$("#store_zip").val(zipcode);
+	};
+	
+	$("#apply").click(function(){
+		if(!$("#applyForm").checkall())
+			return false;
+		$("#apply").attr({"disabled":"disabled"}); 
+		var options = {
+				url : "${ctx}/api/b2b2c/storeApi!apply.do?ajax=yes",
+				type : "POST",
+				async: false,
+				dataType : "json",
+				success : function(result) {
+					if(result.result==0){
+						$.alert(result.message);
+					}else{
+						$.alert(result.message);
+						location.href="index.html";
+					}
+					$("#apply").removeAttr("disabled");
+			 	},
+			 	error : function(e) {
+			 		$.alert("出现错误，请重试");
+				}
+			};
+		$('#applyForm').ajaxSubmit(options);
+	});
+	$("#region_id").setValidator(function(){
+		var value = $("#region_id").val();
+		if( value=="" || value=="0" ) return "地区信息不完整";
+		else return true;
+	});
+});
+
+function bindFileEvent(obj){
+	var status=$(obj).attr("status");
+	$(obj).uploadify({
+		'buttonText':'上传',		//显示文字
+		'fileObjName':'image',		//文件对象名称
+		'fileTypeDesc': '请选择',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 
+		'fileTypeExts': '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+		'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+		'swf'      : '${ctx}/themes/b2b2c/uploadify.swf',
+		'height':'30',				//高度
+		'width':'80',
+		'multi':false,				//是否支持多文件上传
+		'progressData':'percentage',//设置文件上传时显示的数据
+		'uploadLimit':1,
+		'onFallback':function(){				//falsh兼容
+			alert("麻烦了，不兼容falsh!");
+		},							
+		'onUploadSuccess':function(file,data,response){
+			var img =jQuery.parseJSON(data);
+			$("#"+status+"Text").html("已上传");
+			$("#"+status+"Img").val(img.fsimg);
+			$("#"+status+"Status").val(2);
+			$(".apply_"+status).html("<img src='"+img.img+"'style='width:100px;height:100px'/>");
+		},
+		'onSelectError':function(file,errorCode,errorMsg){
+			if(errorCode==SWFUpload.QUEUE_ERROR.INVALID_FILETYPE){
+				this.queueData.errorMsg="请上传正确的格式";
+			}
+		}
+	});
+}
+//检测身份证
+function checkIDNumber(value){
+	var type=1;
+	var idNumber  = $("#id_number").val();
+	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+	if(!reg.test(idNumber)){
+		return "身份证格式不正确！";
+	}
+	$.ajax({
+		url:"${ctx}/api/b2b2c/storeApi!checkIdNumber.do?ajax=yes",
+		type:"POST",
+		async: false,
+		data:"id_number="+idNumber,
+		dataType:"json",
+		success:function(json){
+			type=json.result;
+		}		
+	});
+	if(type==0)
+		return "身份证重复";
+	return true;
+}
+function checkStoreName(value){
+	var storeName=$("input[name='store.store_name']").val();
+	var type=1;
+	if(storeName.length>20){
+		return "店铺名称请控制在20个字符以内";
+	}
+	$.ajax({
+		url:"${ctx}/api/b2b2c/storeApi!checkStoreName.do?ajax=yes",
+		type:"POST",
+		data:"storeName="+storeName,
+		async: false,
+		dataType:"json",
+		success:function(json){
+			type=json.result;
+		}		
+	});	
+	if(type==0)
+		return "店铺名称重复";
+	return true;
+	
+}
+</script>
+<#include '/common/footer.html' />

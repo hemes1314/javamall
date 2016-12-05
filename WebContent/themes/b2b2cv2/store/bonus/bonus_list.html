@@ -1,0 +1,281 @@
+<#include '/store/store_header.html' />
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"></script>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			促销管理<span>></span>优惠券列表
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active commont_list">
+						<a hre="#">优惠券列表</a>
+					</li>
+
+				</ul>
+				<div class="store_commont_search">
+					<a title="新增优惠券"  class="ncu_btn3" href="javascript:void(0)" onclick="saveOrUpdate()">新增优惠券 </a>
+				</div>
+			</div>
+		</div>
+		<div class="search_store_commont">
+			<form target="_self"  method="get">
+				<table class="search_form">
+					<input type="hidden" value="store" name="act">
+					<input type="hidden" value="store_coupon" name="op">
+					<tbody>
+						<tr>
+							<td></td>
+							<th  style="width:70px;">有效期：</th>
+							<td style="width:300px;">
+								<input type="text" readonly="readonly" value="" id="add_time_from_index" name="add_time_from" class="text hasDatepicker input_text" onClick="WdatePicker()" style="width:130px"> &ndash; 
+								<input type="text" readonly="readonly" value="" id="add_time_to_index" name="add_time_to" class="text hasDatepicker input_text" onClick="WdatePicker()" style="width:130px">
+							</td>
+							<td class="w90 tc"  style="width:70px;">
+								<input type="button" value="搜索" class="submit" id="btnSearch">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+		<!-- 优惠券列表 -->
+
+		<div class="bonuslist s_commont_list">
+			<#assign storeBonusListTag=newTag("storeBonusListTag")> 
+			<#assign storeBonusList=storeBonusListTag()/>
+			<table class="list_table">
+				<thead>
+					<tr>
+						<th class="w120">优惠券面额</th>
+						<th class="w60">使用限制</th>
+						<th class="w180">使用期限</th>
+						<th class="w60">发行量</th>
+						<th class="w60">使用量</th>
+						<th class="w90">操作</th>
+					</tr>
+				</thead>
+				<#if storeBonusList.totalCount != 0 >
+				<tbody>
+					<#list storeBonusList.bonusList.result as sbl>
+						<tr>
+							<td>${sbl.type_money}元</td>
+							<td>满${sbl.min_goods_amount}元</td>
+							<td class="goods-time"><@dateformat time="${(sbl.use_start_date)?c}"pattern="yyyy-MM-dd"/>~<@dateformat time="${(sbl.use_end_date)?c}"pattern="yyyy-MM-dd"/></td>
+							<td>${sbl.create_num}个</td>
+							<td>${sbl.use_num}个</td>
+							<td class="storegoodslist_tools">
+								<!-- <a onclick="saveOrUpdate(${sbl.type_id})" href="javascript:void(0)" class="tool2"><i></i>修改</a> -->
+								<a onclick="delBonus(${sbl.type_id})" href="javascript:void(0);"  class="tool3"><i></i>删除</a>
+							</td>
+						</tr>
+					</#list>
+				</tbody>
+			</table>
+			<@pager pageno="${storeBonusList.page!'1'}" pagesize="${storeBonusList.pageSize}" totalcount="${storeBonusList.totalCount}" />
+			<#else>	
+		  		</table>
+		  		<p class="no_blank">暂无符合条件的数据记录</p>
+		  	</#if>
+		</div>
+	</div>	
+</div>
+
+<script>
+	var dialog;
+
+	function saveOrUpdate(bonusid) {
+		var map = {}; // 相当于Map map = new HashMap();
+		if (!bonusid) {
+			map["title"] = "添加优惠券";
+			map["html"] = "bonus_add.html";
+			map["url"] = "${ctx}/api/b2b2c/promotion!add_fullSubtract.do";
+			map["form"] = "#add_form";
+		} else {
+			map["title"] = "修改优惠券";
+			map["html"] = "bonus_edit.html?bonusid=" + bonusid;
+			map["url"] = "${ctx}/api/b2b2c/promotion!edit_fullSubtract.do";
+			map["form"] = "#edit_form";
+		}
+		openDialog(map);
+	}
+
+	function openDialog(map) {
+		dialog = $.dialog({
+			title : map["title"],
+			width : 480,
+			height : 170,
+			lock : true,
+			min : false,
+			max : false
+		});
+
+		$.ajax({
+			url : map["html"],
+			cache : false,
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '保存',
+					callback : function() { 
+				        
+				        if(!$(map["form"]).validate()){
+							return false;
+						}
+				        if(!$(map["form"]).checkall()){
+							return false;
+						}
+				       
+						formSubmit(dialog, map);
+						
+						this.button({  
+			                name: '保存',
+// 			                disabled: true
+			            })
+			            .lock();
+			            return false;
+					}
+				}, {
+					name : '取消'
+				} ]);
+			},
+			error : function() {
+				$.alert("出现错误,请重试！");
+			}
+		});
+	}
+
+	function formSubmit(dialog, map) {
+		var recog = $('input[name=type_recognition]').val();
+		if (!/^[a-zA-Z0-9]+$/.test(recog)) {
+			alert('优惠卷识别码只能包括英文字母、数字.');
+			return false;
+		}
+		
+		var sendTimeStart = $("input[name='sendTimeStart']").val();
+		var sendTimeEnd= $("input[name='sendTimeEnd']").val();
+		var useTimeStart = $("input[name='useTimeStart']").val();
+		var useTimeEnd = $("input[name='useTimeEnd']").val();
+		
+		//减多少
+		var type_money = $("input[name='type_money']").val();
+		if(parseInt(type_money)<=0)
+		{
+			alert("优惠劵面额必须大于0元！");	
+			return false;
+		}
+		
+		//满多少
+		var min_goods_amount = $("input[name='min_goods_amount']").val();
+		if(parseInt(type_money) >= parseInt(min_goods_amount))
+		{
+			alert("优惠券面额不能大于买家消费金额！")
+			return false;
+		}
+		
+		// 发行量校验
+		var create_num = $("input[name='create_num']").val();
+		if(parseInt(create_num) <= 0)
+		{
+			alert("发行量必须大于0！");
+			return false;
+		}
+		
+		if(sendTimeEnd < sendTimeStart){
+			alert("发放开始日期 不能大于发放结束日期，请重新填写发放日期")
+			return false;
+		}
+		if(useTimeEnd < useTimeStart){
+			alert("开始使用期限不能大于结束使用期限，请重新填写使用期限！")
+			return false;		
+		}
+		if(sendTimeStart > useTimeStart){
+			alert("使用期限不能小于发放开始日期，请重新填写使用期限！")
+			return false;
+		} 
+		// 校验
+		$.ajax({
+            type: 'POST',
+            url: "${ctx}/api/b2b2c/promotion!checkRecognition.do",
+            dataType: "json",
+            data: {type_recognition:recog},
+            async: false,
+            success: function(result) {
+	        	if(result.result == 1) {
+	        		var options = {
+	       				url : map["url"], 
+	       				type : "POST",
+	       				dataType : 'json',
+	       				success : function(result) { 
+	       					if(result.result==1){ 
+	       						dialog.title('保存成功，2秒后关闭此窗口。').time(3); 
+	       						dialog.reload();
+	       					}else{
+	       						dialog.title('保存失败，'+result.message);
+	       						$("input[type='button']").each(function(){ 
+	       							$(this).removeAttr("disabled");
+	       						});
+	       					}
+	       				},
+	       				error : function(e) {
+	       					alert("出现错误，请重试");
+	       				}
+	       			};
+	       			$(map["form"]).ajaxSubmit(options);
+	        		return false;
+	        	} else {
+	        		alert(result.message)
+	        		return false;
+	        	}
+            },
+			error : function(e) {
+				alert("出现错误，请重试");
+			}
+        });
+		return false;
+	}
+	
+	
+	$("#btnSearch").click(function(){ 
+		var add_time_from=$("input[name='add_time_from']").val();
+		var add_time_to=$("input[name='add_time_to']").val();
+		location.href="bonus_list.html?act=store&op=store_coupon&add_time_from="+add_time_from+"&add_time_to="+add_time_to+"&menu=promotion";
+	});
+	
+	
+	/* 删除优惠券 */
+	function delBonus(typeid){
+		
+		if(confirm("确定删除此优惠券吗？")){
+		
+		}else{
+			return false;	
+		}
+		$.ajax({
+			url : "${ctx}/api/b2b2c/promotion!deleteBonus.do?type_id="+typeid,
+			cache : false,
+			dataType: "json",
+			success : function(data) {
+				if(data.result==1){
+					$.alert(data.message);
+					location.reload();
+				}else{
+					$.alert(data.message);
+				}
+			},
+			error : function() {
+				$.alert("出现错误，请重试");
+			}
+		});
+	}
+	
+</script>
+<script>
+	$(function(){
+		selectMenu(0);
+	});
+</script>
+<#include '/common/footer.html' />

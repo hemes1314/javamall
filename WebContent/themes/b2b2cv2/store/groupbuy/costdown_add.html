@@ -1,0 +1,367 @@
+<#include '/store/store_header.html' />
+<#assign costDownActListTag=newTag("costDownActListTag")> 
+<#assign actList=costDownActListTag()>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			促销管理<span>></span>直降
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="normal">
+						<a href="costdown_list.html?menu=promotion">直降列表</a>
+					</li>
+					<li class="active">
+						  <a href="costdown_add.html?menu=promotion"  title="新增直降">新增直降</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- 新增直降 -->
+		  <div class="groupbuy_form">
+		    <form id="gb_form" method="post" enctype="multipart/form-data" class="validate">
+		      <input name="group_id" type="hidden" value="">
+		      <dl>
+		        <dt class="required"><em class="pngFix"></em>直降活动：</dt>
+		        <dd>
+		          <p>
+				<#assign costDownActListTag=newTag("costDownActListTag")> 
+				<#assign actList=costDownActListTag()>
+		            <select  name="act_id" class="valid"  isrequired="true">
+		            	<#list actList as act>
+		                   <option value="${act.act_id}">${act.act_name}
+		                   <@dateformat time="${act.start_time}" pattern="yyyy-MM-dd"/>-
+							<@dateformat time="${act.end_time}" pattern="yyyy-MM-dd"/>
+		                   </option>
+		                </#list>   
+		            </select>
+		            
+		            <span></span>
+		           </p>
+		          <p class="hint">选择要参加的直降活动及时间段</p>
+		        </dd>
+		      </dl>
+		      <dl>
+		        <dt class="required"><em class="pngFix"></em>商品名称：</dt>
+		        <dd>
+		          <p>
+		            <input class="text" name="gb_name" type="text"  value="" maxlength="30" isrequired="true">
+		            <span></span> </p>
+		          <span></span>
+		          <p class="hint">商品标题名称长度最多可输入30个字符</p>
+		        </dd>
+		      </dl>
+		      <dl>
+		        <dt>商品副标题：</dt>
+		        <dd>
+		          <p>
+		            <input class="text" name="gb_title" type="text"   value="" maxlength="30">
+		            <span></span> </p>
+		          <span></span>
+		          <p class="hint">商品副标题针对直降特殊说明</p>
+		        </dd>
+		      </dl>
+		      <dl>
+		        <dt class="required"><em class="pngFix"></em>直降商品：</dt>
+		        <dd>
+		          <p>
+		          	
+		            <input class="text" style=" cursor: pointer;" id="goods_name_ipt"   type="button" value="选择商品" readonly autocomplete="off" >
+		           	<input type="hidden" name="goods_id" id="goods_id_ipt" />
+		           	<input type="hidden" name="goods_name" />
+		            </p>
+		          <p class="hint">点击上方输入框从已发布商品中选择要参加直降的商品</p><p class="hint">如没有找到您想要参加直降的商品，请重新发布该商品后再选择。</p>
+		        </dd>
+		      </dl>
+		      <dl class="groupbuy_goods_info" style="display: none;">
+		        <dt>店铺价格：</dt>
+		        <dd> ¥ <span id="goods_store_price"></span> 
+		        	<input name="original_price" id="goods_original_price_ipt" value="" type="hidden"/>
+		        </dd>
+		      </dl>
+		      <dl>
+		        <dt class="required"><em class="pngFix"></em>直降价格：</dt>
+		        <dd>
+		          <p>
+		            <input class="w60 text"  name="price" type="text" value=""  isrequired="true">
+		            <span></span> </p>
+		          <p class="hint">直降价格为该商品参加活动时的促销价格<br>必须是0.01~1000000之间的数字(单位：元)<br></p>
+		        </dd>
+		      </dl>
+		      <dl>
+		        <dt class="required"><em class="pngFix"></em>直降图片：</dt>
+		        <dd> 
+		          <p class="groupbuy_up_img">
+		            <label>
+		            	<input type="file" id="image_ipt" name="image">
+		            	<span>选择图片</span>
+		            </label>
+		          </p>
+		          <p class="hint">用于直降活动页面展示的图片,支持jpg、jpeg、gif、png格式上传<br>建议选择尺寸330x330、大小1M内的图片</p>
+		        </dd>
+		      </dl>
+		      <dl class="groupbuy_goods_info" style="display: none;">
+		        <dt>商品库存数：</dt>
+		        <dd> <span id="goods_storage"></span>
+		        </dd>
+		      </dl>
+		      
+		      <dl class="groupbuy_goods_info" style="display: none;">
+		        <dt>可用库存数：</dt>
+		        <dd> <span id="enable_store"></span>
+		        </dd>
+		      </dl>
+		      
+		      
+		      <dl>
+		        <dt class="required"><em class="pngFix"></em>商品总数：</dt>
+		        <dd>
+		          <p>
+		            <input class="text"  name="goods_num" type="text" value=""  isrequired="true">
+		            <input type="hidden" id="goods_enable_store" name="goods_enable_store"/>
+		            <span></span></p>
+		          <p class="hint">直降商品总数应等于或小于该商品库存数量<br>请提前确认要参与活动的商品库存数量足够充足</p>
+		        </dd>
+		      </dl>
+		      </dl>
+		      <!--dl>
+		        <dt>所属区域：</dt>
+		        <dd>
+		          <p>
+		        <#assign groupBuyAreaListTag=newTag("groupBuyAreaListTag")> 
+				<#assign areaList=groupBuyAreaListTag()>
+		            <select  name="area_id">
+		              <option value="0">不限</option>
+		              <#list areaList as area>
+		              <option value="${area.area_id}">${area.area_name}</option>
+		              </#list>
+		             </select>
+		            <span></span> </p>
+		        </dd>
+		      </dl-->
+		      <dl>
+		        <dt>虚拟数量：</dt>
+		        <dd>
+		          <p>
+		            <input class="text"  name="visual_num" type="text" value="0">
+		            <span></span></p>
+		          <p class="hint">虚拟购买数量，只用于前台显示，不影响成交记录</p>
+		        </dd>
+		      </dl>
+		      <dl style="display:none">
+		        <dt>限购数量：</dt>
+		        <dd>
+		          <p>
+		            <input class="text"  name="limit_num" type="text" value="0">
+		            <span></span></p>
+		          <p class="hint">每个买家ID可直降的最大数量，不限数量请填 "0"</p>
+		        </dd>
+		      </dl>
+		      <dl>
+		        <dt>介绍：</dt>
+		        <dd>
+		          <p>
+		            <textarea name="remark" cols="100" rows="8" id="intro" style="resize: none;"></textarea>
+			          </p>
+		   
+		          <p id="des_demo" style="width:640px;display:none;"></p>
+		        </dd>
+		      </dl>
+		      <dl class="bottom">
+		        <dt>&nbsp;</dt>
+		        <dd>
+		          <p>
+		          	 <label for="groupbuy_agreement" class="ok_add_grounbuy">
+		            <input id="groupbuy_agreement" type="checkbox" id="groupbuy_agreement" checked="checked">
+		           <span>我已阅读</span><a href="/help-61-54.html" target="_blank" class="agreement">直降服务协议</a> <span>并同意</span></label>
+		           </p>
+		          <p>
+		            <input type="button" class="submit to_save" id="okBtn" value="提交">
+		          </p>
+		        </dd>
+		      </dl>
+		    </form>
+		  </div>
+	</div>	
+</div>
+<script type="text/javascript">
+var dialog ;
+/**
+ * 搜索商品
+ */
+function searchGoods(){
+	
+	//搜索事件
+	$("#goods_search_btn").click(function(){
+		var form= $("#goods_search_form");
+		form.ajaxSubmit({
+			url:"${ctx}/api/b2b2c/goods!search.do?is_costdown=1",
+			type:"post",
+			dataType:"json",
+			success:function(json){
+				if(json.result==1){
+					fillSelect(json.data);
+				}else{
+					alert(json.message);
+				}
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	});
+	
+	//选择事件
+	$("#select_btn").click(function(){
+		
+		var option = $("#goods_id>option:selected");
+		if(option.size()==0){
+			alert("请选择商品");
+			return false;
+		}
+		
+		var goodsid  = option.val();
+		if(goodsid=="0"){
+			alert("请先搜索商品，然后选择相应的商品");
+			return false;
+		}
+		var price  = option.attr("goods_price");
+		$("#goods_store_price").html(price);
+		$("#goods_original_price_ipt").val(price);
+		
+		var store  = option.attr("goods_store");
+		$("#goods_storage").html(store);
+		
+		var enable_store  = option.attr("enable_store");
+		$("#enable_store").html(enable_store);
+		$("#goods_enable_store").val(enable_store);
+		
+		$("#goods_id_ipt").val(goodsid);
+		
+		
+		var goods_name  = option.attr("goods_name");
+		$("#goods_name_ipt").val(goods_name);
+		$("input[name='goods_name']").val(goods_name);
+		
+		$(".groupbuy_goods_info").show();
+		dialog.close();
+	});
+}
+
+/**
+ * 将搜索到的商品填充到select
+ */
+function fillSelect(goodsList){
+	
+	var select = $("#goods_id");
+	select.empty();
+	
+	for ( var i = 0; i < goodsList.length; i++) {
+		
+		var goods = goodsList[i];
+		var str ="";
+		str+="<option value='"+ goods.goods_id +"'" ;
+		str+=" goods_name='"+goods.name+"'";
+		str+=" goods_price='"+goods.price+"'";
+		str+=" goods_store='"+goods.store+"'";
+		str+=" enable_store='"+goods.enable_store+"'>";
+		str+=goods.name +"(￥"+goods.price+")</option>";
+		select.append(str);
+		
+	}
+}
+
+$(function(){
+	$('#intro').ckeditor();
+	$("#goods_name_ipt").click(function(){
+		dialog = $.dialog({ title:"商品搜索", width:550, height:300,lock:true,min:false,max:false});
+		
+		$.ajax({
+		    url:"${ctx}/goods/goods_search.html",
+		    success:function(html){
+		    	dialog.content(html);
+		    	searchGoods();
+		    },
+		    error:function(){
+		    	$.alert("页面获取出错");
+		    }
+		    ,
+		    cache:false
+		});
+	});
+	
+	
+	$("#okBtn").click(function(){
+		
+		if(!$("#gb_form").checkall())
+			return false;
+		
+		if( $("#image_ipt").val() ==""){
+			$.alert("必须上传直降图片");
+			return false;
+		}
+		if($("input[name='goods_name']").val()==""){
+			$.alert("必须选择商品");
+			return false;
+		}
+		
+		/************** 2015/10/27 humaodong ****************/
+		var origPrice = parseFloat($("#goods_original_price_ipt").val());
+		if (isNaN(origPrice) || origPrice <= 0) {
+			$.alert("商品原价不正确，请检查");
+			return false;
+		}
+		var price = parseFloat($("input[name=price]").val());
+		if (isNaN(price) || price < 0.01) {
+			$.alert("活动价格不正确，请检查");
+			return false;
+		}
+		if (price >= origPrice) {
+			$.alert("活动价格应小于商品原价");
+			return false;
+		}
+		/****************************************************/
+		
+		if( $("#groupbuy_agreement:checked").size()==0 ){
+			$.alert("您必须同意协议才能保存");
+			return false;
+		}
+		if($("input[name='goods_num']").val()<1){
+			$.alert("直降数量必须大于等于1，并且不能超过商品数量");
+			return false;
+		}
+		$.Loading.show("正在保存，请稍候...");	
+		$("#gb_form").ajaxSubmit({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/b2b2c/cost-down!add.do",
+			success:function(json){
+				$.Loading.hide();
+				if(json.result==1){
+					$.Loading.message("添加成功")
+					location.href="costdown_list.html?menu=promotion";
+				}else{
+					$.alert(json.message);
+				}
+			},
+			error:function(){
+				$.Loading.hide();
+				$.alert("出现意外错误");
+			}
+			
+		});
+	});
+});
+</script>
+	<script>
+		$(function(){
+			selectMenu(3);
+		})
+	</script>
+<#include '/common/footer.html' />

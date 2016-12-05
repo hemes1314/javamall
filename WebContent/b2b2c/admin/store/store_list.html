@@ -1,0 +1,303 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<div style="float:left;display:none;">
+		<a href="javascript:void(0)" class="button blueBlue" data-options="iconCls:'icon-add',plain:true" onclick="registStore()">新增店铺</a>
+		</div>
+		<span style="float: right;height:28px;"> 
+			<a href="javascript:void(0)" class="button b_fr" id="search" data-options="plain:true" onclick="searchStore()">搜索</a>&nbsp;&nbsp;
+			<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30" placeholder="请输入店铺名称" name="searchKeyWord" />
+			店铺状态：<select id="storeStatus" class="inputSelect valid" style="width: 145px; margin-right: 10px;" >
+				<option value="-2">---所有---</option> 
+				<option value="1" selected="selected">开启中</option>
+				<option value="2">关闭中</option>
+				<option value="0">审核中</option>
+				<option value="-1">审核未通过</option>
+			</select>
+		</span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="storeform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/store!store_listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="storedata">
+				<thead>
+					<tr>
+						<th data-options="field:'store_id',checkbox:true,width:100"></th>
+				   	 	<th  data-options="field:'store_name',width:100">店铺名称</th>
+				   	 	<th  data-options="field:'member_name',width:100">会员名称</th>
+				   	 	<th  data-options="field:'store_region',width:100">所在地</th>
+				   	 	<th  data-options="field:'disabled',width:100" formatter="formatDisabled">店铺状态</th>
+				   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+	</div>
+</div>
+
+<div id="divdia"></div>
+
+<script type="text/javascript">
+function formatAction (value,row,index){
+	var val="";
+	if(row.disabled==1){
+		val="<a href='javascript:void;' class='delete' onclick='if(confirm(\"是否禁用店铺？\")){dis("+row.store_id+")}' title='禁用店铺'></a>";		
+	}else if(row.disabled==2){
+		val="<a href='javascript:void;' class='edit' onclick='if(confirm(\"是否还原店铺？\")){revert("+row.store_id+")}' title='还原店铺'></a>";
+	}
+	val+="<a href='javascript:void(0);' class='edit' onclick='append("+row.store_id+",\"uname\")' title='修改'></a>";
+	val+="<a class='jinru_home' title='进入店铺主页' href='${ctx}/home.html?show_c=1&store_id=" + row.store_id + "' target='view_window'></a>";
+	return val;
+}
+function formatDisabled(value,row,index){
+	if(value=="-1")
+		return "未通过审核";
+	if(value=="0")
+		return "待审核";
+	if(value=="1")
+		return "已审核"
+	if(value=="2")
+		return "已关闭";
+}
+function dis(storeId){
+	$("#storeform").ajaxSubmit({
+		url:"${ctx}/b2b2c/admin/store!disStore.do?storeId="+storeId,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				alert(data.message);
+				location.reload();
+			}
+			else{
+				alert(data.message);
+			}
+		}
+	});
+}
+function revert(storeId){
+	$("#storeform").ajaxSubmit({
+		url:"${ctx}/b2b2c/admin/store!useStore.do?storeId="+storeId,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				alert(data.message);
+				location.reload();
+			}
+			else{
+				alert(data.message);
+			}
+		}
+	});
+}
+function opt() {
+	$("#divdia").dialog({
+		title : "选择用户",
+		width : 500,
+		height : 260,
+		closed : false,
+		cache : false,
+		href : "store!opt.do",
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					optMember(savebtn);
+				}
+			}
+		}, {
+			text : '清空',
+			handler : function() {
+				clearForm(map);
+			}
+		} ]
+	});
+}
+
+function optMember(savebtn){
+	var formflag = $("#optForm").form().form('validate');
+	if (formflag) {
+		savebtn.linkbutton("disable");
+		var options = {
+			url :  "store!optMember.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					append(result.id,result.message);
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$("#optForm").ajaxSubmit(options);
+	}
+}
+
+
+function append(id,name) {
+	var map = {}; // Map map = new HashMap();
+	
+	if (!id) {
+		map["href"] = "store!add.do?uname="+name;
+		map["formId"] = "#addForm";
+		map["url"] = "store!save.do?ajax=yes";
+		map["title"] = "新增店铺";
+	} else {
+		map["href"] = "store!edit.do?storeId="+id,
+		map["formId"] = "#editForm";
+		map["url"] = "store!saveEdit.do?ajax=yes";
+		map["title"] = "店铺修改";
+	}
+	
+	
+	map["divDialog"] = "#divdia";
+	map["gridreload"] = "#storedata";
+
+	addDialog(map);
+}
+
+
+//弹出新增店铺窗口
+function registStore() {
+	var map = {};
+	map["href"] = "store!add.do?uname=";
+	map["formId"] = "#addForm";
+	map["url"] = "store!registStore.do?ajax=yes";
+	map["title"] = "新增店铺";
+	
+	map["divDialog"] = "#divdia";
+	map["gridreload"] = "#storedata";
+
+	addDialog(map);
+}
+
+function addDialog(map) {
+	$(map["divDialog"]).show();
+	$(map["divDialog"]).dialog({
+		title : map["title"],
+		width : 800,
+		height : 550,
+		top:10,
+		closed : false,
+		cache : false,
+		href : map["href"],
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				
+				if($("#store_region_id").val() == 0){
+					alert("请完整选择所在地");
+					return false;
+				}
+				var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					submitForm(map,savebtn);
+				}
+			}
+		}, {
+			text : '清空',
+			handler : function() {
+				clearForm(map);
+			}
+		} ]
+	});
+}
+function submitForm(map,savebtn) {
+	var formflag = $(map["formId"]).form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");
+		var options = {
+			url : map["url"],
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					$(map["divDialog"]).dialog('close');
+					$(map["gridreload"]).datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$(map["formId"]).ajaxSubmit(options);
+	}
+}
+
+//清空
+function clearForm(map) {
+	var memberName = $("#member_name").val();
+	var storeId = $("#storeId").val();
+	$(map["formId"]).form('clear');
+	document.getElementById("member_name").value =memberName;
+	document.getElementById("storeId").value =storeId;
+}
+function searchStore(){
+	var storeName = $("#searchKeyword").val();
+	var storeStatus=$("#storeStatus").val();
+	$("#storedata").datagrid('load', {
+		disabled:storeStatus,
+		storeName:storeName,
+		page:1
+   });
+}
+
+/**
+ * 上传附件的回调函数
+ */
+function getPath(path) {
+	$("#fileUploadMsg").html('上传成功！');
+	$("#attachment").val(path);
+}
+
+/**
+ * 上传图片回调函数
+ */
+function getImgPath1(path) {
+	console.info(path);
+	$("#id_img").val(path);
+	$("#img1").attr('src', path);
+	console.info(path);
+	console.info($("#img1").attr('src'));
+}
+
+/**
+ * 上传图片回调函数
+ */
+function getImgPath2(path) {
+	$("#license_img").val(path);
+	$("#img2").attr('src', path);
+}
+ 
+/**
+ * 打开新窗口显示图片
+ */
+function openImageWindow(data)
+{
+	window.open($(data).attr("src"),'_blank','height=650, width=900');
+}
+
+</script>
+<#include '/admin/footer.html' >

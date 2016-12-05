@@ -1,0 +1,341 @@
+<#assign  title="注册" />
+<#include '/common/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/login.css" />
+<script src="${ctx}/themes/b2b2cv2/js/jquery.poshytip.min.js" ></script>
+
+<style>
+.from-line{
+	border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+    height: 50px;
+    transition: all 0.3s ease-out 0s;
+    width: 300px;
+    margin-top: 20px;
+}
+
+.from-line label{
+	border: 0 none;
+    height: 48px;
+	line-height:48px;
+    width: 88px;
+	float:left;
+    font-size: 14px;
+    padding: 0 0 0 10px;
+}
+
+.from-line input{
+	border: 0 none;
+    height: 48px;
+	line-height:48px;
+    width: 198px;
+    font-size: 14px;
+    padding: 0;
+}
+
+.from-line button{
+	background-color: #03a9f4;
+    border: 0 none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    height: 50px;
+    line-height: 50px;
+    width: 300px;
+}
+
+</style>
+
+<div class="index_logo">
+	<a href="${ctx}/index.html"><@image src="${ctx}/themes/b2b2cv2/images/logo.png" class="pngFix" style="width:200px;height:80px;" /></a>
+</div>
+<div class="reg">
+	<div class="reg_left">
+		<h1>注册以后您可以</h1>
+		<ul>
+			<li><i class="reg1"></i><span>购买商品支付订单</span></li>
+			<li><i class="reg2"></i><span>申请开店销售商品</span></li>
+			<li><i class="reg3"></i><span>空间好友推送分享</span></li>
+			<li><i class="reg4"></i><span>收藏商品关注店铺</span></li>
+			<li><i class="reg5"></i><span>商品咨询服务评价</span></li>
+			<li><i class="reg6"></i><span>安全交易诚信无忧</span></li>
+		</ul>
+		<h2>如果您是本站用户</h2>
+		<div class="reg_login">
+			我已经注册过账号，立即<a href="login.html" class="go_register">登录</a>或是<a href="/findpasswordByMobile.html" class="findpassword">手机找回密码？</a>
+		</div>
+		<div  style ="margin-top:15px;">仅限18周岁以上人士购买</div>
+	</div>
+	<div class="reg_right">
+		<h1>
+        <a href="${ctx}/store/register_phone.html" class="selected_phone">手机注册</a>
+        <a href="${ctx}/store/register.html">邮箱注册</a>
+        </h1>
+	<input type="hidden" id="forward" value="${forward!''}"/>
+		<form  method="post" id="register_form" class="validate">
+			<div class="regis_same" style="float:left; width:358px;">
+				<div class="from-line" style="width: 350px;">
+					<input type="text" name="mobile" id="mobile" placeholder="请输入手机号" style="width:180px; padding-left:10px;" class="text tip" title="请输入有效的手机号码">
+					<button style="float: right;width: 150px;height:48px;line-height: 40px; " class="tran get-message pr" type="button" onclick="sendCode()" id="btnSendCode">
+						<a class="tran" href="javascript:;" style="color: white;" >获取短信验证码</a>
+					</button>
+				</div>
+				<div class="from-line">
+					<label>验证码：</label>
+					<input type="text" name="validcode" class="text tip" title="请输入短信接受到的验证码" >
+				</div>
+				<div class="from-line">
+					<label>密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>
+					<input type="password" name="password" id="password" class="text tip" title="6-16位字符，可由英文、数字组成" autocomplete="off" />
+				</div>
+				<div class="from-line">
+					<label>确认密码：</label>
+					<input type="password" name="passwordt" id="passwordt" class="text tip" title="请再次输入您的密码" autocomplete="off" />
+				</div>
+				
+				<dl style="margin:10px 0px 30px 0px">
+        			<dt>&nbsp;</dt>
+        			<dd>
+        				<input type="button" class="regis_ent m_register" value="注册新用户" />
+        				<input type="checkbox" checked="checked" value="agree" fun="checkLicense" name="license" id="license" class="satisfied" />
+        				<span id="reg_agree">阅读并同意<a href="/help-61-62.html" target="_blank" class="agreement" title="阅读并同意">服务协议</a></span>
+        			</dd>
+        		</dl>
+				
+        		<!-- <dl>
+        			<dt>验证码<font color="#FF0000">*</font></dt>
+        			<dd style="min-height:54px;" id="verifyCodebox">
+        				<input type="text" id="iptlogin" name="validcode" isrequired="true" class="regis_small inputstyle _x_ipt" size="8" autocomplete="off" />
+	        			<img id="LoginimgVerifyCode" src="${ctx}/validcode.do?vtype=memberreg" alt="会员登录验证码" />
+	        			<a href="javascript:;">看不清楚？换个图片</a>
+        			</dd>
+        		</dl>
+        		<dl style="margin:0px 0px 30px 0px">
+        			<dt>&nbsp;</dt>
+        			<dd>
+        				<input type="button" class="regis_ent m_register" value="注册新用户" />
+        				<input type="checkbox" checked="checked" value="agree" fun="checkLicense" name="license" id="license" class="satisfied" />
+        				<span id="reg_agree">阅读并同意<a href="javascript:void(0);" target="_blank" class="agreement" title="阅读并同意">服务协议</a></span>
+        			</dd>
+        		</dl> -->
+			</div>
+		</form>
+	</div>
+</div>
+
+
+
+<!--正文结束-->
+
+<script type="text/javascript">
+$(function(){
+	
+	$("#btnSendCode").removeAttr("disabled");//启用按钮
+	
+	$('.tip').poshytip({
+		className: 'tip-yellowsimple',
+		showOn: 'focus',
+		alignTo: 'target',
+		alignX: 'center',
+		alignY: 'top',
+		offsetX: 0,
+		offsetY: 5,
+		allowTipHover: false
+	});
+ 	$("#verifyCodebox a").click(function(){
+		$("#verifyCodebox img").attr("src","${ctx}/validcode.do?vtype=memberreg&r="+new Date().getTime());
+	});
+ 	var options = {
+			url : "${ctx}/api/shop/member!regMobile.do?ajax=yes" ,
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+ 				if(data.result==1){
+	 				location.href=ctx+"/index.html";
+	 			}else{
+	 				$.alert(data.message);
+	 				$.Loading.hide();
+		 		} 
+			},
+			error : function(e) {
+				$.alert("出现错误 ，请重试");
+				$.Loading.hide();
+			}
+	};
+	//点击注册 	
+	$(".m_register").click(function(){
+		if(!checkpwd())
+			return;
+		if("false"!=$(this).attr("validate")){
+			$.Loading.show("正在提交您的信息，请稍候...");
+			$('#register_form').ajaxSubmit(options);	
+		}
+	})
+});
+ 
+//检测用户协议
+function checkLicense(){
+	if($("#license").is(':checked')){
+		return true;
+	}else{
+		return "请阅读用户协议并同意！";
+	}
+}
+
+var InterValObj; //timer变量，控制时间
+var count = 60; //间隔函数，1秒执行
+var curCount;//当前剩余秒数
+
+
+//timer处理函数
+function SetRemainTime() {
+    if (curCount == 0) {                
+        window.clearInterval(InterValObj);//停止计时器
+        $("#btnSendCode").removeAttr("disabled");//启用按钮
+        $(".regis_same .from-line button").css("background-color","#03a9f4");
+        $("#btnSendCode a").html("重新发送验证码");
+    }
+    else {
+        curCount--;
+        $("#btnSendCode a").html("已发送,请在" + curCount + "秒内输入验证码");
+    }
+}
+
+//发送验证码
+function sendCode(){
+	$.ajax({
+		url:ctx+"/api/shop/member!sendCode.do",
+		type:"POST",
+		data:"mobile=" + $("#mobile").val(),
+		dataType:"json",
+		success:function(data){
+			if($("#mobile").val()==""){
+				alert("请输入手机号");
+				$("#mobile").focus(); 
+				return false;
+			}
+			
+			if (!$("#mobile").val().match(/^((1[0-9]{2})+\d{8})$/)) { 
+				alert("手机号码格式不正确！"); 
+				$("#mobile").focus(); 
+				return false; 
+			} 
+			
+			if(data.result==0){
+				//$("#btnSendCode").removeAttr("disabled");//启用按钮
+				alert(data.message);
+				$("#btnSendCode a").html("重新发送验证码");
+			}else{
+				 curCount = count;
+			     $("#btnSendCode").attr("disabled", "true");
+			     $("#btnSendCode a").html("已发送,请在" + curCount + "秒内输入验证码");
+			     InterValObj = window.setInterval(SetRemainTime, 1000);  //启动计时器，1秒执行一次
+			     $(".form_param .from-line button").css("background-color","#9D9D9D");
+			}
+		},
+		error:function(){
+			alert("出现错误");
+		}
+	});	
+}
+
+function formateMobile(){
+	
+	var mobile = $("#mobile").val();
+	if(mobile==""){
+		alert("请输入手机号");
+		return false;
+	}
+	
+	if(/^0?1[3|4|5|8][0-9]\d{8}$/.test(mobile)){
+	}else{
+		alert("手机号错误");
+		return false;
+	}
+	///^0?(13[0-9]|15[012356789]|18[0236789]|14[57]|170)[0-9]{8}$/
+		
+	return true;
+}
+
+//检测用户名
+/* function checkUserName(value,callback){
+	var input = $("#username");
+	var username  = input.val();
+	var patrn=/^([0-9A-Za-z一-龥]|-|_){4,20}$/;
+	if (!patrn.exec(username)) return "用户名格式不正确！"  
+	$.ajax({
+		url:"${ctx}/api/shop/member!checkname.do?ajax=yes",
+		type:"POST",
+		data:"username=" + username,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"重复的用户名！");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});	
+	return true;
+} */
+
+//检测邮箱
+/* function checkEmail(value,callback){
+	var input = $("#reg_email");
+	var email  = input.val();
+	if($.trim(email)==''){
+		return "注册邮箱不能为空！";
+	}
+	var reg = /^([a-z0-9+_]|\-|\.|\-)+@([\w|\-]+\.)+[a-z]{2,4}$/i; 
+	if(!reg.test(email)){
+		return "注册邮箱格式不正确！";
+	}
+	$.ajax({
+		url:"${ctx}/api/shop/member!checkemail.do?ajax=yes",
+		type:"POST",
+		data:"email="+email,
+		dataType:"json",
+		success:function(json){
+			if(json.result==0){
+				callback(false,"注册邮箱重复！");
+			}else{
+				callback(true,"");
+			}
+		}		
+	});	
+	return true;
+} */
+
+/* function isPasswd(s){  
+	var patrn=/^(\w){6,16}$/;  
+	if (!patrn.exec(s)) return "密码格式不正确！"  
+	return true  
+} */
+
+/*
+ * add by linyang 加入密码验证
+ */
+function checkpwd(){
+	var patrn=/^(\w){6,16}$/;  
+	if (!patrn.exec($("#password").val()))
+    {
+	  alert("密码格式不正确，长度为6-16位");
+	  return false;
+    }
+	var partem =/^[0-9]*$/;
+	if(partem.exec($("#password").val())) {
+		alert("密码不能全为数字！");
+		return false;
+	}
+	if($("#passwordt").val()==$("#password").val()){
+		return true;
+	}
+	else{ 
+		alert( "密码不一致");
+		return false;
+	}
+	
+}
+</script>
+<#include '/common/footer.html' />

@@ -1,0 +1,13 @@
+<#-- 创建订单价格标签 --> <#assign orderPiceTag= newTag("orderPriceTag") >
+<#--通过订单价标签获取订单价格 --> <#assign orderPrice =
+orderPiceTag("{'onlyselected':'yes'}") >
+<div style="text-align: left; padding-left: 10px;">
+	<#if orderPrice.promotionDiscount != 0>
+	<div style="float: left; ">
+		已优惠<em>${orderPrice.promotionDiscount?string("currency")}</em></span>
+	</div>
+	</#if>
+	<div style="float: right;">
+		商品总价:<em>${orderPrice.goodsPrice?string("currency")}</em>
+	</div>
+</div>

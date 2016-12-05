@@ -1,0 +1,52 @@
+<#assign  title="核对订单信息" />
+<#include 'common/header.html'/>
+<#assign memberIsLoginTag=newTag("memberLoginCheckTag")>
+<#assign isLogin=memberIsLoginTag("'login_url':'/store/login.html'")>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/cart.css" />
+<script  src="${ctx}/themes/b2b2cv2/js/storecheckout.js"  ></script>
+<script type="text/javascript">
+$.ajaxSetup ({ cache: false });
+</script>
+<!-- 购物流程 -->
+<div class="flow_path">
+	<div class="cart_logo">
+		<a href="${ctx}/index.html"><img src="${ctx}/adminthemes/new/images/logo.png" class="pngFix" style="width:240px;height:100px;"></a>
+	</div>
+	<div class="flow_pathlist">
+		<ul>
+			<li class="">
+				<i class="process1"></i>
+				<span></span>
+				<p>我的购物车</p>
+				<strong></strong>
+			</li>
+			<li class="selected">
+				<i class="process2"></i>
+				<span></span>
+				<p>填写核对信息单</p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process3"></i>
+				<span></span>
+				<p>成功提交订单</p>
+				<strong></strong>
+			</li>
+		</ul>
+	</div>
+</div>
+<div id="main">
+
+	<!--上不填写信息单、购买流程结束-->
+	<#include 'checkout/storecheckout.html'/>
+</div>
+<script>
+	$(function(){
+		var addressred = $(".address .selected").attr("style");
+		if(addressred=="display: none;"){
+			$(".address").addClass("relborder");
+		}
+	})
+</script>
+<#include 'common/footer.html'/>

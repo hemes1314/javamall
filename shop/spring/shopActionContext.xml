@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+
+	<bean id="brandAction" class="com.enation.app.shop.core.action.backend.BrandAction" scope="prototype"/>
+	<bean id="freeOfferAction" class="com.enation.app.shop.core.action.backend.FreeOfferAction" scope="prototype"/>
+	<bean id="freeOfferCategoryAction" class="com.enation.app.shop.core.action.backend.FreeOfferCategoryAction" scope="prototype"/>
+	<bean id="statisticsAction" class="com.enation.app.shop.core.action.backend.StatisticsAction" scope="prototype"/>
+	<bean id="rankAction" class="com.enation.app.shop.core.action.backend.RankAction" scope="prototype"/>
+	<bean id="catAction" class="com.enation.app.shop.core.action.backend.CatAction" scope="prototype"/>
+	<bean id="selectorAction" class="com.enation.app.shop.core.action.backend.SelectorAction" scope="prototype"/>
+	<bean id="promotionAction" class="com.enation.app.shop.core.action.backend.PromotionAction" scope="prototype"/>	
+	<bean id="deliveryAction" class="com.enation.app.shop.core.action.backend.DeliveryAction" scope="prototype"/>
+	<bean id="paymentAction" class="com.enation.app.shop.core.action.backend.PaymentAction" scope="prototype"/>
+	<bean id="articleAction" class="com.enation.app.shop.core.action.backend.ArticleAction" scope="prototype"/> 
+	<bean id="goodsSpecAction" class="com.enation.app.shop.core.action.backend.GoodsSpecAction" scope="prototype"/>
+	<bean id="orderPrintAction" class="com.enation.app.shop.core.action.backend.OrderPrintAction" scope="prototype"/>
+	<bean id="orderReportAction" class="com.enation.app.shop.core.action.backend.OrderReportAction" scope="prototype"/>
+	<bean id="printTmplAction" class="com.enation.app.shop.core.action.backend.PrintTmplAction" scope="prototype"/>
+	<bean id="goodsStoreAction" class="com.enation.app.shop.core.action.backend.GoodsStoreAction" scope="prototype"/>
+	<bean id="typeAction" class="com.enation.app.shop.core.action.backend.TypeAction" scope="prototype"/>
+
+	<!-- 仓库监控 -->
+ 	<bean id="depotMonitorAction" class="com.enation.app.shop.core.action.backend.DepotMonitorAction" scope="prototype"/>
+ 	<bean id="warnTaskAction" class="com.enation.app.shop.core.action.backend.WarnTaskAction" scope="prototype"></bean>
+ 	<bean id="commentsAction" class="com.enation.app.shop.core.action.backend.CommentsAction" scope="prototype" />
+ 	<!-- 约沫 -->
+ 	<bean id="yuemoAction" class="com.enation.app.shop.core.action.backend.YuemoAction" scope="prototype"/>
+ 	<!-- 众筹 -->
+ 	<bean id="cfAction" class="com.enation.app.shop.core.action.backend.CfAction" scope="prototype"/>
+ 	<!-- 拍卖-->
+ 	<bean id="auctionAction" class="com.enation.app.shop.core.action.backend.AuctionAction" scope="prototype"/>
+ 	<!-- 品酒师 -->
+ 	<bean id="sommelierAction" class="com.enation.app.shop.core.action.backend.SommelierAction" scope="prototype"/>
+ 	<!-- 虚拟商品 -->
+ 	<bean id="virtualProductAction" class="com.enation.app.shop.core.action.backend.VirtualProductAction" scope="prototype"/>
+ 	<!-- 一键选酒 -->
+ 	<bean id="keySelectWinesAction" class="com.enation.app.shop.core.action.backend.KeySelectWinesAction" scope="prototype"/>
+</beans>

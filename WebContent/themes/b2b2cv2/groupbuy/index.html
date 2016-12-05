@@ -1,0 +1,96 @@
+<#include '/common/header.html' />
+<#include '/common/reception_header.html'/>
+<link href="${ctx}/themes/b2b2cv2/groupbuy/css/style.css" rel="stylesheet" type="text/css" />
+<#assign groupBuyListTag=newTag("groupBuyListTag")> 
+<#assign gbPage=groupBuyListTag('{"pageSize":12}')>
+<script type="text/javascript">
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+</script>
+
+<body onload="MM_preloadImages('${ctx}/themes/b2b2cv2/groupbuy/images/sgpdy_06.jpg','${ctx}/themes/b2b2cv2/groupbuy/images/yush_11.jpg','${ctx}/themes/b2b2cv2/groupbuy/images/yush_20.jpg','${ctx}/themes/b2b2cv2/groupbuy/images/yush_24.jpg','${ctx}/themes/b2b2cv2/groupbuy/images/yush_27.jpg')" >
+<div class="main">
+
+<!-- 		 广告位 -->
+		<div class="headersy"><img src="${ctx}/themes/b2b2cv2/groupbuy/images/sgpd_07.jpg" width="1188" height="399" /></div>
+		<div class="headerwy">
+		<div class="jrsx">
+			<ul id="sort_type">
+				<li><a href="javascript:void(0)"  onclick="set_sort_type('0')" class="current"  ><img src="${ctx}/themes/b2b2cv2/groupbuy/images/sgpd_06.jpg" width="290" height="40" /></a></li>
+                 <li><a href="javascript:void(0)"  onclick="set_sort_type('1')" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image12','','${ctx}/themes/b2b2cv2/groupbuy/images/yush_11.jpg',1)"/><img src="${ctx}/themes/b2b2cv2/groupbuy/images/sgpd_06.jpg" width="290" height="40" id="Image10" /></a></li>
+            </ul></div>
+		</div>
+<div class="mainbody">
+ <#if gbPage??>
+<#list gbPage.page.result as gb>
+<div class="mainbodyyy">
+	<div class="ljqg">
+        		<ul>
+                <li style="margin-top:14px"><font size="4px">${gb.gb_name!''}</font></li>
+                <li style="margin-bottom:16px"><font size="4px" color="#CCCCCC"></font></li>
+                <li style="margin-bottom:20px"><font size="3px" color="#060001">红色水果香，闻起来有烤面包和</br>咖啡的香味</font></li>
+                <li><div class="divLine"><!----></div></li>
+                <li style="margin-top:14px"><font size="5px" color="#e10414">￥ ${gb.price}</font></li>
+                <li style="margin-bottom:18px"><font size="3px" color="#999999"><s>￥${gb.original_price}</s></font></li>
+                <a target="_blank" href="${ctx}/goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}"> 
+				<img src="${ctx}/themes/b2b2cv2/groupbuy/images/sgpd_10.jpg" width="258" height="35" /></a></li>
+                <li style="margin-top:16px"><div class="frbodr">
+                                       <span class="buyer">剩余：3天20时45分12秒</span>
+                                       <span class="mainbtn">已售：${gb.buy_num+gb.visual_num}</span>
+                                   </div></li>
+                </ul>
+      </div>
+   
+        <div class="zhutu">	<a target="_blank" href="${ctx}/goods.html?goodsid=${gb.goods_id}&act_id=${gb.act_id}"> <@image border="0" src="${gb.img_url!''}"  alt="${gb.gb_name!''}"  width="600" height="300"/></a></div>
+        <div class="xianliang"><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image12','','${ctx}/themes/b2b2cv2/groupbuy/images/yush_11.jpg',1)"><img src="${ctx}/themes/b2b2cv2/groupbuy/images/yushy_11.jpg" width="280" height="300" id="Image12" /></a></div>
+</div>
+</#list>
+	</#if>
+</div>
+<div id="groupbuyGoods">
+	</div>
+	<input type="hidden" name="catid" value=""/>
+	<input type="hidden" name="minprice" value=""/>
+	<input type="hidden" name="maxprice" value=""/>
+	<input type="hidden" name="sort_key" value=""/>
+	<input type="hidden" name="sort_type" value=""/>
+	<input type="hidden" name="area_id" value=""/>
+</div>
+<script type="text/javascript">
+
+function set_sort_type(value){
+	$("input[name='sort_type']").val(value);
+
+	search();
+	$("#sort_type li a").removeClass("current");
+	$("#sort_type li a[type='"+value+"']").addClass("current");
+// 	$('#sort_type li').removeClass('current');    
+// 	$(this).addClass('current');
+}
+function search(){
+
+	var sort_type=$("input[name='sort_type']").val();
+	location.href="${ctx}/groupbuy/index.html?sort_type="+sort_type;
+}
+</script>
+<!-----footer------>
+<#include '/common/footer.html'/>

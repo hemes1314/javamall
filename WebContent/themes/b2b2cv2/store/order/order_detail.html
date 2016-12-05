@@ -1,0 +1,497 @@
+<#include '/store/store_header.html' />
+
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("storeOrderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<!--  订单状态 -->
+<#assign orderstatus=
+"com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<!--创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<!--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList =
+orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 创建“发票标签” -->
+<#assign receiptTag = newTag("receiptTag")>
+<!-- 调用发票标签 -->
+<#assign orderreceipt =
+receiptTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 获得商品META（快递、运费）信息 -->
+<#assign orderMetaTag = newTag("orderMetaTag")>
+<!-- 调用商品META（快递、运费）信息 -->
+<#assign orderMeta =
+orderMetaTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<!-- 获取订单店铺信息 -->
+<#assign storeDetailTag=newTag("myStoreDetailTag")/> <#assign
+storeDetail=storeDetailTag("{'type':'order','store_id':'${orderDetail.store_id}'}")>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color: #999;">您的位置：</span> <span>></span> 交易管理<span>></span>订单详细
+		</div>
+		<input type="hidden" value="${order_state!''}" class="left_selected">
+		<div class="store_right_main">
+			<div class="order_detail">
+				<div class="order_intro">
+					<input type="hidden" value="${orderDetail.order_id}" id="orderId" />
+					<h1>订单信息</h1>
+					<div class="detail_list">
+						<dl>
+							<dt>收货地址：</dt>
+							<dd>${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}</dd>
+						</dl>
+						<dl>
+							<dt>收货人:</dt>
+							<dd>${orderDetail.ship_name!''}</dd>
+						</dl>
+						<dl>
+							<dt>邮政编码：</dt>
+							<dd>${orderDetail.ship_zip!''}</dd>
+						</dl>
+						<dl>
+							<dt>联系电话：</dt>
+							<dd><#if orderDetail.ship_mobile?exists &&
+								orderDetail.ship_mobile != ''> ${orderDetail.ship_mobile!''}
+								<#else> <#if orderDetail.ship_tel?exists && orderDetail.ship_tel
+								!= ''> ${orderDetail.ship_tel!''} </#if> </#if></dd>
+						</dl>
+						<dl class="online">
+							<dt>订单编号：</dt>
+							<dd>${orderDetail.sn}</dd>
+						</dl>
+						<dl>
+							<dt>付款方式：</dt>
+							<dd><#if orderDetail.parentOrder??>
+								${orderDetail.parentOrder.paymentMethod!''} </#if></dd>
+						</dl>
+						<dl>
+							<dt>下单时间：</dt>
+							<dd><@dateformat time="${orderDetail.create_time?c}"
+								pattern="yyyy-MM-dd HH:mm"/></dd>
+						</dl>
+						<dl>
+							<dt>订单附言：</dt>
+							<dd>${orderDetail.remark!''}</dd>
+						</dl>
+						<dl>
+							<dt>送货时间：</dt>
+							<dd>${orderDetail.ship_day!''}&nbsp;${orderDetail.ship_time!''}</dd>
+						</dl>
+						<dl>
+							<dt>发票抬头：</dt>
+							<dd>${orderreceipt.title!'无'}</dd>
+						</dl>
+						<dl>
+							<dt>发票内容：</dt>
+							<dd>${orderreceipt.content!'无'}</dd>
+						</dl>
+
+						 <dl class="online">
+                            <dt>商品总价：</dt>
+                            <dd>${orderDetail.goods_amount?string.currency!''}</dd>
+                        </dl>
+                        <dl>
+                            <dt>促销优惠:</dt>
+                            <dd>${(orderDetail.discount!0)?string.currency!''}</dd>
+                        </dl>
+                        <dl class="m_order_middle">
+                            <dt>订单金额：</dt>
+                            <dd>${orderDetail.order_amount?string.currency!''}</dd>
+                        </dl>
+                        <dl class="">
+                            <dt>使用红包：</dt>
+                            <dd>${orderDetail.bonus_pay?string.currency!''}</dd>
+                        </dl>
+                        <dl class="">
+                            <dt>使用余额：</dt>
+                            <dd>${orderDetail.advance_pay?string.currency!''}</dd>
+                        </dl>
+                        <dl class="">
+                            <dt>运费金额：</dt>
+                            <dd>${orderDetail.shipping_amount?string.currency!''}</dd>
+                        </dl>
+                        <dl class="m_order_big">
+                            <dt>应付金额：</dt>
+                            <dd>${orderDetail.need_pay_money?string.currency!''}</dd>
+                        </dl>
+					</div>
+				</div>
+				<div class="intro_staus">
+					<#if !orderDetail.isCod &&
+					orderDetail.pay_status==orderState.PAY_CONFIRM &&
+					orderDetail.ship_status==orderState.SHIP_NO || orderDetail.isCod &&
+					orderDetail.status==orderState.ORDER_NOT_PAY &&
+					orderDetail.ship_status==orderState.SHIP_NO> <#include
+					'ship_info.html'/> <#else>
+					<div class="orderdetail">
+						<i class="<#if orderDetail.status==8>order_no<#else> order_ok</#if>"></i>
+							订单状态：
+						<#if orderDetail.status == 13>
+							申请退款
+						<#elseif orderDetail.status == 12>
+							用户拒收
+						<#elseif orderDetail.status == -15>
+							退款被拒绝
+						<#elseif orderDetail.status == 16>
+							已拒收
+						<#elseif orderDetail.status == 17>
+							退款中
+						<#elseif orderDetail.status == -12>
+							拒收被拒绝
+						<#elseif orderDetail.status == 18>
+							退货申请中
+						<#elseif orderDetail.isCod && orderDetail.status ==
+						orderState.ORDER_COMPLETE &&
+						orderDetail.pay_status==orderState.PAY_NO> <@orderstatus
+						status="${orderState.ORDER_ROG}" type="order" /> <#else>
+						<@orderstatus status="${orderDetail.status}" type="order" />
+						</#if>
+					</div>
+					<ul>
+						<!--li>1、订单附言：${orderDetail.remark!''}</li>
+               	<li>1、送货时间：${orderDetail.ship_day!''}&nbsp;${orderDetail.ship_time!''}</li>
+               	<li>2、发票抬头：${orderreceipt.title!'无'}</li>
+               	<li>3、发票内容：${orderreceipt.content!'无'}</li-->
+					</ul>
+					</#if>
+
+					<div class="order_help">
+						<#if orderDetail.status==orderState.ORDER_NOT_CONFIRM> <a
+							class="order-btn3" href="javascript:void(0);" name="operation"
+							action="confirm">确认订单</a> <a class="order-btn3"
+							href="javascript:void(0);" name="editOrderInfo">修改收件人信息</a> <a
+							class="order-btn3" href="javascript:void(0);"
+							name="editOrderPrice">调整价格</a> </#if>
+					</div>
+				</div>
+			</div>
+			<!-- 流程图 -->
+			<div class="flow ">
+				<#if (orderDetail.payment_id)?? && (orderDetail.payment_id == 3)>
+				<div class="statusway${orderDetail.status} arrive_order"></div>
+				<#else>
+				<div class="status${orderDetail.status} no_arrive_order">s</div>
+				</#if>
+			</div>
+			<!-- 商品列表 -->
+			<div class="detail_goodslist">
+				<table cellpadding="0" cellspacing="0"
+					style="text-align: center;">
+					<thead>
+						<tr>
+							<th colspan="2">商品名称</th>
+							<th>商品编码</th>
+							<th>单价(元)</th>
+							<th>数量</th>
+							<th>小计</th>
+							<th>促销分摊</th>
+							<th>红包分摊</th>
+							<th>优惠券分摊</th>
+							<th>佣金</th>
+							<th>佣金比例</th>
+							<th>状态</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><#list orderItemList as item>
+						<tr style="border-bottom: 1px solid #e7e7e7;">
+							<td width="100" align="center"><a target="_blank"
+								href="${ctx}/goods-${item.goods_id}.html"> <img height="50"
+									src="${item.image!''}" style="cursor: pointer;" />
+							</a></td>
+							<td><a target="_blank"
+								href="${ctx}/goods-${item.goods_id}.html">${item.name}<#if
+									item.other?? >(${item.other!''})</#if></a></td>
+							<td width="80">${item.sn!''}</td>
+							<td width="80">${item.price?string.currency}</td>
+							<td width="40">${item.num}</td>
+							<td width="80">${(item.num * item.price)?string.currency}</td>
+							<td width="80">${item.promotion_proportion?string.currency}</td>
+							<td width="80">
+								${item.red_packets_proportion?string.currency}</td>
+							<td width="80">${item.coupon_proportion?string.currency}</td>
+							<td width="80">${item.commission!'-'}</td>
+							<td width="80">${item.commission_rate!'-'}</td>
+							<#if item_index == 0>
+								<td  width="80" rowspan="4" style="border-left: 1px solid #e7e7e7;">
+									<#if orderDetail.status  == 13>
+										申请退款
+			       				   	<#elseif  orderDetail.status == 12>
+										用户拒收
+									<#elseif  orderDetail.status == -15>
+										退款被拒绝
+								    <#elseif  orderDetail.status == 16>
+										已拒收
+								    <#elseif  orderDetail.status == 17>
+										退款中
+								    <#elseif  orderDetail.status == -12>
+										拒收被拒绝
+			       					<#else>
+			       						<@orderstatus status="${orderDetail.status}" type="order" />
+									</#if>
+								</td>
+							</#if>
+						</tr>
+						</#list>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	//订单操作
+	$("a[name='operation']").click(function(){
+		var action= $(this).attr("action");
+		var orderId=$("#orderId").val();
+		var url="";
+		if(action=="pay"){
+			showPay();
+			return false;
+		}else{
+			url="${ctx}/api/store/storeOrder!"+action+".do?orderId="+orderId
+		}
+		$.ajax({
+	    	type:"POST",
+	    	url:url ,
+	        dataType: "json",
+	        success: function(data){
+	        		alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+	        },error:function(e){
+				alert("出现错误请重试");
+	        }
+	    });
+	});
+	//修改订单信息
+	$("a[name='editOrderInfo']").click(function(){
+			dialog = $.dialog({
+				title : "修改收件人信息",
+				width : 475,
+				height : 312,
+				lock : true,
+				min : false,
+				max : false
+			});
+			$.ajax({
+				url : "orderInfo.html?ordersn="+${ordersn},
+				success : function(html) {
+					dialog.content(html);
+					dialog.button([ {
+						name : '修改',
+						callback : function() {
+							ok();
+							return false;
+						}
+					}]);
+				},
+				error : function() {
+					$.alert("出现错误，请重试");
+				},
+				cache : false
+			});
+	});
+	$("a[name='editOrderPrice']").click(function(){
+		dialog = $.dialog({
+			title : "调整价格",
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "orderPriceInfo.html?ordersn="+${ordersn},
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '修改',
+					callback : function() {
+						editPrice();
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				$.alert("出现错误，请重试");
+			},
+			cache : false
+		});
+	});
+	$("input[name='ship']").click(function(){
+		$("input[name='ship']").attr({"disabled":"disabled"});
+		var logi_id=$(this).attr("logi_id");
+		var logi_name=$(this).attr("logi_name");
+		var shipNo=$("input[name='shipNo'][logi_id="+logi_id+"]").val();
+		var reg = /[\u4E00-\u9FA5\uF900-\uFA2D]/;
+
+		if(shipNo==""){
+			$.Loading.message("请填写快递单号");
+			$("input[name='ship']").removeAttr("disabled");
+			return false;
+		}
+		var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+		if(reg.test(shipNo) || pattern.test(shipNo)){
+			$.Loading.message("请填写正确的快递单号");
+			$("input[name='ship']").removeAttr("disabled");
+			return false;
+		}
+		/* if(shipNo.length > 15){
+			$.Loading.message("输入位数过长，请重新输入");
+			$("input[name='ship']").removeAttr("disabled");
+			return false;
+		} */
+		 $.ajax({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/store/storeOrder!ship.do",
+			data:{"order_id":${orderDetail.order_id},"shipNos":shipNo,"logi_id":logi_id,"logi_name":logi_name},
+			success:function(json){
+				$.Loading.message(json.message);
+				if(json.result==1){
+					location.reload();
+				}
+			},
+			error:function(){
+				$.Loading.message("出现意外错误");
+				$("input[name='ship']").removeAttr("disabled");
+			}
+		});
+	});
+})
+//提交修改收件人信息
+function ok(){
+	//判断手机格式
+	if($("#ship_mobile").val()!=""){
+		 var tel = $("#ship_mobile").val();
+		 var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;
+		 if(reg.test(tel)==false){
+			 $.Loading.message("手机格式错误");
+			 return false;
+		 }
+	}
+	//判断真是姓名
+	if($("#ship_name").val()==""){
+		$.Loading.message("姓名不能为空");
+		return false;
+	}
+	if(isNaN($("#ship_zip").val())!==false){
+		$.Loading.message("邮编必须为纯数字");
+		return false;
+	}
+	var options = {
+			url : "${ctx}/api/store/storeOrder!saveConsigee.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+	$("#orderInfo").ajaxSubmit(options);
+}
+function editPrice(){
+	var options = {
+			url : "${ctx}/api/store/storeOrder!savePrice.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+	$("#orderPriceForm").ajaxSubmit(options);
+}
+function pay(){
+	var options = {
+			url : "${ctx}/api/store/storeOrder!pay.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+	$("#payForm").ajaxSubmit(options);
+}
+function showRogInfo(logino,logicode){
+ 	$("#store_content").load('${ctx}/api/shop/order!orderKuaidi.do?ajax=yes&logino='+logino+'&code='+logicode,function(){});
+}
+function showPay(){
+	dialog = $.dialog({
+		title : "订单付款",
+		width : 475,
+		height : 312,
+		lock : true,
+		min : false,
+		max : false
+	});
+	$.ajax({
+		url : "pay.html?ordersn="+${ordersn},
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([ {
+				name : '结算',
+				callback : function() {
+					pay();
+					return false;
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("出现错误，请重试");
+		},
+		cache : false
+	});
+}
+//打印发货单
+function printShip(){
+	$.ajax({
+		url:"${ctx}/b2b2c/admin/storeOrderPrint!shipScript.do?order_id=${orderDetail.order_id}",
+		success:function(json){
+			 LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM') );
+			 LODOP.PRINT_INIT("发货单打印");
+			 LODOP.SET_PRINT_PAGESIZE(1,2400,1400,"");
+			 eval(json);
+			 LODOP.PRINT();
+		},error : function(e) {
+	 		alert('出现错误，请重试');
+		}
+	});
+}
+</script>
+<script>
+		$(function(){
+			var leftselect = $(".left_selected").val();
+			if(leftselect=="wait_ship"){
+				selectMenu(1);
+			}else{
+				selectMenu(0);
+			}
+		})
+	</script>
+<#include '/common/footer.html'/>

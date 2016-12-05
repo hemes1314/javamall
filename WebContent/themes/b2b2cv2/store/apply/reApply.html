@@ -1,0 +1,247 @@
+<#include '/store/store_header.html' />
+<!-- 调用地区标签 -->
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/uploadify.css" />
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min.js"></script>
+
+<div class="store_main">
+	<div class="open_store">
+		<div class="open_store_form">
+			<form id="applyForm" class="validate">
+				<div id="step1">
+				<input type="hidden" name="store_id" value="${myStoreDetail.store_id}" />
+				<dl>
+					 <dt class="required">
+					 	<em class="pngFix"></em>店铺名称：
+					 </dt>
+					 <dd>
+			            <p><input type="text" name="store_name"  class="text store_name_title"   value="${myStoreDetail.store_name}" /></p>
+			            <p class="hint">请控制在20个字符以内</p>
+			            
+		          	</dd>
+				</dl>
+		        <dl>
+		          	<dt class="required"><em class="pngFix"></em>所在地区：</dt>
+		        		<dd><@regionSelect province_name='store_province' city_name='store_city' region_name='store_region' province_id='${myStoreDetail.store_provinceid}' city_id='${myStoreDetail.store_cityid}' region_id='${myStoreDetail.store_regionid}'/></dd>
+		        </dl>
+		        <dl>
+		        		<dt class="required"><em class="pngFix"></em>详细地址：</dt>
+		        		<dd><input type="text" name="attr" class="text w400" isrequired="true" value="${myStoreDetail.attr}"/></dd>
+		        </dl>
+		        <dl>
+		        		<dt class="required"><em class="pngFix"></em>邮编：</dt>
+		        		<dd><input type="text" name="zip" class="text w200" id="store_zip" isrequired="true" dataType="post_code" value="${myStoreDetail.zip}" /></dd>
+		        </dl>
+		        <dl>
+		        		<dt class="required"><em class="pngFix"></em>联系方式：</dt>
+		        		<dd><input type="text" name="tel" class="text w200" id="cellphone" isrequired="true" dataType="mobile" value="${myStoreDetail.tel}"/></dd>
+		        </dl>
+		        <dl>
+		        		<dt class="required"><em class="pngFix"></em>身份证号：</dt>
+		        		<dd><input type="text" name="id_number" class="text w200" id="id_number"  value="${myStoreDetail.id_number}"/></dd>
+		        </dl>
+		        <dl>
+		        	<dt>上传身份证照片:<span id="id_imgText"></span></dt>
+		        	<dd>
+		        		<div class="apply_id_img" status="id_img" style="cursor: pointer;" onclick="openImageWindow(this)">
+		        			<#if myStoreDetail.id_img??>
+		        				<@image src="${myStoreDetail.id_img}" width="100" height="100"/>
+		        			</#if>
+		        		</div>
+		        		<input type="file" id="id_img" status="id_img" />
+		        		&nbsp;&nbsp;<span class="applyPro">支持格式jpg,jpeg,png,gif，请保证图片清晰且文件大小不建议超过4M。</span>
+		        		<input type="hidden" name="store_id_img" id="id_imgImg" value="${myStoreDetail.id_img!''}"/>
+		        		<input type="hidden" name="store_name_auth" <#if myStoreDetail??>value="2" <#else> value="0"</#if> id="id_imgStatus">
+		        	</dd>
+		        </dl>
+		        <dl>
+		        	<dt>上传执照照片:<span id="license_imgText"></span></dt>
+		        	<dd>
+		        		<div class="apply_license_img" status="license_img" style="cursor: pointer;" onclick="openImageWindow(this)">
+		        			<#if myStoreDetail.license_img??>
+		        				<@image src="${myStoreDetail.license_img}" width="100" height="100"/>
+		        			</#if>
+		        		</div>
+		        		<input type="file" id="license_img" status="license_img"/>
+		        		&nbsp;&nbsp;<span class="applyPro">支持格式jpg,jpeg,png,gif，请保证图片清晰且文件大小不建议超过4M。</span>
+		        		<input type="hidden" name="store_license_img" id="license_imgImg" value="${myStoreDetail.license_img!''}"/>
+		        		<input type="hidden" name="store_store_auth" <#if myStoreDetail??> value="2"<#else> value="0"</#if> id="license_imgStatus"/>
+		        	</dd>
+		        </dl>
+		        </div>
+				<dl>
+					<dt class="required"><em class="pngFix"></em>银行开户名：</dt>
+					<dd><input type="text" name="bank_account_name" class="text w200" value="${myStoreDetail.bank_account_name}"  id="bank_account_name" isrequired="true" /></dd>
+				</dl>
+				<dl>
+					<dt class="required"><em class="pngFix"></em>公司银行账号：</dt>
+					<dd><input type="text" name="bank_account_number" class="text w200" value="${myStoreDetail.bank_account_number}" id="bank_account_number" isrequired="true" /></dd>
+				</dl>
+				<dl>
+					<dt class="required"><em class="pngFix"></em>开户银行支行名称：</dt>
+					<dd><input type="text" name="bank_name" class="text w200" value="${myStoreDetail.bank_name}" id="bank_name" isrequired="true" /></dd>
+				</dl>
+				<dl>
+					<dt class="required"><em class="pngFix"></em>支行联行号：</dt>
+					<dd><input type="text" name="bank_code" class="text w200" value="${myStoreDetail.bank_code}" id="bank_code" isrequired="true" /></dd>
+				</dl>
+				<dl>
+					<dt class="required"><em class="pngFix"></em>开户银行地址：</dt>
+					<dd>
+						<@regionSelect province_id='${myStoreDetail.bank_provinceid}' city_id='${myStoreDetail.bank_cityid}' region_id='${myStoreDetail.bank_regionid}'  province_name='bank_province' city_name='bank_city' region_name='bank_region'/>
+					</dd>
+				</dl>
+				<dl class="bottom">
+					<dt>&nbsp;</dt>
+					<dd>  
+						<p class="mb10">
+							<input type="button" class="submit" value="立即开店" id="apply"/>
+						</p>
+					</dd>
+				</dl>
+		        
+		       </form>
+			</div>
+		</div>
+		<div align="center">
+		<a href="${ctx}/store/apply/infoDoc1.html" style="margin-left:30px">1.北京国美国际酒业贸易有限公司平台合作协议</a>
+		<a href="${ctx}/store/apply/infoDoc2.html" style="margin-left:30px">2.店铺服务协议</a>
+		<a href="${ctx}/store/apply/infoDoc3.html" style="margin-left:30px">3.店铺运营管理规范</a>
+		<a href="${ctx}/store/apply/infoDoc4.html" style="margin-left:30px">4.平台总则</a>
+		</div>
+	</div>
+		
+</div>
+<script type="text/javascript">
+
+$(function(){
+	bindFileEvent($("#id_img"));
+	bindFileEvent($("#license_img"));
+	
+	$("#apply").click(function(){
+		if($(".store_name_title").val()==""){
+			alert("店铺名称不能为空");
+			return false;
+		}
+		
+		if(!$("#applyForm").checkall())
+			return false;
+		$("#apply").attr({"disabled":"disabled"}); 
+		var options = {
+				url : "${ctx}/api/b2b2c/storeApi!reApply.do?ajax=yes",
+				type : "POST",
+				async: false,
+				dataType : "json",
+				success : function(result) {
+					if(result.result==0){
+						alert(result.message);
+					}else{
+						alert(result.message);
+						location.href="${ctx}/index.html";
+					}
+					$("#apply").removeAttr("disabled");
+			 	},
+			 	error : function(e) {
+			 		alert("出现错误，请重试");
+				}
+			};
+		$('#applyForm').ajaxSubmit(options);
+	});
+	$("#region_id").setValidator(function(){
+		var value = $("#region_id").val();
+		if( value=="" || value=="0" ) return "地区信息不完整";
+		else return true;
+	});
+});
+var isTip = 0;
+function bindFileEvent(obj){
+	var status=$(obj).attr("status");
+	$(obj).uploadify({
+		'buttonText':'上传',		//显示文字
+		'fileObjName':'image',		//文件对象名称
+		'fileSizeLimit':'4MB',//上传文件大小限制
+		'fileTypeDesc': '请选择',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 
+		'fileTypeExts': '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+		'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+		'swf'      : '${ctx}/themes/b2b2cv2/uploadify.swf',
+		'height':'30',				//高度
+		'width':'80',
+		'multi':false,				//是否支持多文件上传
+		'progressData':'percentage',//设置文件上传时显示的数据
+		//'uploadLimit':1,
+		'onFallback':function(){				//falsh兼容
+			if(isTip==0){
+				$.alert("请安装flash插件，确保程序正常运行！");
+			}
+			isTip=1; 
+		},							
+		'onUploadSuccess':function(file,data,response){
+			var img =jQuery.parseJSON(data);
+			$("#"+status+"Text").html("已上传");
+			$("#"+status+"Img").val(img.fsimg);
+			$("#"+status+"Status").val(2);
+			$(".apply_"+status).html("<img src='"+img.img+"'style='width:100px;height:100px'/>");
+		},
+		'onSelectError':function(file,errorCode,errorMsg){
+			if(errorCode==SWFUpload.QUEUE_ERROR.INVALID_FILETYPE){
+				this.queueData.errorMsg="请上传正确的格式";
+			}
+			if(errorCode==SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT) {
+				this.queueData.errorMsg = "文件大小超过限制( " + this.settings.fileSizeLimit + " )";
+			}
+		}
+	});
+}
+//检测身份证
+function checkIDNumber(value){
+	var type=1;
+	var idNumber  = $("#id_number").val();
+	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+	if(!reg.test(idNumber)){
+		return "身份证格式不正确！";
+	}
+	$.ajax({
+		url:"${ctx}/api/b2b2c/storeApi!checkIdNumber.do?ajax=yes",
+		type:"POST",
+		async: false,
+		data:"id_number="+idNumber,
+		dataType:"json",
+		success:function(json){
+			type=json.result;
+		}		
+	});
+	if(type==0)
+		return "身份证重复";
+	return true;
+}
+function checkStoreName(value){
+	var storeName=$("input[name='store.store_name']").val();
+	var type=1;
+	if(storeName.length>20){
+		return "店铺名称请控制在20个字符以内";
+	}
+	$.ajax({
+		url:"${ctx}/api/b2b2c/storeApi!checkStoreName.do?ajax=yes",
+		type:"POST",
+		data:"storeName="+storeName,
+		async: false,
+		dataType:"json",
+		success:function(json){
+			type=json.result;
+		}		
+	});	
+	if(type==0)
+		return "店铺名称重复";
+	return true;
+	
+}
+
+/**
+ * 打开新窗口显示图片
+ */
+function openImageWindow(data)
+{
+	window.open($(data).find("img").attr("src"),'_blank','height=650, width=900');
+}
+</script>
+<#include '/common/footer.html' />

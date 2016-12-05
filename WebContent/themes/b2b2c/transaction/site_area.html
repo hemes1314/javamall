@@ -1,0 +1,89 @@
+
+<#-- 创建商品分类标签 --> 
+<#assign storeRegionsListTag= newTag("storeRegionsListTag") > 
+<#-- 查询商品分类列表 0表示查子分类 --> 
+<#assign storeRegionsList = storeRegionsListTag()!''>
+
+<div style="width: 100%" id="areas">
+	<ul>
+		<#list storeRegionsList as sl>
+		<li>
+			<div class="all_areas">
+				<div class="parent_areas"><input type="checkbox" name="province_id_${sl.region_id}" class="province" value="${sl.region_id}" ><span>${sl.local_name}</span><i></i></div>
+				<div class="children_areas">
+				<#list sl.arealist as al>
+					<label><input type="checkbox" name="area_id_${al.p_region_id}"  class="area" p_region_id="${al.p_region_id}" local_name="${al.local_name}" value="${al.region_id}" ><span>${al.local_name}</span></label>
+				</#list>
+				</div>
+			</div>
+		</li>
+		</#list>
+	</ul>
+</div>
+
+<script>
+	$(function(){
+		//地区切换显示
+		$(".children_areas").hide();
+		$(".parent_areas").click(function(){
+			if($(this).next(".children_areas").attr("style")=="display: none;"){
+				$(".children_areas").hide();
+				$(".parent_areas").removeClass("gareas");
+				$(this).next(".children_areas").show();
+				$(this).addClass("gareas");
+			}
+			else{
+				$(this).next(".children_areas").hide();
+				$(this).removeClass("gareas");
+			}
+		})
+		
+		var c_areaids = checkout_areaids.split(",");
+		var areaids;
+		
+		if("${class_name!''}"=="py"){
+			areaids= py_areaids;
+		}
+		if("${class_name!''}"=="kd"){
+			areaids= kd_areaids;
+		}
+		if("${class_name!''}"=="yz"){											
+			areaids= yz_areaids;
+		}
+		
+		$(".area").each(function(){
+			
+			//把已经选择的地区置为不可选择
+			for(var i = 0; i < areaids.length; i++){
+				if(areaids[i]==$(this).val()){
+					$(this).attr("disabled",true);
+					
+					var province = $(this).parent().parent().find(".province");
+					province.attr("disabled",true);
+				};
+			}
+			
+			//编辑地区时，把当前已经选择的地区,置为已选择
+			for(var i = 0; i < c_areaids.length; i++){
+				if(c_areaids[i]==$(this).val()){
+					$(this).attr("disabled",false);
+					$(this).attr("checked",true);
+				};
+			}
+		});
+		
+		$(".province").click(function(){
+			var $this = $(this);
+			$(this).parents().find(".area").each(function(){
+				if($this.attr("checked")=="checked"){
+					if($(this).attr("p_region_id")==$this.val()){
+						$(this).attr("checked",true);
+					}
+				}else{
+					$(this).attr("checked",false);
+				}
+			});
+		});
+	})
+
+</script>

@@ -1,0 +1,25 @@
+<div id="stock_box" class="grid">
+	<div class="detail">
+		<table cellspacing="0" cellpadding="0" border="0">
+			<thead>
+				<th class="depot">仓库</th>
+				<th class="store">库存</th>
+			</thead>
+			<tbody>
+				<#list storeList as store>
+				<tr>
+					<td>
+						<input type="hidden" name="storeid"value="${store.storeid!'0'}" /> 
+						<input type="hidden" name="depotid" value="${store.depotid!'0'}" /> 
+						${store.name}
+					</td>
+					<td>
+						<input type="text" size="8" class="input_text" style="width: 80px;" name="storeNum" value="${store.store}" isrequired="true" dataType="int" />
+					</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+		</form>
+	</div>
+</div>

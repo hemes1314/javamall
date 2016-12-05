@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="b2b2c商品lucene组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="b2b2c商品lucene索引插件" id="b2b2cGoodsIndexPlugin">
+			<bundle id="goodsIndexPluginBundle"></bundle>
+		</plugin>
+		<plugin name="订单lucene索引插件" id="orderPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>
+		
+		<plugin name="商品评论插件" id="storeGoodsCommentsPlugin">
+			<bundle id="storeGoodsCommentsBundle"></bundle>
+		</plugin>
+		<plugin name="lucene设置插件" id="luceneSettingPlugin">
+				<bundle id="settingPluginBundle"></bundle>
+		</plugin>
+		
+	</plugins>
+	
+</component>

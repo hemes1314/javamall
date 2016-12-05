@@ -1,0 +1,24 @@
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<style>
+h2{
+	font-size: 18px;font-weight: bold;
+}
+#priceinfo tr td{
+	padding-left: 10px;
+}
+</style>
+<div class="orderAmout" >
+	<h2>订单价格信息</h2>
+	<form id="orderPriceForm">
+		<input type="hidden" name="orderId" value="${orderDetail.order_id}">
+		<table  cellspacing="0" cellpadding="0" width="100%" id="priceinfo">
+			<tr>
+				<th>订单价格：</th>
+				<td><input type="text" name="payMoney" value="${orderDetail.order_amount}"/></td>
+			</tr>
+		</table>
+	</form>
+</div>

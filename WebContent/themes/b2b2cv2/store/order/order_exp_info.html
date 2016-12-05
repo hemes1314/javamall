@@ -1,0 +1,63 @@
+<#include '/store/store_header.html' />
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+
+<#if orderDetail?? && orderDetail!=''>
+	<!-- 获取会员订单详细快递信息 -->
+	<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+	<!-- 调用会员订单详细快递信息 -->
+	<#assign orderDelivery = orderDeliveryListTag("{'orderid':${orderDetail.order_id}}")>
+	<#assign orderSend = orderDelivery.deliveryList>
+	
+	<#assign logi_no ='' >
+	<#assign logi_code ='' >
+	<#assign logi_name ='' >
+	<#if orderDetail.ship_status gt 2 >
+	<#list orderSend as delivery>
+		<#if delivery.type ==1 && delivery.logi_no?exists >
+			<#assign logi_no = "${delivery.logi_no!''}">
+			<#assign logi_code = "${delivery.logi_code!''}" >
+			<#assign logi_name = "${delivery.logi_name!''}">
+		</#if>
+		
+		<#if delivery.type ==2 && delivery.logi_no?exists >
+		</#if>
+		
+		<#if delivery.type ==3 && delivery.logi_no?exists >
+		</#if>
+	</#list>
+	</#if>
+	
+	<!--创建“查询订单物流详细”标签-->
+	<#assign OrderExpressInfoTag = newTag("orderExpressInfoTag")>
+	<!--调用“查询订单物流详细”标签，并传递参数-->
+	<#assign kuaidiResult = OrderExpressInfoTag('{"logino":"${logi_no!\"\"}","code":"${logi_code!\"\"}"}')>
+</#if>
+
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			交易管理<span>></span>订单列表
+		</div>
+		<div>
+			<div>
+				<h2>物流公司：${logi_name}</h2>
+				<h2>订单号：${logi_no}</h2>
+				<input type="hidden" id="logino" value="${logi_no}">
+			</div>
+			<div id="store_content">
+				<#include '/member/order_kuaidi.html' />
+			</div>
+		</div>
+	</div>		
+</div>
+
+
+<#include '/common/footer.html'/>

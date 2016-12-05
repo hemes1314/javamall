@@ -1,0 +1,1 @@
+ALERT TABLE es_cart ADD member_id int;

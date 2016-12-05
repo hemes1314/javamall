@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="国美酒窖限时抢购组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="限时抢购活动插件" id="flashBuyActPlugin">
+	 		<bundle id="jobExecutePluginsBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="限时抢购商品插件" id="flashBuyGoodsPlugin">
+	 		<bundle id="orderPluginBundle"></bundle>
+	 		<bundle id="goodsPluginBundle"></bundle>
+	 		<bundle id="flashbuyPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="限时抢购活动标签插件" id="flashBuyActTagPlugin">
+	 		<bundle id="flashbuyPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="限时抢购购物车插件" id="flashGoodsCartPlugin">
+	 		<bundle id="cartPluginBundle"></bundle>
+	 	</plugin>
+	</plugins>
+</component>

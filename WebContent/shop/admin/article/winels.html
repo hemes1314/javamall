@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<#if (data.result) ??>
+	<#if (data.result?size) &gt; 0 >
+        <title>${data.result[0].name}</title>
+    </#if>
+</#if>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="m.gome.com.cn">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="applicable-device" content="mobile">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="shortcut icon" href="http://app.atguat.net.cn/gomecellar/2.0.0/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="http://css.atguat.com.cn/gomecellar/cardinalvices/css/base.css">
+    <link rel="stylesheet" type="text/css" href="http://css.atguat.com.cn/gomecellar/cardinalvices/css/toolbar.css">
+    <link rel="stylesheet" href="http://css.atguat.com.cn/gomecellar/cardinalvices/css/product_list.css" media="screen" title="no title" charset="utf-8">
+</head>
+<body>
+<#if (data.result) ??>
+<div id="winelist"> 
+    <ul class="s_sdfq_detail">
+        <#if (data.result?size) &gt; 0 >
+	        <#list data.result as windlist >
+	                    <li>
+	                        <a href="http://www.uatcellar.com/api/mobile/article!wdetail.do?catid=${windlist.cat_id}&id=${windlist.id}" style="display:block">
+	                            <img src="http://app.atguat.net.cn/gomecellar/2.0.0/images/digital/lazy_img.png" data-lazyload=" ${windlist.image}">
+	                            <h3>${windlist.page_title}</h3>
+	                            <p class="info">
+	                                <span class="care">关注<em>${windlist.view_count }</em></span>
+	                                <span class="zan">点赞<em>${windlist.click_count}</em></span>
+	                                <a href="http://www.uatcellar.com/api/mobile/article!wdetail.do?catid=${windlist.cat_id}&id=${windlist.id}" class="detail">详情</a>
+	                            </p>
+	                        </a>
+	                </li>
+	        </#list>
+
+        </#if>
+	</ul>
+</div>
+<script type="text/javascript" src='http://js.atguat.com.cn/gomecellar/cardinalvices/js/zepto.min.js'></script>
+<script type="text/javascript" src="http://js.atguat.com.cn/gomecellar/cardinalvices/js/zepto.lazyload.js"></script>
+<script type="text/javascript" src="http://js.atguat.com.cn/gomecellar/cardinalvices/js/zepto.loadmore.js"></script>
+<#else>
+<div style="padding:20px 0; font-size:14px;">${data.message}</div>
+</#if>
+</body>
+</html>

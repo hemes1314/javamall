@@ -1,0 +1,39 @@
+<dl>
+	<dt class="required"><em class="pngFix"></em>银行开户名：</dt>
+	<dd><input type="text" name="bank_account_name" class="text w200" id="bank_account_name" isrequired="true"  maxlength="100" onblur="attr_add()"/></dd>
+	
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em>公司银行账号：</dt>
+	<dd><input type="text" name="bank_account_number" class="text w200" id="bank_account_number" isrequired="true" maxlength="60" onblur="attr_add()"/></dd>
+
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em>开户银行支行名称：</dt>
+	<dd><input type="text" name="bank_name" class="text w200" id="bank_name" isrequired="true" maxlength="60" onblur="attr_add()"/></dd>
+	 
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em>支行联行号：</dt>
+	<dd><input type="text" name="bank_code" class="text w200 easyui-numberbox input_text" id="bank_code" isrequired="true" maxlength="60" onblur="attr_add()"
+		dataType="int" onkeyup="javascript:standard(this)"/></dd>
+
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em>开户银行地址：</dt>
+	<dd>
+		<@regionSelect province_name='bank_province' city_name='bank_city' region_name='bank_region'/>
+	</dd>
+	
+</dl>
+<dl class="bottom">
+	<dt>&nbsp;</dt>
+	<dd>  
+		<p class="mb10">
+			<input type="button" class="submit" value="立即开店" id="apply"/>
+		</p>
+	</dd>
+</dl>
+
+
+

@@ -1,0 +1,33 @@
+<#include 'common/header.html' />
+<@css src="css/button.css" iscommon="true"/>
+<@css src="css/dialog.css" iscommon="true"/>
+
+<@script src="js/shop.js" compress="true"   iscommon="true"/>
+<@script src="js/LoginDialog.js" compress="true" iscommon="true"/>
+<@script src="js/DropDownMenu.js" compress="true" iscommon="true"/>
+<@script src="js/ui.datepicker.js" compress="true" iscommon="true"/>
+<@script src="js/DatePicker.js" compress="true" iscommon="true"/>
+<@css src="css/checkout.css" />
+<@css src="css/member.css" />
+<div class="main">
+<#-- 创建会员邮箱验证标签 -->
+<#assign memberEmailCheckTag= newTag("memberEmailCheckTag") >
+<#-- 调用会员邮箱验证信息 -->
+<#assign emailCheck= memberEmailCheckTag() >
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member.css" />
+<div id="register_wrapper" style="height:267px">
+	<div class="tip_wrap" style="border:none">
+		<div class="email_message <#if emailCheck.result==1>success<#else>error</#if>">
+			<div class="span-auto">
+				<h1>${emailCheck.message!''}</h1>
+				<ul>
+					<li>
+						<span><a href="index.html">返回网站首页</a></span>
+						<span><a href="member/member.html" class="zhuce_cg2">去会员中心</a></span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<#include 'common/footer.html' />

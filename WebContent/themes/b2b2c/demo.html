@@ -1,0 +1,7 @@
+<!-- 调用demo演示标签 -->
+<#assign demoTag=newTag("demoTag")>
+<#assign goods=demoTag("{'goods_id':'${goods_id}'}")>
+
+
+商品名称：${goods.name}&nbsp;&nbsp;&nbsp;&nbsp;
+商品编号：${goods.sn}

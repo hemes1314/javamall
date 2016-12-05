@@ -1,0 +1,109 @@
+<style>
+.selectgoods
+{
+  float:left;position:absolute;
+  top:10px;
+  left:0;
+  display:block;
+  width:100%;
+  height:600px;
+}
+.input_text {
+	width: 150px;
+}
+body,table{
+font-size:12px;
+}
+table{
+table-layout:fixed;
+empty-cells:show;
+border-collapse: collapse;
+}
+h1,h2,h3{
+font-size:12px;
+margin:0;
+padding:0;
+}
+.table{
+border:1px solid #cad9ea;
+color:#666;
+}
+.table th {
+background-repeat:repeat-x;
+height:30px;
+}
+.table td,.table th{
+border:1px solid #cad9ea;
+padding:0 1em 0;
+}
+.table tr.alter{
+background-color:#f5fafe;
+} 
+
+.input_text {
+	width: 150px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editForm" method="post" class="validate">
+			<table class="table" style="float:left; width:99%;">
+				<tr class="datagrid-row">
+					<th style="width:60px; height:50px;">约沫名称</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="yuemotitle"
+						name="yuemo.title" value="${yuemo.title}" data-options="required:true"  style="width:300px;" ></input>
+					</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:70px;">约沫地址</th>
+					<td>
+		                <textarea class="easyui-validatebox input_text" style="width:300px; height:80px; line-height:30px;" type="text" id="yuemoaddress"
+						name="yuemo.address" value="${yuemo.address}" data-options="required:true">${yuemo.address}</textarea>				
+					</td>
+				</tr>				
+				<tr>
+					<th style="width:60px; height:50px;">价格</th>
+					<td><input class="easyui-validatebox input_text" validType="money" style="width:300px;" type="text" id="yuemoprice"
+						name="yuemo.price" value="${yuemo.price}" data-options="required:true" dataType="float"></input>
+					</td>
+				</tr>	
+				<tr>
+					<th style="width:60px; height:50px;">人数上限</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="plimit"
+						name="yuemo.plimit" value="${yuemo.plimit}" data-options="required:true"  style="width:300px;" dataType="int"></input>
+					</td>
+				</tr>
+				<tr>
+				   	<th style="width:60px; height:130px;">图片</th>
+                    <td><img src="${yuemo.image}" width="90" height="90" style="margin-right:15px;"><input type="file" name="image" data-options="required:true" style="width:170px;" />(请上传gif,jpg,bmp,png格式,2M以内的图片)
+                    </td>
+				</tr>
+				<tr>
+				   	<th style="width:60px; height:50px;">约沫简介</th>
+                    <td><textarea  class="easyui-validatebox input_text" style="height:150px;width:415px;" type="text" id="yuemobrief" name="yuemo.brief" data-options="required:true">${yuemo.brief!''}</textarea></td>
+				</tr>				
+                <tr>
+					<th style="width:60px; height:330px;">约沫介绍</th>
+					<td>
+                    <div style="width:40%">
+                    <textarea class="easyui-validatebox input_text" style="height:150px;width:70%;" type="text" id="yuemocontent" name="yuemo.content" value="${yuemo.content}" data-options="required:true">${yuemo.content}</textarea>
+                    </div>
+					</td>
+				</tr>					
+			</table>
+			<input type="hidden" name="yuemo.id" value="${yuemo.id}">
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var instance = CKEDITOR.instances["yuemocontent"];
+		if (instance) {
+			CKEDITOR.remove(instance);
+			$('#yuemocontent').ckeditor();
+		}else
+		{
+		    $('#yuemocontent').ckeditor();
+		}
+	});
+</script>

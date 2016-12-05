@@ -1,0 +1,88 @@
+<table class="form-table" style="width: 100%;">
+	<tr>
+		<td>
+			<div id="container" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align: left;">
+		<hr>
+			<h3>订单统计详细</h3><br>
+			<div class="shadowBoxWhite tableDiv">
+				<table class="easyui-datagrid"
+					data-options="url:'${ctx}/shop/admin/brand!listJson.do',pageList: [5,10,15,20],pageSize:10,fitColumns:'true'"
+					pagination="true" id="branddata" >
+					<thead>
+						<tr>
+							<th data-options="field:'brand_id',checkbox:true,width:100"></th>
+							<th data-options="field:'name',width:200">品牌名称</th>
+							<th data-options="field:'url',width:300">品牌网址</th>
+							<th data-options="field:'action',width:25" >操作</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+
+<script type="text/javascript">
+$(function () {
+	
+   var data=[17.0, 16.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6];
+	
+   var ref = new Highcharts.Chart({
+        chart: {
+            type: 'line',
+            renderTo: 'container'
+        },
+        title: {
+            text: '订单销售额统计'
+        },
+        subtitle: {
+            text: '副标题'
+        },
+        xAxis: {
+            categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+        },
+        yAxis: {
+            title: {
+                text: '温度 (°C)'
+            },
+            labels:{
+            	formatter: function () {
+                    return this.value + 'k';
+                }
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+            name: '今天',
+            data: data
+        }, {
+            name: '昨天',
+            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        }]
+    });
+    
+
+	$("#ref").click(function(){
+		/* jQuery.getJSON('http://localhost:8080/JQueryPIC/ajax', null, function(data) {  
+                  //为图表设置值  
+			chart.series[0].setData(data);  
+		}); */
+		var data=[17.0, 16.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6];
+		ref.series[0].setData(data); 
+	})
+});
+
+</script>

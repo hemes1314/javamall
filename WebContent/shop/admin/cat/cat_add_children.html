@@ -1,0 +1,49 @@
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 60px">
+		<form id="addchildrenForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th>分类名称</th>
+					<td><input class="input_text" type="text" id="name"
+						name="cat.name" data-options="required:true"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th>分类图片</th>
+					<td>
+					<input class="easyui-validatebox" type="file" id="image"
+						name="image" ></input>
+					</td>
+				</tr>
+				<tr>
+					<th>上级分类</th>
+					<td>
+						<input type="hidden" name="cattype" value="0" >
+						<input class="easyui-combotree combo" value="${cat.cat_id}" name="cat.parent_id" data-options="url:'cat!addlistJson.do',method:'get',required:false,height:28" style="width:200px;">
+					</td>
+				</tr>
+				<tr>
+					<th>商品类型</th>
+					<td>
+						<input class="easyui-combotree combo" value="" name="cat.type_id" data-options="url:'cat!typelistjson.do',method:'get',required:true,height:28" style="width:200px;">
+					</td>
+				</tr>
+				<tr>
+					<th>排序</th>
+					<td>
+					<input class="input_text" type="text" id="order"
+						name="cat.cat_order" data-options="required:true" value="0"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>列表中显示</th>
+					<td>
+						<input type="radio" name="cat.list_show" value="1" checked="checked"/>是&nbsp;
+      				 	<input type="radio" name="cat.list_show" value="0" />否
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,149 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+
+<#-- 创建商品分类标签 --> 
+<#assign storeTransportListTag= newTag("storeTransportListTag") > 
+<#-- 查询商品分类列表 0表示查子分类 -->
+<#assign storeTransportList = storeTransportListTag()!''>
+
+<div class="layout">
+	<#include '/left_menu.html' />
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="path">
+					<div>
+						<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span> 
+						<a href="javascript:void(0);">物流工具 </a>
+					</div>
+					
+				</div>
+				<div class="tabmenu">
+					<ul class="tab pngFix">
+						<li class="normal"><a href="${ctx}/ship/dlyCenter/dlyCenter_list.html">地址库</a></li>
+						<li class="active"><a href="javascript:void(0);">物流工具</a></li>
+						<li class="normal"><a href="${ctx}/ship/logiCompany/logi_company_list.html">物流公司</a></li>
+					</ul>
+					<a class="user-btn3" href="transport_add.html">新增运费模板 </a>
+				</div>
+				<div id="postage-tpl" style="padding: 20px 0;">
+					<#list storeTransportList as stl>
+					<div id="J_TemplateList" class="manage-list">
+						<div class="section J_Section">
+							<div class="tbl-prefix">
+								<span class="meta"> 
+									<!-- 最后编辑时间：
+									<span class="J_LastModified">2014-12-01 17:02:47</span> 
+									<a data-id="4" href="javascript:void(0)" class="J_Clone">复制模板</a> |  -->
+									<#if stl.def_temp==1 >
+										<span class="J_LastModified">默认模板</span> |
+									<#else>
+										<a data-id="4" href="javascript:void(0)" class="J_Clone" onclick="setDefTemp(${stl.id})" >设置默认模板</a> |
+									</#if>
+									<a href="transport_edit.html?tempid=${stl.id}">修改</a> | 
+									<a  href="javascript:void(0)" class="J_Delete" onclick="delTemp(${stl.id});" >删除</a>
+									
+								</span>
+								<h3 class="J_Title">${stl.name}</h3>
+							</div>
+							<div class="tbl-head">
+								<table cellspacing="0" cellpadding="0" border="0" width="100%">
+									<tbody>
+
+										<tr>
+											<th>运送方式</th>
+											<th class="cell-area">运送到</th>
+											<th>首重(kg)</th>
+											<th>运费(元)</th>
+											<th>续重(kg)</th>
+											<th>运费(元)</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="entity">
+								<table cellspacing="0" cellpadding="0" border="0">
+									<tbody>
+										<#list stl.dlylist as dl>
+										<tr>
+											<td>${dl.name}</td>
+											<td class="cell-area">${dl.area}</td>
+											<td>${dl.dlyConfig.firstunit}</td>
+											<td>${dl.dlyConfig.firstprice}</td>
+											<td>${dl.dlyConfig.continueunit}</td>
+											<td>${dl.dlyConfig.continueprice}</td>
+										</tr>
+										<#list dl.arealist as al>
+										<tr>
+											<td>${dl.name!''}</td>
+											<td class="cell-area">${al.area!''}</td>
+											<td>${(al.areaConfig.firstunit)!''}</td>
+											<td>${(al.areaConfig.firstprice)!''}</td>
+											<td>${(al.areaConfig.continueunit)!''}</td>
+											<td>${(al.areaConfig.continueprice)!''}</td>
+										</tr>
+										</#list> </#list>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					</#list>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+function delTemp(tempid){
+	if(!confirm("确认删除吗？")){
+		return false;
+    }else{
+    	
+    	$.ajax({
+			url : "${ctx}/api/b2b2c/transport!del.do?tempid="+tempid,
+			type : "post",
+			dataType : 'json',
+			cache : false,
+			success : function(result) {
+				if (result.result == 1) {
+					location.reload();
+				}
+				if (result.result == 0) {
+					$.Loading.message(result.message);
+				}
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			}
+		});
+    }
+	
+}
+
+function setDefTemp(tempid){
+	
+	$.ajax({
+		url : "${ctx}/api/b2b2c/transport!setDefTemp.do?tempid="+tempid,
+		type : "post",
+		dataType : 'json',
+		cache : false,
+		success : function(result) {
+			if (result.result == 1) {
+				location.reload();
+			}
+			if (result.result == 0) {
+				$.Loading.message(result.message);
+			}
+		},
+		error : function() {
+			alert("出现错误，请重试");
+		}
+	});
+	
+}
+
+</script>
+
+<#include '/common/footer.html' />

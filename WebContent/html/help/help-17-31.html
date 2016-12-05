@@ -1,0 +1,611 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>GomeCellar</title> 
+		<meta name="keywords" content="GomeCellar">
+		<meta name="description" content="GomeCellar">
+	<!--meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/--> 
+	
+</meta>
+
+<!-- 判断IE，并使IE9以下支持html5标签 -->
+<!–[if lt IE 9]> <script  src="/gome-javamall/themes/b2b2cv2/js/html5.js"  ></script> <![endif]–>
+
+
+<script>
+var member = "";
+var loginDialog;
+var ctx="/gome-javamall";
+var app_path="/gome-javamall";
+</script>
+
+<!-- 公共样式 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/base.css" />
+<!-- 内含dialog.css样式，原来的dialog.css中无代码 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/default.css" />
+<!-- 商品详细、 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/shop.css" />
+
+<script>window._prompt = window.prompt;</script>
+
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/lhgdialog.js" ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/common.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/shop.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.ui.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/index.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.validate.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.form-3.51.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/CartBar.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.blockUI.js"   ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/LoginDialog.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.cookie.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/perfect-scrollbar.min.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.SuperSlide.2.1.1.js" ></script>
+<!-- jquery的布局插件 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script>
+<!-- 购物车移入滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.nicescroll.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.bigautocomplete.js"></script>
+<!-- 自定义滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.jscroll.js"></script>
+
+<script type="text/javascript">
+
+var ctx="/gome-javamall";
+
+
+
+$(function(){
+	
+	$(".common_member").load("/gome-javamall/common/member_bar.html?_="+new Date().getTime()	,function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"/gome-javamall/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,              
+				success:function(result){
+					if(result.result==1){
+						//$.alert(result.message);
+						location.href="/gome-javamall/index.html";
+					}else{
+						$.alert(result.message);
+					}	
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		});	
+	});
+	
+	$(".my_store").load("/gome-javamall/common/my_store.html?_="+new Date().getTime());
+	
+	$(".my_store").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+	
+	$(".title_menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+</script>
+
+
+</head>
+<body>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/backtotop.js"></script>
+	<a name="backtotop"></a>
+	<div class="website_top w">
+		<div class="topbar wrapper">
+        	<div class="area" style="width:50px;">
+                  <div class="title" style="overflow:hidden;">
+                      <div class="city"><a href="javascript:void(0)" id="button_show">
+                      <h3 id="show_area_name">全国</h3>
+                      <i class="arrow"></i></a></div>
+                      <div id="list" class="list" style="display: none;">
+                      <a id="button_close" class="close" href="javascript:void(0)">×</a>
+                      <ul>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(0,&#39;全国&#39;)">全国</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(1,&#39;北京&#39;)">北京</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(2,&#39;上海&#39;)">上海</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(3,&#39;天津&#39;)">天津</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(4,&#39;河北&#39;)">河北</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(5,&#39;江苏&#39;)">江苏</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(6,&#39;安徽&#39;)">安徽</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(7,&#39;浙江&#39;)">浙江</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(8,&#39;福建&#39;)">福建</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(9,&#39;辽宁&#39;)">辽宁</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(10,&#39;吉林&#39;)">吉林</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(11,&#39;黑龙江&#39;)">黑龙江</a></li>
+                       </ul>
+                       </div>
+                    </div>
+            </div> 
+			<div class="common_member" style="float:left;">
+			</div>
+			<div class="title_menu">
+                <!--dl style="width:90px;">
+					<dt>
+						手机端App<i></i>
+					</dt>
+					<dd style="width:90px;">
+						<ul>
+							<li>
+                            <img src="/gome-javamall/themes/b2b2cv2/app_download/images/QR_code_android.jpg" width="80" height="80" style="padding:5px; float:left;" />
+                            <a class="menu-app" href="/gome-javamall/app_download/index.html" target="_blank">Android版</a>
+                            </li>
+						</ul>
+					</dd>	
+				</dl-->
+				<dl>
+					<dt>
+						<a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" style="padding-left:5px;">商家中心</a>
+					</dt>
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/order.html">我的订单</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/order.html?status=0">待付款订单</a></li>
+							<li><a href="/gome-javamall/member/order.html?status=5">商品已发货</a></li>
+							<li><a href="/gome-javamall/member/waitcommont.html">待评价商品</a></li>
+						</ul>
+					</dd>	
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/favorite.html" title="我的收藏" target="_top">我的收藏</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/favorite.html" target="_top" title="收藏的商品">收藏的商品</a></li>
+							<li><a href="/gome-javamall/member/collect_store.html" target="_top" title="收藏的店铺">收藏的店铺</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						客户服务<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/help-81-83.html">帮助中心</a></li>
+							<li><a href="/gome-javamall/help-81-84.html">售后服务</a></li>
+							<li><a href="/gome-javamall/help-81-85.html">客服中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						站点导航<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a target="_blank" href="/gome-javamall/index.html">商城首页</a></li>
+                            <li><a href="/gome-javamall/member/member.html">会员中心</a></li>
+							<li><a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" >商家中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+<script type="text/javascript">
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+//选项卡样式
+function index_click(type,value){
+	$("#"+type+" li").removeClass("selected");
+	$("#"+type+" li a[type='"+value+"']").parents("li").addClass("selected");
+}
+function set_groupbuy_area(area_id,area_name){
+	$("#show_area_name").html(area_name);
+	$("input[name='area_id']").val(area_id);
+	$("#list").hide();
+	loadPage();
+}
+</script>
+	</div>
+<div id="goodsSelectDiv"></div>
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/help.css" />
+<div class="content">
+	<!--帮助中心-->
+	<div class="besides">
+		<div class="help2_wh">
+			<div class="help_left">
+				<h1>关于网站</h1>
+				<ul>
+						<li >
+							<a href="help-21-7.html">公司简介</a>
+						</li>
+						<li >
+							<a href="help-21-8.html">招商合作</a>
+						</li>
+						<li >
+							<a href="help-21-9.html">联系我们</a>
+						</li>
+						<li class= "last">
+							<a href="help-21-42.html">合作酒庄</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>新手上路</h1>
+				<ul>
+						<li >
+							<a href="help-17-171.html">登录帮助</a>
+						</li>
+						<li >
+							<a href="help-17-32.html">购物指南</a>
+						</li>
+						<li class= "last">
+							<a href="help-17-31.html">常见问题</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>购物指南</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+			<div class="help_left">
+				<h1>支付方式</h1>
+				<ul>
+						<li >
+							<a href="help-19-48.html">货到付款</a>
+						</li>
+						<li class= "last">
+							<a href="help-19-49.html">在线支付</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>购物条款</h1>
+				<ul>
+						<li >
+							<a href="help-20-50.html">会员介绍</a>
+						</li>
+						<li class= "last">
+							<a href="help-20-168.html">积分说明</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>配送方式</h1>
+				<ul>
+						<li >
+							<a href="help-22-44.html">配送时间及范围</a>
+						</li>
+						<li >
+							<a href="help-22-45.html">配送费收取标准</a>
+						</li>
+						<li >
+							<a href="help-22-47.html">运输包装说明</a>
+						</li>
+						<li class= "last">
+							<a href="help-22-23.html">签收与验货</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>服务</h1>
+				<ul>
+						<li >
+							<a href="help-23-18.html">退换货政策</a>
+						</li>
+						<li >
+							<a href="help-23-14.html">退换货流程</a>
+						</li>
+						<li class= "last">
+							<a href="help-23-16.html">取消订单</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>优惠活动</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>我的订单</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+		</div>
+		<div class="client">
+			<!-- 调用CMS蚊香详细标签，并传递文章所在分类ID，及文章ID -->
+			<!-- 文章详细，所需的catid与articleid通过help.html?catid=XXX&articleid=XXX传递参数 -->
+			<h1 class="help_title">常见问题</h1>
+			<h2 class="help_time">2012-05-25 11:31</h2>
+			<p>
+	<strong>账户及购物类</strong><br />
+	<br />
+	<strong>1</strong><strong>、如何增强账户安全系数？</strong><br />
+	1）账户密码应设置为字母、数字、符号的搭配组合，密码位数不要过短；<br />
+	2）验证常用手机号和邮箱；<br />
+	3）设置账户支付密码；<br />
+	4）建议定期更换账户登录密码。<br />
+	<br />
+	<strong>2</strong><strong>、如何验证手机和邮箱？</strong><br />
+	登录GOME酒窖账户后，点击我的酒窖-账户安全，进入后进行手机和邮箱验证，详情请点击账户安全<br />
+	<br />
+	<strong>3</strong><strong>、验证手机和邮箱的好处有哪些？</strong><br />
+	1）验证后可用手机号或邮箱号+密码直接登录；<br />
+	2）忘记密码时也可通过接收短信验证码或邮件找回密码。<br />
+	<br />
+	<strong>4</strong><strong>、密码设置的技巧有哪些？</strong><br />
+	1）账户密码设置应字母、数字、符号搭配；<br />
+	2）密码位数不要过短，长度为6-20个字符之间；<br />
+	3）密码不要设置为日常常用到的信息，例如身份证号或生日等。<br />
+	<br />
+	<strong>5</strong><strong>、积分的获得方式有哪些，如何使用？</strong><br />
+	获得积分的方式有消费积分、评价积分、活动积分、纠错积分、晒单积分等5种方式。GOME酒窖会员积分永久有效，积分获得及使用请参阅积分攻略。<br />
+	<br />
+	<strong>6</strong><strong>、商品什么时候能够享受降价或促销活动？</strong><br />
+	您好，网页商品无法明确具体的活动细则，可将您喜欢的商品设置降价通知功能获得商品的促销信息。</p>
+<p>
+	<br />
+	<strong>支付及退款类</strong><br />
+	<br />
+	<strong>1</strong><strong>、在线付款的方式有哪些？</strong><br />
+	您可以选择以下方式在线付款：<br />
+	1）快钱支付；<br />
+	2）银行汇款；<br />
+	3）支付宝。<br />
+	<br />
+	<strong>2</strong><strong>、如何选择货到付款？</strong><br />
+	您在填写核对订单信息时，在支付及配送方式中，选择支付方式中的&ldquo;货到付款&rdquo;；<br />
+	然后您还可以选择货到现金支付或者POS机刷卡支付。<br />
+	<br />
+	<strong>3</strong><strong>、为什么选择不了货到付款？</strong><br />
+	无法选择货到付款可能是因为以下原因：<br />
+	1）金额小于30元的商品不支持货到付款；<br />
+	2）不支持货到付款的地区不能选择货到付款。<br />
+	<br />
+	<strong>4</strong><strong>、如何修改我的支付方式？</strong><br />
+	您在填写核对订单信息时已选择的支付方式在确认提交订单后是不支持修改的，您可以取消该订单然后重新下单。<br />
+	<br />
+	<strong>5</strong><strong>、如何查询我是否支付成功了？</strong><br />
+	您可以通过以下方式验证在线支付是否成功：<br />
+	1）当您完成网上在线支付过程后，系统应提示支付成功。如果系统没有提示支付成功或失败，您可通过电话、ATM 、柜台或登录网上银行等各种方式查询银行卡余额，如果款项已被扣除，说明您已支付成功；<br />
+	2）如出现信用卡超额透支、存折余额不足、意外断线等情况支付失败，请您登录GOME酒窖&ldquo;我的订单&rdquo;，找到未支付成功的订单，重新完成支付；<br />
+	3）一般情况下，您的每笔在线支付的订单，支付成功后，银行页面都会有显示&ldquo;支付成功&rdquo;的提示，如果您未及时看到支付结果，您也可以通过银行网站查询交易明细，或者致电银行的客服。同时，在我的酒窖的&ldquo;我的订单&rdquo;中，此笔订单的状态是&ldquo;支付完成&rdquo;。<br />
+	<br />
+	<strong>6</strong><strong>、如果重复支付了，怎么办？</strong><br />
+	您可以先和您支付时所用的银行卡的银行客服人员联系确认是否重复支付了订单，或者联系GOME酒窖客服进一步查询和确认。<br />
+	<br />
+	<strong>7</strong><strong>、哪些原因会造成支付不成功？</strong><br />
+	1）所持银行卡尚未开通网上支付功能；<br />
+	2）所持银行卡内余额不足；<br />
+	3）超过银行卡支持的支付限额；<br />
+	4）输入证件号不符；<br />
+	5）银行卡预留手机号码不符；<br />
+	6）输入银行卡卡号或密码不符；<br />
+	7）所持银行卡已挂失、作废、过期；<br />
+	8）网络中断等原因。<br />
+	<br />
+	<strong>8</strong><strong>、下单后未付款，订单将保留多长时间？</strong><br />
+	在线支付订单超时说明：<br />
+	1）在线支付付款等待期限为24小时。请您在订购成功后24小时内完成支付；<br />
+	2）团购订单在线支付付款等待期限为24小时，请您在订购成功后24小时内完成支付；<br />
+	3）抢购订单在线支付付款等待期限为半小时，请您在订购成功后半小时内完成支付，否则系统将自动取消订单。网上支付均是支付成功即到账，若由于网络故障导致您已支付成功的订单未改变订单状态，请您联系GOME酒窖客服；<br />
+	<br />
+	<strong>9</strong><strong>、付款时网上银行网页已过期无法支付怎么办？</strong><br />
+	您可以登录GOME酒窖&ldquo;我的订单&rdquo;，找到未支付成功的订单，重新完成支付。<br />
+	<br />
+	<strong>10</strong><strong>、银行卡每天有使用次数限制吗？</strong><br />
+	银行卡有每日限额和日累计限额，根据您所持卡的类型，支付限额也会不同。<br />
+	<br />
+	<strong>11</strong><strong>、在线支付会有手续费吗？</strong><br />
+	在线支付（信用卡分期付款除外）是没有手续费的。<br />
+	<br />
+	<strong>12</strong><strong>、各家银行支持信用卡支付的额度是多少？</strong><br />
+	一般信用卡的支付额度为最高单笔单日500元的限额（部分银行可能会有差异，以具体银行规定为准），如需大额支付，请与您所持银行卡的客服联系，支付额度最高可达信用卡本身透支额度。</p>
+<p>
+	<strong>13</strong><strong>、如何进行信用卡大额支付</strong><strong>?</strong><br />
+	信用卡支付一般受单笔单日500元的额度限制（部分银行可能会有差异，以具体银行规定为准），如果需要进行大额支付，可联系发卡行客服申请开通或登录网上银行自助开通，即可进行大额支付，不受单笔单日500元的额度限制。您可以使用网银专业版U盾进行大额支付。<br />
+	<br />
+	<strong>14</strong><strong>、信用卡支付和以往的支付方式有什么区别？</strong><br />
+	1）信用卡支付是可以透支支付的，储蓄卡支付不可以透支；<br />
+	2）在其他平台支付中（例如支付宝、银联在线等）既可以绑定储蓄卡也可以绑定信用卡进行支付，还可以使用账户中余额进行支付；<br />
+	3）同一张信用卡，使用&ldquo;信用卡支付&rdquo;，就属于一般消费，有积分。使用其他支付方式，就是把信用卡当普通银行卡使用，属于&ldquo;网络消费&rdquo;，是没有积分的（部分银行可能会有差异，以具体银行规定为准）。<br />
+	<br />
+	<strong>15</strong><strong>、付款时是否能使用别人的信用卡？</strong><br />
+	可以。只要是开通网上银行的信用卡就可以付款，付款时不限制卡的持有人信息。<br />
+	<br />
+	<strong>16</strong><strong>、购买商品部分现金支付部分优惠券支付，退货后（非客户原因）优惠券如何返还？</strong>&nbsp;<br />
+	1）单件商品将退还全额优惠券；<br />
+	2）多件商品，系统按购买商品使用优惠券金额所占商品金额比例进行拆分核算，然后根据比例返还优惠券。</p>
+<br />
+<p>
+	<strong>配送类</strong></p>
+<br />
+<p>
+	<strong>1</strong><strong>、配送费如何收取？&nbsp;</strong><br />
+	根据商品品类及配送地址的不同，配送费也是不同的，详情请点击<a href="http://help.gome.com.cn/question/8.html" target="_blank"><strong>配送费用</strong></a>。<br />
+	<br />
+	<strong>2</strong><strong>、签收时发现商品包装破损，应该如何处理？</strong><br />
+	如包装破损，您可直接向快递员说明情况，或直接拒收（POS机刷卡情况除外）。<br />
+	<br />
+	<strong>3</strong><strong>、签收时有哪些注意事项？&nbsp;</strong><br />
+	1）付款及签收完毕后，请在配送人员在场的情况下，参照顾客签收单对商品数量、型号、外观、配件和发票依次进行核对验收；<br />
+	2）若发现异常（如商品缺失、损坏、渗漏、无发票等），请务必让配送人员在顾客签收单上签字确认，并立即联系GOME酒窖客服人员进行反馈和登记，客服人员会根据您的实际情况做相应处理。GOME酒窖客服热线：4009-190-199。<br />
+	3）如您在配送人员离开后再提出包裹外包装或封带异常，以及商品的型号、数量或外观等存在异常而要求退换货，此时因无法确认责任，将无法为您做进一步处理，请您谅解。<br />
+	4）货到付款的商品送达时，请您当面与配送员核对商品与款项，确保货、款两清；若您在配送员离开后发现款项有误，将无法为您核实处理。<br />
+	5）如配送人员以公司没有规定或着急送货为借口，不配合您进行验货和签字确认，请及时联系GOME酒窖客服进行投诉，客服人员将会在第一时间为您处理；一旦出现此情况，为了维护您的权益，建议您先不要拆开包裹。<br />
+	6）为了保护您的权益，建议您尽量不要委托他人签收；如由他人代为签收商品而没有在配送人员在场的情况下验货，则视为您所订购商品的包装无任何问题。<br />
+	<br />
+	<strong>5</strong><strong>、送货能否验货后再付款，不喜欢是否可以不要?&nbsp;</strong><br />
+	根据商品属性不同，商品的签收流程也不同，详细可以参考帮助中心配送流程<a href="http://help.gome.com.cn/question/38.html" target="_blank"><strong>签收与验货流程</strong></a>。<br />
+	<br />
+	<strong>6</strong><strong>、商品到货后，我能否签收部分商品？</strong><br />
+	很抱歉，我司目前不支持商品部分拒收。</p>
+<p>
+	&nbsp;</p>
+
+
+		</div>
+	</div>
+	<div style="width:100%;height:1px;overflow:hidden;display:block;clear:both;"></div>
+</div>
+<div class="footer">
+	<div class="wrapper">
+	<!-- 
+	<div id="footer-top">
+		<ul>
+			<li class="one"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="two"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="three"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="four"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="five"><strong>正品行货<em>100%正品保证</em></strong></li>
+		</ul>
+	</div>
+	 -->
+	</div>
+	<!--帮助中心-->
+	  <div id="faq">
+	  <div class="wrapper">
+	    <ul>
+	        <li>
+		        <dl class="s1">
+		          	<dt>关于我们 </dt>
+		          			          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-7.html">公司简介</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-8.html">招商合作</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-9.html">联系我们</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-42.html">合作酒庄</a>
+		          		</dd>
+		       </dl>
+	      	</li>
+	        <li>
+	        	<dl class="s2">
+	          		<dt>新手上路</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-171.html">登录帮助</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-32.html">购物指南</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-31.html">常见问题</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <li>
+	    		<dl class="s3">
+			        <dt>配送说明</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-44.html">配送时间及范围</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-45.html">配送费收取标准</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-47.html">运输包装说明</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-23.html">签收与验货</a>
+		          		</dd>
+	          	</dl>
+	      </li>
+	      <li>
+	        	<dl class="s4">
+	          		<dt>支付方式</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-48.html">货到付款</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-49.html">在线支付</a>
+		          		</dd>
+	           </dl>
+	      </li>
+	      <li>
+	        	<dl class="s5">
+	          		<dt>售后服务</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-18.html">退换货政策</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-14.html">退换货流程</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-16.html">取消订单</a>
+		          		</dd>
+		        </dl>
+	      </li>
+	      <li>
+	        	<dl class="s6">
+	          		<dt>特殊服务 </dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-50.html">会员介绍</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-168.html">积分说明</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <div class="clear"></div>
+	    </ul>
+	  </div>
+	</div>
+	<!--底部版权，调用footer.php-->
+	<div id="footer" >
+		<div class="wrapper">
+		  <p><a href="/gome-javamall/index.html">首页</a>
+             | <a  href="/gome-javamall/member/member.html">会员中心</a>
+             | <a  href="/gome-javamall/store/business_center.html?menu=store_index">商家中心</a>
+             | <a  href="/gome-javamall/help-62-65.html">关于网站</a>
+             | <a  href="/gome-javamall/help-21-9.html">联系我们</a>
+             | <a  href="/gome-javamall/help-21-7.html">关于我们</a>
+          </p>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

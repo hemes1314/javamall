@@ -1,0 +1,408 @@
+<div class="store_add_goods hide0">
+	<h1>商品基本信息</h1>
+	<div class="addgoods">
+ 
+		<input type="hidden" name="storeGoods.cat_id" value="${storeGoods.cat_id}"> 
+		<input type="hidden" name="storeGoods.goods_id" value="${storeGoods.goods_id}"> 
+		<input type="hidden" name="storeGoods.type_id" value="${storeGoodsCat.typeid}"> 
+		<input type="hidden" name="storeGoods.store" value="${storeGoods.store}">
+		<input type="hidden" name="storeGoods.store_id" value="${storeGoods.store_id}"> 
+		<input type="hidden" name="storeGoods.enable_store" value="${storeGoods.enable_store}">
+		<div class="goods_attribute">
+			<dl>
+				<dt>商品分类：</dt>
+				<dd id="gcategory">
+					<#list storeGoodsCat.parentList as parent> <#if parent_index != 0>
+					<span>&nbsp;&gt;&nbsp;</span> </#if> <span>${parent.name}</span>
+					</#list>
+				</dd>
+			</dl>
+		</div>
+ 
+		<dl>
+			<dt class="required">
+				<span class="red">*</span>商品名称：
+			</dt>
+			<dd>
+				<p>
+					<input type="text" class="text" name="storeGoods.name"
+						value="${storeGoods.name}" isrequired="true" 
+						fun="checkGoodsName" style="width: 500px;" />
+				<p>
+				<p class="hint">商品标题名称长度至少3个字符，最长200个汉字</p>
+			</dd>
+		</dl>
+		<dl>
+			<dt nc_type="no_spec">
+				<span class="red">*</span>商品编号：
+			</dt>
+			<dd nc_type="no_spec">
+				<p>
+					<input type="text" class="text" name="storeGoods.sn"
+						value="${storeGoods.sn}" datatype="string" isrequired="true" />
+				</p>
+			</dd>
+		</dl>
+		<dl>
+			<dt nc_type="no_spec">
+				<span class="red">*</span>市场价格：
+			</dt>
+			<dd nc_type="no_spec">
+				<input type="text" class="text" name="storeGoods.mktprice"
+					value="${storeGoods.mktprice}" isrequired="true" dataType="float" />
+			</dd>
+		</dl>
+		<dl>
+			<dt nc_type="no_spec">
+				<span class="red">*</span>商品价格：
+			</dt>
+			<dd nc_type="no_spec">
+				<p>
+					<input type="text" class="text" name="price"
+						value="${storeGoods.price}" isrequired="true" dataType="float" />
+					<!-- 价格区间 -->
+				</p>
+				<p class="hint">商品价格必须是0.01~1000000之间的数字</p>
+			</dd>
+		</dl>
+		<dl>
+			<dt nc_type="no_spec">
+				<span class="red">*</span>成本价格：
+			</dt>
+			<dd nc_type="no_spec">
+				<p>
+					<input type="text" class="text" name="cost"
+						value="${storeGoods.cost}" isrequired="true" dataType="float" />
+					<!-- 价格区间 -->
+				</p>
+				<p class="hint">商品价格必须是0.01~1000000之间的数字</p>
+			</dd>
+		</dl>
+		<dl>
+			<dt>
+				<span>商品重量(g)</span>
+			</dt>
+			<dd>
+				<p>
+					<input type="text" class="text" name="weight"
+						value="${storeGoods.weight}" isrequired="true" dataType="float" />
+				</p>
+			</dd>
+		</dl>
+		<dl>
+			<dt>
+				<span>商品类型</span>
+			</dt>
+			<dd>
+				<p>
+					<select name="storeGoods.goods_type">
+						<option value="normal"<#if
+							storeGoods.goods_type=='normal'>selected="selected"</#if> >实物类</option>
+						<option value="cf" <#if
+							storeGoods.goods_type=='cf'>selected="selected"</#if> >众筹类</option>
+					</select>
+				</p>
+			</dd>
+		</dl>
+		<!-- <dl>
+			<dt>
+				<span>商品佣金比例</span>
+			</dt>
+			<dd>
+				<p>
+					<input type="text" class="text" name="storeGoods.commission"
+						dataType="float" isrequired="true"
+						value="${storeGoods.commission!''}" />%
+				</p>
+			</dd>
+		</dl> -->
+		<#if storeGoods.is_pack?? && storeGoods.is_pack==0>
+		<div id="spec-input">
+			<input type="hidden" name="haveSpec" id="haveSpec"
+				value="${goodsSpec.have_spec!'0'}" /> <#list goodsSpecList as spec>
+			<dl class="spec-bg" nctype="spec_group_dl"
+				nc_type="spec_group_dl_${spec_index}">
+				<dt>${spec.spec_name}</dt>
+				<dd>
+					<ul class="spec" specname="${spec.spec_name}">
+						<#list spec.valueList as specValue>
+						<li><span nctype="input_checkbox"> <input class="chk"
+								autocomplete="off" type="checkbox"
+								value="${specValue.spec_value_id}"
+								spec_value="${specValue.spec_value}"
+								specid="${specValue.spec_id}" />
+						</span> <span>${specValue.spec_value}</span></li> </#list>
+					</ul>
+				</dd>
+			</dl>
+			</#list>
+			<dl class="spec-bg spec-table">
+				<dt>库存配置</dt>
+				<dd>
+					<table cellspacing="0" cellpadding="0" border="0"
+						class="spec_table" width="98%">
+						<thead>
+							<tr>
+								<#if goodsSpec.have_spec?exists && goodsSpec.have_spec==1 &&
+								goodsSpec.specList?exists > <#list goodsSpec.specList as spec>
+								<th class="w1">${spec.spec_name}</th> </#list> </#if>
+								<th class="w2">货号<span class="red">*</span></th>
+								<th class="w2">销售价<span class="red">*</span></th>
+								<th class="w3">重量<span class="red">*</span></th>
+								<th class="w3">成本价</th>
+							</tr>
+						</thead>
+						<tbody>
+							<#if goodsSpec.have_spec?exists && goodsSpec.have_spec==1 &&
+							goodsSpec.productList?exists > <#list goodsSpec.productList as
+							product> <#assign specids=''> <#assign specvids=''> <#assign
+							propid=''>
+							<tr>
+								<#list product.specList as spec> <#if spec_index!=0 > <#assign
+								specids=specids+','> <#assign specvids=specvids+','> <#assign
+								propid=propid+'_'> </#if> <#assign specids=specids+spec.spec_id>
+								<#assign propid=propid+spec.spec_value_id> <#assign
+								specvids=specvids+spec.spec_value_id>
+								<td>${spec.spec_value} <input type="hidden"
+									name="specvalue_${product_index}" value="${spec.spec_value}" />
+								</td> </#list>
+								<td><input type="text" style="width: 150px" class="ipt" onblur="sn_is_exist(this)" 
+									name="sns" prop='sn' propid="${propid}" value="${product.sn}">
+									<span style="float:left;color:red;" class="err"></span>
+									<input type="hidden" name="productids"
+									value="${product.product_id}" class="ipt" prop='productid'
+									propid="${propid}" /></td>
+								<td><input type="hidden" value="${specids}" name="specids">
+									<input type="hidden" value="${specvids}" name="specvids">
+									<!-- 形成price id，用js通过此id反向选择checkobx --> <input type="text"
+									size="8" name="prices" class='ipt price'
+									value="${(product.price!0)?c}" prop='price' propid="${propid}" />
+								</td>
+								<td><input type="text" size="10" name="weights"
+									value="${(product.weight!0)?c}" class='ipt' prop='weight'
+									propid="${propid}" class="input_text" style="width: 80px" /></td>
+								<td><input type="text" size="8" name="costs"
+									value="${(product.cost!0)?c}" class='ipt' prop='cost'
+									propid="${propid}" class="input_text" style="width: 80px" /></td>
+							</tr>
+							</#list> </#if>
+						</tbody>
+					</table>
+				</dd>
+			</dl>
+		</div>
+		</#if>
+		<dl>
+			<dt>
+				商品图片</br>(第一张图片为列表图片)：
+			</dt>
+			<dd>
+				<div class="goods_image">
+					<input type="hidden" name="image_default" id="image_default" value="${storeGoods.original!''}" /> 
+					<#if (storeGoodsInfo.galleryList?size) lt 5>
+						<!-- 循环店铺商品列表 获取默认图片 -->
+						<#list storeGoodsInfo.galleryList as gallery> 
+							<#if gallery.isdefault==1>
+								<div style="float: left; height: 200px; position: relative; text-align: center; margin-right: 5px;">
+									<img src="${gallery.thumbnail}" width="100" height="100" id="img${gallery.img_id}"> <br /> 
+									<input type="hidden" name="picnames" id="fs_img${gallery.img_id}" value="${gallery.original}" /> 
+									<input type="hidden" name="status" value="2" id="fs_status${gallery.img_id}" /> 
+									<input type="file" id="goods${gallery.img_id}" fs="${gallery.img_id}" status="修改"
+									<#if gallery.isdefault==1>
+										is_default="true"
+									<#else>
+										is_default="false"
+									</#if> /> 
+									<input type="button" name="clean" value="清除" fs="${gallery.img_id}" is_default="true" class="del_addgoods" />
+								</div>
+								<#break> 
+							</#if> 
+						</#list>
+					<!-- 循环店铺商品列表 获取所有图片 -->
+					<#list storeGoodsInfo.galleryList as gallery> 
+						<#if gallery.isdefault==0>
+							<div style="float: left; height: 200px; position: relative; text-align: center; margin-right: 5px;">
+								<img src="${gallery.thumbnail}" width="100" height="100" id="img${gallery.img_id}"> <br /> 
+								<input type="hidden" name="picnames" id="fs_img${gallery.img_id}" value="${gallery.original}" /> 
+								<input type="hidden" name="status" value="2" id="fs_status${gallery.img_id}" /> 
+								<input type="file" id="goods${gallery.img_id}" fs="${gallery.img_id}" status="修改"
+									<#if gallery.isdefault==1>
+										is_default="true"
+									<#else>
+										is_default="false"
+									</#if> /> 
+								<input type="button" name="clean" value="清除" fs="${gallery.img_id}" is_default="false" class="del_addgoods" />
+							</div>
+						</#if> 
+					</#list>
+					<!-- 没有上传图片的 图片 -->
+					<#list (storeGoodsInfo.galleryList?size+1)..5 as t>
+						<div style="float: left; height: 200px; position: relative; text-align: center; margin-right: 5px;">
+							<img src="${ctx}/themes/b2b2cv2/images/default_goods_image_tiny.gif" name="img${t}" id="img${t}" width="100" height="100"> <br />
+							<input type="hidden" name="goods_fs" id="fs_img${t}" fs="${t}" />
+							<input type="hidden" name="status" value="2" id="fs_status${t}" />
+							<input type="file" id="goods-${t}" fs="${t}" status="上传" /> 
+							<input type="button" name="clean" value="清除" fs="${t}" class="del_addgoods" is_default="false"/>
+						</div>
+					</#list> 
+				<#else>
+					<!-- 循环店铺商品列表 获取默认图片 -->
+					<#list storeGoodsInfo.galleryList as gallery> <#if
+					gallery.isdefault==1>
+					<div
+						style="float: left; height: 200px; position: relative; text-align: center; margin-right: 5px;">
+						<img src="${gallery.thumbnail}" width="100" height="100"
+							id="img${gallery.img_id}"> <br /> <input type="hidden"
+							name="picnames" id="fs_img${gallery.img_id}"
+							value="${gallery.original}" /> <input type="hidden"
+							name="status" value="2" id="fs_status${gallery.img_id}" /> <input
+							type="file" id="goods${gallery.img_id}" fs="${gallery.img_id}"<#if
+						gallery.isdefault==1>
+						is_default="true"<#else>is_default="false"</#if> status="修改" /> <input
+							type="button" name="clean" value="清除" fs="${gallery.img_id}"
+							class="del_addgoods" />
+					</div>
+					</#if> </#list>
+					<!-- 循环店铺商品列表 获取图片 -->
+					<#list storeGoodsInfo.galleryList as gallery> <#if
+					gallery.isdefault==0>
+					<div
+						style="float: left; height: 200px; position: relative; text-align: center; margin-right: 5px;">
+						<img src="${gallery.thumbnail}" width="100" height="100"
+							id="img${gallery.img_id}"> <br /> <input type="hidden"
+							name="picnames" id="fs_img${gallery.img_id}"
+							value="${gallery.original}" /> <input type="hidden"
+							name="status" value="2" id="fs_status${gallery.img_id}" /> <input
+							type="file" id="goods${gallery.img_id}" fs="${gallery.img_id}"<#if
+						gallery.isdefault==1>
+						is_default="true"<#else>is_default="false"</#if> status="修改" /> <input
+							type="button" name="clean" value="清除" fs="${gallery.img_id}"
+							class="del_addgoods" />
+					</div>
+					</#if> </#list> </#if>
+				</div>
+			</dd>
+		</dl>
+
+		<dl class="tit">
+			<h3>商品详情描述</h3>
+		</dl>
+		<!--<dl>
+			<dt>商品品牌：</dt>
+			<dd>
+				<select name="storeGoods.brand_id"> <#list brandList as
+					brand>
+					<option value="${brand.brand_id}"<#if
+						brand.brand_id==storeGoods.brand_id>selected="selected"</#if>
+						>${brand.name}</option> </#list>
+				</select>
+			</dd>
+		</dl>-->
+		<dl>
+			<dt>商品描述：<br />(图片宽度最宽940px)</dt>
+			<dd>
+				<p>
+					<textarea name="storeGoods.intro" cols="100" rows="8" id="intro"
+						style="resize: none;">${storeGoods.intro!''}</textarea>
+				</p>
+			</dd>
+		</dl>
+		<dl>
+			<dt>移动端商品描述：</dt>
+			<dd style="width:50%">
+				<p>
+					<textarea name="storeGoods.intro2" rows="16" id="intro2"
+						style="resize:none;">${storeGoods.intro2!''}</textarea>
+				</p>
+			</dd>
+			<button id="copyGoodsDesc" style="cursor:pointer;background:#59c;color:#fff;border:1px solid #5cf;padding:4px 10px;position:relative;left:15px;top:10px;">
+				复制商品描述
+			</button>
+		</dl>
+		<!--transport info begin-->
+		<dl class="tit" style="display:none;">
+			<h3>商品物流信息</h3>
+		</dl>
+		<dl style="display:none;">
+			<dt>运费：</dt>
+			<dd>
+				<p style="float: left; clear: both; margin-top: 8px;">
+					<input type="radio" value="1"
+						name="storeGoods.goods_transfee_charge" id="whops_seller"<#if
+					storeGoods.goods_transfee_charge==1>checked="checked"</#if>/> <label
+						for="whops_seller">卖家承担运费</label>
+				</p>
+				<p style="float: left; clear: both; margin-top: 8px;">
+					<input type="radio" value="0"
+						name="storeGoods.goods_transfee_charge" id="whops_buyer"<#if
+					storeGoods.goods_transfee_charge==0>checked="checked"</#if>/> <label
+						for="whops_buyer">买家承担运费</label>
+				</p>
+			</dd>
+		</dl>
+		<!--transport info end-->
+		<dl class="tit">
+			<h3>其他信息</h3>
+		</dl>
+		<dl>
+			<dt>本店分类：</dt>
+			<dd>
+				<p>
+					<select name="storeGoods.store_cat_id"> <#list
+						storeGoodsCatList as cat> <#if cat.store_cat_pid==0>
+						<option value="${cat.store_cat_id!0}"<#if
+							storeGoods.store_cat_id==cat.store_cat_id>selected="selected"
+							</#if> >${cat.store_cat_name!''}</option> </#if> <#list storeGoodsCatList
+						as childCat> <#if childCat.store_cat_pid==cat.store_cat_id>
+						<option value="${childCat.store_cat_id}"<#if
+							storeGoods.store_cat_id==childCat.store_cat_id>selected="selected"
+							</#if> >&nbsp;&nbsp;&nbsp;&nbsp;${childCat.store_cat_name!''}</option>
+						</#if> </#list> </#list>
+					</select>
+				</p>
+				<p class="hint">
+					商品可以从属于店铺的多个分类之下,</br>店铺分类可以由 "商家中心 -> 商品管理 -> 分类管理" 中自定义
+				</p>
+			</dd>
+		</dl>
+		<dl>
+			<dt>商品发布：</dt>
+			<dd>
+				<p class="mt5">
+					<label> <input type="radio" name="storeGoods.market_enable"<#if
+						storeGoods.market_enable==1> checked="checked" </#if>
+						value="1"/>立即发布
+					</label>
+				</p>
+
+				<p class="mt5">
+					<label> <input type="radio" name="storeGoods.market_enable"<#if
+						storeGoods.market_enable==0> checked="checked" </#if>
+						value="0"/>暂不发布
+					</label>
+				</p>
+			</dd>
+		</dl>
+		<div class="clear">
+			<p>&nbsp;</p>
+			<p>&nbsp;</p>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$('#copyGoodsDesc').click(function(e) {
+	e.preventDefault();
+	var intro2 = $('#intro2').val();
+	if (intro2) {
+		alert('移动端商品描述当前不为空，不能复制');
+		return;
+	}
+	var intro = $('#intro').val();
+	if (intro) {
+		$('#intro2').val("<style>img{width:100%}</style>" + intro);
+	} else {
+		alert('商品描述为空，无可复制');
+	}
+});
+</script>

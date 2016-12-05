@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>GOME Cellar - 金融</title>
+<!-- 文章列表 -->
+<#assign cmsCatListTag = newTag("cmsCatListTag")/>
+<#assign cmslist = cmsCatListTag()/>
+<link href="${ctx}/themes/b2b2cv2/finance/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+
+
+<body>
+   <div class="Header">
+      <div class="Header-text">
+         <div class="Header-logo"><img src="${ctx}/themes/b2b2cv2/finance/images/logo.png" width="355" height="110" alt=""/></div>
+        <div class="Header-shop"></div>
+      </div>
+     <div class="Header-menu">
+        <ul>
+          <li class="left" style="letter-spacing:1px;">GOME Cellar邀您一起探讨金融理财 <!--<a href="#"> GOME Cellar</a> [ <a href="#">登录</a> ]--><span></span></li>
+          <li class="right">
+             <a href="index.html">首页</a>
+             <a href="list.html?cat_id=jiucaijing">酒财经</a>
+             <a href="list.html?cat_id=jiutouzi">酒投资</a>
+             <a href="list.html?cat_id=jiuyinhang">酒银行</a>
+          </li>
+        </ul>
+     </div>
+   </div> 
+   <div class="List">
+   <#list cmslist.result as cmsCat>
+     <#if (cmsCat_index=0)>
+     	<h1>${cmsCat.name!''}<p><a href="index.html">首页</a> > <a href="#">${cmsCat.name!''}</a><p></h1>
+    	 <ul>
+  	</#if>
+      <li>
+         <h2>${cmsCat.page_title!''}</h2>
+         <a href="list_inner.html?cat_id=${cmsCat.cat_id}&id=${cmsCat.id}"><img src="${cmsCat.image!''}" width="360" height="230" alt=""/></a>
+         <p><@substring title="${cmsCat.page_keywords!''}" length="50" dot="..." /></p>
+         <a class="btn"href="list_inner.html?cat_id=${cmsCat.cat_id}&id=${cmsCat.id}">READ MORE</a>
+       </li>
+      <#assign var ="${cmsCat.cat_id!''}">  
+    </#list>
+       <li class="page">  
+       <#if cmslist.totalPageCount!=0>
+       		<#if cmslist.currentPageNo!=1>
+				<a href="list.html?cat_id=${var}&page=${cmslist.currentPageNo-1}">上一页</a> 
+			</#if>
+       		    <a href="list.html?cat_id=${var}&page=${cmslist.currentPageNo}">第${cmslist.currentPageNo}页</a> 
+       		 <#if cmslist.currentPageNo!=cmslist.totalPageCount>   
+       		    <a href="list.html?cat_id=${var}&page=${cmslist.currentPageNo+1}">下一页</a> 
+       		</#if>
+       	</#if>
+       </li>
+     </ul>
+   </div>
+<div class="Footer">Copyright © 2015-2016 GOME Cellar 版权所有</div> 
+</body>
+</html>

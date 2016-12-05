@@ -1,0 +1,73 @@
+<#include '/admin/header.html' >
+
+<script type="text/javascript" src="${staticserver }/js/admin/Tab.js"></script>
+<script type="text/javascript" src="js/MemberDetail.js"></script>
+<link type="text/css" rel="stylesheet" href="css/membermetail.css" />
+<div class="main">
+	<div style="display: block;" class="member_detail">
+		<div class="contentTab">
+			<ul class="tab">
+				<#list pluginTabs?keys as key>
+					<li tabid="${key}" <#if key==3> class="active"</#if> >${pluginTabs.get(key)}</li>
+				</#list>
+			</ul>
+		</div>
+		
+		<div class="shadowBoxWhite wf100 whiteBox">
+			<div class="text">
+				<div class="tab-page">
+					<#list pluginHtmls?keys as key>
+						<div tabid="${key}" class="tab-panel" <#if key!=3> style="display:none"</#if> >${pluginHtmls.get(key)}</div>
+					</#list>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+<script>
+
+$(function(){
+	MemberDetail.init(${member_id!''});
+	
+	var password="";
+	$("input[name='member.password']").focus(function(){
+		password=$("input[name='member.password']").val();
+		$("input[name='member.password']").val("");
+	});
+	$("input[name='member.password']").blur(function(){
+		if($("input[name='member.password']").val()==""){
+			$("input[name='member.password']").val(password);
+		}
+	});
+});
+
+function editForm() {
+	var formflag= $("#editor").form().form('validate');
+		if(formflag){
+			$.Loading.show("正在修改......");
+			var options = {
+					url :"member!saveEditMember.do?ajax=yes",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if(result.result==1){
+							$.Loading.success(result.message);
+						}
+						if(result.result==0){ 
+							$.Loading.error(result.message);
+						}
+						$.Loading.hide();
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+				};
+			$('#editor').ajaxSubmit(options);
+		}		
+}
+
+</script>
+
+<#include '/admin/footer.html' >

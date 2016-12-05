@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="add">
+			<name>seller_cids</name>
+			<type>varchar</type>
+			<size>255</size>
+		</field>
+	</action>
+</dbsolution>

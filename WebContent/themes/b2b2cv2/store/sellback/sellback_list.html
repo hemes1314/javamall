@@ -1,0 +1,86 @@
+<#include '/store/store_header.html' />
+<#assign storeSellBackListTag=newTag("storeSellBackListTag") />
+<#assign sellBackInfo=storeSellBackListTag("{'status':${status!'0'} }" ) />
+<#assign sellBackList=sellBackInfo.sellBackList />
+
+<style>
+.s_orderlist tbody tr td{border:0px none;height: 40px;}
+</style>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			交易管理<span>></span>退货申请
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active"><a href="javascript:void(0);">退货申请</a></li>
+					<li class="normal"><a href="${ctx}/store/sellback/return_list.html?menu=transaction">退货单</a></li>
+				</ul>
+			</div>
+			<div class="store_orderlist">
+				<table class="s_orderlist"  cellpadding="0" cellspacing="0">
+			  		<thead>
+			  			<tr class="s_orderlist_title">
+			  				<th >退货单号</th>
+							<th >订单号</th>
+							<th >会员名称</th>
+							<th >申请时间</th>
+							<th >退货状态</th>
+							<th >操作</th>
+			  			</tr>
+			  		</thead>
+			  		<#if sellBackList.totalCount != 0 >
+        					<tbody>
+      						<#list sellBackList.result as sellBack>
+       							<tr>
+       								<td>${sellBack.tradeno}</td>
+       								<td>${sellBack.ordersn}</td>
+       								<td>
+       									${sellBack.sndto!''}
+       								</td>
+       								<td>
+       									<@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/>
+       								</td>
+       								<td>
+       									<#if sellBack.tythstatus  == 12 >
+       										<span>用户拒收</span>
+       									<#elseif sellBack.tythstatus  == 13>
+       										<span>申请退款</span>
+       									<#else>
+											<span>申请退货</span>
+							           </#if>
+       								</td>
+       								<td>
+	       								<#if sellBack.tythstatus  == 12 >
+	       									<a href="${ctx}/store/sellback/auth_sellback2.html?id=${sellBack.id}&menu=transaction&tythstatus=${sellBack.tythstatus}" target="_blank">审核</a>
+	       								<#elseif sellBack.tythstatus  == 13>
+	       									<a href="${ctx}/store/sellback/auth_sellback3.html?id=${sellBack.id}&menu=transaction&tythstatus=${sellBack.tythstatus}" target="_blank">审核</a>
+	       								<#else>
+	       									<a href="${ctx}/store/sellback/auth_sellback.html?id=${sellBack.id}&menu=transaction&tythstatus=${sellBack.tythstatus}" target="_blank">审核</a>
+	       								</#if>
+       								</td>
+       							</tr>
+       						</#list>
+			    			</tbody>
+			  	</table>
+		    		<@pager pageno="${sellBackInfo.page!'1'}" pagesize="${sellBackInfo.pageSize}" totalcount="${sellBackInfo.totalCount}" />
+			  	<#else>	
+			  		</table>
+			  		<p class="no_blank">暂无符合条件的数据记录</p>
+			  	</#if>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	<script>
+		$(function(){
+				selectMenu(4);
+		})
+	</script>
+    <#include '/common/footer.html'/>

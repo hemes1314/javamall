@@ -1,0 +1,66 @@
+<style>
+.subNavBox{width:100px;border:solid 1px #e5e3da;margin:100px auto;}
+.subNav{border-bottom:solid 1px #e5e3da;cursor:pointer;font-weight:bold;font-size:14px;color:#999;line-height:28px;padding-left:10px;}
+.subNav:hover{color:#277fc2;}
+.currentDd{color:#277fc2}
+.navContent{display: none;border-bottom:solid 1px #e5e3da;}
+.navContent li a{display:block;width:100px;heighr:28px;text-align:center;font-size:14px;line-height:28px;color:#333}
+.navContent li a:hover{color:#fff;background-color:#277fc2}
+</style>
+<script type="text/javascript">
+$(function(){
+	$(".subNav").click(function(){
+		$(this).toggleClass("currentDd").siblings(".subNav").removeClass("currentDd")
+		$(this).toggleClass("currentDt").siblings(".subNav").removeClass("currentDt")
+		$(this).next(".navContent").slideToggle(300).siblings(".navContent").slideUp(500)
+	})	
+})
+</script>
+
+<!-- 创建店铺优惠券标签 --> 
+	<#assign storeBonusListTag= newTag("storeBonusListTag") > 
+	<!-- 查询店铺优惠券列表 --> 
+	<#assign storeBonusList= storeBonusListTag("{'store_id':${store_id!0}}")!''>
+
+<div class="subNavBox" style="position: fixed; *position:absolute;top: 100px;right: 10px;background: white;">
+   <div class="subNav currentDd currentDt">优惠券</div>
+   	<ul class="navContent " style="display:block">	
+   		<#if storeBonusList.totalCount != 0 >
+	   		<#list storeBonusList.bonusList.result as bl>
+			<li onclick="openDialog(${bl.type_id},this);" type_money="${bl.type_money}" min_order_amount="${bl.min_goods_amount}" >${bl.type_money}元优惠券</li>
+       		</#list>
+       	<#else>
+       		<li>无优惠券</li>
+       </#if>
+    </ul>
+	<div class="subNav">客服</div>
+    <ul class="navContent">
+    	<#if store.qq??>
+       		<li style="padding:0px;"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=${store.qq}&amp;site=qq&amp;menu=yes" style="width:100%;">客服</a></li>
+       	</#if>
+    </ul>
+	
+	<script>
+		$(function(){
+			$(".navContent li").click(function(){
+				var storeid = $(this).attr("store_id");
+				var typeid = $(this).attr("type_id");
+				$.ajax({
+					url:"../api/b2b2c/promotion!receiveBonus.do?store_id="+storeid+"&type_id="+typeid,
+					type : "POST",
+					dataType : 'json',
+					success : function(data) {	
+						if(data.result==1){
+							alert(data.message);
+						}
+						else{
+							alert(data.message);
+						}
+					},
+					 cache:false
+				});	
+			})
+		})
+	</script>
+	
+</div>

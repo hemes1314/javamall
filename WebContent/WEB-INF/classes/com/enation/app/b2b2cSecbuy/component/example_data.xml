@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_active</table>
+		<fields>act_id,act_name,start_time,end_time,join_end_time,act_status,add_time,act_tag_id</fields>
+		<values>9,'整时秒拍',1433174400,1464796800,1435852800,1,1433244900,79</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>71,15,0,9,0,0,'		AMOVO魔吻7口味夹心巧克力礼盒 ','','AMOVO魔吻7口味夹心巧克力礼盒',299,90,70,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021936092560.jpg',100,0,0,0,0,'',1,1433244969</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>72,15,0,9,0,0,'		宝矿力水特24瓶 整箱 ','','宝矿力水特24瓶 整箱',289,93,60,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021936554089.jpg',100,0,0,0,0,'',1,1433245015</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>73,15,0,9,0,0,'		红花郎酒十年陈酿53度 500ml ','','红花郎酒十年陈酿53度 500ml',195,255,150,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021937413821.jpg',100,0,0,0,0,'',1,1433245061</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>74,5,0,9,0,0,'		太平鸟女装2015夏装新品拼接衬衫 ','','太平鸟女装2015夏装新品拼接衬衫',147,239,200,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021939066002.jpg',100,0,0,0,0,'',1,1433245146</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>75,5,0,9,0,0,'		太平鸟女装2014夏装新款印花连衣裙韩版长裙女夏 ','','太平鸟女装2014夏装新款印花连衣裙韩版长裙女夏 ',285,239,190,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021939382558.jpg',200,0,0,0,0,'',1,1433245178</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>76,5,0,9,0,0,'太平鸟女装2015夏装新品相拼蕾丝短裤 ','','太平鸟女装2015夏装新品相拼蕾丝短裤',144,219,180,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021940105794.jpg',100,0,0,0,0,'',1,1433245210</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>77,10,0,9,0,0,'		朴美床品全棉儿童学生宿舍床上三件套单人纯棉床单被套 ','','朴美床品全棉儿童学生宿舍床上三件套单人纯棉床单被套',84,149,100,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021941175028.jpg',100,0,0,0,0,'',1,1433245277</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>78,10,0,9,0,0,'雅培(Abbott) 亲体 金装喜康力较大婴儿配方奶粉 2段','','雅培(Abbott) 亲体 金装喜康力较大婴儿配方奶粉 2段',69,189,150,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021941503279.jpg',100,0,0,0,0,'',1,1433245310</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_secbuy_goods</table>
+		<fields>gb_id,store_id,product_id,act_id,cat_id,area_id,gb_name,gb_title,goods_name,goods_id,original_price,price,img_url,goods_num,visual_num,limit_num,buy_num,view_num,remark,gb_status,add_time</fields>
+		<values>79,10,0,9,0,0,'		帮宝适（Pampers）自然纯净 婴儿湿巾 ','','帮宝适（Pampers）自然纯净 婴儿湿巾',73,32,23,'http://static.b2b2cv2.javamall.com.cn/attachment/secbuy/201506021943249245.jpg',100,0,0,0,0,'',1,1433245404</values>
+	</action>
+</dbsolution>

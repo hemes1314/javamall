@@ -1,0 +1,41 @@
+<#assign cartTag= newTag("cartTag")> 
+<#assign itemList = cartTag() >
+<#if (itemList?size>0) >
+		<div class="incart-goods">
+		<#list itemList as item>
+			<dl itemid="${item.id}" class="item">
+				<dd class="goods-thumb">
+					<span class="thumb size40" >
+						<a target="_blank" href="${ctx}/goods-${item.goods_id}.html" title="${item.name}" >
+							<@image height="40" width="40" src="${item.image_default!''}" style="cursor: pointer;" />
+						</a>	
+					</span>
+				</dd>
+				<dt class="goods-name">
+					<a href="${ctx}/goods-${item.goods_id}.html">${item.name}</a>
+					<#if item.others?exists>
+									<#if item.others.specList?exists>
+										<span class="spec">
+											<#list item.others.specList as spec>
+												<#if spec_index!=0></#if><strong>${spec.name}:<em style="color:#ED7108">${spec.value}</em></strong>
+											</#list>
+										</span>
+									</#if>
+									 
+								</#if>
+				</dt>
+				<dd class="goods-price"><p>￥${item.price}×${item.num}</p></dd>
+				<dd class="handle">
+					<a href="javascript:void(0)" itemid="${item.id}" class="delete">删除</a>
+				</dd>
+			</dl>
+			<#if item_has_next>
+			</#if>
+		</#list>
+		</div>
+		<div class="checkout">
+			<a  class="btn-cart" href="${ctx}/cart.html">结算购物车中的商品</a>
+		</div>
+<#else>
+	<p style="text-align:center;border:0px!important;">您的购物车中还没有任何商品</p>
+</#if>

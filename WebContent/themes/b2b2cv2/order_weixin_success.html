@@ -1,0 +1,63 @@
+<#assign  title="订单支付成功" />
+<#include 'common/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/cart.css" />
+<!--正文-->
+<#--创建订单详细标签-->
+<#assign orderDetailTag = newTag("orderDetailTag") />
+<#--获取订单详细，传递参数orderid-->
+<#assign order = orderDetailTag("'orderid':${orderid}") />
+<#--创建订单状态标签-->
+<#assign orderStautsTag= newTag("orderStautsTag") />
+<#--获取订单状态 -->
+<#assign orderStauts= orderStautsTag() />
+<!-- 购物流程 -->
+<div class="flow_path">
+	<div class="cart_logo">
+		<a href="${ctx}/index.html"><img src="${ctx}/adminthemes/new/images/logo.png" class="pngFix" style="width:240px;height:100px;"></a>
+	</div>
+	<div class="flow_pathlist">
+		<ul>
+			<li class="">
+				<i class="process1"></i>
+				<span></span>
+				<p>我的购物车</p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process2"></i>
+				<span></span>
+				<p>填写核对信息单</p>
+				<strong></strong>
+			</li>
+			<li class="selected">
+				<i class="process3"></i>
+				<span></span>
+				<p>订单支付成功</p>
+				<strong></strong>
+			</li>
+		</ul>
+	</div>
+</div>
+<!-- 订单确认，并引导支付 -->
+<div class="confirmation">
+	<div class="con_img">
+		<img src="themes/b2b2cv2/images/duihao.jpg" alt="订单支付成功" />
+		<h1>订单支付成功</h1>
+	</div>
+	<h2>
+		<#if order.need_pay_money!=0>支付金额<strong>${order.need_pay_money?string("currency")}</strong></span></#if>
+	</h2>
+	<h4>收货信息：${order.ship_name}(${order.shipping_area}-${order.ship_addr})，联系电话：<#if order.ship_mobile??>${order.ship_mobile!''}<#else>${order.ship_tel!''}</#if></h4>
+	<div class="go_tools">
+		<a href=" ${ctx}/" class="go_continue">继续购物</a>
+		<#if order.member_id?exists  >
+			<a href="member/order.html" class="go_state">我的订单>></a>
+		<#else>
+			<a href="orderdetail.html?ordersn=${order.sn}" class="go_state">查看订单状态>></a>	
+		</#if>
+	</div>
+</div>
+
+	<!--正文结束-->
+<#include 'common/footer.html' />

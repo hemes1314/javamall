@@ -1,0 +1,83 @@
+<style>
+.input_text {
+	width: 150px;
+}
+.title{font-weight:bold;font-style:italic;font-size:14px;}
+body,table{
+font-size:12px;
+}
+table{
+table-layout:fixed;
+empty-cells:show;
+border-collapse: collapse;
+}
+h1,h2,h3{
+font-size:12px;
+margin:0;
+padding:0;
+}
+.table{
+border:1px solid #cad9ea;
+color:#666;
+}
+.table th {
+background-repeat:repeat-x;
+height:30px;
+text-align:left;
+}
+.table td,.table th{
+border:1px solid #cad9ea;
+padding:0 1em 0;
+}
+.table tr.alter{
+background-color:#f5fafe;
+} 
+</style>
+<form id="addForm">
+<input type="hidden" name="cfId" value="${cfId}" />
+<div class="main" style="background-color: white;clear:both">
+	<div style="float:left">
+		<table class="table" style="float:left; width:99%; margin:30px 0;">
+			<tr>
+				<th></th>
+				<th>ID</th>
+				<th>商品名称</th>
+			</tr>
+			<#list goodsList as goods>
+			<tr>
+				<td><input type="checkbox" name="goodsIds" value="${goods.goods_id}" <#if goods.has == "1">checked="checked" /></#if></td>
+				<td>${goods.goods_id!''}</td>
+				<td>${goods.name!''}</td>
+			</tr>
+			</#list>
+			<tr>
+				<td colspan="3" align="center">
+					<a href="javascript:addCfGoods()" class="l-btn" group="" id=""><span class="l-btn-left"><span class="l-btn-text icon-ok l-btn-icon-left">保存</span></span></a>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+</form>
+<script>
+function addCfGoods() {
+	alert("${cfId}");
+	var options = {
+		url : "cf!addCFGoods.do?ajax=yes",
+		type : "POST",
+		dataType : 'json',
+		success : function(result) {
+			if (result.result == 1) {
+				alert("添加成功");
+			}
+			if (result.result == 0) {
+				alert("添加失败");
+			}
+		},
+		error : function(e) {
+			alert("出现错误 ，请重试");
+		}
+	};
+	$("#addForm").ajaxSubmit(options);
+}
+</script>

@@ -1,0 +1,26 @@
+<h1>商品参数</h1>
+<#if paramAr?exists && (paramAr?size)!=0 > 
+<#-- 这里判断是否为0-->
+<#list paramAr as group >
+<div class="addgoods" style="border-bottom:0px none">
+<div class="form-table goods_attribute">
+		<dl style="display: none;">
+			<dt style='text-align:left' align="left" colSpan="2" class="groupname title">
+				<input type="hidden" name="groupnames" value="${ group.name!''}" />
+				<input type="hidden" name="paramnums" value="${ group.paramNum!''}" />
+			</dt>
+		</dl>
+		<#list group.paramList as gparam>
+		<dl>
+			<dt style="font-weight: normal;">
+				<input type="hidden" name="paramnames" value="${gparam.name!''}" /> ${gparam.name!''}：</dt>
+			<dd style="text-align: left;">
+				<input type="text" name="paramvalues" class="input_text text" value="${gparam.value!''}" style="width:300px"/></dd>
+		</dl>
+		</#list>
+	</div>
+	</div>
+	</#list> 
+<#else> 
+	该类型未定义参数 
+</#if>

@@ -1,0 +1,291 @@
+<#assign  title="收货地址" />
+<#include 'member_header.html' />
+<!--创建"会员地址列表"标签-->
+<#assign consigneeListTag= newTag("consigneeListTag") >    
+<!--调用"会员地址列表"标签-->          
+<#assign  consigneeList= consigneeListTag()>	
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<div class="member_center">
+	<div class="address">
+		<ul>
+			<li class="selected"><a href="address.html"><span>收货地址管理</span></a></li>
+		</ul>
+		<a href="javascript:;" class="add_address"><span>新增收货地址</span></a>
+	</div>
+	<div class="alert_address">
+		<h1>友情提示</h1>
+		<p>最多可以保存10个地址</p>
+	</div>
+	<div class="address_list">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th class="a1">收货人</th>
+					<th class="a2">所在地区</th>
+					<th class="a3" style="text-align:left">街道地址</th>
+					<th class="a4">电话/手机</th>
+					<th class="a5">邮编</th>
+					<th class="a6">默认</th>
+					<th class="a7">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#if consigneeList?size gt 0 >
+				<#list consigneeList as address>
+				<tr>
+					<td>${address.name!''}</td>
+					<td>${address.province!''}-${address.city!''}-${address.region!''}</td>
+					<td style="text-align:left">${address.addr!''}</td>
+					<td>
+						<p class="a_tel">${address.tel!''}</p>
+						<p class="a_phone">${address.mobile!''}</p>
+					</td>
+					<td>${address.zip!''}</td>
+					<td><#if address.def_addr == 0 >否</#if><#if address.def_addr == 1 >是</#if></td>
+					<td>
+						<a href="javascript:;" rel="${address.addr_id}" class="edit"></a>
+						<span class="aline"></span>
+						<a href="javascript:;" class="address_del" rel="${address.addr_id}" ></a>
+					</td>					
+				</tr>
+				</#list>
+				<#else>
+				<tr>
+					<td colspan="9">
+						您尚未添加收货地址，<a href="javascript:;" class="addressadd">添加一个</a>
+					</td>
+				</tr>
+				</#if>
+			</tbody>	
+		</table>
+	</div>
+	<!--添加会员地址。使用js load方法调用member/address_add.html页面  -->
+	<div class="address_add" style="overflow:hidden;">
+	</div>
+	<!-- 修改会员地址 。使用js load方法调用member/address_edit.html页面 -->
+	<div class="address_edit" style="overflow:hidden;">
+	</div>
+	
+</div>
+
+
+
+
+
+<script>
+	$(function(){
+		/*添加会员地址专用*/
+		$(".add_address,.addressadd").click(function(){
+			$(".address_add").load("address_add.html",function(){
+				$(".address_list").hide();
+				$(".address_edit").hide();
+				$(".grey_top").hide();
+				$(".address_add").show();
+				/*添加用户地址js*/
+				$("#btnSubmit").click(function(){
+					var membername = $(".member_name_title").val();
+					if(membername.indexOf(" ")!=-1){
+						alert("请确保会员名称前、后或名称中有空格");
+						return false;
+					}
+					//判断真实姓名
+					if($("#username").val()==""){
+						alert("姓名不能为空");
+						return false;
+					}
+					
+					//判断真实姓名  
+					var strss = "[@/'\"#$%&^*]+";
+					var reg = new RegExp(strss);
+					var tname = $("#username").val();
+					if(tname.match(reg)!=null)
+					{
+						alert("姓名中有特殊字符");
+						return false;
+					}
+					
+					//判断姓名中不能有数字
+					var strss = "[0-9]";
+					var reg = new RegExp(strss);
+					var tname = $("#username").val();
+					if(tname.match(reg)!=null)
+					{
+						alert("姓名中不能有数字");
+						return false;
+					}
+					
+					//判断联系地址  
+					var strss = "[@/'\"#$%&^*]+";
+					var reg = new RegExp(strss);
+					var tname = $("#useraddree").val();
+					if(tname.match(reg)!=null)
+					{
+						alert("联系地址中有特殊字符");
+						return false;
+					}
+					
+					//请选择地区
+					if($("select").val()=="0"){
+					    alert("请选择地区");
+						return false;	
+					}
+					
+					//判断地区是否选择完整
+					if($("#city").val() == "请选择" || $("#region").val() == "请选择"){
+						alert("请将地区选择完整");
+						return false;
+					}
+										
+					//判断邮编
+					if(isNaN($("#zipcode").val())!==false){
+						alert("邮编必须为纯数字");
+						return false;
+					}
+					if($("#zipcode").val().length!="6"){
+						alert("邮编位数错误");
+						return false;
+					}
+					
+					$("#member_addr").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!add.do",
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							<!-- Bug 124079：修正 -->
+							if(data.result==1){
+								$("#btnSubmit").attr("add_address","add_address1");
+								location.href = "${ctx}/member/address.html";
+							}
+						},
+						error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			});
+		});
+		/*修改地址专用*/
+		$(".edit").click(function(){
+			var editid = $(this).attr("rel");
+			$(".address_edit").load("address_edit.html?addressid="+editid,function(){
+				$(".address_list").hide();
+				$(".address_edit").show();
+				$(".grey_top").hide();
+				$(".address_add").hide();
+				/*修改用户地址*/
+				$("#address_edit").click(function(){
+					var membername = $(".member_name_title").val();
+					if(membername.indexOf(" ")!=-1){
+						alert("请确保会员名称前、后或名称中有空格");
+						return false;
+					}
+					//判断真实姓名
+					if($("#username").val()==""){
+						alert("姓名不能为空");
+						return false;
+					}
+					
+					//判断真实姓名  
+					var strss = "[@/'\"#$%&^*]+";
+					var reg = new RegExp(strss);
+					var tname = $("#username").val();
+					if(tname.match(reg)!=null)
+					{
+						alert("姓名中有特殊字符");
+						return false;
+					}
+					
+					//判断姓名中不能有数字
+					var strss = "[0-9]";
+					var reg = new RegExp(strss);
+					var tname = $("#username").val();
+					if(tname.match(reg)!=null)
+					{
+						alert("姓名中不能有数字");
+						return false;
+					}
+					
+					//判断联系地址  
+					var strss = "[@/'\"#$%&^*]+";
+					var reg = new RegExp(strss);
+					var tname = $("#useraddree").val();
+					if(tname.match(reg)!=null)
+					{
+						alert("联系地址中有特殊字符");
+						return false;
+					}
+					
+					//请选择地区
+					if($("select").val()=="0"){
+					    alert("请选择地区");
+						return false;	
+					}
+					
+					//判断地区是否选择完整
+					if($("#city").val() == "请选择" || $("#region").val() == "请选择"){
+						alert("请将地区选择完整");
+						return false;
+					}
+										
+					//判断邮编
+					if(isNaN($("#zipcode").val())!==false){
+						alert("邮编必须为纯数字");
+						return false;
+					}
+					if($("#zipcode").val().length!="6"){
+						alert("邮编位数错误");
+						return false;
+					}
+					$(".validate").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!edit.do?addressid="+editid,
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							<!-- Bug 124079：修正 -->
+							if(data.result==1) {
+								location.href = "address.html"
+							}
+						},
+						error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			})
+		})
+		/*删除地址*/
+		$(".address_del").click(function(){
+			if(confirm("确定要删除吗")){
+				var deleteid = $(this).attr("rel");
+				$.ajax({
+					url : "${ctx}/api/shop/memberAddress!delete.do?addr_id="+deleteid,
+					dataType : 'json',
+					success : function(data) {	
+						alert(data.message)
+						if(data.result==1)
+							location.href = "address.html"
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+				})  
+			}
+			else{
+				location.href="address.html";
+			}
+		})
+	});		
+</script>
+	<!--会员中心首页右侧结束-->
+
+
+</div>
+<#include '../common/footer.html'/>

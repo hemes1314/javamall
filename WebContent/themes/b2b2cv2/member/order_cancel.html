@@ -1,0 +1,17 @@
+<style>
+.ui_border tr td{border:0px none;text-align:left;height:0px;background:none;width:0px;border-radius:none;}
+</style>
+<div class="member_order_cancel">
+<form method="post" action="" id="cancelForm" style="display: none;">
+	<div class="order_cancel">
+		<label>
+			<span class="span1">取消原因：</span>
+			<textarea id="txt" type="text" name="reason" class="order_reason" maxlength="30"></textarea>
+            <span style="width:auto; height:20px; line-height:20px; color:ccc; padding:0; margin:0; text-align:left;">(请输入不要超过30个字符)</span>
+		</label>
+	</div>
+	<div class="order_cancel_tools">
+		<input type="button" value="确认取消订单" id="cancelBtn" class="yellow_btn">
+	</div>
+</form>
+</div>

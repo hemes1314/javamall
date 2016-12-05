@@ -1,0 +1,77 @@
+<#assign title="我的优惠券" /> <#include 'member_header.html' />
+
+<!-- 获得会员优惠券列表标签 -->
+<#assign b2b2cMemberBonusListTag = newTag("b2b2cMemberBonusListTag")>
+<!-- 调用会员优惠券列表标签 -->
+<#assign bonusresult = b2b2cMemberBonusListTag()> 
+<#assign bonuslist = bonusresult.bonusList>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li <#if bonusresult.store=='1'>class="selected"</#if>><a href="bonus.html?store=1"><span>我的优惠券</span></a></li>
+			<li <#if bonusresult.store=='0'>class="selected"</#if>><a href="bonus.html?store=0"><span>我的红包</span></a></li>
+		</ul>
+	</div>
+	<!-- 优惠券明细 -->
+	<div class="point_list">
+		<#if bonuslist?size gt 0 >
+		<table style="width: 100%" cellspacing="0" cellpadding="0">
+			<tr>
+			<#if bonusresult.store=='1'>
+				<th class="title">优惠券类型</th>
+			<#else>
+				<th class="title">红包类型</th>
+			</#if>
+			<#if bonusresult.store=='1'>
+				<th class="title">所属店铺</th>
+			</#if>
+			
+			<#if bonusresult.store=='1'>
+				<th class="date">优惠券金额</th>
+			<#else>
+				<th class="date">红包金额</th>
+			</#if>
+				
+			<#if bonusresult.store=='1'>
+				<th class="date">最小订单金额</th>
+				<th class="date">开始时间</th>
+			</#if>
+				<th class="date">到期时间</th>
+			</tr>
+			<#list bonuslist as mb>
+			<tr>
+				<td>${mb.type_name}</td>
+<#if bonusresult.store=='1'>
+				<td>${mb.store_name!''}</td>
+</#if>
+				<td>${mb.type_money?string('currency')}</td>
+				<#if bonusresult.store=='1'>
+					<td><#if mb.store_id == 0>-<#else>${mb.min_goods_amount?string('currency')}</#if></td>
+					<td>
+						<@dateformat time="${mb.use_start_date?c}" pattern="yyyy-MM-dd"/>
+					</td>
+				</#if>
+				
+				<#if .now?long/1000 gt	mb.use_end_date?long>
+					<td>已过期</td> 
+				<#elseif mb.used==1>
+					<td>
+						订单${mb.order_sn!''}
+					</td> 
+				<#else>
+					<td>
+						<@dateformat time="${mb.use_end_date?c}" pattern="yyyy-MM-dd"/>
+					</td> 
+				</#if>
+			</tr>
+			</#list>
+		</table>
+		<#else>
+		<div class="empty">您暂时没有优惠券记录</div>
+		</#if>
+	</div>
+</div>
+
+</div>
+<#include '../common/footer.html'/>
+

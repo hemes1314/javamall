@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+label.error { color: #F30;}
+
+.quick-login { background: #FFF; overflow: hidden; width: 278px; padding: 0 40px; }
+.quick-login dl { width: 100%; margin: 0 auto; overflow: hidden;}
+.quick-login dl dt { line-height: 20px; height:20px; margin: 8px 0 2px 0; text-shadow: 1px 1px 0 #FFF;}
+.quick-login dl dd span { line-height: 28px; color: #999; margin-left:8px;}
+.quick-login .text{ font-family: Tahoma; width: 250px; height: 24px; line-height: 24px; background-color:#FFF; padding: 1px 2px 3px 4px !important; padding: 3px 2px 1px 4px; border: solid 1px; border-color: #CCC #DDD #DDD #CCC; border-radius: 0; box-shadow: 2px 2px 1px 0 #E7E7E7 inset; -moz-box-shadow: 2px 2px 1px 0 #E7E7E7 inset/* if FF*/; -webkit--box-shadow: 2px 2px 1px 0 #E7E7E7 inset/* if Webkie*/;}
+.quick-login .text:focus{ background-color:#FFF; border-color: #CCC; box-shadow: 1px 1px 1px 0 #E7E7E7; -moz-box-shadow: 1px 1px 1px 0 #E7E7E7/* if FF*/; -webkit--box-shadow: 1px 1px 1px 0 #E7E7E7/* if Webkie*/;}
+
+.quick-login ul { width: 100%; display:block; clear:both; margin: 20px auto 10px auto; padding-bottom:10px; overflow: hidden; border-bottom: solid 1px #E7E7E7;}
+.quick-login ul li {line-height: 20px; color:#999;}
+.quick-login ul li a { text-decoration:underline; font-weight:600; margin:0 2px;}
+.quick-login ul li a.forget {  color: #FF7F00;}
+.quick-login ul li a.register { color: #006DD9;}
+.quick-login .enter { width: 100%; margin: 10px auto 20px auto; overflow: hidden;}
+.quick-login .enter .submit { padding: 0px;margin: 0px;height: 36px;line-height: 36px;width: 110px;border: medium none;text-align: center;text-decoration: none;vertical-align: middle;cursor: pointer;font-family: 微软雅黑,宋体;background-color: #d93600;color: #FFF;outline: medium none;display: inline-block;font-size: 14px;border-radius: 4px;-moz-user-select: none;}
+.quick-login .enter .submit:hover { text-decoration: none !important;background-color: #ff4400;color: #fff;  }
+.quick-login .enter span {  border-left: dotted 1px #ccc; padding-left:6px; margin: 0 0 0 6px; line-height:28px;}
+.quick-login .enter span a { background-image: url(../images/login.png); background-repeat: no-repeat; background-attachment: scroll; height: 28px; display: inline-block;}
+.quick-login .enter span a.qq { background-position: -88px 0px; width: 78px;}
+.quick-login .enter span a:hover.qq {background-position: -88px -28px; text-decoration:none;}
+.quick-login .enter span a.sina { background-position: -166px 0px; width: 88px;}
+.quick-login .enter span a:hover.sina {background-position: -166px -28px; text-decoration:none;}
+

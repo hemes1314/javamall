@@ -1,0 +1,85 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editForm" method="post" class="validate">
+			<table width="100%">
+				<tr height="40">
+					<th width="100">类型：</th>
+					<td>
+						<select class="easyui-validatebox" name="adv.img_type" onchange="onTypeChanged(this.value);">
+							<option value="1" <#if adv.img_type == 1>selected="selected"</#if>>商品列表</option>
+							<option value="2" <#if adv.img_type == 2>selected="selected"</#if>>商品详情</option>
+							<option value="3" <#if adv.img_type == 3>selected="selected"</#if>>专题</option>
+							<option value="4" <#if adv.img_type == 4>selected="selected"</#if>>闪购</option>
+							<option value="5" <#if adv.img_type == 5>selected="selected"</#if>>预售</option>
+						</select>
+					</td>
+				</tr>
+				<tr height="40">
+					<th id="detailTitle">商品分类id：</th>
+					<td><input class="input_text" type="text" id="detail"
+						name="adv.detail" data-options="required:true" value="${adv.detail}" />
+					<td>
+				</tr>
+				<tr id="propTr" height="30">
+					<th id="propTitle">商品类型：</th>
+					<td><input class="input_text" type="text" id="prop"
+						name="adv.prop" value="${adv.prop}"/>
+					<td>
+				</tr>
+				<tr height="40">
+					<th>上传广告文件：</th>
+					<td><input class="easyui-validatebox" type="file"
+						name="pic"></input>(请上传gif,jpg,bmp,png格式,2M以内的图片)</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td><img alt="" src="${adv.imgUrl!''}" height="120px" width="150px;">
+					</td>
+				</tr>
+				<tr height="40">
+					<th>标题：</th>
+					<td><input class="input_text" type="text" id="introduce"
+						name="adv.introduce" data-options="required:true" value="${adv.introduce}"/>
+					<td>
+				</tr>
+			</table>
+			<input type="hidden" name="adv.aid" value="${adv.aid}">
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+
+	function onTypeChanged(type) {
+		var detailTitle = "";
+		$("#propTr").hide();
+		$("#prop").val("");
+		$("#detail").val("").prop("disabled", false);
+		switch (parseInt(type)) {
+		case 1:
+			detailTitle = "商品分类id：";
+			$("#propTr").show();
+			break;
+		case 2:
+			detailTitle = "商品id：";
+			break;
+		case 3:
+			detailTitle = "专题链接：";
+			break;
+		case 4:
+			detailTitle = "标识：";
+			$("#detail").val("s").prop("disabled", true);
+			break;
+		case 5:
+			detailTitle = "标识：";
+			$("#detail").val("y").prop("disabled", true);
+			break;
+		}
+		$("#detailTitle").text(detailTitle);
+	}
+	
+</script>

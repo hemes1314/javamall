@@ -1,0 +1,111 @@
+<style>
+.input_text {
+	width: 150px;
+}
+body,table{
+font-size:12px;
+}
+table{
+table-layout:fixed;
+empty-cells:show;
+border-collapse: collapse;
+}
+h1,h2,h3{
+font-size:12px;
+margin:0;
+padding:0;
+}
+.table{
+border:1px solid #cad9ea;
+color:#666;
+}
+.table th {
+background-repeat:repeat-x;
+height:30px;
+}
+.table td,.table th{
+border:1px solid #cad9ea;
+padding:0 1em 0;
+text-align:left;
+}
+.table tr.alter{
+background-color:#f5fafe;
+} 
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+			 <table class="table" style="float:left; width:99%">
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">商品编号</th>
+					<td>${auction.goodsn!''}</td>
+					<th style="width:60px; height:40px; line-height:40px;">拍卖品名</th>
+					<td>${auction.title!''}</td>
+                    <th style="width:60px; height:40px; line-height:40px;">起始价格</th>
+					<td>${auction.sprice!''}</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">当前价格</th>
+					<td>${auction.cprice!''}</td>
+                    <th style="width:60px; height:40px; line-height:40px;">开始时间</th>
+					<td>${auction.start_time!''}</td>
+					<th style="width:60px; height:40px; line-height:40px;">截止时间</th>
+					<td>${auction.time!''}</td>
+				</tr>
+				<tr>
+					<th style="width:60px; height:40px; line-height:40px;">竞拍人数</th>
+					<td>${auction.length!''}人
+					</td>
+					<th style="width:60px; height:40px; line-height:40px;">出价次数</th>
+					<td>${record!''}次</td>
+                    <th style="width:60px; height:40px; line-height:40px;">当前状态</th>
+					<td>${auction.status!''}</td>
+				</tr>
+			</table>
+            <table class="table" style="float:left; width:99%; margin:3px 0 0 0;">
+               <tr>
+					<th style="width:60px;">拍卖介绍</th>
+					<td style="line-height:30px;">${auction.content!''}</td>
+				</tr>
+            </table>
+            <table class="table" style="float:left; width:99%; margin:3px 0 0 0;">
+               <tr>
+					<th style="width:60px;">服务保障</th>
+					<td style="line-height:30px;">${auction.service!''}</td>
+				</tr>
+            </table>
+		    <table width="80%" class="table" style="float:left; width:99%; margin:3px 0 0 0;"">
+		    <tr>
+				<td colspan=9 style="font-weight:bold; font-size:14px;">出价详情</td>
+			</tr>
+			<tr>
+				<th>用户名</th>
+				<th>姓名</th>
+				<th>昵称</th>
+				<th>出价</th>
+				<th>状态</th>
+				<th>手机</th>
+				<th>电话</th>
+				<th>邮箱</th>
+				<th>地址</th>
+			</tr>
+			<#list auctionRecordList as uctionRecord>
+				<tr>
+					<td>${uctionRecord.user_name!''}</td>
+					<td>${uctionRecord.name!''}</td>
+					<td>${uctionRecord.nickname!''}</td>
+					<td>${uctionRecord.price!''}</td>
+					<td>
+					   <#if uctionRecord.status==1>当前最高</#if>
+					   <#if uctionRecord.status==0>未中拍</#if>
+					   <#if uctionRecord.status==2>已中拍</#if>
+					</td>
+					<td>${uctionRecord.mobile!''}</td>
+					<td>${uctionRecord.tel!''}</td>
+					<td>${uctionRecord.email!''}</td>
+					<td>${uctionRecord.address!''}</td>
+				</tr>										
+			</#list>
+			</table> 			
+			<input type="hidden" name="auction.id" value="${auction.id}">
+	</div>
+</div>

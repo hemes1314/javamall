@@ -1,0 +1,51 @@
+<#-- 创建单一的商品分类信息标签 --> 
+<#assign storeCatTag= newTag("storeCatTag") > 
+<#-- 查询单一的商品分类信息 --> 
+<#assign storeCat= storeCatTag('"catid":${catid}')!''>
+
+<#-- 创建商品分类标签 --> 
+<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+<#-- 查询商品分类列表 0表示查子分类 --> 
+<#assign storeGoodsCatList= storeGoodsCatListTag("{'type':1,'catid':${catid}}")!''>
+<div class="store_goodscat">
+	<#-- 创建商品分类标签 --> 
+	<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+	<#-- 查询商品分类列表 0表示查子分类 --> 
+	<#assign storeGoodsCatList= storeGoodsCatListTag("'type':1")!''>
+	
+	<form id="edit_form">
+		<input type="hidden" name="cat_id" value="${catid!''}" >
+		<dl>
+			<dt>分类名称：</dt>
+			<dd>
+				<input type="text" name="store_cat_name" value="${storeCat.store_cat_name!''}" >
+			</dd>
+		</dl>
+		<dl>
+			<dt>上级分类：</dt>
+			<dd>
+				<select name="store_cat_pid">
+					<option value="0">请选择</option>
+					<#list storeGoodsCatList as cat>
+					<option value="${cat.store_cat_id}" <#if cat.store_cat_id==storeCat.store_cat_pid>selected</#if> >${cat.store_cat_name}</option>
+					</#list>
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>排&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序：</dt>
+			<dd>
+				<input id="sort" value="${storeCat.sort!0}"
+				style="IME-MODE: disabled;"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="5"
+				size="14" name="store_sort" type="text" dataType="int"/>
+			</dd>
+		</dl>
+		<dl>
+			<dt>显示状态：</dt>
+			<dd id="add_goodscat">
+				<label><input type="radio" name="disable" value="1" <#if storeCat.disable==1>checked</#if> style="border:0px none"><span style="height:32px;line-height:32px;display:inline;">是</span></label>
+				<label><input type="radio" name="disable" value="0" <#if storeCat.disable==0>checked</#if> style="border:0px none"><span style="height:32px;line-height:32px;display:inline;">否</span></label>
+		</dl>
+	</form>
+	
+</div>

@@ -1,0 +1,111 @@
+<#include '/admin/header.html' > 
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+
+<div class="main" style="background-color: white;">
+	<form id="addForm">
+		<table cellspacing="1" cellpadding="3" width="100%" style="border-collapse:collapse;" border='1' bordercolor="#d7d7d7" class="form-table">
+			<input type="hidden" name="appealFlow.business_id" value="${appealFlow.business_id}">
+			<input type="hidden" name="appealFlow.member_id" value="${appealFlow.member_id}">
+			<input type="hidden" name="appealFlow.applicant" value="${loginname}">
+			<input type="hidden" name="appealFlow.applicant_cn" value="${loginname_cn}">
+			<input type="hidden" name="appealFlow.appeal_date" value="${appealFlow.appeal_date}">
+			<input type="hidden" name="appealFlow.appeal_flow_id">
+			<!-- <tr>
+				<th>描述：</th>
+				<td><input class="input_text easyui-validatebox" type="text" readonly="true" 
+					id="m_name" name="member.uname" data-options="required:false"></input>
+				</td>
+			</tr> -->
+			<tr>
+				<th>申请人</th>
+				<td><input class="input_text" type="text" name="appealFlow.member_name" readonly value="${appealFlow.member_name}"></input>
+				</td>
+			</tr>
+			<tr>
+				<th>申诉相片</th>
+				<td>
+					<div id="sitelogo" style="float: none; position: static;">
+						<img style="float: none; display:none;position: static;max-width:400px;height:auto;" src="${appealFlow.appeal_photo!''}" id="appeal_photo_img1" />&nbsp;
+						<img style="float: none; display:none;position: static;max-width:400px;height:auto;" src="${appealFlow.appeal_photo!''}" id="appeal_photo_img2" />&nbsp;
+						<img style="float: none; display:none;position: static;max-width:400px;height:auto;" src="${appealFlow.appeal_photo!''}" id="appeal_photo_img3" />&nbsp;
+						<img style="float: none; display:none;position: static;max-width:400px;height:auto;" src="${appealFlow.appeal_photo!''}" id="appeal_photo_img4" />&nbsp;
+						<img style="float: none; display:none;position: static;max-width:400px;height:auto;" src="${appealFlow.appeal_photo!''}" id="appeal_photo_img5" />&nbsp;
+						
+						<input type="button" class="button" id="appeal_photo_button" value="上传申诉相片" onclick="openImgDlg(getPhotoPath)"/>
+						<input type="hidden" name="appealFlow.appeal_photo" id="appeal_photo" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>申请原因</th>
+				<td>
+					<textarea  class="input_text easyui-validatebox" name="appealFlow.reason" 
+					 cols="100" rows="8" id="intro" style="resize: none;"
+					 data-options="required:true"></textarea>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div class="buttonWrap fixed">
+		<a id="submitButton" class="easyui-linkbutton" onclick="submitForm()"
+			href="javascript:;">保存</a>
+	</div>
+</div>
+<script>
+	
+
+	function submitForm() {
+		var formflag = $("#addForm").form().form('validate');
+		if (formflag) {
+			$.Loading.show("正在提交......");
+			$("#submitButton").linkbutton("disable");
+			var options = {
+				url : "appeal!save.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success("单据已保存");
+						
+						//newTab("申诉申请", "${ctx}/b2b2c/admin/appeal!list.do");
+						//parent.CloseTabByTitle("申诉申请");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$("#submitButton").linkbutton("enable");
+					
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					$("#submitButton").linkbutton("enable");
+					$.Loading.hide();
+				}
+			};
+			$("#addForm").ajaxSubmit(options);
+		} else {
+			$.Loading.hide();
+		}
+	}
+	
+	function getPhotoPath(path){
+		
+		if ($("#appeal_photo").val() != '') {
+			$("#appeal_photo").val( $("#appeal_photo").val() + ',' + path);
+		} else {
+			$("#appeal_photo").val(path);
+		}
+		for(var i = 1; i < 6;i++) {
+			if($("#appeal_photo_img" + i).attr("src")=='') {
+				$("#appeal_photo_img" + i).attr("src",path);
+				$("#appeal_photo_img" + i).show();
+				break;
+			}
+		}
+		/* $("#appeal_photo_img").attr("src",path);
+		$("#appeal_photo_img").show();
+		$("#appeal_photo_button").toggle(); */
+	}
+</script>
+
+<#include '/admin/footer.html' >

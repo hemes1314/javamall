@@ -1,0 +1,188 @@
+<#include '/admin/header.html' >
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+
+<link href="${ctx}/adminthemes/default/css/dialog.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/adminthemes/new/css/global.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/adminthemes/new/css/main.css" rel="stylesheet" type="text/css" />
+
+<script	type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script	type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<script type="text/javascript" src="${ctx}/shop/admin/js/OrderDetail.js"></script>
+<script type="text/javascript" src="${staticserver }/js/admin/Tab.js"></script>
+
+
+<style>
+.box {width:250px;display:block;float:left}
+
+.division {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border-color: #CCCCCC #BEC6CE #BEC6CE #CCCCCC;
+	border-style: solid;
+	border-width: 1px 2px 2px 1px;
+	line-height: 150%;
+	margin: 10px;
+	padding: 5px;
+	white-space: normal;
+}
+
+.division table {
+	margin: 0;
+	padding: 0;
+	width:100%
+}
+
+.orderdetails_basic th {
+	color: #336699;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.division th {
+	background: none repeat scroll 0 0 #E2E8EB;
+	border-right: 1px solid #CCCCCC;
+	font-size: 14px;
+	text-align: right;
+	white-space: nowrap;
+	width: 140px;
+}
+
+.division th,.division td {
+	border-color: #FFFFFF #DBE2E7 #DDDDDD #FFFFFF;
+	border-left: 1px solid #FFFFFF;
+	border-right: 1px solid #DBE2E7;
+	border-style: solid;
+	border-width: 1px;
+	padding: 5px;
+	vertical-align: top;
+}
+
+.tableform {
+	background: none repeat scroll 0 0 #EFEFEF;
+	border-color: #DDDDDD #BEC6CE #BEC6CE #DDDDDD;
+	border-style: solid;
+	border-width: 1px;
+	margin: 10px;
+	padding: 5px;
+}
+
+h5 {
+	font-size: 1em;
+	font-weight: bold;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	clear: both;
+	color: #111111;
+	margin: 0.5em 0;
+}
+
+
+.allo_box {
+	background: none repeat scroll 0 0 #EEEEEE;
+	border: 1px solid #CCCCCC;
+	position: absolute;
+	width: 300px;
+	display: none;
+}
+
+.allo_box li {
+	line-height: 30px;
+	border-bottom: 1px solid #ccc
+}
+
+.allo_items li.selected {
+	background-color: #00EE76
+}
+
+.close_box a {
+	float: right
+}
+</style>
+<div class="main">
+	<div id="orderinfo" style="display: none; overflow:hidden" ></div>
+	<form id="nextForm" action="" method="post">
+			<span id="nextorder" style="float:right;" >
+				<input type="hidden" name="order_id" value="${orderId}">
+				<input type="hidden" name="orderId" value="${orderId}">
+				<input type="hidden" name="sn" value="${sn}">
+				<input type="hidden" name="logi_no" value="${logi_no}">
+				<input type="hidden" name="uname" value="${uname}">
+
+				<input type="hidden" name="status" value="${status}">
+
+				<input id="nextvalue" type="hidden" name="next" value="">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<!-- <a href="#" class="easyui-linkbutton" id="previous" data-options="toggle:true,group:'g1'">上一订单</a>
+				<a href="#" class="easyui-linkbutton" id="next" data-options="toggle:true,group:'g1'">下一订单</a> -->
+			</span>
+		</form>
+		<div style="clear: both"></div>
+	<div id="memberpricedlg"></div>
+	<div class="input">
+		<div style="display: block;" class="order_detail">
+			<div class="contentTab" >
+				<ul class="tab">
+					<#list pluginTabs?keys as key>
+						<li tabid="${key}" <#if key==0> class="contentTabS"</#if> >${pluginTabs.get(key)}</li>
+					</#list>
+				</ul>
+			</div>
+			<div class="shadowBoxWhite wf100 whiteBox">
+				<div class="text">
+					<div class="tab-page">
+						<#list pluginHtmls?keys as key>
+							<div tabid="${key}" <#if key!=0> style="display:none"</#if> class="tab-panel">${pluginHtmls.get(key)}</div>
+						</#list>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="store_content"></div>
+
+</div>
+
+<script type="text/javascript">
+$(function(){
+	var instance = CKEDITOR.instances['intro'];
+	if (instance) { CKEDITOR.remove(instance); }
+	$('#intro').ckeditor();
+ 	 $(".order_detail .contentTab>ul>li").click(function(){
+ 	 	 var tabid=$(this).attr("tabid");
+ 	 	 $(".order_detail .contentTab>ul>li").removeClass("contentTabS");
+ 	 	 $(this).addClass("contentTabS");
+ 	 	 $(".tab-page .tab-panel").hide();
+ 	 	 $(".tab-panel[tabid="+tabid+"]").show();
+ 	 });
+
+	if($("#alert_null").val() == 'kong'){
+		alert("已经是最后一条！");
+	}
+	OrderDetail.init(${orderId},${ord.status},${ord.pay_status},${ord.ship_status},<#if ord.isCod>true<#else>false</#if>,${ord.payment_id!''});
+	$("#next").click( function(){
+		$("#nextvalue").val('previous');
+		$("#nextForm").attr("action","order!nextDetail.do?rand="+new Date().getTime());
+		$("#nextForm").submit();
+		});
+	$("#previous").click( function(){
+		$("#nextvalue").val('next');
+		$("#nextForm").attr("action","order!nextDetail.do?rand="+new Date().getTime());
+		$("#nextForm").submit();
+	});
+});
+
+function showRogInfo(logino,logicode){
+ 	$("#store_content").dialog({
+		title : "物流信息",
+		width : 500,
+		height : 400,
+		closed : false,
+		cache : false,
+		href : '${ctx}/api/shop/order!orderKuaidi.do?ajax=yes&logino='+logino+'&code='+logicode
+ 	});
+}
+
+</script>
+
+<#include '/admin/footer.html' >

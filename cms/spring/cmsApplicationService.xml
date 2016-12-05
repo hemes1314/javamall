@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+	<!-- 定义此应用的组件扫描包 -->
+	<context:component-scan base-package="com.enation.app.cms.component" />
+	
+	<bean id="cms" class="com.enation.app.cms.CmsApp"  />
+	<bean id="dataModelManager" class="com.enation.app.cms.core.service.impl.DataModelManager"  parent="baseSupport" />
+	<bean id="dataFieldManager" class="com.enation.app.cms.core.service.impl.DataFieldManager"  parent="baseSupport" />
+	<bean id="dataCatManagerImpl" class="com.enation.app.cms.core.service.impl.DataCatManager"  parent="baseSupport" />
+	<bean id="dataCatManager" class="com.enation.app.cms.core.service.impl.cache.DataCatCacheProxy"  >
+	<constructor-arg>
+		<ref bean="dataCatManagerImpl"/>
+	</constructor-arg>
+	</bean>
+	<bean id="dataManager" class="com.enation.app.cms.core.service.impl.DataManager"  parent="baseSupport" />
+	
+	<!-- CMS文章插件桩 -->
+	<bean id="articlePluginBundle" class="com.enation.app.cms.core.plugin.ArticlePluginBundle"></bean>	
+ 	
+</beans>

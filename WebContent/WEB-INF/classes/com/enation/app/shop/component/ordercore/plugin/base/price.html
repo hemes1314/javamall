@@ -1,0 +1,102 @@
+<div class="division">
+	<table cellspacing="0" cellpadding="0" border="0">
+		<tbody>
+			<tr>
+				<th>商品总价：</th>
+				<td
+					style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+					${order.goods_amount?string("currency")}</td>
+			</tr>
+
+			<tr>
+				<th>促销优惠：</th>
+				<td
+					style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+					<span style="float: left;">￥</span>${order.discount?string("0.00")}
+				</td>
+			</tr>
+
+			<tr>
+				<th>订单金额：</th>
+				<td
+					style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+					<span style="float: left;">￥</span>${order.order_amount?string("0.00")}
+				</td>
+			</tr>
+			<tr>
+				<th>使用红包：</th>
+				<td
+					style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+
+					<span>${order.bonus_pay?string("currency")}</span>
+				</td>
+			</tr>
+			<tr>
+				<th>使用余额：</th>
+				<td
+					style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+
+					<span>${order.advance_pay?string("currency")}</span>
+				</td>
+			</tr>
+			<tr>
+				<th>配送费用：</th>
+				<td
+					style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+					<span style="float: left;">￥</span>${order.shipping_amount?string("0.00")}
+				</td>
+			</tr>
+			<tr>
+				<th>应付金额：</th>
+				<td
+					style="font-size: 16px; color: rgb(255, 153, 0); font-weight: 700;">
+
+					<span>${order.need_pay_money?string("currency")}</span>
+				</td>
+			</tr>
+
+			<tr>
+				<th>已支付金额：</th>
+				<td>${order.paymoney?string("currency")}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+	<#if order.ship_status==SHIP_NO&&order.pay_status==PAY_NO>
+	<@permssion actid="order">
+	$(function() {
+		$("#order_shipmoney_span").AjaxEditor(
+				'/shop/admin/order!saveShipMoney.do?orderId='
+						+ $("#orderid").val(), "shipmoney",
+				function(oldvalue, newvalue) {
+					if (!/^(([1-9]\d*)|\d)(\.\d{1,2})?$/.test(newvalue)) {
+						$.Loading.error("请输入正确的配送金额!");
+						return false;
+					} else if (newvalue == "") {
+						$.Loading.error("金额不能为空")
+						return false;
+					} else {
+						return true;
+					}
+				});
+		$("#order_price_span")
+				.AjaxEditor(
+						'/shop/admin/order!savePrice.do?orderId='
+								+ $("#orderid").val(),
+						"price",
+						function(oldvalue, newvalue) {
+							if (!/^(([1-9]\d*)|\d)(\.\d{1,2})?$/.test(newvalue)) {
+								$.Loading.error("请输入正确的订单金额!");
+								return false;
+							} else if (newvalue == "") {
+								$.Loading.error("金额不能为空")
+								return false;
+							} else {
+								return true;
+							}
+						});
+	});
+	</@permssion>
+	</#if>
+</script>

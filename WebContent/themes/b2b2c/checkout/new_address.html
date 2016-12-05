@@ -1,0 +1,119 @@
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member.css" />
+<style>
+.user-form-style {
+	padding-top: 0px;
+}
+.user-form-style dl {
+    border-bottom: 1px dashed #f5f5f5;
+    clear: both;
+    color: #777;
+    line-height: 20px;
+    margin: 4px auto;
+    overflow: hidden;
+    padding: 0;
+    width: 480px;
+}
+.user-form-style dl dd{
+	width: 320px;
+}
+</style>
+
+<div class="user-form-style">
+	<form id="add_addressForm">
+		<dl>
+			<dt><em style="color: red;">*</em> 收货地区：</dt>
+			<dd><@regionSelect /></dd>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 地址：</dt>
+			<dd><input id="addr" type="text" class="text" size="30" 
+				name="shipAddr" isrequired="true" dataType="string" autocomplete="off"></dd>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 邮编：</dt>
+			<dd><input type="text" id="zip" size="30" style="width: 60px;"
+				name="shipZip" isrequired="true" dataType="post_code"  class="text" autocomplete="off"></dd>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 收货人姓名：</dt>
+			<dd><input type="text" class="text" size="30" style="width: 60px;"
+				id="name" name="shipName" autocomplete="off" isrequired="true" dataType="string">
+				<p class="hint">请填写真实姓名，以免延误收货</p> </dd>
+		</dl>
+		<dl>
+			<dt><em style="color: red;">*</em> 联系手机：</dt>
+			<dd><input type="text" class="text" id="mobile" style="width: 180px;" 
+					size="30" name="shipMobile" autocomplete="off"></dd>
+		</dl>
+		<dl>
+			<dt>联系电话：</dt>
+			<dd><input type="text" class="text" id="tel" dataType="tel_num"
+				style="width: 180px;" size="30" name="shipTel" autocomplete="off">
+				<p class="hint">手机和电话填写一项即可</p> </dd>
+		</dl>
+		<dl>
+			<dt></dt>
+			<dd style="padding-left: 200px;"> <input type="button" value="保存地址" id="add_btn"> </dd>
+		</dl>
+	</form>
+</div>
+
+<script>
+$(function(){
+	
+	$("#add_btn").click(function(){
+		var result = $("#add_addressForm").checkall();
+		if(!result ) return ;
+		var options = {
+			url : "api/b2b2c/memberAddress!addNewAddress.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					alert(result.message);
+					parent.location.reload();
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+					parent.location.reload();
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误，请重试");
+			}
+		};
+		$("#add_addressForm").ajaxSubmit(options);
+	})
+	
+	$("#mobile").setValidator(function(){
+		var tel= $.trim( $("#tel").val() ) ;
+		var mobile = $.trim( $("#mobile").val() ) ;
+		
+		if( tel=="" && mobile==""  ){
+			return  "手机或电话必须填写一项";
+		}
+		
+		if( mobile!="" && !$.isMobile(mobile) ){
+			return  "手机格式不正确";
+		}
+		
+		return true;
+	});
+	
+	
+	$("#region_id").setValidator(function(){
+		var value = $("#region_id").val();
+		if( value=="" || value=="0" ) return "地区信息不完整";
+		else return true;
+	});
+	
+	
+	
+	//地区联动选择-选择最后一级（区）时自动设置邮编
+	RegionsSelect.regionChange=function(regionid,name,zipcode){
+		$("#add_addressForm input[name='shipZip']").val(zipcode);
+	};
+	
+})
+</script>

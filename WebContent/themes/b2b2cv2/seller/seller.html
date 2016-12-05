@@ -1,0 +1,208 @@
+<#include '../common/header.html'/>
+<!-- 获取检查b2b2c会员标签 -->
+<#assign checkMemberTag = newTag("checkB2b2cMemberTag")>
+<!-- 调用检查b2b2c会员标签 -->
+<#assign member = checkMemberTag()>
+<!-- 获取导购列表标签 -->
+<#assign sellerTag = newTag("sellerListTag")>
+<!-- 调用导购列表标签 --> 
+<#assign sellerMap = sellerTag()>
+<#assign sellersList = sellerMap.sellersList>
+
+<div class="main">
+	<div class="seller">
+		<a href="javascript:void(0)" onclick="showAdd()">添加</a>
+		<form id="formId" method="post">
+		<#if sellerMap?size gt 0>
+			<table border="1" cellpadding="10" cellspacing="0">
+				<thead>
+					<tr>
+						<th>导购ID</th>
+						<th>门店ID</th>
+						<th>所属商家</th>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>年龄</th>
+						<th>手机号</th>
+						<th>用户名</th>
+						<th>密码</th>
+						<th>积分</th>
+						<th>最后更换商家时间</th>
+						<th>月更换商家次数</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list sellersList as seller>
+						<tr>
+							<th>${seller.seller_id}</th>
+							<th>${seller.offline_store_id}</th>
+							<th>${seller.store_id}</th>
+							<th>${seller.seller_name}</th>
+							<th>
+								<#if seller.seller_sex == 1>
+									男
+								<#else>
+									女
+								</#if>
+							</th>
+							<th>${seller.seller_age}</th>
+							<th>${seller.seller_mobile}</th>
+							<th>${seller.username}</th>
+							<th>${seller.password}</th>
+							<th>${seller.point}</th>
+							<th>${seller.last_change_time}</th>
+							<th>${seller.change_times}</th>
+							<th colspan="2">
+								<a href="javascript:void(0)" onclick="showEdit(${seller.seller_id})">修改</a>
+								<a href="javascript:void(0)" class="dele" rel="${seller.seller_id}">删除</a>
+							</th>
+						</tr>
+					</#list>
+				</tbody>
+			</table>
+			<#else>
+				<div class="empty" >暂时还没有商家</div>
+			</#if>
+			<@pager pageno="${sellerMap.page}" pagesize="${sellerMap.pageSize}" totalcount="${sellerMap.totalCount}" />
+			</form>
+	</div>
+</div>
+
+<<script type="text/javascript">
+
+function showAdd(){
+	dialog = $.dialog({
+		title : "添加导购信息",
+		width : 475,
+		height : 312,
+		lock : true,
+		min : false,
+		max : false
+	});
+	$.ajax({
+		url : "seller_add.html",
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([ {
+				name : '添加',
+				callback : function() {
+					if(!$("#addSellerForm").validate()){
+						 return false;
+					}
+					if(!$("#addSellerForm").checkall()){
+						return false;
+					}
+					var val = $('input:radio[name="seller_sex"]:checked').val();  
+		            if(val == null){  
+		                $.alert("请选择性别！");  
+		                return false;  
+		            }
+					add();
+					$(":button").attr("disabled","disabled");
+					return false;
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("出现错误，请重试");
+		},
+		cache : false
+	});	
+}
+
+function add(){
+	var options = {
+			url : "${ctx}/api/o2o/seller!saveAdd.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				$.Loading.message("正在保存,请稍后...");
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				$.alert("出现错误，请重试");
+			}
+		};
+	$("#addSellerForm").ajaxSubmit(options);
+}
+
+function showEdit(seller_id){
+	dialog = $.dialog({
+		title : "修改导购信息",
+		width : 475,
+		height : 312,
+		lock : true,
+		min : false,
+		max : false
+	});
+	$.ajax({
+		url : "seller_edit.html?seller_id="+seller_id,
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([ {
+				name : '修改',
+				callback : function() {
+					if(confirm("确定要修改此条信息吗？")){
+						if(!$("#editSellerForm").validate()){
+							 return false;
+						}
+						if(!$("#editSellerForm").checkall()){
+							return false;
+						}
+						edit();
+						$(":button").attr("disabled","disabled");
+						return false;
+					}
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("出现错误，请重试");
+		},
+		cache : false
+	});
+}
+
+function edit(){
+	var options = {
+			url : "${ctx}/api/o2o/seller!saveEdit.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				$.Loading.message("正在保存,请稍后...");
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				$.alert("出现错误，请重试！");
+			}
+		};
+	$("#editSellerForm").ajaxSubmit(options);
+}
+
+$(function(){
+	$(".dele").click(function(){
+		if(confirm("确定要删除吗")){
+			var deleteid = $(this).attr("rel");
+			$.ajax({
+				url : "${ctx}/api/o2o/seller!delete.do?seller_id="+deleteid,
+				dataType : 'json',
+				success : function(data) {	
+					$.Loading.message("正在删除,请稍后...");
+					if(data.result==1)
+						location.reload();
+				},
+				error : function(e) {
+					$.alert("出现错误，请重试！");
+				}
+			})  
+		}
+	});
+});
+</script>
+
+<#include '../common/footer.html'/>

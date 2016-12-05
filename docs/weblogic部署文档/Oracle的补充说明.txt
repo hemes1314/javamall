@@ -1,0 +1,18 @@
+1. Oracle数据库版本为11g，使用navicat或者oracle客户端均可。
+
+2.配置：
+192.168.0.246:1521
+SYSTEM
+password
+myorcl
+
+3.添加用户User：gomeshop，密码也是gomeshop，同时会建立schema gomeshop
+执行grant connect,resource to GOMESHOP;
+
+4.使用如下配置连接:
+192.168.0.246:1521
+gomeshop
+gomeshop
+myorcl
+
+5.完成。

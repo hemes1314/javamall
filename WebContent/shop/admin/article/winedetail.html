@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#if (data) ?? >
+		<title>${data[0].title}</title>
+	</#if>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="m.uatcellar.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="applicable-device" content="mobile">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="shortcut icon" href="http://app.atguat.net.cn/gomecellar/2.0.0/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="http://css.atguat.com.cn/gomecellar/cardinalvices/css/base.css">
+    <link rel="stylesheet" type="text/css" href="http://css.atguat.com.cn/gomecellar/cardinalvices/css/toolbar.css">
+    <link rel="stylesheet" href="http://css.atguat.com.cn/gomecellar/cardinalvices/css/product_list.css" media="screen" title="no title" charset="utf-8">
+</head>
+<body>
+	<#if (data) ?? && (data?size) &gt; 0 >
+		<#list data as winddetail >
+        <section class="jpm_txt">${winddetail.page_description}</section>
+        <section class="jpm_imgs"><img src="${winddetail.image}"></section>
+		</#list>
+    </#if>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="b2b2c组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+ 
+	<plugins>
+		<plugin name="店铺搜索过滤器" id="storeSearchFilter">
+			<bundle id="goodsSearchPluginBundle"></bundle>
+		</plugin>
+		<plugin name="店铺商品标签" id="storeGoodsPlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+		<plugin name="b2b2c会员注册插件" id="b2b2cMemberRegisterPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin>
+		<plugin name="b2b2c会员登录插件" id="b2b2cMemberLoginPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin> 
+		<plugin name="b2b2c会员退出插件" id="b2b2cMemberLogoutPlugin">
+			<bundle id="memberPluginBundle"></bundle>
+		</plugin> 
+		<plugin name="店铺通过添加店铺商品标签插件" id="storeAddGoodsTagsPlugin">
+			<bundle id="storePluginBundle"></bundle>
+		</plugin>
+		<plugin name="店铺通过审核添加店铺幻灯片插件" id="storeAddSildePlugin">
+			<bundle id="storePluginBundle"></bundle>
+		</plugin>
+		<plugin name="确认收货后添加商品购买数量" id="b2b2cRogGoodsPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+	 	</plugin> 
+	 	<plugin name="b2b2c购物车插件" id="storeCartAddPlugin">
+	 		<bundle id="cartPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="b2b2c订单创建插件" id="b2b2cOrderPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+			<bundle id="cartPluginBundle"></bundle>
+	 	</plugin> 
+	 	<plugin name="申请店铺更改会员申请状态插件" id="storeAfterApplyPlugin">
+	 		<bundle id="storePluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="店铺商品删除插件" id="storeDeleteGoodsPlugin">
+	 		<bundle id="goodsPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="店铺结算插件" id="billStorePlugin">
+	 		<bundle id="jobExecutePluginsBundle"></bundle>
+	 	</plugin> 	
+	 	<plugin name="店铺商品属性插件" id="storeGoodsPropsPlugin">
+	 		<bundle id="storeGoodsPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="店铺商品参数插件" id="storeGoodsParamePlugin">
+	 		<bundle id="storeGoodsPluginBundle"></bundle>
+	 	</plugin>
+	 	<plugin name="网店短消息提醒插件" id="b2b2cShortMsgPlugin">
+			<bundle id="shortMsgPluginBundle"></bundle>
+		</plugin>
+       	<plugin name="定时" id="timerPlugin">
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		
+	 	<plugin name="订单完成创建结算单插件" id="confirmOrderPlugin">
+	 		<bundle id="orderPluginBundle"></bundle>
+	 	</plugin>
+	</plugins>
+</component>

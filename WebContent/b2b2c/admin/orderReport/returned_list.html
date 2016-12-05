@@ -1,0 +1,92 @@
+<#include '/admin/header.html' > <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class='buttonArea' style="height: auto">
+		 <span style="float: right;">
+		 	<span id="simpleSearch">
+			 	<input id="searchKeyword" class="input_text" type="text" value="" size="30" style="width: 300px" placeholder="请输入退货单号" name="keyword">
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a>
+			</span>
+		</span>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<table id="orderReturndata" class="easyui-datagrid"
+			data-options="url:'${ctx}/b2b2c/admin/storeOrderReport!returnedListJson.do',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+			pagination="true" width="width">
+			<thead>
+				<tr>
+					<th data-options="field:'id',width:35">退货ID</th>
+					<th data-options="field:'tradeno',width:100">退货单号</th>
+					<!--<th data-options="field:'refund_way',width:100" >退款方式</th>-->
+					<th data-options="field:'tradestatus',width:100" formatter="formatType">退货状态</th>
+					<th data-options="field:'ordersn',width:100">退货订单号</th>
+					<th data-options="field:'parent_ordersn',width:100">退货主订单号</th>
+					<th data-options="field:'return_price',width:100">退货金额</th>
+					<th data-options="field:'chargebacks',width:100">扣款金额</th>
+					<th data-options="field:'return_advance_pay',width:100">退款余额</th>
+					<th data-options="field:'need_pay_money',width:100">在线支付金额</th>
+					<!-- 暂时无法实现 chenzhongwei update -->
+					<!-- <th>退款在线方式</th> -->
+					<th data-options="field:'return_time',width:100" formatter="formatTime">退款时间</th>
+					<th data-options="field:'pay_tradeno',width:100">交易流水号</th>
+					<th data-options="field:'regtime',width:100" formatter="formatTime">操作时间</th>
+					<th data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="pay_detail"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	window.top["reload_Abnormal_Monitor"]=function(){
+	    $("#orderReturndata").datagrid("reload");
+	};
+	function formatType(value, row, index) {
+		var val;
+		if (value == 2) {
+			val = "已审核";
+		}
+		if (value == 3) {
+			val = "已完成";
+		}
+		if (value == 4) {
+			val = "已取消";
+		}
+		if (value == 0) {
+			val = "申请退货";
+		}
+		if (value == 13) {
+			val = "申请退款";
+		}
+		if (value == 12) {
+			val = "用户拒收";
+		}
+		return val;
+	}
+
+	function formatTime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	function formatOperation(value, row, index) {
+		var val;
+		if(row.tradestatus==2){
+			val = "<a href='javascript:void(0);' onclick=newTab('退货结算','${ctx}/shop/admin/sellBack!payment.do?id="+row.id+"'); >退款</a>";
+		}else{
+			val = "<a href='javascript:void(0);' onclick=newTab('退货结算','${ctx}/shop/admin/sellBack!payment.do?id="+row.id+"'); >查看</a>";
+		}
+		return val;
+	}
+
+    function searchOrder(){
+    	var keyword = $("#searchKeyword").val();
+
+    	$("#orderReturndata").datagrid('load', {
+    		 keyword:keyword,
+    		 page:1
+        });
+    }
+</script>
+<div id="log"></div>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>store_cat_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>buy_num</name><type>int</type><size>10</size><option>00</option></field>
+		<field type="add"><name>comment_num</name><type>int</type><size>10</size><option>00</option></field>
+		<field type="add"><name>template_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>goods_transfee_charge</name><type>int</type><size>10</size></field>
+		<field type="add"><name>store_name</name><type>varchar</type><size>255</size></field>
+		<field type="add"><name>commission</name><type>decimal</type><size>20,2</size><option>00</option></field>
+	</action>
+<!-- 	<action> -->
+<!-- 		<command>alter</command> -->
+<!-- 		<table>member</table> -->
+<!-- 		<field type="add"><name>store_id</name><type>int</type><size>10</size></field> -->
+<!-- 		<field type="add"><name>is_store</name><type>int</type><size>10</size></field> -->
+<!-- 	</action> -->
+	<action>
+		<command>alter</command>
+		<table>dly_type</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>defaulte</name><type>int</type><size>10</size></field>
+		<field type="add"><name>template_id</name><type>int</type><size>10</size></field>
+	</action>
+	
+	<action>
+		<command>alter</command>
+		<table>order</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>parent_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>commission</name><type>decimal</type><size>20,2</size><option>00</option></field>
+		<field type="add"><name>bill_status</name><type>int</type><size>10</size></field>
+		<field type="add"><name>bill_sn</name><type>varchar</type><size>50</size></field>
+		<field type="add"><name>store_name</name><type>varchar</type><size>255</size></field>
+		
+	</action>
+	<action>
+		<command>alter</command>
+		<table>tags</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>is_parent</name><type>int</type><size>10</size></field>
+		<field type="add"><name>mark</name><type>varchar</type><size>255</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>cart</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>bonus_type</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>img_bonus</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>limit_num</name><type>int</type><size>10</size></field>
+		<field type="add"><name>is_given</name><type>int</type><size>10</size></field>
+		
+	</action>
+	<action>
+		<command>alter</command>
+		<table>dly_center</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>member_comment</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>store_desccredit</name><type>int</type><size>10</size></field>
+		<field type="add"><name>store_servicecredit</name><type>int</type><size>10</size></field>
+		<field type="add"><name>store_deliverycredit</name><type>int</type><size>10</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>sellback_list</table>
+		<field type="add"><name>store_id</name><type>int</type><size>10</size></field>
+		<field type="add"><name>bill_status</name><type>int</type><size>10</size></field>
+		<field type="add"><name>bill_sn</name><type>varchar</type><size>50</size></field>
+	</action>
+	
+</dbsolution>

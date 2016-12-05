@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="直降组件" version="1.0" javashop_version="3.0.0"
+	author="javashop">
+
+	<plugins>
+		<plugin name="直降活动插件" id="costDownActPlugin">
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		<plugin name="直降商品插件" id="costDownGoodsPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+			<bundle id="goodsPluginBundle"></bundle>
+			<bundle id="costDownPluginBundle"></bundle>
+		</plugin>
+		<plugin name="直降活动标签插件" id="costDownActTagPlugin">
+			<bundle id="costDownPluginBundle"></bundle>
+		</plugin>
+		<plugin name="直降购物车插件" id="costDownGoodsCartPlugin">
+			<bundle id="cartPluginBundle"></bundle>
+		</plugin>
+	</plugins>
+</component>

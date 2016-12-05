@@ -1,0 +1,161 @@
+<#include '/admin/header.html' >
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion= "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<div class="main">
+	<div class="input">
+	<form method="post" id="theForm">
+		<input type="hidden" value="${sellBackList.id}" name="id"/>
+		<div class="shadowBoxWhite  whiteBox">
+			<div class="detail">
+				<table cellspacing="0" cellpadding="0" border="0" id="data" style="width: 99%">
+					<tr>
+						<th class="title" colspan="2">退货单基本信息</th>
+					</tr>
+					<tr>
+						<td>退货单号：</td>
+						<td >
+							${sellBackList.tradeno }
+
+						</td>
+					</tr>
+					<tr>
+						<td >关联订单号：</td>
+						<td>
+							${orderinfo.sn }
+						</td>
+					</tr>
+					<tr>
+						<td>已支付：</td>
+						<td>
+							￥${orderinfo.paymoney}
+						</td>
+					</tr>
+					<tr>
+						<td >退货人：</td>
+						<td>
+							${orderinfo.ship_name }
+						</td>
+					</tr>
+					<tr>
+						<td>退货原因：</td>
+						<td colspan="3">
+							${sellBackList.remark!''}
+						</td>
+					</tr>
+					<tr>
+						<td >操作备注：</td>
+						<td colspan="3">
+							<textarea rows="5" cols="30" name="seller_remark" style="resize: none;"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>审核</td>
+						<td>
+							<input type="radio" name="status" value="1" checked="checked"/>通过
+							<input type="radio" name="status" value="6"/>不通过
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		</form>
+		<br/>
+		<div class="shadowBoxWhite  whiteBox">
+			<div class="detail">
+				<table cellspacing="0" cellpadding="0" border="0" id="orderbasedata">
+					<tr>
+						<th class="title" colspan="4">退货单商品</th>
+					</tr>
+					<tr>
+						<th>商品名称</th>
+						<th>金额</th>
+						<th>购买数量</th>
+						<th>退货数量</th>
+					</tr>
+
+					<#list goodsList as data>
+							<tr>
+								<td><a href="${ctx}/goods-${data.goods_id}.html">${data.name }</a></td>
+								<td>${data.price?string.currency}</td>
+								<td>${data.num }</td>
+								<#if data.is_pack == 1>
+									<#if data.return_type == 0>
+										<td>${data.return_num!0}</td>
+									<#else>
+										<td>部分退货，无法统计套餐数量</td>
+									</#if>
+								<#else>
+									<td>${data.return_num!0}</td>
+								</#if>
+
+							</tr>
+						<#if data.is_pack == 1>
+						<tr class="detail_${data.goods_id }">
+							<td></td>
+							<td style="background: none repeat scroll 0 0 #FFFDEE;"
+								colspan="6">
+								<div>
+									<table width="100%" style="border: none;">
+										<tr>
+											<th style="background: none repeat scroll 0 0 #FFFDEE; border: none;">商品名称</th>
+											<th style="background: none repeat scroll 0 0 #FFFDEE; border: none;">购买数量</th>
+											<th style="background: none repeat scroll 0 0 #FFFDEE; border: none;">退货数量</th>
+										</tr>
+										<#list return_child_list as childData>
+										<#if data.goodsId == childData.parent_id>
+										<tr>
+											<td style="border: none;">
+												${childData.name}</td>
+											<td style="border: none;">${(childData.num)!0}
+											</td>
+											<td style="border: none;">${(childData.return_num)!0 }
+
+											</td>
+										</tr>
+										</#if> </#list>
+									</table>
+								</div>
+
+							</td>
+						</tr>
+						</#if>
+						</#list>
+				</table>
+			</div>
+		</div>
+	<br/>
+	<div class="buttonWrap">
+		<a href="javascript:;" id="goodsinput" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+	</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+function submitForm() {
+	var formflag= $("#theForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在提交");
+		var options = {
+				url : "sellBack!saveAuth.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result){
+					if(result.result==1){
+						$.Loading.success(result.message);
+					}
+					if(result.result==0){
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					$.Loading.hide();
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#theForm").ajaxSubmit(options);
+	}
+}
+</script>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,714 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>GomeCellar</title> 
+		<meta name="keywords" content="GomeCellar">
+		<meta name="description" content="GomeCellar">
+	<!--meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/--> 
+	
+</meta>
+
+<!-- 判断IE，并使IE9以下支持html5标签 -->
+<!–[if lt IE 9]> <script  src="/gome-javamall/themes/b2b2cv2/js/html5.js"  ></script> <![endif]–>
+
+
+<script>
+var member = "";
+var loginDialog;
+var ctx="/gome-javamall";
+var app_path="/gome-javamall";
+</script>
+
+<!-- 公共样式 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/base.css" />
+<!-- 内含dialog.css样式，原来的dialog.css中无代码 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/default.css" />
+<!-- 商品详细、 -->
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/shop.css" />
+
+<script>window._prompt = window.prompt;</script>
+
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/lhgdialog.js" ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/common.js"  ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/shop.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.ui.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/index.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.validate.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.form-3.51.js"  ></script> 
+<script  src="/gome-javamall/themes/b2b2cv2/js/CartBar.js"></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/jquery.blockUI.js"   ></script>
+<script  src="/gome-javamall/themes/b2b2cv2/js/LoginDialog.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.cookie.js" ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/perfect-scrollbar.min.js"  ></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.SuperSlide.2.1.1.js" ></script>
+<!-- jquery的布局插件 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.masonry.js" ></script>
+<!-- 购物车移入滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.nicescroll.js"></script>
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.bigautocomplete.js"></script>
+<!-- 自定义滚动条 -->
+<script src="/gome-javamall/themes/b2b2cv2/js/jquery.jscroll.js"></script>
+
+<script type="text/javascript">
+
+var ctx="/gome-javamall";
+
+
+
+$(function(){
+	
+	$(".common_member").load("/gome-javamall/common/member_bar.html?_="+new Date().getTime()	,function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"/gome-javamall/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,              
+				success:function(result){
+					if(result.result==1){
+						//$.alert(result.message);
+						location.href="/gome-javamall/index.html";
+					}else{
+						$.alert(result.message);
+					}	
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		});	
+	});
+	
+	$(".my_store").load("/gome-javamall/common/my_store.html?_="+new Date().getTime());
+	
+	$(".my_store").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+	
+	$(".title_menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+</script>
+
+
+</head>
+<body>
+	<script  src="/gome-javamall/themes/b2b2cv2/js/backtotop.js"></script>
+	<a name="backtotop"></a>
+	<div class="website_top w">
+		<div class="topbar wrapper">
+        	<div class="area" style="width:50px;">
+                  <div class="title" style="overflow:hidden;">
+                      <div class="city"><a href="javascript:void(0)" id="button_show">
+                      <h3 id="show_area_name">全国</h3>
+                      <i class="arrow"></i></a></div>
+                      <div id="list" class="list" style="display: none;">
+                      <a id="button_close" class="close" href="javascript:void(0)">×</a>
+                      <ul>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(0,&#39;全国&#39;)">全国</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(1,&#39;北京&#39;)">北京</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(2,&#39;上海&#39;)">上海</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(3,&#39;天津&#39;)">天津</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(4,&#39;河北&#39;)">河北</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(5,&#39;江苏&#39;)">江苏</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(6,&#39;安徽&#39;)">安徽</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(7,&#39;浙江&#39;)">浙江</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(8,&#39;福建&#39;)">福建</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(9,&#39;辽宁&#39;)">辽宁</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(10,&#39;吉林&#39;)">吉林</a></li>
+                        <li><a href="javascript:void(0)" onclick="set_groupbuy_area(11,&#39;黑龙江&#39;)">黑龙江</a></li>
+                       </ul>
+                       </div>
+                    </div>
+            </div> 
+			<div class="common_member" style="float:left;">
+			</div>
+			<div class="title_menu">
+                <!--dl style="width:90px;">
+					<dt>
+						手机端App<i></i>
+					</dt>
+					<dd style="width:90px;">
+						<ul>
+							<li>
+                            <img src="/gome-javamall/themes/b2b2cv2/app_download/images/QR_code_android.jpg" width="80" height="80" style="padding:5px; float:left;" />
+                            <a class="menu-app" href="/gome-javamall/app_download/index.html" target="_blank">Android版</a>
+                            </li>
+						</ul>
+					</dd>	
+				</dl-->
+				<dl>
+					<dt>
+						<a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" style="padding-left:5px;">商家中心</a>
+					</dt>
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/order.html">我的订单</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/order.html?status=0">待付款订单</a></li>
+							<li><a href="/gome-javamall/member/order.html?status=5">商品已发货</a></li>
+							<li><a href="/gome-javamall/member/waitcommont.html">待评价商品</a></li>
+						</ul>
+					</dd>	
+				</dl>
+				<dl>
+					<dt>
+						<a href="/gome-javamall/member/favorite.html" title="我的收藏" target="_top">我的收藏</a><i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/member/favorite.html" target="_top" title="收藏的商品">收藏的商品</a></li>
+							<li><a href="/gome-javamall/member/collect_store.html" target="_top" title="收藏的店铺">收藏的店铺</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						客户服务<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a href="/gome-javamall/help-81-83.html">帮助中心</a></li>
+							<li><a href="/gome-javamall/help-81-84.html">售后服务</a></li>
+							<li><a href="/gome-javamall/help-81-85.html">客服中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+				<dl>
+					<dt>
+						站点导航<i></i>
+					</dt>
+					<dd>
+						<ul>
+							<li><a target="_blank" href="/gome-javamall/index.html">商城首页</a></li>
+                            <li><a href="/gome-javamall/member/member.html">会员中心</a></li>
+							<li><a target="_blank" href="/gome-javamall/store/business_center.html?menu=store_index" >商家中心</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+		</div>
+<script type="text/javascript">
+//鼠标触及更替li样式
+$(document).ready(function(){
+    $("#list").hide();
+    $("#button_show").click(function(){
+        $("#list").toggle();
+    });
+    $("#button_close").click(function(){
+        $("#list").hide();
+    });
+    var area = $.cookie('E667_groupbuy_area');
+   if(area == null) {
+        $("#show_area_name").html("全国");
+    }
+   else {
+        area_array = area.split(",");
+        $("#show_area_name").html(area_array[1]);
+        $("#groupbuy_area").val(area);
+    }
+});
+//选项卡样式
+function index_click(type,value){
+	$("#"+type+" li").removeClass("selected");
+	$("#"+type+" li a[type='"+value+"']").parents("li").addClass("selected");
+}
+function set_groupbuy_area(area_id,area_name){
+	$("#show_area_name").html(area_name);
+	$("input[name='area_id']").val(area_id);
+	$("#list").hide();
+	loadPage();
+}
+</script>
+	</div>
+<div id="goodsSelectDiv"></div>
+<link rel="stylesheet" type="text/css" href="/gome-javamall/themes/b2b2cv2/css/help.css" />
+<div class="content">
+	<!--帮助中心-->
+	<div class="besides">
+		<div class="help2_wh">
+			<div class="help_left">
+				<h1>关于网站</h1>
+				<ul>
+						<li >
+							<a href="help-21-7.html">公司简介</a>
+						</li>
+						<li >
+							<a href="help-21-8.html">招商合作</a>
+						</li>
+						<li >
+							<a href="help-21-9.html">联系我们</a>
+						</li>
+						<li class= "last">
+							<a href="help-21-42.html">合作酒庄</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>新手上路</h1>
+				<ul>
+						<li >
+							<a href="help-17-171.html">登录帮助</a>
+						</li>
+						<li >
+							<a href="help-17-32.html">购物指南</a>
+						</li>
+						<li class= "last">
+							<a href="help-17-31.html">常见问题</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>购物指南</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+			<div class="help_left">
+				<h1>支付方式</h1>
+				<ul>
+						<li >
+							<a href="help-19-48.html">货到付款</a>
+						</li>
+						<li class= "last">
+							<a href="help-19-49.html">在线支付</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>购物条款</h1>
+				<ul>
+						<li >
+							<a href="help-20-50.html">会员介绍</a>
+						</li>
+						<li class= "last">
+							<a href="help-20-168.html">积分说明</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>配送方式</h1>
+				<ul>
+						<li >
+							<a href="help-22-44.html">配送时间及范围</a>
+						</li>
+						<li >
+							<a href="help-22-45.html">配送费收取标准</a>
+						</li>
+						<li >
+							<a href="help-22-47.html">运输包装说明</a>
+						</li>
+						<li class= "last">
+							<a href="help-22-23.html">签收与验货</a>
+						</li>
+				</ul>
+			</div>
+			<div class="help_left">
+				<h1>服务</h1>
+				<ul>
+						<li >
+							<a href="help-23-18.html">退换货政策</a>
+						</li>
+						<li >
+							<a href="help-23-14.html">退换货流程</a>
+						</li>
+						<li class= "last">
+							<a href="help-23-16.html">取消订单</a>
+						</li>
+				</ul>
+			</div>
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>优惠活动</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 			<div class="help_left"> -->
+<!-- 				<h1>我的订单</h1> -->
+<!-- 				<ul> -->
+<!-- 					 -->
+<!-- 					 -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+		</div>
+		<div class="client">
+			<!-- 调用CMS蚊香详细标签，并传递文章所在分类ID，及文章ID -->
+			<!-- 文章详细，所需的catid与articleid通过help.html?catid=XXX&articleid=XXX传递参数 -->
+			<h1 class="help_title">注册服务协议</h1>
+			<h2 class="help_time">2015-10-30 13:03</h2>
+			<div>
+	一.接受协议</div>
+<div>
+	1.1. GOME CELLAR网站是由国美国际酒业贸易有限公司建立的，本网站商品由国美国际酒业贸易有限公司及其关联公司卖家销售，本网站产品描述以及其它内容中&quot;国美&quot;均指国美国际酒业贸易有限公司。如果您在本网站访问或购物，您便接受了以下使用条件，请仔细阅读这些使用条件。当您使用本网站目前或将来提供的服务（例如，我的账户、礼品卡、商城等）时，您同时应接受适用于那些服务的准则和条件（&quot;其它条件&quot;）；如果以下使用条件与其它条件有不一致之处，则以其它条件为准。通过在本网站购买商品和/或使用其提供的服务，您同意接受本使用条件和所有有关的政策、条件和准则的约束。如果您不同意本使用条件中的任何一条，您可以选择不使用本网站。</div>
+<div>
+	1.2. 通过访问或使用本网站，表示您同意接受本协议的所有条件和条款。国美国际酒业贸易有限公司作为GOME CELLAR网站的运营者依据本协议为您提供服务。</div>
+<div>
+	1.3. 国美国际酒业贸易有限公司有权随时对本协议进行修改，并且一旦发生协议条款的变动，国美国际酒业贸易有限公司将在相关页面上提示修改的内容；用户如果不同意本协议的修改，可以放弃使用或访问本网站或取消已经获得的服务；如果用户选择在本协议变更后继续访问或使用本网站，则视为用户已经接受本协议的修改。</div>
+<div>
+	1.4. 除非另有明确规定，增强或强化GOME CELLAR目前服务的任何新功能，包括新产品以及新增加的服务，均无条件地适用本协议。</div>
+<div>
+	二. 服务内容</div>
+<div>
+	2.1. GOME CELLAR向您提供包括但不限于如下服务：</div>
+<div>
+	1) GOME CELLAR网站（含其他任何由GOME CELLAR直接所有或运营的任何网站）；</div>
+<div>
+	2) GOME CELLAR网站联盟（包括其他第三方网站）；</div>
+<div>
+	3) GOME CELLAR直接拥有或运营的客户端；</div>
+<div>
+	4) GOME CELLAR提供给您的任何其他技术和/或服务。</div>
+<div>
+	2.2. 您需要自行负担使用GOME CELLAR服务所需的相关设备（如个人电脑、手机、及其他与接入互联网或移动网有关的装置）及所需的费用（如为接入互联网而支付的电话费及上网费、为使用移动网而支付的手机费等）。为获取GOME CELLAR的服务，您需要具备通过有线或无线方式连接到互联网络的条件和设备。</div>
+<div>
+	三. 用户行为规则</div>
+<div>
+	3.1. 为了能向用户提供高品质的服务，在使用GOME CELLAR的某些功能或接受GOME CELLAR提供的某些服务之前，用户可能会被要求注册一个账号并设定密码，并保证注册资料的真实性、准确性和完整性，同时，一旦相关资料发生变更，用户应及时进行更改。为保证用户方便安全的完成注册，GOME CELLAR会提供简明的操作流程对用户进行实时指引，具体操作流程及步骤请参见注册部分的提示。一旦注册成功，用户就会获得由GOME CELLAR为您提供的专属于您的帐号和密码，账号和密码是用户在GOME CELLAR进行相关活动的唯一身份识别依据，请用户一定要保护好自己的帐号和密码。</div>
+<div>
+	3.2. 用户账号保护</div>
+<div>
+	3.2.1. 用户有责任维持注册的账号和密码的安全，用户应对本人所有使用密码及账号的活动负完全的责任。用户同意∶(a) 本人的密码或账号遭到未获授权的使用，或者发生其它任何安全问题时，将立即通知GOME CELLAR；(b)每次上网完毕都会把本人的账号关闭，使其处于&quot;退出&quot;状态。用户如未能依前述规定行事，则对于任何人利用该密码及账号所进行的任何行为，用户自己应负完全的责任。对于因此而产生的任何损失或损害，GOME CELLAR无法也不承担任何责任。</div>
+<div>
+	3.3. 用户发布信息</div>
+<div>
+	3.3.1. 为满足用户表达自身观点以及交流互动的需求，更好服务于用户，GOME CELLAR通过开通包括但不限于网友评论功能，向用户提供发布、张贴包括但不限于文字、图片形式的内容的服务。</div>
+<div>
+	3.3.2. 根据有关法律法规，GOME CELLAR在此郑重提醒用户注意，任何由用户经由GOME CELLAR网站服务以上载、张贴或任何其它方式传送的资讯、资料、文字、照片、图形、信息或其它资料（以下简称&quot;内容&quot;），无论系公开还是私下传送，均由内容提供者、发布者承担责任。在任何情况下，GOME CELLAR均不为此类内容负责，包含但不限于此类内容之任何错误或遗漏，以及此类内容衍生之任何损失或损害。但GOME CELLAR有权依法停止传输任何前述内容并采取相应行动，包括但不限于暂停用户使用我们的服务的全部或部分，保存有关记录，并向有关机关报告。</div>
+<div>
+	3.3.3. 用户在GOME CELLAR发布信息（包括注册用户名）时，必须遵守国家有关法律规定，并承担一切因自己发布信息不当导致的民事、行政和/或刑事法律责任。用户在GOME CELLAR所发布的信息（包括注册用户名、发表评论以及其他内容），不得含有以下任何内容：</div>
+<div>
+	1) 违反宪法确定的基本原则的；</div>
+<div>
+	2) 危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；</div>
+<div>
+	3) 损害国家荣誉和利益，攻击党和政府的；</div>
+<div>
+	4) 煽动民族仇恨、民族歧视，破坏民族团结的；</div>
+<div>
+	5) 破坏国家、地区间友好关系的；</div>
+<div>
+	6) 违背中华民族传统美德、社会公德、论理道德、以及社会主义精神文明的；</div>
+<div>
+	7) 破坏国家宗教政策，宣扬邪教和封建迷信的；</div>
+<div>
+	8) 散布谣言或不实消息，扰乱社会秩序 ，破坏社会稳定的；</div>
+<div>
+	9) 煽动、组织、教唆恐怖活动、非法集会、结社、游行、示威、聚众扰乱社会秩序的；</div>
+<div>
+	10) 散布淫秽、色情、赌博、暴力、恐怖或者教唆犯罪的；</div>
+<div>
+	11) 侮辱或诽谤他人，侵害他人合法权益的；</div>
+<div>
+	12) 侵犯他人肖像权、姓名权、名誉权、隐私权或其他人身权利的；</div>
+<div>
+	13) 使用漫骂、辱骂、中伤、恐吓、诅咒等不文明语言的；</div>
+<div>
+	14) 以非法民间组织名义活动的；</div>
+<div>
+	15) 侵犯他人著作权等合法权益的；</div>
+<div>
+	16) 含有法律、行政法规禁止的其他内容的。</div>
+<div>
+	3.3.4. 如果用户在GOME CELLAR发布信息时不能履行和遵守协议中的规定，为维护本网站的形象、信誉、安全，本网站有权删除用户发布的相关信息，并对违反协议的用户做出封闭ID或暂时、永久禁止在本网站发布信息的处理，同时保留依法追究当事人法律责任的权利。此外，本网站在采取移除等相应措施后不为此向原发布人承担违约责任或其他法律责任，包括不承担因侵权指控不成立而给原发布人带来损害的赔偿责任。</div>
+<div>
+	3.3.5. GOME CELLAR不对用户所发布信息的删除或储存失败承担任何责任。</div>
+<div>
+	3.4. 用户需独立对自己在本网站上实施的行为承担法律责任。若用户的行为不符合本协议，GOME CELLAR有权根据自身之独立判断立即取消用户的服务账号。用户若在GOME CELLAR上散布和传播反动、色情或其他违反国家法律的信息，GOME CELLAR的系统记录将有可能作为证明用户违反法律的证据。</div>
+<div>
+	3.5. GOME CELLAR有权判定用户的行为是否符合中国法律法规的规定以及本服务条款的要求，如果用户违背了中国法律法规的规定或本服务条款的规定，GOME CELLAR有中断或停止对其提供服务的权利。</div>
+<div>
+	四. 隐私保护</div>
+<div>
+	4.1. GOME CELLAR保证不对外公开或向第三方提供单个用户的注册资料及用户在使用网络服务时存储在GOME CELLAR的非公开内容，但下列情况除外：</div>
+<div>
+	4.1.1. 事先获得用户的明确授权；</div>
+<div>
+	4.1.2. 根据有关的法律法规要求；</div>
+<div>
+	4.1.3. 按照有权之相关政府主管部门的要求；</div>
+<div>
+	4.1.4. 为维护社会公共的利益；</div>
+<div>
+	4.1.5. 其他需要公开、编辑或透露个人信息的情况。</div>
+<div>
+	4.2. GOME CELLAR可能会与第三方合作向用户提供相关的网络服务，在此情况下，如该第三方同意承担与GOME CELLAR同等的保护用户隐私的责任，则GOME CELLAR有权将用户的注册资料等提供给该第三方。</div>
+<div>
+	4.3. 在不透露单个用户隐私资料的前提下，GOME CELLAR有权对整个用户数据库进行分析并对用户数据库进行商业上的利用。</div>
+<div>
+	4.4. 您对于自己向GOME CELLAR提交的个人资料享有以下权利：</div>
+<div>
+	4.4.1. 随时查询及请求阅览；</div>
+<div>
+	4.4.2. 随时请求补充或更正；</div>
+<div>
+	4.4.3. 随时请求删除；</div>
+<div>
+	4.4.4. 请求停止电脑处理及利用。</div>
+<div>
+	4.5. 免责事项</div>
+<div>
+	4.5.1. 由于您将用户密码告知他人或与他人共享注册账户，由此导致的任何个人资料泄露。</div>
+<div>
+	4.5.2. 任何由于计算机2000问题、黑客攻击、计算机病毒侵入或发作、因政府管制而造成的暂时性关闭等影响网络正常经营之不可抗力而造成的个人资料泄露、丢失、被盗用或被篡改等。</div>
+<div>
+	4.5.3. 由于与本网站链接的其它网站所造成之个人资料泄露及由此而导致的任何法律争议和后果。</div>
+<div>
+	五. 知识产权</div>
+<div>
+	5.1. GOME CELLAR提供的网络服务中包含的任何文本、图片、图形、音频或视频资料均受版权、商标或其它财产所有权法律的保护。未经相关权利人同意，上述资料均不得在任何媒体直接或间接发布、播放、出于播放或发布目的而改写或再发行，或者被用于其他任何商业目的。所有这些资料或资料的任何部分仅可作为私人用途而保存在某台计算机内。GOME CELLAR不就由上述资料产生或在传送或递交全部或部分上述资料过程中产生的延误、不准确、错误和遗漏或从中产生或由此产生的任何损害，以任何形式向用户或任何第三方负法律责任。</div>
+<div>
+	5.2. GOME CELLAR为提供网络服务而使用的任何软件（包括但不限于软件中所含的任何图像、照片、动画、录像、录音、音乐、文字和附加程序、随附的帮助材料）的一切权利均属于该软件的著作权人，未经该软件的著作权人许可，用户不得对该软件进行反向工程（reverse engineer）、反向编译（decompile）或反汇编（disassemble）等。</div>
+<div>
+	5.3. GOME CELLAR尊重并采取合理措施保护版权人的合法利益，并已制定了完善的版权政策，该版权政策构成本协议的组成部分。 版权政策请参考：&quot;GOME CELLAR版权声明&quot;</div>
+<div>
+	六. 第三方链接</div>
+<div>
+	GOME CELLAR可能会为用户提供与其他国际互联网网站或资源进行链接的服务。对于前述网站或资源是否可以利用，GOME CELLAR不承担任何担保责任。因使用或依赖上述网站或资源所生的损失或损害（包括因下载被链接到的第三方网站内容或资源而感染电脑病毒等），GOME CELLAR也不负担任何责任。</div>
+<div>
+	七. 产品说明</div>
+<div>
+	7.1. 价格责任 GOME CELLAR将尽最大努力保证您所购商品与网站上公布的价格一致，但价目表和声明并不构成要约；GOME CELLAR保留对产品订购的数量的限制权。在下订单的同时，也同时承认了您拥有购买这些产品的权利能力和行为能力，并且您对您在订单中提供的所有信息的真实性负责。</div>
+<div>
+	7.2. 价格变化和缺货 产品的价格和可获性都在GOME CELLAR上指明。这类信息将随时更改且不发任何通知。商品的价格都包含了增值税。送货费将另外结算，费用根据您选择的送货方式的不同而异。如果发生了意外情况，在确认了您的订单后，由于突然提价，税额变化引起的价格变化，或是由于网站的错误等造成商品价格变化或您的订单发生缺货，您有权取消订单，并希望您能及时通知客户服务部。</div>
+<div>
+	7.3. 邮件/短信提醒服务 GOME CELLAR会保留通过邮件或短信的方式，对用户注册、订单信息、促销活动、发货通知、返修等服务的告知权利。如果您在GOME CELLAR注册、购物，表明您已同意接受此项服务。</div>
+<div>
+	7.4. 送货 本网站将会把产品送到您所指定的配送地址。所有在本网站上列出的送货时间均为参考时间，参考时间的计算是根据库存状况、正常的处理过程和送货时间、送货地点的基础上估计得出的，参考时间不等同于到货时间。 送货费用根据您选择的配送方式及地区不同而异。 请准确清晰地填写您的真实姓名、送货地址及联系方式。因如下情况造成订单延迟或无法配送等，本站将不迟延配送的责任：</div>
+<div>
+	(1)客户提供错误信息和不详细的地址； (2)货物送达无人签收，由此造成的重复配送所产生的费用及相关的后果 ； (3)不可抗力，例如：自然灾害、交通戒严、突发战争等。</div>
+<div>
+	八. 责任限制</div>
+<div>
+	8.1. 用户明确了解并同意，使用本服务之风险由用户个人负担，除非此种风险或损害系由GOME CELLAR自身过错所直接导致。本服务系依&quot;现状&quot;及&quot;现有&quot;基础提供。GOME CELLAR网站对本服务不提供任何明示或默示的担保或保证，包含但不限于商业适售性、特定目的之适用性及未侵害他人权利等担保或保证。</div>
+<div>
+	8.2. GOME CELLAR不保证为向用户提供便利而设置的外部链接的准确性和完整性，同时，对于外部链接指向的不由GOME CELLAR实际控制的任何网页上的内容，GOME CELLAR也不承担任何责任。</div>
+<div>
+	8.3. 对于因不可抗力或其它GOME CELLAR不能控制的原因造成的网络服务中断或其它缺陷，GOME CELLAR不承担任何责任，但将尽力减少因此而给用户造成的损失和影响。</div>
+<div>
+	8.4. GOME CELLAR对于任何自本网站而获得的他人的信息或者广告宣传等任何资讯（以下统称&quot;信息&quot;），不保证真实、准确和完整性。如果任何单位或者个人通过上述&quot;信息&quot;而进行任何行为，须自行甄别真伪和谨慎预防风险。否则，无论何种原因，本网站不对任何非与本网站直接发生的交易和/或行为承担任何直接、间接、附带或衍生的损失和责任。</div>
+<div>
+	8.5. 对于GOME CELLAR网站向用户提供的下列产品或者服务的质量缺陷本身及其引发的任何损失，若非由GOME CELLAR自身过错而直接导致，则GOME CELLAR网站无需承担任何责任：</div>
+<div>
+	8.5.1. GOME CELLAR向用户免费提供的各项网络服务；</div>
+<div>
+	8.5.2. GOME CELLAR向用户赠送的任何产品或者服务；</div>
+<div>
+	8.5.3. 其他与本网站相关的事宜。</div>
+<div>
+	8.6. 用户明确了解并同意，基于以下原因造成的包括但不限于利润、信誉、应用、数据等有形损失或其它无形损失，GOME CELLAR不承担任何直接、间接、附带、特别、衍生性或惩罚性赔偿责任：(i)我们的服务之使用或无法使用，(ii)为替换从或通过我们的服务购买或取得之任何商品、数据、信息、服务，收到的讯息，或缔结之交易而发生的成本，(iii)用户的传输或数据遭到未经GOME CELLAR授权的存取或变造，(iv) 任何第三方在我们的服务中所作之声明或行为，或(v)与我们的服务相关的其它事宜，但本服务条款有明确规定的除外。</div>
+<div>
+	九. 通知及送达</div>
+<div>
+	9.1. 本协议项下GOME CELLAR对于用户所有的通知均可通过网页公告、电子邮件、手机短信或其他常规的信件传送等方式进行；该等通知于发出之日视为已送达收件人。</div>
+<div>
+	9.2. 用户对GOME CELLAR的通知应当通过GOME CELLAR对外正式公布的通信地址、传真号码、电子邮件地址等联系信息进行送达。</div>
+<div>
+	十. 服务的修改、中断和终止</div>
+<div>
+	10.1. 根据国家相关法律法规及政策变化或网站运营需要，GOME CELLAR有权对本协议条款不时地进行修改，修改后的协议一旦被张贴在本站上即生效，并代替原来的协议。用户可随时登录查阅最新协议；用户有义务不时关注并阅读最新版的协议及网站公告。如用户不同意更新后的协议，可以且应立即停止接受GOME CELLAR网站依据本协议提供的服务；如用户继续使用本网站提供的服务的，即视为同意更新后的协议。GOME CELLAR建议您在使用本站之前阅读本协议及本站的公告。 如果本协议中任何一条被视为废止、无效或因任何理由不可执行，该条应视为可分的且并不影响任何其余条款的有效性和可执行性。</div>
+<div>
+	10.2. 用户同意GOME CELLAR有权基于其自行之合理考量，因任何理由，包含但不限于缺乏使用或GOME CELLAR认为用户已经违反本协议的文字及精神，而终止用户的密码、账号或我们的服务之使用（或服务之任何部分），并将用户在我们的服务内的任何内容加以移除并删除。GOME CELLAR亦得依其自行之考虑，于通知或未通知之情形下，随时终止我们的服务或其任何部分。用户同意依本协议提供之任何服务，无需进行事先通知即可中断或终止，用户承认并同意，GOME CELLAR可立即关闭或删除用户的账号及用户账号中所有相关信息及文件，或禁止继续使用前述文件或我们的服务。此外，用户同意若我们的服务之使用被中断或终止或用户的账号及相关信息和文件被关闭或删除，GOME CELLAR对用户或任何第三人均不承担任何责任。</div>
+<div>
+	十一.会员制计划协议</div>
+<div>
+	11.1.GOME CELLAR会员制计划协议的变更/终止/责任限制 GOME CELLAR的会员制计划，本计划由中域电讯提供。以上计划条款和条件，连同计划有关的任何促销内容的相应条款和条件，构成本计划会员与中域之间关于制度的完整协议。如果您参加计划，您就接受了这些条款、条件、限制和要求。请注意，您对GOME CELLAR站的使用以及您的会员资格还受制于GOME CELLAR站上时常更新的所有条款、条件、限制和要求，请仔细阅读这些条款和条件。</div>
+<div>
+	11.2. 终止 GOME CELLAR可以不经通知而自行决定终止全部或部分计划，或终止您的计划会员资格。即使GOME CELLAR没有要求或强制您严格遵守这些条款，也并不构成对属于GOME CELLAR的任何权利的放弃。如果您在GOME CELLAR的客户账户被关闭，那么您也将丧失您的会员资格。对于该会员资格的丧失，您对GOME CELLAR不能主张任何权利或为此索赔。</div>
+<div>
+	11.3. 责任限制 除了GOME CELLAR的使用条件中规定的其它限制和除外情况之外，在中国法律法规所允许的限度内，对于因VIP计划而引起的或与之有关的任何直接的、间接的、特殊的、附带的、后果性的或惩罚性的损害，或任何其它性质的损害，GOME CELLAR、GOME CELLAR的董事、管理人员、雇员、代理或其它代表在任何情况下都不承担责任。GOME CELLAR的全部责任，不论是合同、保证、侵权（包括过失）项下的还是其它的责任，均不超过您所购买的与该索赔有关的商品价值额。这些责任排除和限制条款将在法律所允许的最大限度内适用，并在您的计划会员资格被撤销或终止后仍继续有效。</div>
+<div>
+	11.4. 电子通讯 当您访问GOME CELLAR站或给我们发送电子邮件时，您与我们用电子方式进行联系。您同意以电子方式接受我们的信息。我们将用电子邮件或通过在GOME CELLAR上发布通知的方式与您进行联系。您同意我们用电子方式提供给您的所有协议、通知、披露和其他信息是符合此类通讯必须是书面形式的法定要求的。如果GOME CELLAR能够证明以电子形式的信息已经发送给您或者GOME CELLAR立即在GOME CELLAR网站上张贴这样的通知，将被视为您已收到所有协议、声明、披露和其他信息</div>
+<div>
+	11.5. 版权声明 GOME CELLAR上的所有内容诸如文字、图表、标识、按钮图标、图像、声音文件片段、数字下载、数据编辑和软件、商标都是国美国际酒业贸易有限公司或其关联公司或其内容提供者的财产，受中国和国际版权法的保护。未经GOME CELLAR书面授权或许可 ，不得以任何目的对GOME CELLAR网站或其任何部分进行复制、复印、仿造、出售、转售、访问、或以其他方式加以利用。</div>
+<div>
+	11.6. 您的账户 如果您使用GOME CELLAR网站，您有责任对您的账户和密码保守秘密并对进入您的计算机作出限制，并且您同意对在您的账户和密码下发生的所有活动承担责任。GOME CELLAR销售的手机相关产品，销售给成年人。如果您在18岁以下，您只能在父母或监护人的参与下才能使用GOME CELLAR。GOME CELLAR及其关联公司保留在中华人民共和国法律允许的范围内独自决定拒绝服务、关闭账户、清除或编辑内容或取消订单的权利。</div>
+<div>
+	11.7. 评论、意见、消息和其他内容 访问者可以张贴评论、意见及其他内容，以及提出建议、主意、意见、问题或其他信息，只要内容不是非法、淫秽、威胁、诽谤、侵犯隐私、侵犯知识产权或以其他形式对第三者构成伤害或侵犯或令公众讨厌，也不包含软件病毒、政治宣传、商业招揽、连锁信、大宗邮件或任何形式的&quot;垃圾邮件&quot;。您不可以使用虚假的电子邮件地址、冒充任何他人或实体或以其它方式对卡片或其他内容的来源进行误导。GOME CELLAR保留清除或编辑这些内容的权利（但非义务），但不对所张贴的内容进行经常性的审查。</div>
+<div>
+	如果您确实张贴了内容或提交了材料，除非我们有相反指示，您授予GOME CELLAR及其关联公司非排他的、免费的、永久的、不可撤销的和完全的再许可权而在全世界范围内任何媒体上使用、复制、修改、改写、出版、翻译、创作衍生作品、分发和展示这样的内容。您授予GOME CELLAR及其关联公司和被转许可人使用您所提交的与这些内容有关的名字的权利，如果他们选择这样做的话。您声明并担保您拥有或以其它方式控制您所张贴内容的权利，内容是准确的，对您所提供内容的使用不违反本政策并不会对任何人和实体造成伤害。您声明并保证对于因您所提供的内容引起的对GOME CELLAR或其关联公司的损害进行赔偿。GOME CELLAR有权（但非义务）监控和编辑或清除任何活动或内容。GOME CELLAR对您或任何第三方所张贴的内容不承担责任。</div>
+<div>
+	十二. 合同缔结</div>
+<div>
+	如果您通过我们网站订购产品，您的订单就成为一种购买产品的申请或要约。我们将发送给您一封确认收到订单的电子邮件，其中载明订单的细节。但是只有当我们向您发出送货确认的电子邮件通知您我们已将产品发出时，我们对您合同申请的批准与接受才成立。如果您在一份订单里订购了多种产品并且我们只给您发出了关于其中一部分的发货确认电子邮件，那么直到我们发出关于其他产品的发货确认电子邮件，关于那部分产品的合同才成立。当您确认购买的商品无误后，该物品的所有权和灭失风险即转移到您这一方。</div>
+<div>
+	十三. GOME CELLAR免责说明</div>
+<div>
+	GOME CELLAR及其关联公司努力使产品说明尽可能准确。不过，我们并不保证产品说明或GOME CELLAR网站上的其他内容是准确的、完整的、可靠的、最新的或无错误的。如果GOME CELLAR提供的产品本身并非如说明所说，您可以选择将该未经使用过的产品退还我们。 直到您发出订单，我们才能确认商品的价格。尽管我们做出最大的努力，我们的商品目录里的一小部分商品可能会有定价错误。如果我们发现错误定价，我们将采取下列之一措施：</div>
+<div>
+	13.1 如果某一商品的正确定价低于我们的错误定价，我们将按照较低的定价向您销售交付该商品。</div>
+<div>
+	13.2如果某一商品的正确定价高于我们的错误定价，我们会根据我们的情况决定,是否在交付前联系您寻求您的指示, 或者取消订单并通知您。</div>
+<div>
+	对于因GOME CELLAR网站或与之有关而产生的任何争议，GOME CELLAR使用条款所包含的您的权利和义务及所有行为适用中华人民共和国区域法律管辖。如果您以任何方式侵犯或可能侵犯我们的知识产权或其他所有权，我们可在任何法院寻求指令性或其他适当的补救，而您对该法院的管辖、管辖区域和/或管辖权放弃反对权。在法律许可的最大范围内，GOME CELLAR使用条款项下的任何仲裁不得与涉及受制于GOME CELLAR使用条款的任何其他方的仲裁结合，不论通过共同仲裁程序或其他方式。</div>
+<div>
+	十四. 法律适用</div>
+<div>
+	本服务条款的生效、履行、解释及争议的解决均应适用中华人民共和国法律。</div>
+<div>
+	十五. 争议</div>
+<div>
+	如缔约方就本协议内容或其执行发生任何争议，双方应尽力友好协商解决；协商不成时，任何一方均可向有管辖权的中华人民共和国大陆地区法院提起诉讼。</div>
+<div>
+	十六.版权侵权投诉程序和通知</div>
+<div>
+	如果您认为对您作品的使用构成侵犯知识产权，请以书面形式向本网站法律部提供下列信息。请注意这个程序仅适用于您通知我们您享有版权的内容已被侵权而使用。</div>
+<div>
+	16.1 被授权代表版权利益所有人行事的人的电子或亲笔签名；</div>
+<div>
+	16.2 关于您已遭侵权的享有版权的作品的描述；</div>
+<div>
+	16.3 关于您已遭侵权的材料在本网站所在位置的描述；</div>
+<div>
+	16.4 您的地址、电话号码和电子邮件地址；</div>
+<div>
+	16.5 您确信所引起争议的使用未经版权所有人或其代理人或法律的授权的声明。</div>
+<div>
+	16.6 您以版权所有人或授权代表的名义声明保证上述信息正确真实，否则将承担作伪证的责任。 如向本网站投诉版权侵权，请联系：GOME CELLAR法律部。&nbsp;</div>
+
+
+		</div>
+	</div>
+	<div style="width:100%;height:1px;overflow:hidden;display:block;clear:both;"></div>
+</div>
+<div class="footer">
+	<div class="wrapper">
+	<!-- 
+	<div id="footer-top">
+		<ul>
+			<li class="one"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="two"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="three"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="four"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="five"><strong>正品行货<em>100%正品保证</em></strong></li>
+		</ul>
+	</div>
+	 -->
+	</div>
+	<!--帮助中心-->
+	  <div id="faq">
+	  <div class="wrapper">
+	    <ul>
+	        <li>
+		        <dl class="s1">
+		          	<dt>关于我们 </dt>
+		          			          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-7.html">公司简介</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-8.html">招商合作</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-9.html">联系我们</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-21-42.html">合作酒庄</a>
+		          		</dd>
+		       </dl>
+	      	</li>
+	        <li>
+	        	<dl class="s2">
+	          		<dt>新手上路</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-171.html">登录帮助</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-32.html">购物指南</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-17-31.html">常见问题</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <li>
+	    		<dl class="s3">
+			        <dt>配送说明</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-44.html">配送时间及范围</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-45.html">配送费收取标准</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-47.html">运输包装说明</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-22-23.html">签收与验货</a>
+		          		</dd>
+	          	</dl>
+	      </li>
+	      <li>
+	        	<dl class="s4">
+	          		<dt>支付方式</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-48.html">货到付款</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-19-49.html">在线支付</a>
+		          		</dd>
+	           </dl>
+	      </li>
+	      <li>
+	        	<dl class="s5">
+	          		<dt>售后服务</dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-18.html">退换货政策</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-14.html">退换货流程</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-23-16.html">取消订单</a>
+		          		</dd>
+		        </dl>
+	      </li>
+	      <li>
+	        	<dl class="s6">
+	          		<dt>特殊服务 </dt>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-50.html">会员介绍</a>
+		          		</dd>
+		          		<dd><i></i>
+		          			<a href="/gome-javamall/help-20-168.html">积分说明</a>
+		          		</dd>
+	            </dl>
+	      </li>
+	      <div class="clear"></div>
+	    </ul>
+	  </div>
+	</div>
+	<!--底部版权，调用footer.php-->
+	<div id="footer" >
+		<div class="wrapper">
+		  <p><a href="/gome-javamall/index.html">首页</a>
+             | <a  href="/gome-javamall/member/member.html">会员中心</a>
+             | <a  href="/gome-javamall/store/business_center.html?menu=store_index">商家中心</a>
+             | <a  href="/gome-javamall/help-62-65.html">关于网站</a>
+             | <a  href="/gome-javamall/help-21-9.html">联系我们</a>
+             | <a  href="/gome-javamall/help-21-7.html">关于我们</a>
+          </p>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

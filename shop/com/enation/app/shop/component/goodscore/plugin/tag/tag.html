@@ -1,0 +1,19 @@
+
+<table class="form-table" style="width: 100%">
+	<tr>
+		<td style="text-align: left;"><#list tagList as tag> <input type="checkbox" name="tag_id"
+			value="${tag.tag_id }" id="tag_${tag.tag_id }" />${tag.tag_name
+			}&nbsp;&nbsp; </#list></td>
+	</tr>
+</table>
+<script type="text/javascript">
+ 
+$( function() {
+	<#if tagRelList?exists >
+	<#list 	tagRelList as tr>
+		$("#tag_${tr}").attr("checked",true);
+	</#list>
+	</#if> 
+});
+
+</script>

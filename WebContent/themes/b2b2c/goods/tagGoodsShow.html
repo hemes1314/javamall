@@ -1,0 +1,163 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<#assign storeTagsGoods=newTag("storeTagsGoodsTag")>
+<#assign storeTagsGoodsList=storeTagsGoods("'mark':'${mark}'")>
+<style>
+#add{
+	margin-right: 160px;
+}
+#delete{
+	margin-right: 80px;
+}
+</style>
+<div class="layout">
+	<#include '/left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="path">
+					<div>
+						<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span>商品标签列表
+					</div>
+				</div>
+				<div class="tabmenu">
+	  				<ul class="tab pngFix">
+	  					<li class="active"><a href="javascript:void(0);">设置标签商品列表</a></li>
+	  				</ul>
+	  				<table>
+	  					<tr>
+			  				<td>
+			  					<a class="user-btn3" id="add" href="javascript:void(0);" mark="${mark}" tagid="${tagid}">添加</a> 
+							</td>
+							<td>
+								<a class="user-btn3" id="delete" href="javascript:void(0);" >批量删除</a> 
+							</td>
+							<td>
+								<a class="user-btn3" id="saveSort" href="javascript:void(0);" >保存排序</a> 
+							</td>
+						</tr>
+					</table>
+				</div>
+				<form id="goodsTagForm">
+					<input type="hidden" name="tagId" value="${tagid}"/>
+					<div id="postage-tpl" style="padding: 20px 0;">
+			  			<div id="J_TemplateList" class="manage-list">
+			            	<div class="section J_Section">
+			            		<h3 class="J_Title">设置标签商品列表</h3>
+			            	</div>
+			            	<div class="tbl-head">
+			        			<table cellspacing="0" cellpadding="0" border="0"  width="100%">
+			        				<tbody>
+				        				<tr>
+											<th></th>
+										    <th>商品名称</th>
+										    <th>排序</th>
+										    <th>操作</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="entity">
+	        						<table cellspacing="0" cellpadding="0" border="0" >
+		        						<tbody>
+		        							<#list storeTagsGoodsList.goodsTag.result as storeTagGoods>
+			        							<tr>
+												    <td>
+												    	<input type="checkbox" name="reg_id" value="${storeTagGoods.goods_id}">
+												    </td>
+												    <td>
+												    <#if (storeTagGoods.name?length>10)>
+															${storeTagGoods.name?substring(0,10)}
+													<#else>
+												    		${storeTagGoods.name}
+													</#if>		    
+												    </td>
+												    <td>
+												    	<input type="hidden" name="regId" value="${storeTagGoods.goods_id}">
+												    	<input type="text" name="ordernum" class="ordernum" value="${storeTagGoods.ordernum!'0'}" reg_id="${storeTagGoods.goods_id}"/>
+												    	<input type="hidden" id="order_num_${storeTagGoods.goods_id}" value="${storeTagGoods.ordernum!'0'}">
+												    </td>
+												    <td>
+												    	<a href="javascript:void" name="delteRel" reg_id="${storeTagGoods.goods_id}">删除</a>
+												    </td>
+									  			</tr>
+							  				</#list>
+							  			</tbody>
+							  		</table>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+
+$(function(){
+	$("#saveSort").click(function(){
+		var options = {
+				url : "${ctx}/api/b2b2c/tag!saveSort.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+		};
+		$("#goodsTagForm").ajaxSubmit(options);
+	});
+	$(".ordernum").blur(function(){
+		var reg_id= $(this).attr("reg_id");
+		if($(this).val()!=$("#order_num_"+reg_id).val()){
+			$(this).attr("name","ordernum");
+		}
+	});
+	$("a[name='delteRel']").click(function(){
+		var reg_id=$(this).attr("reg_id");
+		$.ajax({
+			url : "${ctx}/api/b2b2c/tag!deleteRel.do?ajax=yes&tagId=${tagid}&reg_id="+reg_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			}
+		});
+	});
+	$("#delete").click(function(){
+		var options = {
+				url : "${ctx}/api/b2b2c/tag!deleteRel.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+		};
+		$("#goodsTagForm").ajaxSubmit(options);
+	});
+	$("#add").click(function(){
+		var mark=$(this).attr("mark");
+		var tagid=$(this).attr("tagid");
+		location.href="store_goods_list.html?type=tag&mark="+mark+"&tagId="+tagid;
+	});
+})
+</script>
+
+<#include '/common/footer.html' />

@@ -1,0 +1,63 @@
+<#assign activityGiftListTag=newTag("activityGiftListTag")>
+<#assign activityGiftList=activityGiftListTag("{'activityId':${activityId}}")>
+<script  src="${ctx}/themes/b2b2cv2/js/quickpagers.js"></script>
+<form id="activityGiftForm">
+		商品名：<input  type="text" name="goods_name" id="goods_name" value="${goods_name!''}" style="width:250px; height:25px;margin-left:20px">
+		商品编号：<input  type="text" name="sn" id="sn" value="${sn!''}" style="width:250px; height:25px;margin-left:10px">
+		<input type="button"  id="searchGoods" value="搜索" style="width:50px; height:25px;margin-left:10px">
+	<input type="hidden" name="activity_id" id="activity_id" value="${activityId}">
+	<input type="hidden" name="goods_ids" id="goods_ids" value="">
+		<table cellspacing="0" cellpadding="0" border="1" class="spec_table" width="700">
+			<theader>
+				<tr>
+					<td style="width:20px;"></td>
+					<td style="width:330px;">名称</th>
+					<td>价格</th>
+					<td>SN</th>
+				</tr>
+			</theader>
+			<tbody id="goods">
+				<#list activityGiftList as goods>
+				<tr>
+					<td><input type="checkbox" name="goods_id" id="goods_id" value="${goods.goods_id}"></td>
+					<td>${goods.name}</td>
+					<td>${goods.price}</td>
+					<td>${goods.sn}</td>
+				</tr>
+				</#list>
+			</tbody>
+		</table>
+        <div class="holder"></div>
+</form>
+<script>
+$(function () {
+	$("div.holder").jPages({
+	  containerID : "goods", //存放表格的窗口标签ID
+	  previous : "←", //指示首页的按钮
+	  next : "→",//指示尾页的按钮
+	  perPage : 10,//每页显示表格的行数
+	  delay : 20 //分页时动画持续时间，0表示无动画
+	});
+$("#searchGoods").click(function(){
+		
+		var goods_name=$("#goods_name").val();
+		var activityId = $("#activity_id").val();
+		var sn = $("#sn").val();
+		var map = {};
+		map["title"] = "添加活动商品";
+		map["html"] = "add_activity_goods.html";
+		map["url"] = "${ctx}/store/activity/add_activity_goods.html?activityId=" + activityId+"&goods_name="+goods_name+"&sn="+sn;
+		dialog.close();
+		openDialogAdd(map);
+		
+
+		});
+	$("#checkall").click(function () {
+		if ($(this).attr("checked")) {
+			$("input[type=checkbox]").attr("checked", true);
+		} else {
+			$("input[type=checkbox]").attr("checked", false);
+		}
+	})
+})
+</script>

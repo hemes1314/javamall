@@ -1,0 +1,141 @@
+<#include '/admin/header.html' > 
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+
+<div class="main" style="background-color: white;">
+	<form id="addForm">
+		<table cellspacing="1" cellpadding="3" width="100%" style="border-collapse:collapse;" border='1' bordercolor="#d7d7d7" class="form-table">
+			<input type="hidden" name="appealFlow.business_id" value="${appealFlow.business_id}">
+			<input type="hidden" name="appealFlow.appeal_flow_id" value="${appealFlow.appeal_flow_id}">
+			<input type="hidden" name="appealFlow.member_id" value="${appealFlow.member_id}">
+			<input type="hidden" name="appealFlow.applicant" value="${loginname}">
+			<input type="hidden" name="appealFlow.applicant_cn" value="${loginname_cn}">
+			<input type="hidden" name="appealFlow.appeal_date" value="${appealFlow.appeal_date}">
+			<input type="hidden" name="appealFlow.tradeno" value="${appealFlow.tradeno!''}">
+			<!-- <tr>
+				<th>描述：</th>
+				<td><input class="input_text easyui-validatebox" type="text" readonly="true" 
+					id="m_name" name="member.uname" data-options="required:false"></input>
+				</td>
+			</tr> -->
+			<tr>
+				<th>申请人</th>
+				<td><input class="input_text" type="text" name="appealFlow.member_name" readonly value="${appealFlow.member_name}"></input>
+				</td>
+			</tr>
+			<tr>
+				<th>订单号</th>
+				<td>
+				<a class="easyui-linkbutton" 
+				href="${ctx}/b2b2c/admin/storeOrder!detailBySN.do?sn=${appealFlow.business_id}" target="_blank">${appealFlow.business_id}</a>
+				</td>
+			</tr>
+			<tr>
+				<th>申诉相片</th>
+				<td>
+					<div id="sitelogo" style="float: none; position: static;">
+						<#list photoList as photoPath>
+							<img style="float: none;position: static;max-width:400px;height:auto;" src="${photoPath!''}" />&nbsp;
+						</#list>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>申请原因</th>
+				<td>
+					<textarea  class="input_text easyui-validatebox" name="appealFlow.reason" 
+					 cols="100" rows="8" id="intro" style="resize: none;" readonly
+					 data-options="required:true">${appealFlow.reason!''}</textarea>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div class="buttonWrap fixed">
+		<a id="submitButton" class="easyui-linkbutton" onclick="submitForm()"
+			href="javascript:;">启动流程</a>
+		<a id="submitButtonBack" class="easyui-linkbutton" onclick="submitFormBack()"
+			href="javascript:;">退回</a>
+	</div>
+</div>
+<script>
+	
+
+	function submitForm() {
+		var formflag = $("#addForm").form().form('validate');
+		if (formflag) {
+			$.Loading.show("正在提交......");
+			$("#submitButton").linkbutton("disable");
+			var options = {
+				url : "appeal!start.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success("单据已提交");
+						
+						newTab("申诉申请",
+								"${ctx}/b2b2c/admin/appeal!list.do");
+						//parent.CloseTabByTitle("申诉申请");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$("#submitButton").linkbutton("enable");
+					
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					$("#submitButton").linkbutton("enable");
+					$.Loading.hide();
+				}
+			};
+			$("#addForm").ajaxSubmit(options);
+		} else {
+			$.Loading.hide();
+		}
+	}
+	function submitFormBack() {
+		var formflag = $("#addForm").form().form('validate');
+		if (formflag) {
+			$.Loading.show("正在提交......");
+			$("#submitButton").linkbutton("disable");
+			$("#submitButtonBack").linkbutton("disable");
+			var options = {
+				url : "appeal!refuse.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success("单据已退回");
+						
+						newTab("申诉申请",
+								"${ctx}/b2b2c/admin/appeal!list.do");
+						//parent.CloseTabByTitle("申诉申请");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$("#submitButton").linkbutton("enable");
+					$("#submitButtonBack").linkbutton("enable");
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					$("#submitButton").linkbutton("enable");
+					$("#submitButtonBack").linkbutton("enable");
+					$.Loading.hide();
+				}
+			};
+			$("#addForm").ajaxSubmit(options);
+		} else {
+			$.Loading.hide();
+		}
+	}
+	
+	function getPhotoPath(path){
+		$("#appeal_photo").val(path);
+		$("#appeal_photo_img").attr("src",path);
+		$("#appeal_photo_img").show();
+		$("#appeal_photo_button").toggle();
+	}
+</script>
+
+<#include '/admin/footer.html' >

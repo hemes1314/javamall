@@ -1,0 +1,96 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<!-- <div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueBlue"
+			data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+	</div> -->
+	<div class="shadowBoxWhite tableDiv">
+		<form id="auditform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/store!auth_listJson.do?disabled=1',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="auditdata">
+				<thead>
+					<tr>
+						<th  data-options="field:'store_id',checkbox:true,width:100"></th>
+				   	 	<th  data-options="field:'store_name',width:100">店铺名称</th>
+				   	 	<th  data-options="field:'member_name',width:100">会员名称</th>
+				   	 	<th  data-options="field:'store_region',width:100">所在地</th>
+				   	 	<th  data-options="field:'disabled',width:100" formatter="formatDisabled">店铺状态</th>
+				   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+	<div id="storeInfo" style="display: none;"></div>
+</div>
+<script type="text/javascript">
+function formatAction (value,row,index){
+	var val="<a href='javascript:void;'class='edit' onclick='onPass("+row.store_id+",2)' title='审核通过'></a>"
+	return val;
+}
+function formatDisabled(value,row,index){
+	if(value=="0")
+		return "待审核";
+	if(value=="1")
+		return "已审核"
+	if(value=="2")
+		return "已关闭";
+}
+function onPass(storeId,type){
+	$("#storeInfo").show();
+　　	$('#storeInfo').dialog({
+　　		title: '审核店铺',
+　　		width: 550,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/b2b2c/admin/store!pass.do?storeId='+storeId+"&type="+type,
+　　		modal: true,
+　　		buttons: [{
+　　			 text:'保存',
+　　			 iconCls:'icon-ok',
+　　			 handler:function(){
+　　				 var btn = $(this);
+　　				 var disabled=btn.hasClass("l-btn-disabled");
+　　				 if(!disabled){
+　　					 pass(btn);
+	　　			 }	
+　　			}
+			 },{
+			 text:'还原',
+			 handler:function(){
+				$('#storeInfoForm')[0].reset() ;
+			 }
+　　		}]
+　　	});
+}
+
+function pass(btn){
+	var formflag= $("#storeInfoForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后...");
+		btn.linkbutton("disable");	
+		var options = {
+				url : "${ctx}/b2b2c/admin/store!auth_pass.do",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#storeInfo").dialog('close');
+						$('#auditdata').datagrid('reload');
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);
+					}
+					btn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		btn.linkbutton("enable");
+				}
+			};
+		$('#storeInfoForm').ajaxSubmit(options);	
+	}
+	
+}
+</script>

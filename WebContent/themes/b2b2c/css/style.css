@@ -1,0 +1,82 @@
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-cart:before {
+	content: "\e600";
+}
+.icon-qrcode:before {
+	content: "\e608";
+}
+.icon-alarm:before {
+	content: "\e603";
+}
+.icon-user:before {
+	content: "\e604";
+}
+.icon-signin:before {
+}
+.icon-user2:before {
+	content: "\e609";
+}
+.icon-home:before {
+	content: "\e601";
+}
+.icon-user3:before {
+	content: "\e60a";
+}
+.icon-circle-arrow-right:before {
+	content: "\e607";
+}
+.icon-truck:before {
+	content: "\e60b";
+}
+
+.icon-envelope:before {
+	content: "\e60f";
+}
+
+.icon-mobile:before {
+	content: "\e610";
+}
+.icon-grid:before {
+	content: "\e616";
+}
+.icon-phone:before {
+	content: "\e613";
+}
+.icon-chronometer:before {
+	content: "\e617";
+}
+.icon-arrow-down2:before {
+	content: "\e614";
+}
+.icon-arrow-up2:before {
+	content: "\e615";
+}
+.icon-dot:before {
+	content: "\e60e";
+}
+.icon-arrow-down:before {
+	content: "\e60c";
+}
+.icon-arrow-up:before {
+	content: "\e60d";
+}
+.icon-star:before {
+	content: "\e611";
+}
+.icon-star-outline:before {
+	content: "\e612";
+}

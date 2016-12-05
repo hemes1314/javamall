@@ -1,0 +1,73 @@
+<#include '/admin/header.html' > <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="shadowBoxWhite tableDiv">
+		<table id="orderReturndata" class="easyui-datagrid"
+			data-options="url:'orderReport!returnedListJson.do',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+			pagination="true" width="width">
+			<thead>
+				<tr>
+					<th data-options="field:'id',width:35">退货ID</th>
+					<th data-options="field:'tradeno',width:100">退货单号</th>
+					<th data-options="field:'tradestatus',width:100" formatter="formatType">退货状态</th>
+					<th data-options="field:'ordersn',width:100">退货订单号</th>
+					<th data-options="field:'regoperator',width:100">业务员</th>
+					<th data-options="field:'regtime',width:100" formatter="formatTime">操作时间</th>
+					<th data-options="field:'alltotal_pay',width:100">退货金额</th>
+					<th data-options="field:'goodslist',width:100">退货商品及数量</th>
+					<th data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="pay_detail"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	function formatType(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = "新建";
+		}
+		if (value == 1) {
+			val = "待入库";
+		}
+		if (value == 2) {
+			val = "已入库";
+		}
+		if (value == 3) {
+			val = "已完成";
+		}
+		if (value == 4) {
+			val = "已取消";
+		}
+		if (value == 5) {
+			val = "部分入库";
+		}
+		return val;
+	}
+
+	function formatTime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	function formatOperation(value, row, index) {
+		var val;
+		if(row.tradestatus==0){
+			val = "<a href='javascript:void(0);' onclick=newTab('退货单审核','${ctx}/shop/admin/sellBack!auth.do?id="+row.id+"'); >查看</a>";
+		}
+		if(row.tradestatus==1|| row.tradestatus==5){
+			val = "<a href='javascript:void(0);' onclick=newTab('退货入库','${ctx}/shop/admin/sellBack!returned.do?id="+row.id+"'); >查看</a>";
+		}
+		if(row.tradestatus==2|| row.tradestatus==3 || row.tradestatus==4){
+			val = "<a href='javascript:void(0);' onclick=newTab('退货结算','${ctx}/shop/admin/sellBack!payment.do?id="+row.id+"'); >查看</a>";
+		}
+		return val;
+	}
+	
+	window.top["reload_Abnormal_Monitor"]=function(){
+        $("#orderReturndata").datagrid("reload");
+    };
+    
+</script>
+<div id="log"></div>
+
+<#include '/admin/footer.html' >

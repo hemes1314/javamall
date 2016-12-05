@@ -1,0 +1,168 @@
+<div class="nc-s-c-s1 ncs-message-bar">
+	<div class="title">
+		<h4>客服中心</h4>
+	</div>
+	<div class="content">
+		<#if store??>
+			<#if store.qq??>
+				<p>QQ：<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=${store.qq!''}&amp;site=qq&amp;menu=yes">
+					<img src="http://wpa.qq.com/pa?p=2:1234567:52" alt=""></a>
+				</p>
+			</#if>
+		</#if>
+		<#if storeInfo??>
+			<#if storeInfo.qq??>
+				<p>
+					QQ：<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=${storeInfo.qq!''}&amp;site=qq&amp;menu=yes">
+					<img src="http://wpa.qq.com/pa?p=2:1234567:52" alt=""></a>
+				</p>
+			</#if>
+		</#if>
+	</div>
+</div>
+<div class="nc-s-c-s1 ncs-search-bar mt10">
+	<div class="title">
+		<h4>店内搜索</h4>
+	</div>
+	<div class="content">
+		<form id="" name="searchShop" method="get" action="#">
+			<input type="hidden" name="act" value="show_store" /> <input
+				type="hidden" name="op" value="goods_all" /> <input type="hidden"
+				name="id" value="4" />
+			<table class="ncs-search">
+				<tr>
+					<th>关键字：</th>
+					<td><input type="text" class="w90" name="goods_keyword" id="goods_keyword" value="${keyword!''}"></td>
+				</tr>
+				<tr>
+					<th>价格：</th>
+					<td><input type="text" class="w30" name="s_price" id="s_price" value="${start_price!''}" >
+						- <input type="text" class="w30" name="e_price" id="e_price" value="${end_price!''}" >
+					</td>
+				</tr>
+				<tr>
+					<th>&nbsp;</th>
+					<td><a href="javascript:void(0);" onclick="searchGoods();">搜索</a>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<#-- 创建商品分类标签 --> 
+<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+<#-- 查询商品分类列表 0表示查子分类 --> 
+<#assign storeGoodsCatList= storeGoodsCatListTag("{'type':0,'storeid':${store_id!0}}")!''>
+
+<div class="nc-s-c-s1 ncs-class-bar mt10">
+	<div class="title">
+		<h4>商品分类</h4>
+	</div>
+	<div class="content">
+		<ul class="ncs-submenu">
+			<li><span class="ico-none"><em>-</em> </span>
+			<a href="home.html?show_c=4&store_id=${store_id!0}">全部商品</a></li>
+			<#list storeGoodsCatList as cat>
+			<#if cat.store_cat_pid==0 && cat.disable!=0>
+			<li><span class="goods_none" onclick="class_list(this);"
+				span_id="${cat.store_cat_id}" style="cursor: pointer;"> <em>-</em> </span>
+				<a href="home.html?show_c=4&store_id=${store_id}&stc_id=${cat.store_cat_id}">${cat.store_cat_name!''}</a>
+				<ul class="goods_store_category${cat.store_cat_id}">
+					<#list storeGoodsCatList as childCat> 
+					<#if childCat.store_cat_pid==cat.store_cat_id && childCat.disable!=0>
+					<li><a
+						href="home.html?show_c=4&store_id=${store_id}&stc_id=${childCat.store_cat_id}">${childCat.store_cat_name!''}</a>
+					</li> 
+					</#if> 
+					</#list>
+				</ul>
+			</li> 
+			</#if> 
+			</#list>
+		</ul>
+		<div class="clear mb10"></div>
+	</div>
+</div>
+
+
+<div class="nc-s-c-s1 ncs-top-bar mt10">
+	<div class="title">
+		<h4>热销商品排行</h4>
+	</div>
+	<div class="content">
+		<!-- <ul class="ncs-top-tab pngFix">
+			<li class="current"><a
+				href="#">热销商品排行</a>
+			</li>
+			<li><a
+				href="#">热门收藏排行</a>
+			</li>
+		</ul> -->
+
+		<#-- 创建标签商品标签 --> 
+		<#assign storeTagsGoodsTag = newTag("storeTagsGoodsTag") > 
+		<#-- 查询标签商品列表 -->
+		<#assign storeTagsGoods = storeTagsGoodsTag("{'mark':'hot','storeid':${store_id!0},'num':5}")>
+		<div class="ncs-top-panel">
+			<ol>
+				<#if storeTagsGoods?size!=0 >
+				<#list storeTagsGoods.list as st>
+				<li>
+					<dl>
+						<dt>
+							<a href="goods-${st.goods_id}.html">${st.name}</a>
+						</dt>
+						<dd class="goods-pic">
+							<a href="goods-${st.goods_id}.html"> 
+								<span class="thumb size40"><i></i> <@image src="${st.thumbnail!''}"
+									onload="javascript:DrawImage(this,40,40);" /> </span>
+							</a>
+							<p>
+								<span class="thumb size100"><i></i>
+								<@image src="${st.thumbnail!''}"
+									onload="javascript:DrawImage(this,100,100);" title="sda12" /> <big></big><small></small>
+								</span>
+							</p>
+						</dd>
+						<dd class="price pngFix">${st.price}</dd>
+						<dd class="selled pngFix">
+							售出：<strong>${st.buy_num!0}</strong>笔
+						</dd>
+					</dl>
+				</li> 
+				</#list>
+				</#if>
+				
+			</ol>
+		</div>
+		<p>
+			<a href="${ctx}/home.html?show_c=4&store_id=${store_id!0}">查看本店其他商品</a>
+		</p>
+	</div>
+</div>
+
+<script>
+function searchGoods(){
+	var goods_keyword = $("input[name='goods_keyword']").val();
+	var start_price = $("input[name='s_price']").val();
+	var end_price = $("input[name='e_price']").val();
+	if (isNaN(Number(start_price)) || isNaN(Number(end_price))) {
+		alert("请输入数字！");
+		return false;
+	}
+
+	if (Number(start_price) < 0 || Number(end_price) < 0) {
+		alert("输入的价格不能小于0！");
+		return false;
+	}
+
+	if (Number(start_price) >= Number(end_price)) {
+		if (Number(start_price) >= 0 && Number(end_price) > 0) {
+			alert("结束价格应大于起始价格！");
+			return false;
+		}
+	}
+	window.location.href = "home.html?show_c=4&store_id=${store_id}&keyword="+goods_keyword+"&start_price="+start_price+"&end_price="+end_price;
+}
+</script>

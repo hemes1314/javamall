@@ -1,0 +1,891 @@
+<#include 'common/header.html' /> 
+<#include 'common/reception_header.html'/>
+<!-- 
+<script src="${ctx}/themes/b2b2c/js/home_index.js"></script>
+-->
+<script src="${ctx}/themes/b2b2c/js/index.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/indexroll.css" />
+<script src="${ctx}/themes/b2b2c/js/adv.js" > </script>
+<script src="${ctx}/themes/b2b2c/js/scroll.1.3.js" > </script>
+<script src="${ctx}/themes/b2b2c/js/focus.js" > </script>
+
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<!-- 创建广告标签 -->
+<#assign advListTag= newTag("advListTag")>
+<!-- 文章 -->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+<!-- 团购活动 -->
+<#assign groupBuyActTag=newTag("groupBuyActTag")>
+<#assign groupBuyAct=groupBuyActTag()>
+<#if groupBuyAct!="">
+	<!-- 获取商品列表标签 -->
+	<#assign goodsList=goodsListTag("'tagid':'${groupBuyAct.act_tag_id}','goodsnum':'5'")>
+	<!-- 团购时间 -->
+	<#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+	<#assign groupBuyActSurplus=groupBuyActSurplusTag("{'end_time':${groupBuyAct.end_time} }")>
+</#if>
+<div class="clear"></div>
+<style type="text/css">
+.category {
+	display: block !important;
+}
+/* focus */
+#focus{width:776px;height:295px;overflow:hidden;position:relative;}
+#focus ul{height:295px;position:absolute;}
+#focus ul li{float:left;width:776px;height:295px;overflow:hidden;position:relative;background:#000;}
+#focus ul li div{position:absolute;overflow:hidden;}
+#focus .btnBg{position:absolute;width:800px;height:20px;left:0;bottom:0;background:#000;}
+#focus .btnn{position:absolute;width:780px;height:10px;padding:5px 10px;right:0;bottom:0;text-align:right;}
+#focus .btnn span{display:inline-block;_display:inline;_zoom:1;width:25px;height:10px;_font-size:0;margin-left:5px;cursor:pointer;background:#fff;}
+#focus .btnn span.on{background:#fff;}
+#focus .preNext{width:45px;height:100px;position:absolute;top:90px;cursor:pointer;}
+#focus .pre{left:0;}
+#focus .next{right:0;background-position:right top;}
+</style>
+<!-- HomeFocusLayout Begin-->
+<#assign advListTag= newTag("advListTag")>
+<!-- 调用广告信息,传递参数acid:1 -->
+<#assign adv = advListTag("'acid':'1'")!'' >
+<!-- 获取广告列表 -->
+<#assign advList = adv.advList /> 
+<#assign n = 1 />
+<div class="home-focus-layout">
+	<!-- 轮播广告 -->
+	<div class="banner pr" style="height:481px;">
+		<div style="width:776px;height:481px;margin:0px auto;position:relative">
+		
+			<div id="focus">
+				<ul >
+					<#list advList as adv>
+						<li >
+							<#if adv.url=="#">
+								<@image border="0" src="${adv.atturl}" alt="${adv.aname!''}"  />
+							<#else>
+								<a target="_blank" title="${adv.aname!''}" href="${ctx}/core/adv!click.do?advid=${adv.aid} ">
+									<@image border="0" src="${adv.atturl}" alt="${adv.aname!''}" width="776px" />
+								</a>
+							</#if>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			
+			<div class="three_adv">
+				<#assign advListTag= newTag("advListTag")>
+				<!-- 调用广告信息,传递参数acid:1 -->
+				<#assign adv = advListTag("'acid':'1'")!'' >
+				<!-- 获取广告列表 -->
+				<#assign advList = adv.advList />
+				<ul>
+					<#list advList as adv>
+						<li class="<#if adv_index == 0>frist</#if>">
+							<#if adv.url=="#">
+								<@image border="0" src="${adv.atturl}" alt="${adv.aname!''}"  />
+							<#else>
+								<a target="_blank" title="${adv.aname!''}" href="javascript:void(0);">
+									<@image border="0" src="${adv.atturl}" alt="${adv.aname!''}"  />
+								</a>
+							</#if>
+						</li>
+					</#list>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="right-sidebar">
+		<div class="policy">
+			<ul>
+				<li class="b1">七天包退</li>
+				<li class="b2">正品保障</li>
+				<li class="b3">闪电发货</li>
+			</ul>
+		</div>
+		<!---团购模块-->
+		<div class="groupbuy">
+			<div class="title">
+				<i>团</i>限时团购
+			</div>
+			<#if groupBuyAct!="">
+				<ul style="left: 0px; width: 210px;">
+			        <li>
+			        	<#list goodsList as goods>
+					    	<dl >
+					    		<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" width="210px" height="150px" />
+					            <dt>${goods.name}</dt>
+					            <dd class="price">
+					            	<span class="groupbuy-price">${goods.price?string.currency}</span>
+					            	<span class="buy-button"><a href="${ctx}/goods.html?goodsid=${goods.goods_id}">立即团</a></span>
+					            </dd>
+								<dd class="time">
+									<span class="time-remain"> <i></i><em id="d0"></em>天<em id="h0"></em>小时 <em id="m0"></em>分<em id="s0"></em>秒 </span>
+									<script type="text/javascript">
+										tms[tms.length] = "${groupBuyActSurplus.cha}";
+										day[day.length] = "d0";
+										hour[hour.length] = "h0";
+										minute[minute.length] = "m0";
+										second[second.length] = "s0";
+									</script>
+								</dd>
+					          </dl>
+				   		</#list>
+				   </li>
+			      </ul>
+	      	    <div class="pagination"></div>
+	      	    <div class="arrow pre" style="opacity: 0;"></div>
+	      	    <div class="arrow next" style="opacity: 0;"></div>
+      	    </#if>
+		</div>
+
+		<div class="proclamation">
+			<ul class="tabs-nav mallinfo">
+				<li class="tabs-selected" show="mall-news"><h3>商城公告</h3></li>
+				<li show="mall-tel"><h3>联系方式</h3></li>
+			</ul>
+			<div class="tabs-panel mall-news">
+				<ul >
+					<!-- 调用CMS数据搜索标签，并传递所在模型ID参数-->
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":26}') />
+					<#list webPage.result as articlea>
+						<li> 
+							<a href="help.html?articleid=${articlea.id}"> 
+								<#if (articlea.title?length gt 8) >
+									${articlea.title?substring(0,7)}...
+								<#else>
+									${articlea.title!''}&nbsp;
+								</#if>
+								(<@dateformat time="${articlea.add_time}" pattern="yyyy-MM-dd"/>)
+							</a>
+						</li> 
+					</#list>
+				</ul>
+			</div>
+			<div class="tabs-panel mall-tel">
+				<ul>
+	          		<#assign webPage = dataSearchTag('{"modelid":3,"catid":28}') />
+					<#list webPage.result as articlea>
+						<li style="width: 100%;"> ${articlea.name!''}：${articlea.context!''}</li> 
+					</#list>
+				</ul>
+        	</div>
+		</div>
+	</div>
+</div>
+<div class="home-sale-layout wrapper">
+	<div class="left-layout">
+		<ul class="tabs-nav">
+			<li class="tabs-selected" rel="1"><i class="arrow"></i>
+				<h3>特别推荐</h3></li>
+			<li rel="2"><i class="arrow"></i>
+				<h3>猜你喜欢</h3></li>
+			<li rel="3"><i class="arrow"></i>
+				<h3>新品上市</h3></li>
+			<li rel="4"><i class="arrow"></i>
+				<h3>疯狂抢购</h3></li>
+		</ul>
+		<!--特别推荐-->
+		<div style="width:989px;height:250px;overflow:hidden;">
+		<div class="tabs-panel sale-goods-list " id="goods1">
+			<ul class="specially">
+				<!-- 特别推荐标签-->
+				<#assign goodsList=goodsListTag("'tagid':'1','goodsnum':'5'")>
+				<#list goodsList as goods>
+				<li>
+					<dl>
+						<!--商品名称-->
+						<dt class="goods-name">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"
+								title="${goods.name}">${goods.name}</a>
+						</dt>
+						<!--商品图片-->
+						<dd class="goods-thumb">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+								<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+						</dd>
+						<!--商品价格-->
+						<dd class="goods-price">商城价：${goods.price?string.currency}</dd>
+					</dl>
+				</li> </#list>
+			</ul>
+		</div>
+		<!---猜你喜欢---->
+		<div class="tabs-panel sale-goods-list" id="goods2">
+			<ul class="specially">
+				<!-- 猜你喜欢标签-->
+				<#assign goodsList=goodsListTag("'tagid':'2','goodsnum':'5'")>
+				<#list goodsList as goods>
+				<li>
+					<dl>
+						<!--商品名称-->
+						<dt class="goods-name">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"
+								title="${goods.name}">${goods.name}</a>
+						</dt>
+						<!--商品图片-->
+						<dd class="goods-thumb">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+							<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+						</dd>
+						<!--商品价格-->
+						<dd class="goods-price">商城价：${goods.price?string.currency}</dd>
+					</dl>
+				</li> </#list>
+			</ul>
+		</div>
+		<!---新品上市---->
+		<div class="tabs-panel sale-goods-list" id="goods3">
+			<ul class="specially">
+				<!-- 新品上市标签-->
+				<#assign goodsList=goodsListTag("'tagid':'3','goodsnum':'5'")>
+				<#list goodsList as goods>
+				<li>
+					<dl>
+						<!--商品名称-->
+						<dt class="goods-name">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"
+								title="${goods.name}">${goods.name}</a>
+						</dt>
+						<!--商品图片-->
+						<dd class="goods-thumb">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+								<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+						</dd>
+						<!--商品价格-->
+						<dd class="goods-price">商城价：${goods.price?string.currency}</dd>
+					</dl>
+				</li> </#list>
+			</ul>
+		</div>
+		<!---疯狂抢购---->
+		<div class="tabs-panel sale-goods-list" id="goods4">
+			<ul class="specially">
+				<!-- 疯狂抢购标签-->
+				<#assign goodsList=goodsListTag("'tagid':'4','goodsnum':'5'")>
+				<#list goodsList as goods>
+				<li>
+					<dl>
+						<!--商品名称-->
+						<dt class="goods-name">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"
+								title="${goods.name}">${goods.name}</a>
+						</dt>
+						<!--商品图片-->
+						<dd class="goods-thumb">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+								<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+						</dd>
+						<!--商品价格-->
+						<dd class="goods-price">商城价：${goods.price?string.currency}</dd>
+					</dl>
+				</li> </#list>
+			</ul>
+		</div>
+		</div>
+	</div>
+	<div class="right-sidebar">
+		<!---限时打折-->
+		<div class="title">
+			<h3>限时打折</h3>
+		</div>
+	</div>
+</div>
+<!--HomeFocusLayout End-->
+<div class="clear"></div>
+
+
+<!--首页分类，后台设置-->
+<div class="home-standard-layout wrapper style-pink">
+	<div class="left-sidebar">
+		<div class="title">
+			<div class="pic-type">
+				<img border="0" src="themes/b2b2c/images/home/web-3.png">
+			</div>
+		</div>
+		<div class="left-ads">
+			<a href="javascript:void(0);" target="_blank"> 
+			<#assign adv = advListTag("'acid':'15'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> 
+				<#if !advList?exists || advList?size==0> 没有上传广告 
+					<#else>
+					<!-- 获取广告图片宽度 -->
+					<#assign width = adv.adDetails.width />
+					<!-- 获取广告图片高度 -->
+					<#assign height = adv.adDetails.height /> 
+					<#list advList as adv>
+						<a target="_blank" href="${ctx}${adv.url!''}">
+						<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</#list> 
+				</#if>
+		</div>
+		<div class="recommend-classes">
+			<ul>
+				<li><a href="javascript:void(0);" title="风衣" target="_blank">风衣</a></li>
+				<li><a href="javascript:void(0);" title="打底衫" target="_blank">打底衫</a></li>
+				<li><a href="javascript:void(0);" title="牛仔裤" target="_blank">牛仔裤</a></li>
+				<li><a href="javascript:void(0);" title="毛呢连衣裙" target="_blank">毛呢连衣裙</a></li>
+				<li><a href="javascript:void(0);" title="长袖连衣裙" target="_blank">长袖连衣裙</a></li>
+				<li><a href="javascript:void(0);" title="羽绒服" target="_blank">羽绒服</a></li>
+				<li><a href="javascript:void(0);" title="卫衣" target="_blank">卫衣</a></li>
+				<li><a href="javascript:void(0);" title="长袖T恤" target="_blank">长袖T恤</a></li>
+				<li><a href="javascript:void(0);" title="长袖衬衫" target="_blank">长袖衬衫</a></li>
+				<li><a href="javascript:void(0);" title="品质秋冬外套" target="_blank">品质秋冬外套</a></li>
+				<li><a href="javascript:void(0);" title="风衣" target="_blank">风衣</a></li>
+				<li><a href="javascript:void(0);" title="休闲西装" target="_blank">休闲西装</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="middle-layout">
+		<ul class="tabs-nav">
+			<li class="tabs-selected"><i class="arrow"></i>
+				<h3>美容美妆</h3></li>
+		</ul>
+		<div class="tabs-panel middle-banner-style01 fade-img " id="index_advimg">
+			<#assign aadv = advListTag("'acid':'9'")!'' > 
+			<#assign badv = advListTag("'acid':'10'")!'' > 
+			<#assign cadv = advListTag("'acid':'11'")!'' > 
+			<#assign dadv = advListTag("'acid':'12'")!'' >
+
+			<!-- 获取a广告列表 -->
+			<#assign advList = aadv.advList /> 
+			<#if !advList?exists ||advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = aadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = aadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="a${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" rel="${adv.aid}" class="aaaaaa"/>
+						</a>
+					</li>
+				</#list> 
+			</#if>
+
+			<!-- 获取b广告列表 -->
+			<#assign advList = badv.advList /> 
+			<#if !advList?exists || advList?size==0> 没有上传广告 
+				<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = badv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = badv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="b${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</li> 
+				</#list> 
+			</#if>
+
+			<!-- 获取c广告列表 -->
+			<#assign advList = cadv.advList /> 
+			<#if !advList?exists || advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = cadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = cadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="c${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" />
+						</a>
+					</li> 
+				</#list> 
+			</#if>
+
+			<!-- 获取d广告列表 -->
+			<#assign advList = dadv.advList /> 
+			<#if !advList?exists ||advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = dadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = dadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="d${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+						<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</li> 
+				</#list> 
+			</#if>
+		</div>
+	</div>
+	<div class="right-sidebar">
+		<div class="title"></div>
+		<div class="recommend-brand">
+			<ul>
+				<#assign adv = advListTag("'acid':'13'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> <#if !advList?exists ||
+				advList?size==0> 没有上传广告 <#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height /> <#list advList as adv>
+				<li><a target="_blank" href="${ctx}${adv.url!''}"><@image
+						border="0" src="${adv.atturl!''}" width="${width!''}"
+						height="${height!''}" alt="${adv.aname!''}" /></a></li> </#list> </#if>
+			</ul>
+		</div>
+		<div class="right-side-focus">
+			<ul>
+				<#assign adv = advListTag("'acid':'14'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> <#if !advList?exists ||
+				advList?size==0> 没有上传广告 <#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height /> <#list advList as adv>
+				<li><a target="_blank" href="${ctx}${adv.url!''}"><@image
+						border="0" src="${adv.atturl!''}" width="${width!''}"
+						height="${height!''}" alt="${adv.aname!''}" /></a></li> </#list> </#if>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="home-standard-layout wrapper style-green">
+	<div class="left-sidebar">
+		<div class="title">
+			<div class="pic-type">
+				<img border="0" src="themes/b2b2c/images/home/web-2.png">
+			</div>
+		</div>
+		<div class="left-ads">
+			<a href="javascript:void(0);" target="_blank"> 
+			<#assign adv = advListTag("'acid':'15'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> 
+				<#if !advList?exists || advList?size==0> 没有上传广告 
+					<#else>
+					<!-- 获取广告图片宽度 -->
+					<#assign width = adv.adDetails.width />
+					<!-- 获取广告图片高度 -->
+					<#assign height = adv.adDetails.height /> 
+					<#list advList as adv>
+						<a target="_blank" href="${ctx}${adv.url!''}">
+						<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</#list> 
+				</#if>
+		</div>
+		<div class="recommend-classes">
+			<ul>
+				<li><a href="javascript:void(0);" title="单肩包" target="_blank">单肩包</a></li>
+				<li><a href="javascript:void(0);" title="打底衫" target="_blank">打底衫</a></li>
+				<li><a href="javascript:void(0);" title="牛仔裤" target="_blank">牛仔裤</a></li>
+				<li><a href="javascript:void(0);" title="毛呢连衣裙" target="_blank">毛呢连衣裙</a></li>
+				<li><a href="javascript:void(0);" title="长袖连衣裙" target="_blank">长袖连衣裙</a></li>
+				<li><a href="javascript:void(0);" title="羽绒服" target="_blank">羽绒服</a></li>
+				<li><a href="javascript:void(0);" title="卫衣" target="_blank">卫衣</a></li>
+				<li><a href="javascript:void(0);" title="长袖T恤" target="_blank">长袖T恤</a></li>
+				<li><a href="javascript:void(0);" title="长袖衬衫" target="_blank">长袖衬衫</a></li>
+				<li><a href="javascript:void(0);" title="品质秋冬外套" target="_blank">品质秋冬外套</a></li>
+				<li><a href="javascript:void(0);" title="风衣" target="_blank">风衣</a></li>
+				<li><a href="javascript:void(0);" title="休闲西装" target="_blank">休闲西装</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="middle-layout">
+		<ul class="tabs-nav">
+			<li class="tabs-selected"><i class="arrow"></i>
+				<h3>美容美妆</h3></li>
+		</ul>
+		<div class="tabs-panel middle-banner-style01 fade-img " id="index_advimg">
+			<#assign aadv = advListTag("'acid':'9'")!'' > 
+			<#assign badv = advListTag("'acid':'10'")!'' > 
+			<#assign cadv = advListTag("'acid':'11'")!'' > 
+			<#assign dadv = advListTag("'acid':'12'")!'' >
+
+			<!-- 获取a广告列表 -->
+			<#assign advList = aadv.advList /> 
+			<#if !advList?exists ||advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = aadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = aadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="a${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" rel="${adv.aid}" class="aaaaaa"/>
+						</a>
+					</li>
+				</#list> 
+			</#if>
+
+			<!-- 获取b广告列表 -->
+			<#assign advList = badv.advList /> 
+			<#if !advList?exists || advList?size==0> 没有上传广告 
+				<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = badv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = badv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="b${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</li> 
+				</#list> 
+			</#if>
+
+			<!-- 获取c广告列表 -->
+			<#assign advList = cadv.advList /> 
+			<#if !advList?exists || advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = cadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = cadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="c${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" />
+						</a>
+					</li> 
+				</#list> 
+			</#if>
+
+			<!-- 获取d广告列表 -->
+			<#assign advList = dadv.advList /> 
+			<#if !advList?exists ||advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = dadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = dadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="d${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+						<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</li> 
+				</#list> 
+			</#if>
+		</div>
+	</div>
+	<div class="right-sidebar">
+		<div class="title"></div>
+		<div class="recommend-brand">
+			<ul>
+				<#assign adv = advListTag("'acid':'13'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> <#if !advList?exists ||
+				advList?size==0> 没有上传广告 <#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height /> <#list advList as adv>
+				<li><a target="_blank" href="${ctx}${adv.url!''}"><@image
+						border="0" src="${adv.atturl!''}" width="${width!''}"
+						height="${height!''}" alt="${adv.aname!''}" /></a></li> </#list> </#if>
+			</ul>
+		</div>
+		<div class="right-side-focus">
+			<ul>
+				<#assign adv = advListTag("'acid':'14'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> <#if !advList?exists ||
+				advList?size==0> 没有上传广告 <#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height /> <#list advList as adv>
+				<li><a target="_blank" href="${ctx}${adv.url!''}"><@image
+						border="0" src="${adv.atturl!''}" width="${width!''}"
+						height="${height!''}" alt="${adv.aname!''}" /></a></li> </#list> </#if>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="home-standard-layout wrapper style-blue">
+	<div class="left-sidebar">
+		<div class="title">
+			<div class="pic-type">
+				<img border="0" src="themes/b2b2c/images/home/web-1.png">
+			</div>
+		</div>
+		<div class="left-ads">
+			<a href="javascript:void(0);" target="_blank"> 
+			<#assign adv = advListTag("'acid':'15'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> 
+				<#if !advList?exists || advList?size==0> 没有上传广告 
+					<#else>
+					<!-- 获取广告图片宽度 -->
+					<#assign width = adv.adDetails.width />
+					<!-- 获取广告图片高度 -->
+					<#assign height = adv.adDetails.height /> 
+					<#list advList as adv>
+						<a target="_blank" href="${ctx}${adv.url!''}">
+						<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</#list> 
+				</#if>
+		</div>
+		<div class="recommend-classes">
+			<ul>
+				<li><a href="javascript:void(0);" title="单肩包" target="_blank">单肩包</a></li>
+				<li><a href="javascript:void(0);" title="打底衫" target="_blank">打底衫</a></li>
+				<li><a href="javascript:void(0);" title="牛仔裤" target="_blank">牛仔裤</a></li>
+				<li><a href="javascript:void(0);" title="毛呢连衣裙" target="_blank">毛呢连衣裙</a></li>
+				<li><a href="javascript:void(0);" title="长袖连衣裙" target="_blank">长袖连衣裙</a></li>
+				<li><a href="javascript:void(0);" title="羽绒服" target="_blank">羽绒服</a></li>
+				<li><a href="javascript:void(0);" title="卫衣" target="_blank">卫衣</a></li>
+				<li><a href="javascript:void(0);" title="长袖T恤" target="_blank">长袖T恤</a></li>
+				<li><a href="javascript:void(0);" title="长袖衬衫" target="_blank">长袖衬衫</a></li>
+				<li><a href="javascript:void(0);" title="品质秋冬外套" target="_blank">品质秋冬外套</a></li>
+				<li><a href="javascript:void(0);" title="风衣" target="_blank">风衣</a></li>
+				<li><a href="javascript:void(0);" title="休闲西装" target="_blank">休闲西装</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="middle-layout">
+		<ul class="tabs-nav">
+			<li class="tabs-selected"><i class="arrow"></i>
+				<h3>美容美妆</h3></li>
+		</ul>
+		<div class="tabs-panel middle-banner-style01 fade-img " id="index_advimg">
+			<#assign aadv = advListTag("'acid':'9'")!'' > 
+			<#assign badv = advListTag("'acid':'10'")!'' > 
+			<#assign cadv = advListTag("'acid':'11'")!'' > 
+			<#assign dadv = advListTag("'acid':'12'")!'' >
+
+			<!-- 获取a广告列表 -->
+			<#assign advList = aadv.advList /> 
+			<#if !advList?exists ||advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = aadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = aadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="a${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" rel="${adv.aid}" class="aaaaaa"/>
+						</a>
+					</li>
+				</#list> 
+			</#if>
+
+			<!-- 获取b广告列表 -->
+			<#assign advList = badv.advList /> 
+			<#if !advList?exists || advList?size==0> 没有上传广告 
+				<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = badv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = badv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="b${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</li> 
+				</#list> 
+			</#if>
+
+			<!-- 获取c广告列表 -->
+			<#assign advList = cadv.advList /> 
+			<#if !advList?exists || advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = cadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = cadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="c${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" />
+						</a>
+					</li> 
+				</#list> 
+			</#if>
+
+			<!-- 获取d广告列表 -->
+			<#assign advList = dadv.advList /> 
+			<#if !advList?exists ||advList?size==0> 
+			没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = dadv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = dadv.adDetails.height /> 
+				<#list advList as adv>
+					<li class="d${adv_index+1}">
+						<a href="${ctx}${adv.url!''}">
+						<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+					</li> 
+				</#list> 
+			</#if>
+		</div>
+	</div>
+	<div class="right-sidebar">
+		<div class="title"></div>
+		<div class="recommend-brand">
+			<ul>
+				<#assign adv = advListTag("'acid':'13'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> <#if !advList?exists ||
+				advList?size==0> 没有上传广告 <#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height /> <#list advList as adv>
+				<li><a target="_blank" href="${ctx}${adv.url!''}"><@image
+						border="0" src="${adv.atturl!''}" width="${width!''}"
+						height="${height!''}" alt="${adv.aname!''}" /></a></li> </#list> </#if>
+			</ul>
+		</div>
+		<div class="right-side-focus">
+			<ul>
+				<#assign adv = advListTag("'acid':'14'")!'' >
+				<!-- 获取广告品牌列表 -->
+				<#assign advList = adv.advList /> <#if !advList?exists ||
+				advList?size==0> 没有上传广告 <#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height /> <#list advList as adv>
+				<li><a target="_blank" href="${ctx}${adv.url!''}"><@image
+						border="0" src="${adv.atturl!''}" width="${width!''}"
+						height="${height!''}" alt="${adv.aname!''}" /></a></li> </#list> </#if>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+
+<!--底部广告位-->
+<div style="clear: both;"></div>
+<div id="web_chat_dialog" style="display: none; float: right;"></div>
+<a id="chat_login" href="javascript:void(0)" style="display: none;"></a>
+<div class="clear"></div>
+<script>
+$(function(){
+
+	//动态变换透明度
+	/*登陆页面 左边*/
+ 	$(".style-green #index_advimg li img").hover(function (){
+        $(".style-green #index_advimg li img").css("background","#000");
+        $(".style-green #index_advimg li img").fadeTo(0,0.5)
+    },function (){
+        $(".style-green #index_advimg li img").css("background","");
+    });
+		
+    $(".style-green #index_advimg li img").hover(function(){
+        var className = $(this).attr('class')+"_h";
+        $(this).removeClass().addClass(className);
+        $(this).fadeTo(0,2);  
+        $(this).css("background","");
+    },function (){
+        var className = $(this).attr('class');
+        className = className.replace("_h","")
+        $(this).removeClass().addClass(className);
+        $(this).css("background","#000");
+        $(this).fadeTo(0,0.5);  
+    });
+    
+    $(".style-green #index_advimg").mouseout(function(){
+    	$(".style-green #index_advimg li img").css("opacity","1")
+    }) 
+    
+    //pink
+    $(".style-pink #index_advimg li img").hover(function (){
+        $(".style-pink #index_advimg li img").css("background","#000");
+        $(".style-pink #index_advimg li img").fadeTo(0,0.5)
+    },function (){
+        $(".style-pink #index_advimg li img").css("background","");
+    });
+		
+    $(".style-pink #index_advimg li img").hover(function(){
+        var className = $(this).attr('class')+"_h";
+        $(this).removeClass().addClass(className);
+        $(this).fadeTo(0,2);  
+        $(this).css("background","");
+    },function (){
+        var className = $(this).attr('class');
+        className = className.replace("_h","")
+        $(this).removeClass().addClass(className);
+        $(this).css("background","#000");
+        $(this).fadeTo(0,0.5);  
+    });
+    
+    $(".style-pink #index_advimg").mouseout(function(){
+    	$(".style-pink #index_advimg li img").css("opacity","1")
+    }) 
+    
+    //blue
+    $(".style-blue #index_advimg li img").hover(function (){
+        $(".style-blue #index_advimg li img").css("background","#000");
+        $(".style-blue #index_advimg li img").fadeTo(0,0.5)
+    },function (){
+        $(".style-blue #index_advimg li img").css("background","");
+    });
+		
+    $(".style-blue #index_advimg li img").hover(function(){
+        var className = $(this).attr('class')+"_h";
+        $(this).removeClass().addClass(className);
+        $(this).fadeTo(0,2);  
+        $(this).css("background","");
+    },function (){
+        var className = $(this).attr('class');
+        className = className.replace("_h","")
+        $(this).removeClass().addClass(className);
+        $(this).css("background","#000");
+        $(this).fadeTo(0,0.5);  
+    });
+    
+    $(".style-blue #index_advimg").mouseout(function(){
+    	$(".style-blue #index_advimg li img").css("opacity","1")
+    }); 
+    
+    
+		
+	//标签切换
+	$(".home-sale-layout .tabs-nav li").mouseover(function(){
+		$(".home-sale-layout .tabs-nav li").removeClass("tabs-selected");
+		$(this).addClass("tabs-selected");
+		var goodslistnum = $(this).attr("rel");
+		$(".sale-goods-list").hide();
+		$("#goods"+ goodslistnum).show();
+	});
+	$(".mall-tel").hide();
+	  $(".mallinfo li").click(function(){
+		$(".mallinfo li").removeClass("tabs-selected");
+	    $(this).addClass("tabs-selected");
+    	var show=$(this).attr("show");
+    	if(show=="mall-news"){
+    		$(".mall-news").show();
+	    	$(".mall-tel").hide();
+    	}else{
+    		$(".mall-tel").show();
+	    	$(".mall-news").hide();
+    	}
+    });	
+	//品牌
+		$(".recommend-brand ul li ").mouseover(function(){
+			$(".recommend-brand ul li").css("opacity","0.5");
+			$(this).css("opacity","1");
+		})
+    
+    $(".recommend-brand").mouseout(function(){
+    	$(".recommend-brand ul li").css("opacity","1")
+    })
+})
+
+</script>
+<!-----footer------>
+<#include 'common/footer.html'/>

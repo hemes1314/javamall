@@ -1,0 +1,184 @@
+<#include '/store/store_header.html' />
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>
+<!--退货申请标签 -->
+<#assign storeSellBackTag=newTag("storeSellBackTag")>
+<#assign storeSellBack=storeSellBackTag("{'id': ${id} }")>
+<!-- 退货申请 -->
+<#assign sellBack=storeSellBack.sellBack>
+<!-- 退货订单 -->
+<#assign orderinfo=storeSellBack.orderInfo>
+<!-- 退货商品列表 -->
+<#assign goodsList=storeSellBack.goodsList>
+<!-- 退货子商品列表 -->
+<#assign childGoodsList=storeSellBack.childGoodsList>
+<div class="store_center">
+<style>
+.detail_goodslist table tbody tr td{
+	text-align:center;border-bottom:1px solid #e7e7e7;height: 40px;
+}
+</style>
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			交易管理<span>></span>退货申请
+		</div>
+		<div class="store_right_main">
+			<div class="order_detail">
+				<div class="order_intro" style="border:0px none;background:#fff;">
+					<h1>订单信息</h1>
+					<div class="detail_list">
+						<input type="hidden" value="${sellBack.id}" name="id"/>
+						<dl>
+				        		<dt style="padding-bottom:8px;font-size:14px;width:25%;">退货单号：</dt>
+				        			<dd style="padding-bottom:8px;font-size:14px;width:75%;">${sellBack.tradeno }</dd>
+				        		<dt style="padding-bottom:8px;font-size:14px;width:25%;">关联订单：</dt>
+				        			<dd style="padding-bottom:8px;font-size:14px;width:75%;""> ${orderinfo.sn }</dd>
+				        		<dt style="padding-bottom:8px;font-size:14px;width:25%;">已支付：</dt>
+				        			<dd style="padding-bottom:8px;font-size:14px;width:75%;"">${orderinfo.paymoney?string("currency")}</dd>
+				        		<dt style="padding-bottom:8px;font-size:14px;width:25%;">退货人：</dt>
+				        			<dd style="padding-bottom:8px;font-size:14px;width:75%;"">${sellBack.sndto!orderinfo.ship_name }</dd>
+				        		<dt style="padding-bottom:8px;font-size:14px;width:25%;">退货状态：</dt>
+			        			<dd style="padding-bottom:8px;font-size:14px;width:75%;"">
+			        			<#if sellBack.tradestatus==2>
+									已审核
+								<#elseif sellBack.tradestatus==3>
+									已完成
+								<#elseif sellBack.tradestatus==4>
+									审核未通过
+								<#elseif sellBack.tradestatus==0>
+									待审核
+								</#if>
+			        			</dd>
+						</dl>
+					</div>
+				</div>
+				<div class="intro_staus" style="border-left:1px solid #d8d8d8">
+					<form id="theForm">
+						<input type="hidden" name="id" value="${sellBack.id}"/>
+						<input type="hidden" id="tythstatus" name ="tythstatus" value="${tythstatus}"/>
+						<ul>
+							<li>申请时间：<@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></li>
+						 	<li>退货原因：${sellBack.remark!''}</li>
+						 	<li>退货金额：${sellBack.return_price!''}元</li>
+			          		<li>审核备注：<textarea rows="2" cols="80" name="seller_remark" style="resize:none;">${sellBack.seller_remark!''}</textarea></li>
+			          		<li>审核：
+			          			<input type="radio" name="status" value="2" checked="checked"/>通过
+								<input type="radio" name="status" value="4"/>不通过 
+							</li>
+							<li>
+								<input type="button" value="确认收货并审核" autocomplete="off" id="btnSubmit" class="to_save">
+							</li>
+						</ul>
+					</form>
+				</div>
+			</div>
+			<div class="detail_goodslist">
+				<table cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th >商品名称</th>
+							<th >金额</th>
+							<th >购买数量</th>
+							<th >退货数量</th>
+						</tr>
+					</thead>
+					<tbody>
+		       			<#list goodsList as data>
+							<tr>
+								<td><a href="${ctx}/goods-${data.goods_id}.html">${data.name }</a></td>
+								<td>${data.price?string.currency}</td>
+								<td>${data.num }</td>
+								<#if data.is_pack?number == 1>
+									<#if data.return_type == 0>
+										<td>${data.return_num!0}</td>
+									<#else>
+										<td>部分退货，无法统计套餐数量</td>
+									</#if>
+								<#else>
+									<td>${data.return_num!0}</td>
+								</#if>
+								
+							</tr>
+						<#if data.is_pack?number == 1>
+						<tr class="detail_${data.goods_id }">
+							<td></td>
+							<td style="background: none repeat scroll 0 0 #FFFDEE;"
+								colspan="6">
+								<div>
+									<table width="100%" style="border: none;">
+										<tr>
+											<th style="background: none repeat scroll 0 0 #FFFDEE; border: none;">商品名称</th>
+											<th style="background: none repeat scroll 0 0 #FFFDEE; border: none;">购买数量</th>
+											<th style="background: none repeat scroll 0 0 #FFFDEE; border: none;">退货数量</th>
+										</tr>
+										<#list childGoodsList as childData>
+										<#if data.goodsId == childData.parent_id>
+										<tr>
+											<td style="border: none;">
+												${childData.name}</td>
+											<td style="border: none;">${(childData.num)!0}
+											</td>
+											<td style="border: none;">${(childData.return_num)!0 }
+												
+											</td>
+										</tr>
+										</#if> </#list>
+									</table>
+								</div>
+
+							</td>
+						</tr>
+						</#if>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+   var url = "${ctx}/api/store/storeSellBack!saveAuth.do";
+    if (typeof($("#kddh").val()) != "undefined" || $("#tythstatus").val() == "12") { 
+    	$("#btnSubmit").val("确认收货并审核");
+    	 url = "${ctx}/api/store/storeSellBack!jssaveAuthtg.do";
+    }
+	$("#btnSubmit").click(function(){
+		var seller_remark =$("textarea[name='seller_remark']").val();
+		if(seller_remark.length > 300){
+			alert("字数超过限制，请不要超过300个字符。");
+			return false;
+		}
+		$.Loading.show("正在提交");
+		var options = {
+				url : url,
+				type : "POST",
+				dataType : 'json',
+				success : function(result){
+					if($("input[name='status']").val()==2){
+						$.Loading.message("审核通过成功");
+					}else{
+						$.Loading.message("审核不通过成功");
+					}
+					if(result.result==1){
+						location.href="${ctx}/store/sellback/sellback_list.html?status=0&menu=transaction";
+					}
+				},
+				error : function(e) {
+					$.Loading.hide();
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#theForm").ajaxSubmit(options);
+	});
+})
+</script>
+	<script>
+		$(function(){
+				selectMenu(4);
+		})
+	</script>
+<#include '/common/footer.html' >

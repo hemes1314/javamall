@@ -1,0 +1,355 @@
+<#assign  title="商城首页" />
+<#include 'common/header.html'/>
+<link rel="stylesheet" href="${ctx}/themes/default/css/index.css" type="text/css" />
+<script>
+$(function(){
+	$('#cat_wrapper>ul>li.haschild').dropDownMenu({child:'.child'});
+});
+</script>
+<!--正文-->
+<!--第一层、商品列表-->
+<div id="floor_1">
+	<!--商品分类列表-->
+	<div id="cat_wrapper">
+		<h1>全部商品列表</h1>
+		<!-- 创建商品分类标签 -->
+		<#assign goodsCatTag= newTag("goodsCatTag")>
+		<!-- 调用商品分类信息 -->
+		<#assign goodsCat = goodsCatTag()!'' >
+		<ul>
+			<#list goodsCat.cat_tree as cat>
+				<li <#if cat.hasChildren >class="haschild"</#if>><a href="${ctx}/goods_list.html?cat=${cat.cat_id}" class="menu">${cat.name }</a>
+					<#if cat.hasChildren  >
+						<div class="child">
+							<div class="top"></div>
+							<div class="con">
+								<ul class="inner_con">
+									<#assign children2=cat.children />
+									<#list children2 as cat2>
+										<li <#if !cat2_has_next>class="last"</#if> >
+											<h6> <a href="${ctx}/goods_list.html?cat=${cat2.cat_id}">${cat2.name }:</a></h6>
+											<#if cat2.hasChildren  >
+												<ul>
+													<#assign children3=cat2.children />
+													<#list children3 as cat3>
+														<li><a href="${ctx}/goods_list.html?cat=${cat3.cat_id}">${cat3.name }</a></li>
+													</#list>
+												</ul>
+											</#if>
+										</li>
+									</#list>
+								</ul>
+							</div>
+							<div class="bottom"></div>
+						</div>
+					</#if>
+				</li>
+			</#list>	
+		</ul>
+	</div>
+	<!--商品列表结束-->
+	<!--首页第一层右侧-->
+	<div class="right">
+		<!--商品广告-->
+		<div class="adv">
+			<!-- 创建广告标签 -->
+			<#assign advListTag= newTag("advListTag")>
+			<!-- 调用广告信息,传递参数acid:1 -->
+			<#assign adv = advListTag("'acid':'1'")!'' >
+			<!-- 获取广告列表 -->
+			<#assign advList = adv.advList />
+			<#if !advList?exists || advList?size==0> 
+				没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height />
+				<div name="__DT" class="slides"	<#if width?exists>width="${width}"</#if><#if height?exists>height="${height}"</#if> >
+					<ul class="slide-pic" <#if width?exists>width="${width}"</#if> <#if height?exists>height="${height}"</#if> >
+					    <#list advList as adv>
+							<li class="" <#if adv_index == 0>style="display: list-item;"<#else>style="display:none;"</#if>>
+							<a target="_blank" title="${adv.aname!''}" href="${ctx}${adv.url!''}">
+							<@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a></li>
+						</#list>
+					</ul>
+					<ul class="slide-li op">
+					    <#list advList as adv>
+					    	<li class="<#if adv_index == 0>cur</#if><#if !adv_has_next> last</#if>"></li>
+						</#list>
+					</ul>
+					<ul class="slide-li slide-txt">
+					    <#list advList as adv>
+						    <li class="<#if adv_index == 0>cur</#if><#if !adv_has_next> last</#if>"><a target="_blank"
+								href="${ctx}${adv.url!''}">${adv.aname!''}</a>
+							</li>
+						</#list>
+					</ul>
+				</div>
+			</#if>
+		</div>
+		<!--商品广告结束-->
+		<!--第一层、特别推荐商品-->
+		<div class="unusual">
+			<!-- 创建广告标签 -->
+			<#assign advListTag= newTag("advListTag")>
+			<!-- 调用广告信息,传递参数acid:8 -->
+			<#assign adv = advListTag("'acid':'8'")!'' >
+			<!-- 获取广告列表 -->
+			<#assign advList = adv.advList />
+			<#if !advList?exists || advList?size==0> 
+				没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height />
+				<ul>
+					<#list advList as adv>
+						<li <#if !adv_has_next>class="last"</#if>>
+							<a href="${ctx}/goods-118.html"><@image src="${adv.atturl!''}" alt="首页示例图片" width='${width}' height='${height}'/></a>
+						</li>
+					</#list>
+				</ul>
+			</#if>						
+		</div>
+		<!--第一层、特别推荐商品结束-->
+	</div>
+	<!--首页第一层右侧结束-->
+</div>
+<!--第一层结束-->
+<!--第二层-->
+<div id="floor_2">
+	<!--第二层、左侧、热卖排行榜-->
+	<div class="goods_list_box">
+		<div class="index_hot">
+			<h1><span></span>热卖排行榜</h1>
+			<!-- 获取商品列表标签 -->
+			<#assign goodsListTag = newTag("goodsListTag")>		
+			<!-- 调用商品列表标签，并传递商品列表所在catid及循环次数 -->		
+			<#assign goodsList=goodsListTag("'tagid':'1','goodsnum':'5'")>
+			<ul>
+				<#list goodsList as goods>
+					<li	class="<#if goods_index==0>first</#if> <#if !goods_has_next>last</#if>">
+						<a href="${ctx}/goods-${goods.goods_id}.html">
+							<@image	src="${goods.thumbnail!''}" alt="${goods.name}" />
+						</a>
+						<div class="h_intro">
+							<div>
+								<a href="goods-${goods.goods_id}.html">
+									<@substring	title="${goods.name}" length="30" dot="..." />
+								</a>
+							</div>
+							<p>售价：<span>${goods.price}</span></p>
+						</div>
+					</li> 
+				</#list>
+			</ul>
+		</div>
+	</div>
+	<!--第二层、左侧、热卖排行榜结束-->
+	<!--第二层右侧热卖图片-->
+	<div class="right">
+		<!--第二层、右侧、上部分大图片-->
+		<div class="top">
+			<!-- 创建广告标签 -->
+			<#assign advListTag= newTag("advListTag")>
+			<!-- 调用广告信息,传递参数acid:2 -->
+			<#assign adv = advListTag("'acid':'2'")!'' >
+			<!-- 获取广告列表 -->
+			<#assign advList = adv.advList />
+			<#if !advList?exists || advList?size==0> 
+				没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height />
+				<ul>
+					<#list advList as adv>
+						<li><a href="${ctx}${adv.url!''}"><@image src="${adv.atturl!''}" width="${width}" height="${height}"/></a></li>
+					</#list>
+				</ul>
+			</#if>
+		</div>
+		<!--第二层、右侧、上部分大图片结束-->
+		<!--第二层、右侧、下部分小图片列表-->
+		<div class="bottom">
+		<!--创建"商品列表"标签-->
+		<#assign goodsListTag= newTag("goodsListTag") >  
+		<!--调用"商品列表"标签，并传递参数-->            
+		<#assign  goodsList= goodsListTag("'tagid':'2','goodsnum':'4'") >	
+		<ul>
+		<#list goodsList as goods>
+			<li <#if !goods_has_next>class="last"</#if>>
+				<a href="${ctx}/goods-${goods.goods_id}.html"><@image src="${goods.thumbnail!''}"  /></a>
+				<div class="indexshow">
+					<a href="${ctx}/goods-${goods.goods_id}.html">${goods.name}</a>
+					<span><del>${goods.mktprice?string.currency}</del></span>
+					<span><strong>${goods.price?string.currency}</strong>元</span>
+				</div>
+			</li>
+		</#list>
+		</ul>
+		</div>
+		<!--第二层、右侧、下部分小图片列表结束-->
+	</div>
+	<!--第二层右侧热卖图片结束-->
+</div>
+<!--第二层结束-->
+<!--第三层相同内容-->
+<div class="same">
+	<!--第三层相同内容标题-->
+	<div class="title">
+		<h1>家居用品</h1>
+		<h2>Household Goods</h2>
+		<span></span>
+		<ul> 
+			<li><a href="${ctx}/search-cat-76.html">床单</a></li>
+			<li><a href="${ctx}/search-cat-77.html">浴巾</a></li>
+			<li class="last"><a href="${ctx}/search-cat-78.html">抱被</a></li>
+		</ul>
+	</div>
+	<!--第三层相同内容标题结束-->
+	<!--相同内容图片-->
+	<div class="frame">
+		<!--第三层相同图片大幅图片-->
+		<div class="f_top">
+			<!-- 创建广告标签 -->
+			<#assign advListTag= newTag("advListTag")>
+			<!-- 调用广告信息,传递参数acid:1 -->
+			<#assign adv = advListTag("'acid':'3'")!'' >
+			<!-- 获取广告列表 -->
+			<#assign advList = adv.advList />
+			<#if !advList?exists || advList?size==0> 
+				没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height />
+				<#list advList as adv>
+					<a href="${ctx}${adv.url!''}"><@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+				</#list>
+			</#if>
+		</div>
+		<!--第三层相同图片大幅图片结束-->
+		<!--第三层相同图片小图片列表-->
+		<div class="f_bottom">
+		<#assign goodsListTag=newTag("goodsListTag")>
+		<#assign goodsList=goodsListTag("'catid':'75','goodsnum':'10'")>
+			<ul>
+				<#list goodsList as goods>
+					<li>
+						<a href="${ctx}/goods-${goods.goods_id}.html" title="${goods.name}"><@image src="${goods.thumbnail!''}" alt="${goods.name}" /></a>
+						<a href="${ctx}/goods-${goods.goods_id}.html" title="${goods.name}"><@substring title="${goods.name}" length="25" dot="..." /></a>
+						<p>市场价：<del>${goods.mktprice?string.currency}</del></p>
+						<h3>商城价：<span>${goods.price?string.currency}</span>元</h3>
+					</li>
+				</#list>
+			</ul>
+		</div>
+		<!--第三层相同图片小图片列表结束-->
+	</div>
+	<!--相同内容图片结束-->
+</div>
+<!--第三层相同内容结束-->
+<!--第四层相同内容-->
+<div class="same">
+	<!--第四层相同内容标题-->
+	<div class="title">
+		<h1>厨房用品</h1>
+		<h2>Kitchen Supplies</h2>
+		<span></span>
+		<ul>
+			<li><a href="search-cat-81.html">汤锅</a></li>
+			<li><a href="search-cat-82.html">水壶</a></li>
+			<li><a href="search-cat-83.html">炒锅</a></li>
+			<li class="last"><a href="search-cat-84.html">奶锅</a></li>
+		</ul>
+	</div>
+	<!--第四层相同内容标题结束-->
+	<!--相同内容图片-->
+	<div class="frame">
+		<!--第四层相同图片大幅图片-->
+		<div class="f_top">
+			<!-- 创建广告标签 -->
+			<#assign advListTag= newTag("advListTag")>
+			<!-- 调用广告信息,传递参数acid:1 -->
+			<#assign adv = advListTag("'acid':'4'")!'' >
+			<!-- 获取广告列表 -->
+			<#assign advList = adv.advList />
+			<#if !advList?exists || advList?size==0> 
+				没有上传广告 
+			<#else>
+				<!-- 获取广告图片宽度 -->
+				<#assign width = adv.adDetails.width />
+				<!-- 获取广告图片高度 -->
+				<#assign height = adv.adDetails.height />
+				<#list advList as adv>
+					<a href="${adv.url!''}"><@image border="0" src="${adv.atturl!''}" width="${width!''}" height="${height!''}" alt="${adv.aname!''}" /></a>
+				</#list>
+			</#if>
+		</div>
+		<!--第四层相同图片大幅图片结束-->
+		<!--第四层相同图片小图片列表-->
+		<div class="f_bottom">
+		<#assign goodsList=goodsListTag("'catid':'79','goodsnum':'10'")>
+			<ul>
+				<#list goodsList as goods>
+					<li>
+						<a href="goods-${goods.goods_id}.html" title="${goods.name}"><@image src="${goods.thumbnail!''}" alt="${goods.name}" /></a>
+						<a href="goods-${goods.goods_id}.html" title="${goods.name}"><@substring title="${goods.name}" length="25" dot="..." /></a>
+						<p>市场价：<del>${goods.mktprice?string.currency}</del></p>
+						<h3>商城价：<span>${goods.price?string.currency}</span>元</h3>
+					</li>
+				</#list>
+			</ul>
+		</div>
+		<!--第四层相同图片小图片列表结束-->
+	</div>
+	<!--相同内容图片结束-->
+</div>
+<!--第四层相同内容结束-->
+<script>
+var defaultOpts = { interval: 10000, fadeInTime: 300, fadeOutTime: 200 };
+//Iterate over the current set of matched elements
+	var _titles = $("ul.slide-txt li");
+	var _titles_bg = $("ul.op li");
+	var _bodies = $("ul.slide-pic li");
+	var _count = _titles.length;
+	var _current = 0;
+	var _intervalID = null;
+	var stop = function() { window.clearInterval(_intervalID); };
+	var slide = function(opts) {
+		if (opts) {
+			_current = opts.current || 0;
+		} else {
+			_current = (_current >= (_count - 1)) ? 0 : (++_current);
+		};
+		_bodies.filter(":visible").fadeOut(defaultOpts.fadeOutTime, function() {
+			_bodies.eq(_current).fadeIn(defaultOpts.fadeInTime);
+			_bodies.removeClass("cur").eq(_current).addClass("cur");
+		});
+		_titles.removeClass("cur").eq(_current).addClass("cur");
+		_titles_bg.removeClass("cur").eq(_current).addClass("cur");
+	}; //endof slide
+	var go = function() {
+		stop();
+		_intervalID = window.setInterval(function() { slide(); }, defaultOpts.interval);
+	}; //endof go
+	var itemMouseOver = function(target, items) {
+		stop();
+		var i = $.inArray(target, items);
+		slide({ current: i });
+	}; //endof itemMouseOver
+	_titles.hover(function() { if($(this).attr('class')!='cur'){itemMouseOver(this, _titles); }else{stop();}}, go);
+	//_titles_bg.hover(function() { itemMouseOver(this, _titles_bg); }, go);
+	_bodies.hover(stop, go);
+	//trigger the slidebox
+	go();
+	 
+</script>
+<script src="themes/default/js/jquery-tools-Slide.js"  ></script>
+		
+<#include 'common/footer.html'/>

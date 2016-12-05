@@ -1,0 +1,86 @@
+<#assign goodsStoreTag=newTag("goodsStoreTag")>
+<#assign goodsStore=goodsStoreTag("{'goods_id':${goods_id}}")>
+
+<#-- 商品规格标签 -->
+<#assign goodsSpecTag=newTag("goodsSpecTag")/>
+<#assign goodsSpec=goodsSpecTag("{'goods_id':${goods_id}}") />
+
+<style>
+h2{
+	font-size: 18px;font-weight: bold;
+}
+#goodsStore tr td{
+	padding-left: 10px;
+}
+</style>
+<form id="goodsStoreForm">
+	<input type="hidden" name="goods_id" value="${goods_id}">
+	<table  cellspacing="0" cellpadding="0" width="100%" id="goodsStore">
+	
+		<#if goodsSpec.have_spec?exists && goodsSpec.have_spec==1 && goodsSpec.productList?exists > 
+		<#--商品规格库存标签-->
+		<#assign goodsSpecStoreTag=newTag("goodsSpecStoreTag") />
+		<#assign goodsSpecStoreList=goodsSpecStoreTag("{'goods_id':${goods_id}}") /> 
+			<table cellspacing="0" cellpadding="0" border="0" class="spec_table" width="98%">
+				<thead>
+					<tr>
+						<th>货号</th>
+						<th>商品名称</th>
+						<#list goodsSpec.specList as spec>
+							<th class="w1">${spec.spec_name}</th> 
+						</#list>
+						<th style="text-align:center;">库存</th>
+					</tr>
+				</thead>
+				<tbody>
+				<#list goodsSpec.productList as product> 
+					<tr>
+						<td>${product.sn}</td>
+						<td>${product.name}</td>
+						<#list product.specList as spec> 
+							<td>${spec.spec_value}</td>
+						</#list>
+						<td>
+							<input type="hidden" value="${product.product_id}" name="productIds"/>
+							<#assign n=0 />
+							
+							<#if (goodsSpecStoreList?size>0)>
+								<#list goodsSpecStoreList as goodsStore>
+									<#if product.product_id==goodsStore.productid >
+										<input type="hidden" value="${goodsStore.storeid}" name="storeIds" />
+										<input type="hidden" class="more_storeoldnum" value="${goodsStore.store!'0'}"/>
+										<input type="hidden" class="more_storeenablenum" value="${goodsStore.enable_store!'0'}"/>
+										<input type="text" value="${goodsStore.store}" name="storeNum" class="more_storenum"/>
+										<#assign n=1 />
+									</#if>
+								</#list>
+							</#if>
+							<#if n==0>
+								<input type="hidden" value="0" name="storeIds" />
+								<input type="hidden" class="more_storeoldnum" value="0"/>
+								<input type="hidden" class="more_storeenablenum" value="0"/>
+								<input type="text" value="0" name="storeNum" style="text-align:center;" class="more_storenum"/>
+							</#if>
+						</td>
+					</tr>
+				</#list>
+			<#else>
+				<tr>
+					<th>库存数量：</th>
+					<td>
+						<#if goodsStore.store??>
+							<input type="text" name="store" value="${goodsStore.store.store}" style="text-align:center;" class="one_storenum" onkeydown="if(event.keyCode==13) return false;"/>
+							<input type="hidden" class="one_storeoldnum" value="${goodsStore.store.store!'0'}"/>
+							<input type="hidden" class="one_storeenablenum" value="${goodsStore.store.enable_store!'0'}"/>
+							<input type="hidden" name="storeid" value="${goodsStore.store.storeid!'0'}" onkeydown="if(event.keyCode==13) return false;"/>
+							<#else>
+							<input type="text" name="store" value="0" style="text-align:center;" class="one_storenum" onkeydown="if(event.keyCode==13) return false;">
+							<input type="hidden" class="one_storeoldnum" value="0"/>
+							<input type="hidden" class="one_storeenablenum" value="0"/>
+							<input type="hidden" name="storeid" value="0" onkeydown="if(event.keyCode==13) return false;"/>
+						</#if>
+					</td>
+				</tr>
+		</#if> 
+	</table>
+</form>

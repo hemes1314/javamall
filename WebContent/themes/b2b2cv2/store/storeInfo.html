@@ -1,0 +1,232 @@
+<#include '/store/store_header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/uploadify.css" />
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<!-- 调用地区标签 -->
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<!-- 获取店铺信息 -->
+<#assign myStoreDetailTag = newTag("myStoreDetailTag")>
+<!-- 调用订单状态标签 -->
+<#assign store = myStoreDetailTag()> 
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			店铺设置
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;">店铺设置</a>
+					</li>
+				</ul>
+			</div>
+			<!-- 店铺设置 -->
+			<div class="groupbuy_form">
+				<form id="storeInfo" class="validate">
+					<input type="hidden" name="store_id" value="${store.store_id}"/>
+			      	
+			      	<dl>
+			        	<dt class="required"><em class="pngFix"></em>身份证号：</dt>
+			        	<dd>
+			          		<p>
+			            		${store.id_number}
+			          		</p>
+			        	</dd>
+			      	</dl>
+			      	<dl>
+			      		<dt class="required"><em class="pngFix"></em>店铺地址：</dt>
+			        	<dd>
+			          		<p>
+			            		<@regionSelect province_id="${store.store_provinceid!''}" city_id="${store.store_cityid!''}" region_id="${store.store_regionid!''}" />
+			          		</p>
+			        	</dd>
+			      	</dl>
+			      	<dl>
+        				<dt>详细地址：</dt>
+        				<dd>
+				          	<p>
+				            	<input  type="text" class="text w400" name="attr" value="${store.attr}" isrequired="true" />
+				          	</p>
+          					<p class="hint">不必重复填写所在地区</p>
+        				</dd>
+      				</dl>
+      				<dl>
+        				<dt>邮编：</dt>
+        				<dd>
+				          	<p>
+				            	<input name="zip" value="${store.zip}" id="store_zip"  type="text" class="text w400" dataType="post_code"  />
+				          	</p>
+        				</dd>
+      				</dl>
+			      	<dl>
+				        <dt>联系电话：</dt>
+				        <dd>
+				         	<input type="text" name="tel" value="${store.tel}" isrequired="true" fun="checkTel"/>
+				        </dd>
+					</dl>
+					<dl>
+				        <dt>QQ：</dt>
+				        <dd>
+				       		<p>
+				         		<input type="text" name="qq" value="${store.qq!''}" isrequired="true"/>
+				         	</p>	
+				         	<p class="hint">设置店铺的客服QQ</p>
+				        </dd>
+					</dl>
+					<dl>
+        				<dt>店铺简介：</dt>
+        				<dd>
+        					<textarea cols="100" rows="8" id="description" style="resize: none;"  name="description">${store.description!''}</textarea>
+        				</dd>
+        			</dl>
+					<dl>
+						<dt>店铺Logo：</dt>
+						<dd>
+							<p>
+								<#if store.store_logo?? &&store.store_logo!=''>
+									<@image src="${store.store_logo!''}" id="img_store_logo" width="200" height="60" />
+								<#else>
+									<img src="${ctx}/themes/b2b2c/images/storelogo.png" id="img_store_logo" height="60" width="200">
+								</#if>
+							</p>
+							<p>
+								<input type="file" id="store_logo" status="store_logo" text="上传Logo"/><span style="float:left;">logo尺寸为：200px*60px</span>
+								<input type="hidden" name="store_logo" value="${store.store_logo!''}"  id="fs_store_logo"  />
+							</p>
+							<p class="hint">此处为您的店铺logo，将显示在店铺Logo栏里</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt>店铺横幅：</dt>
+						<dd>
+							<p>
+								<#if store.store_banner?? &&store.store_banner!=''>
+									<@image src="${store.store_banner!''}" id="img_store_banner" width="638" height="158" />
+								<#else>
+									<img src="${ctx}/themes/b2b2c/images/home_def.jpg" id="img_store_banner" height="158" width="638">
+								</#if>
+							</p>
+							<p>
+								<input type="file" id="store_banner" status="store_banner" text="上传店铺横幅"/><span style="float:left;">横幅尺寸为：638px*158px</span>
+								<input type="hidden" name="store_banner" value="${store.store_banner!''}"  id="fs_store_banner"  />
+							</p>
+							<p class="hint">
+								此处为您的店铺条幅，将显示在移动端。
+							</p>
+						</dd>
+					</dl>
+					
+					<dl class="bottom">
+			        	<dt>&nbsp;</dt>
+			        	<dd>
+							<input type="button" id="update" value="保存修改" class="submit to_save"/>
+			        	</dd>
+			      	</dl>
+				</form>
+			</div>
+		</div>
+	</div>	
+</div>
+
+
+<script type="text/javascript">
+var app_path="${ctx}";
+$(function(){
+	$("#province_id").change(function() {
+		if ($(this).val() == 0) {
+			$("#city").val("请选择");
+			$("#region").val("请选择");
+		}
+	})
+	
+	$('#description').ckeditor();
+	$("#update").click(function(){
+		if(!$("#storeInfo").checkall())
+			return false;
+		$("#update").attr({"disabled":"disabled"});
+		$.Loading.message("正在保存....");
+		var options = {
+				url : "${ctx}/api/b2b2c/storeApi!edit.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					$.Loading.message(data.message);
+					if(data.result==1){
+						location.href="business_center.html?menu=store_index";
+					}else{
+						$("#update").removeAttr("disabled");
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					$("#update").removeAttr("disabled");
+				}
+			};
+		$("#storeInfo").ajaxSubmit(options);
+	});
+	window.onload=function(){
+		bindFileEvent($("#store_logo"));
+		bindFileEvent($("#store_banner"));
+	}
+})
+var isTip=0;
+function bindFileEvent(obj){
+	var status=$(obj).attr("status");
+	var text=$(obj).attr("text");
+	$(obj).uploadify({
+		'buttonText':text,		//显示文字
+		'fileObjName':'image',		//文件对象名称
+						//上传文件大小限制 'fileSizeLimit':'100KB',
+		'fileTypeDesc': '请选择',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 
+		'fileTypeExts': '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+		'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+		'swf'      : '${ctx}/themes/b2b2cv2/uploadify.swf',
+		'height':'30',				//高度
+		'width':'80',
+		'multi':false,				//是否支持多文件上传
+		'progressData':'percentage',//设置文件上传时显示的数据
+		'uploadLimit':5,
+		'onFallback':function(){				//falsh兼容
+			if(isTip==0){
+				$.alert("请安装flash插件，确保程序正常运行！");
+			}
+			isTip=1; 
+		},							
+		'onUploadSuccess':function(file,data,response){
+			var img =jQuery.parseJSON(data);
+			$("#fs_"+status).val(img.fsimg);
+			$("#img_"+status).attr("src",img.img);
+		},
+		'onSelectError':function(file,errorCode,errorMsg){
+			if(errorCode==SWFUpload.QUEUE_ERROR.INVALID_FILETYPE){
+				this.queueData.errorMsg="请上传正确的格式";
+			}
+		}
+	});
+}
+function checkTel(){
+	//var tel=$("input[name='store.tel']");
+	//var reg=/^(\(\d{3,4}\)|\d{3,4}-)?\d{7,8}(-\d{1,4})?$/;
+	//if(!reg.test(tel)){
+	//	alert("bushidianhua")
+	//	 reg=/^1[3|4|5|8|7][0-9]{9}$/;
+	//	 if(!reg.test(tel)){
+	//		 alert("fuck!")
+	//		return "请输入正确的联系方式";
+	//	 }else return true;
+	// }
+	//else return true;
+	return true;
+}
+</script>
+	<script>
+		$(function(){
+				selectMenu(1);
+		})
+	</script>
+<#include '/common/footer.html' />

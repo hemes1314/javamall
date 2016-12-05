@@ -1,0 +1,130 @@
+<#include '/store/store_header.html' />
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<!-- 获取店铺订单标签 -->
+<#assign storeBillListTag=newTag("storeBillListTag")/>
+<#assign billList=storeBillListTag()/>
+<style>
+.s_orderlist tbody tr td{border:0px none;height: 40px;border-top:1px solid #ddd;}
+
+</style>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			结算管理<span>></span>结算单列表
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active"><a href="javascript:void(0);">结算单列表</a></li>
+				</ul>
+			</div>
+			<!-- 订单列表 -->
+			<div class="store_orderlist">
+			  	<!-- 订单列表详细 -->
+			  	<table class="s_orderlist"  cellpadding="0" cellspacing="0">
+			  		<thead>
+			  			<tr class="s_orderlist_title">
+			  				<th >结算单号</th>
+			  				<th >起止时间</th>
+							<!--<th>佣金</th>-->
+			  				<th >本期应收</th>
+			  				<th >结算状态</th>
+			  				<th >出账时间</th>
+			  				<th >操作</th>
+			  			</tr>
+			  		</thead>
+			  		<#if billList.totalCount != 0 >
+			  		<tbody>
+			  		<#list billList.billList.result as billDetail>
+				  		<tr>
+							<td>
+								${billDetail.sn}
+							</td>
+							<td>
+								<@dateformat time="${(billDetail.start_time)?c}" pattern="yyyy-MM-dd "/>
+								-
+								<@dateformat time="${billDetail.end_time?c}" pattern="yyyy-MM-dd "/>
+							</td>
+							<!--<td>-->
+								<!--${billDetail.bill_price}-->
+							<!--</td>-->
+							<td>
+								${billDetail.price}
+							</td>
+
+							<td>
+								<#if billDetail.status==1>
+									已出账
+								<#elseif billDetail.status==0>
+									未出账
+								<#elseif billDetail.status==2>
+									已确认
+								<#elseif billDetail.status==3>
+									已审核
+								<#else>
+									已付款
+								</#if>	
+							</td>
+							<td>
+								<@dateformat time="${billDetail.bill_time?c}" pattern="yyyy-MM-dd HH:mm"/>
+							</td>
+							<td>
+								<a href="bill_detail.html?id=${billDetail.id}&menu=transaction">查看</a>
+
+
+								<#if billDetail.status==1>
+									|
+									<a class="admit" href="javascript:void(0);" id="${billDetail.id}">确认结算单</a>
+								</#if>
+
+
+
+							</td>
+						</tr>
+			  		</#list>
+						<tr>
+						</tr>			  		
+			  		</tbody>
+			  	</table>
+			  	<@pager pageno="${billList.pageNo!'1'}" pagesize="${billList.pageSize}" totalcount="${billList.totalCount}" />
+			  	<#else>	
+			  		</table>
+			  		<p class="no_blank">暂无符合条件的数据记录</p>
+			  	</#if>
+			</div>
+		</div>
+	</div>		
+</div>
+<script>
+	$(function(){
+		selectMenu(5);
+		
+		$(".admit").click(function(){
+			if(window.confirm('确定要进行确认吗？')){
+				var $this  = $(this);
+				var id =$this.attr("id");
+				$.ajax({
+					url:'${ctx}/api/bill/storeBill!confirm.do',
+					data:'id='+id,
+					dataType:"json",
+					success:function(data){
+						alert(data.message);
+						if(data.result==1){
+							location.reload();
+						}
+					},
+					error:function(){
+						alert("出现意外错误");
+					}
+				});
+	            return true;
+	         }else{
+	            return false;
+	        }
+		});
+	})
+</script>
+<#include '/common/footer.html'/>

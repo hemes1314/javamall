@@ -1,0 +1,156 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+<#assign groupBuyListTag=newTag("myGroupBuyListTag")> 
+<#assign gbPage=groupBuyListTag()>
+<style>
+#deleteCheck{
+	margin-right: 8%;
+}
+#revert{
+margin-right: 8%;
+}
+</style>
+<div class="layout">
+	<#include '/left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+ 			<div class="wrap">
+ 			<div class="path">
+					<div>
+						<a href="${ctx}/store.html">商家中心</a> <span>&gt;</span> 
+						<a href="javascript:void(0);">闪购列表 </a>
+					</div>
+				</div>
+  				<div class="tabmenu">
+    				<ul class="tab pngFix">
+    					<li class="active"><a href="groupbuy_list.html">闪购列表</a></li>
+    				</ul>
+    				<a href="groupbuy_add.html" class="user-btn3"  title="新增闪购">新增闪购</a>
+    			</div>
+    			<form action="groupbuy_list.html" method="get">
+					<table class="search-form">
+      					<tbody>
+      						<tr>
+						        <td>&nbsp;</td>
+						        <th>闪购名称：</th>
+						        <td class="w160"><input class="text" type="text" name="gb_name" value="${gb_name!''}"></td>
+						        <th>活动状态：</th>
+						        <td class="w100">
+							        <#if !gb_status?? >  <#assign gb_status='-1'  />  </#if>
+							        <select name="gb_status" class="w90">
+							               <option value="" >全部闪购</option>
+							                <option value="0" <#if gb_status=='0'>selected="selected"</#if> >未审核</option>
+							                <option value="1" <#if gb_status=='1'>selected="selected"</#if>>已通过</option>
+							                <option value="2" <#if gb_status=='2'>selected="selected"</#if>>审核失败</option>
+							                <option value="3" <#if gb_status=='3'>selected="selected"</#if>>已结束</option>
+							         </select>
+						        </td>
+        						<td class="w90 tc">
+        							<input type="submit" class="submit" value="搜索">
+        						</td>
+      						</tr>
+  						</tbody>
+  					</table>
+  				</form>
+				<table class="ncu-table-style">
+					<thead>
+						<tr>
+							<th class="w10"></th>
+							<th class="w70"></th>
+							<th class="tl">闪购名称</th>
+							<th class="w200">闪购活动</th>
+							<th class="w90">已闪购</th>
+							<th class="w90">活动状态</th>
+							<th class="w90">操作</th>
+						</tr>
+					</thead>
+				<tbody>
+			       <#assign  gbList = gbPage.result />
+			       <#if gbList?size==0>
+				      <tr>
+				        <td colspan="20" class="norecord"><i>&nbsp;</i><span>暂无符合条件的数据记录</span></td>
+				      </tr>
+					<#else>
+	      				<#list gbList as gb > 
+	      					<tr class="bd-line">
+						    <td></td>
+						    	<td><div class="goods-pic-small"><span class="thumb size60"><i></i><a target="_blank" href="${ctx}/goods-${gb.goods_id}.html">
+						        	<img width="60" height="37" onload="javascript:DrawImage(this,60,60);" src="<@imgurl pic="${gb.img_url!''}" />"  style="display: inline;"></a></span></div>
+						      	</td>
+						        
+						        <td class="tl">
+						        	<dl class="goods-name">
+						        		<dt><a href="${ctx}/goods-${gb.goods_id}.html" target="_blank">${gb.gb_name!''}</a><a href="#" target="_blank" class="subtitle">${gb.gb_title!''}</a></dt></dl></td>
+						        <td><strong>${gb.act_name}</strong>
+							        <p class="goods-time">
+										<@dateformat time="${gb.start_time}" pattern="yyyy-MM-dd"/>-
+										<@dateformat time="${gb.end_time}" pattern="yyyy-MM-dd"/>
+									</p>
+								</td>
+						        <td>${gb.buy_num!0}</td>
+						        <td>
+									<#if gb.gb_status==0 >未审核</#if>
+									<#if gb.gb_status==1 >已审核</#if>
+									<#if gb.gb_status==2 >已拒绝</#if>
+									<#if gb.gb_status==3 >已结束</#if>
+								</td>
+						        <td>         
+							        <#if gb.gb_status==0>
+							         <a href="groupbuy_edit.html?goodsid=${gb.goods_id}">编辑内容</a>
+							         <a class="user-btn2 mt5 delete" gbid="${gb.gb_id}" href="javascript:void(0);">删&nbsp;除</a>
+							        </#if>			 
+	        			 
+	         	 				</td>
+						  </tr>
+				      </#list>
+					</#if>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="list-attach">
+		<@pager pageno="${gbPage.page!'1'}" pagesize="${gbPage.pageSize}" totalcount="${gbPage.totalCount}" />
+	</div>
+	</div>
+</div>
+<script type="text/javascript">
+<!--
+$(function(){
+	$(".delete").click(function(){
+		if( !confirm("确认删除?") ){
+			return false ;
+		}
+		var gbid = $(this).attr("gbid");
+		$.Loading.show("正在删除...");
+		
+		$.ajax({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/b2b2c/groupBuy!delete.do",
+			data:"gb_id="+gbid,
+			success:function(json){
+				$.Loading.hide();
+				if(json.result==1){
+					alert("删除成功")
+					location.href="groupbuy_list.html";
+				}else{
+					alert(json.message);
+				}
+			},
+			error:function(){
+				$.Loading.hide();
+				alert("出现意外错误");
+			}
+			
+		});
+
+		
+	});
+});
+//-->
+</script>
+<!--
+
+//-->
+</script>
+<#include '/common/footer.html' />

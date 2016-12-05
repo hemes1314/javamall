@@ -1,0 +1,52 @@
+<div id="stock_box" class="grid">
+	<table >
+		<thead>
+			<th class="depot">仓库</th>
+			<th width="50">库存 </th>
+			<th class="store">出货量</th>
+		</thead>
+		
+		<tbody>
+			<#list storeList as store>
+				<tr>
+					<td class="depot">
+						<input type="hidden" name="storeid" value="${store.storeid!'0'}" />
+						<input type="hidden" name="depotid" value="${store.depotid!'0'}" />
+						${store.name}
+					</td>
+					<td>${store.store}</td>
+					<td class="store">
+						<input  type="text" size="8" name="store"  store="${store.store}" value="0" isrequired="true"  dataType="int"/>
+					</td>
+				</tr>
+			</#list>
+		</tbody>
+	</table>
+</div>
+<script>
+$(function(){
+	
+	
+	$("#stock_box input[name=store]").change(function(){
+		
+		var self = $(this);
+		var value  = self.val();
+		
+		if( parseInt( value )<0  ){
+			alert("出货量必须大于0");
+			self.val(value);
+			return false;
+		}
+		
+		if( parseInt(value) > parseInt(self.attr("store")) ){
+			alert("出货量["+value+"]大于库存["+self.attr("store")+"]，不能出货。")
+			self.val(0);
+			return false;
+		}
+		
+		
+		
+	});
+	
+})
+</script>

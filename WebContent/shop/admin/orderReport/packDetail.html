@@ -1,0 +1,29 @@
+<div class="shadowBoxWhite  whiteBox detail" style="margin: 5px;">
+	<table class="goodsList" cellspacing="0" cellpadding="0" border="0">
+		<thead>
+			<tr>
+				<th data-options="field:'gid',width:50">选择</th>
+				<th data-options="field:'name',width:300">商品名称</th>
+				<th data-options="field:'price',width:100">单价</th>
+				<th data-options="field:'payNum',width:200">购买数量</th>
+				<th data-options="field:'goodsNum',width:160">退货数量</th>
+			</tr>
+			<#list orderItemDetail as data>
+			<tr>
+				<td><input type="checkbox" value="${data.goodsid }" checked="" name="cGoodsId_${data.itemid}" />
+					
+					<input type="hidden" value="${data.productid}" id="cProductId_${data.itemid}${data_index}" />
+				</td>
+				<td>${data.name }</td>
+				<td>${data.mktprice}<input type="hidden" id="goodsPrice_${data.itemid}${data_index}" value="${data.mktprice }" /></td>
+				<td>${data.num } <input type="hidden" id="cPayNum_${data.itemid}${data_index}" value="${data.num }" />
+				</td>
+				<td><input type="text" class="input_text" value="${data.num}" num="${data.num }" id="${data.itemid}${data_index}" name="cGoodsNum_${data.itemid}" style="width: 20px;"></td>
+			</tr>
+			</#list>
+		</thead>
+		<tr>
+
+		</tr>
+	</table>
+</div>

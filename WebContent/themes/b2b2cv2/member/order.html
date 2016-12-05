@@ -1,0 +1,277 @@
+<#assign  title="我的订单" />
+<#include 'member_header.html' />
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderListTag = newTag("storeMemberOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign memberOrderList = memberOrderListTag("{'keyword':'${keyword!''}'}")>
+<#assign order = memberOrderList.ordersList.result>
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+<div class="user_order">
+	<div class="order_title_nav">
+		<ul>
+			<li <#if !memberOrderList.status?exists  && !memberOrderList.keyword?exists >class="selected"</#if>><a href="order.html"><span>所有订单</span></a></li>
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_NOT_PAY>class="selected"</#if>><a href="order.html?status=0"><span>等待付款</span></a></li>
+			<!-- 	<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_PAY>class="selected"</#if>><a href="order.html?status=1"><span>已付款待确认</span></a></li> -->
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_PAY_CONFIRM>class="selected"</#if>><a href="order.html?status=2"><span>已付款</span></a></li>
+			<!-- 暂无状态显示已经在配货中 
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_ALLOCATION>class="selected"</#if>><a href="order.html?status=3"><span>配货中</span></a></li>
+			 -->
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_SHIP>class="selected"</#if>><a href="order.html?status=5"><span>已发货</span></a></li>
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_CANCELLATION>class="selected"</#if>><a href="order.html?status=8"><span>已取消</span></a></li>
+			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_COMPLETE>class="selected"</#if>><a href="order.html?status=7"><span>已完成</span></a></li>
+			<!--
+				<li <#if keyword?exists>class="selected"</#if>><a href="javascript:;" id="searchtab" onclick="$('#btnSearch').click()"><span>搜索结果</span></a></li>
+			 -->
+		</ul>
+	</div>
+	<!-- 订单搜索 -->
+	<div class="user_ordersearch">
+		<span class="ordershearch_result">搜索到<strong>
+				${memberOrderList.totalCount!0}
+		<strong>笔订单</span>
+		<span class="ordershearch_button"><input class="searOrderBtn" id="btnSearch" type="button" value="在订单中搜索"/></span>
+		<span class="ordershearch_word"><input class="inputText default" id="search_keyword" autocomplete="off" type="text" placeholder="输入订单中商品关键词" value="${keyword!''}" /></span>
+	</div>
+	<!-- 订单列表 -->
+	<div class="order_list">
+		<#if memberOrderList.totalCount gt 0 >
+			<table cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th colspan="4" style="width:480px;">商品名称</th>
+						<th style="width:70px;">单价（元）</th>
+						<th style="width:90px;">数量</th>
+						<th style="width:100px;">订单金额</th>
+						<th style="width:100px;">交易状态</th>
+						<th style="width:100px;">交易操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- 订单详细 -->
+					<#assign orderDetailTag = newTag("orderDetailTag")>
+					<#list order as orderinfo>
+						<!--调用“订单详细”标签，并传递父参数-->
+						<#assign parentOrderDetail = orderDetailTag('{"ordersn":"${orderinfo.parent.sn}"}')>
+						<table class="order_box">
+						<!-- 订单下商品列表 -->
+						<tr>
+							<td class="orderlist_title" colspan="20" >
+								<span>
+									主订单号：${parentOrderDetail.sn!""}
+								</span>
+								<span>
+									支付方式：${parentOrderDetail.paymentMethod!""}
+								</span>
+								<#if orderinfo.can_pay_all==1>
+								<a href="${ctx}/api/b2b2c/storePaymentApi.do?orderid=${parentOrderDetail.order_id}"
+									style="margin-left:10px;padding:5px 10px;background:#59c;color:#fff;display:none;">合并支付</a>
+								</#if>
+								<#if parentOrderDetail.status==0 && parentOrderDetail.pay_status==0>
+								<span>支付剩余时间：${parentOrderDetail.timeLeft}</span>
+								</#if>
+							</td>
+						</tr>
+						<#assign existed = false>
+						<#list orderinfo.child as orders>
+							<!--调用“订单详细”标签，并传递子参数-->
+							<#assign orderDetail = orderDetailTag('{"ordersn":"${orders.sn}"}')>
+							<#assign balancePay = orderDetail.advance_pay+orderDetail.virtual_pay>
+							<tr>
+							<#if parentOrderDetail.status==0 && parentOrderDetail.pay_status==0>
+								<td class="orderlist_sn" colspan="3" >
+									<span> ${orders.store_name!'' } </span>
+									<span> 订单号：${orders.sn!'' } </span>
+									<span> 下单时间：<@dateformat time="${orders.create_time?c}" pattern="yyyy-MM-dd HH:mm"/> </span>
+								</td>
+								<#if existed == false>
+								<#assign existed = true>
+								<td class="orderlist_tools" rowspan="${3 * orderinfo.child?size}">
+									<#if orders.status == orderState.ORDER_NOT_PAY>
+										<!-- 未支付 -->
+										<#if orders.pay_status==orderState.PAY_NO && !((orders.payment_type!'')=='cod')>
+											<a href="${ctx}/api/b2b2c/storePaymentApi.do?orderid=${parentOrderDetail.order_id}"
+											   class="green_btn" target="_blank">订单付款</a>
+										</#if>
+										<#if orders.status==orderState.ORDER_NOT_PAY>
+											<a href='javascript:;' class="cancelBtn" sn="${parentOrderDetail.sn}" rel="${parentOrderDetail.order_id}" >取消订单</a>
+										</#if>
+									</#if>
+								</td>
+								</#if>
+							<#else>
+							<td class="orderlist_sn" colspan="20" >
+								<span> ${orders.store_name!'' } </span>
+								<span> 订单号：${orders.sn!'' } </span>
+								<span> 下单时间：<@dateformat time="${orders.create_time?c}" pattern="yyyy-MM-dd HH:mm"/> </span>
+							</td>
+							</#if>
+								
+							</tr>
+							<tr>
+								<td class="orderlist_goodslist" colspan="1" style="padding:6px 0px 0px 0px;">
+									<#assign orderItemListTag = newTag("orderItemListTag")>
+									<#assign orderItemList = orderItemListTag("{'orderid':${orders.order_id}}")>
+									<table class="orderitem_goodslist" cellpadding="0" cellspacing="0">
+										<#list orderItemList as item>
+											<tr>
+												<td class="order_image" style="border:0px none;">
+													<a target="_blank" href="${ctx}/goods-${item.goods_id}.html">
+															<@image height="50" src="${item.image!''}"  style="cursor: pointer;" />
+													</a>
+												</td>
+												<td class="order_listtiele" style="border:0px none;">
+												<!-- add by lxl start -->
+														<#if item.disable == 1>
+                       									<a href="javascript:alert('此商品已删除')">${item.name}</a>
+                      								  <#elseif item.market_enable == 0>
+                       								  <a href="javascript:alert('此商品已下架')">${item.name}</a>
+                       								  <#else>
+                        								<a target="_blank" href="${ctx}/goods-${item.goods_id}.html">${item.name}</a>
+                        							 </#if>
+												<!-- end -->
+												</td>
+												<td class="order_listprice" style="border:0px none;">
+													${item.price?string.currency}
+												</td>
+												<td class="order_listnum" style="border:0px none;">
+													${item.num}
+												</td>
+											</tr>
+										</#list>
+									</table>
+								</td>
+								<td class="orderlist_pay">
+										<p><strong>订单金额 ${orders.order_amount?string.currency}</strong><p>
+										<!--p>${orders.payment_name}</p-->
+										<#if orders.status == orderState.ORDER_NOT_PAY>
+										<p><strong>应付金额 ${orders.need_pay_money?string.currency}</strong><p>
+										</#if>
+								</td>
+								<td class="orderlist_staus">
+									<p>
+									    <#if orders.status  == 13>
+       										申请退款
+       									<#elseif orders.status  == 18>
+       										申请退货中
+       									<#elseif orders.status  == 12>
+       										用户拒收
+       									<#elseif  orders.status == 16>
+											已拒收
+									     <#elseif  orders.status == 17>
+											退款中
+       									<#elseif orders.status  == -15>
+       										退款被拒绝
+       									<#elseif  orders.status == -12>
+					            			拒收被拒绝
+					            		<#elseif  orders.status == orderState.ORDER_PAY_CONFIRM && orders.is_erp_process == 1>
+					            			配货中
+       									<#else>
+											<@orderstatus status="${orders.status}" type="order" />
+							           </#if>
+									</p>
+									<!-- 未付款/新订单/已确认  已发货  已收货-->
+                                    <#if orders.status == orderState.ORDER_NOT_PAY || orders.status == 5 || orders.status==6>
+                                      	 <a href="order_detail.html?ordersn=${orders.sn}">订单详情</a>
+                                    <#else>
+                                    </#if>
+								</td>
+								
+								<#if parentOrderDetail.status!=0 || parentOrderDetail.pay_status!=0>
+								<td class="orderlist_tools">
+									<#if orders.status == orderState.ORDER_NOT_PAY>
+										<!-- 未支付 -->
+										<#if orders.pay_status==orderState.PAY_NO && !((orders.payment_type!'')=='cod')>
+											<a href="${ctx}/api/b2b2c/storePaymentApi.do?orderid=${orders.order_id}"
+											   class="green_btn" target="_blank">订单付款</a>
+										</#if>
+										<#if orders.status==orderState.ORDER_NOT_PAY>
+											<a href='javascript:;' class="cancelBtn" sn="${orders.sn}" rel="${orders.order_id}" >取消订单</a>
+										</#if>
+									<#elseif orders.status == orderState.ORDER_PAY_CONFIRM && orders.is_erp_process == 0>
+										<!-- 已确认支付 erp未处理-->
+										<a href="order_detail.html?ordersn=${orders.sn}">查看订单</a>
+										<a href="${ctx}/member/return.html?refund=1&ordersn=${orders.sn}&return_price=${orders.order_amount}" >申请退款</a>
+									<#elseif orders.status == 5 >
+										<!-- 已发货 -->
+										<a href="javascript:;"   class="rogBtn" orderid="${orders.order_id}">确认收货</a>
+		                                <#--<a href="${ctx}/member/returnOrder.html?ordersn=${orders.sn}&yprice=${orders.order_amount}&ye=${balancePay?string.currency}" >退货退款</a>-->
+									<#elseif orders.status==6 && (orders.payment_type!'') !='cod'>
+										<a href="javascript:;"  class="thawBtn" orderid="${orders.order_id}">解冻</a>
+									<#else>
+										<a href="order_detail.html?ordersn=${orders.sn}">查看订单</a>
+									</#if>
+									<#if orders.status == 6 || orders.status == -5 >
+										<!-- 已收货，退货被拒绝 -->
+										<a href="${ctx}/member/returnOrder.html?ordersn=${orders.sn}&yprice=${orders.order_amount}&ye=${balancePay?string.currency}" >退货退款</a>
+									<#elseif orders.status == -15>
+										<!-- 退款被拒绝 可重新发起申请退款 -->
+										<a href="${ctx}/member/return.html?refund=1&ordersn=${orders.sn}&return_price=${orders.order_amount}" >申请退款</a>
+									<#elseif orders.status == -12>
+										<!-- 拒收被拒绝 可重新确认收货 -->
+										<a href="javascript:;"   class="rogBtn" orderid="${orders.order_id}">确认收货</a>
+									<#elseif orders.status == 7 && orders.payment_type =='cod'>
+										<!-- 已发货 -->
+										<a href="${ctx}/member/return.html?ordersn=${orders.sn}">申请退货</a>
+									</#if>
+								</td>
+								</#if>
+							<tr>
+						</#list>
+						</table>
+						</#list>
+					</tbody>
+				</table>
+			<#else>
+				<div class="empty" >尚无订单</div>
+			</#if>
+		<@pager pageno="${memberOrderList.page}" pagesize="20" totalcount="${memberOrderList.totalCount}" />
+	</div>
+	<!-- 隐藏取消订单弹出框 -->
+	<#include 'order_cancel.html'/>
+</div>
+<script>
+var ordersearchTipText = "输入订单中商品关键词";
+function odersearch(){
+	var orderkeyword = $.trim($("#search_keyword").val());
+	if(orderkeyword == ordersearchTipText){
+		orderkeyword = '';
+	}
+	if(orderkeyword==''){
+		alert("请输入订单中商品关键词！");
+	}else{
+		location.href="order.html?keyword=" + orderkeyword;
+	}
+}
+$(function(){
+
+	$("#search_keyword").keypress(function(event){
+		$("#search_keyword").attr("class","inputText");
+		if(event.keyCode=="13" ){
+			odersearch();
+		}
+	});
+	$("#search_keyword").click(function(){
+		if($(this).val() == ordersearchTipText){
+			$(this).val("");
+		}
+	});
+	$("#search_keyword").blur(function(){
+		if($(this).val() == ''){
+			$(this).val(ordersearchTipText);
+		}
+	});
+
+	$("#btnSearch").click(function(){
+		odersearch();
+	});
+	Order.init();
+});
+</script>
+<!-- 会员中心公用底部 -->
+</div>
+<#include '../common/footer.html'/>

@@ -1,0 +1,166 @@
+<#assign title="登录" /> 
+<#include '/common/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/login.css" />
+<div class="index_logo">
+	<a href="${ctx}/index.html"><img src="${ctx}/themes/b2b2cv2/images/logo.png" class="pngFix" style="width:200px;height:80px;" /></a>
+</div>
+<!--登录界面-->
+<div id="login_wrapper">
+	<!--左侧登录界面-->
+	<div class="login_img">
+	</div>
+	<div class="login_tools">
+		<form method="post" class="validate" id="login_form">
+			<input type="hidden" name="action" value="login" /> 
+			<h1>用户登录</h1>
+			<div class="login_content">
+				<label>
+					<span>用户名：</span>
+					<input type="text" tabindex="1"  name="username"  class="definition_small same_input" id="username" isrequired="true" placeholder="邮箱/用户名/已验证手机"/>
+				</label>
+				<label>
+					<span>密&nbsp;&nbsp;&nbsp;码：</span>
+					<input type="password" vtype="password" tabindex="2"  name="password" id="password"  class="definition_small same_input" dataType="string" isrequired="true" placeholder="密码"/>
+				</label>
+				<label>
+					<span>验证码：</span>
+					<div class="m_account" id="verification_num">
+						<input type="text" tabindex="3" name="validcode"  size="8"  class="m_small" id="validcode" />
+						<img src="${ctx}/validcode.do?vtype=memberlogin" alt="会员登录验证码" class="code_img">
+						<div class="m_forget">
+							<a href="javascript:;">看不清楚换个图片</a>
+						</div>
+					</div>
+				</label>
+				<!-- 
+					<div class="m_week">
+						<input type="checkbox" name="remember" class="satisfied" value="1" />
+						<span>两周内免登录</span>
+					</div>
+				 -->
+				<div class="m_submit"> 
+					<span class="m_register btn"> 
+						<input type="button" tabindex="4" value="登  录" class="regis_ent">
+                        <a href="${ctx}/findpasswordByMobile.html">手机找回</a><span style="padding-left:11px;">|</span>
+                        <a href="${ctx}/findpasswordByEmail.html">邮箱找回</a>
+					</span> 
+					<span class="goregister">
+						还不是本站会员？立即
+						<#if sms_isopen==0>
+							<span>
+								<a href="register.html?forward=${forward!''}" class="go_register">注册</a>
+							</span> 
+						<#else>
+							<span>
+								<a href="register_phone.html?forward=${forward!''}" class="go_register">注册</a>
+							</span> 
+						</#if>
+					</span>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<!--登录界面结束-->
+	<input type="hidden" id="forward" value="${forward!''}"/>
+<script>
+$(function(){
+	$(".m_forget a").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	$(".code_img").click(function(){
+		$(this).attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	var options = {
+		url : "${ctx}/api/shop/member!login.do?ajax=yes",
+		dataType : 'json',
+		success : function(data) {
+			if(data.result==1){
+				var forward=$("#forward").val();
+				if(forward==""){
+					location.href ="../index.html";
+				}
+				else if(forward=="checkout.html"){
+					location.href ="../cart.html";
+				}
+				else{
+					var url = window.location.href;
+					var forward = url.split("forward=")[1];
+					location.href="../" + decodeURI(forward);
+				}
+			}
+			else{
+				alert(data.message);
+				if(data.message=='验证码错误！'){
+					$(".code_img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+				}
+				$.Loading.hide();
+			}
+		},
+		error : function(e) {
+			alert("出现错误 ，请重试");
+		}
+	};
+	
+	$(".regis_ent").click(function(){
+		   var username = $.trim($('input[name="username"]').val()); 
+           $('input[name="username"]').val(username);
+		   
+		   if($("#username").val()==""){
+			   alert("请输入用户名！");
+			   return false;
+		   }
+			
+		   if($("#password").val()==""){
+			   alert("请输入密码！");
+			   return false;
+		   }
+		   
+			if($("#validcode").val()==""){
+				alert("请输入验证码！");
+				return false;
+			}
+			
+			if (!$("#login_form").checkall()) {
+				return false;
+			}
+			
+			$.Loading.show("正在登录，请稍候...");
+			$('#login_form').ajaxSubmit(options);	
+	});
+	
+	
+	
+	$(document).keyup(function(event) {
+			if (event.keyCode == 13) {
+				
+				
+				var username = $.trim($('input[name="username"]').val()); 
+				$('input[name="username"]').val(username);
+				 
+				if($("#username").val()==""){
+					 alert("请输入用户名！");
+					 return false;
+				}
+				 
+				if($("#password").val()==""){
+					   alert("请输入密码！");
+					   return false;
+				   }
+				
+				if($("#validcode").val()==""){
+					alert("请输入验证码！");
+					return false;
+				}
+				
+				if (!$("#login_form").checkall()) {
+					return false;
+				}
+				
+				$.Loading.show("正在登录，请稍候...");
+				$('#login_form').ajaxSubmit(options);
+			}
+		});
+	});
+</script>
+<#include '/common/footer.html' />

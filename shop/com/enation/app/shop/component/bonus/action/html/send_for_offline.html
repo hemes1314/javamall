@@ -1,0 +1,35 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<div class="shadowBoxWhite  whiteBox"
+		style="padding: 10px 0 10px 10px;">
+		<form method="post" class="validate" id="sendForm">
+			<label>发放数量：</label> 
+				<input type="text" name="createnum" class="input_text" /> 
+				<input type="hidden" name="typeid" value="${typeid}" />
+				<a href="javascript:void(0)" class="easyui-linkbutton" style="padding-left: 30px;"
+				onclick="submitForm()">确认发放</a>
+		</form>
+	</div>
+</div>
+<script>
+	function submitForm() {
+		$.Loading.show('正在生成，请稍侯...');
+		$("#sendForm").ajaxSubmit({
+			url : "bonus!sendForOffLine.do?ajax=yes",
+			dataType : "json",
+			success : function(res) {
+				$.Loading.hide();
+				if (res.result == 1) {
+					alert("成功发放[" + res.count + "]个红包");
+				} else {
+					alert(res.message);
+				}
+			},
+			error : function() {
+				$.Loading.hide();
+				alert("红包发放失败");
+			}
+		});
+	};
+</script>
+<#include '/admin/footer.html' >

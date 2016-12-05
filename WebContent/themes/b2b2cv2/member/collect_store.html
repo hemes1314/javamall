@@ -1,0 +1,80 @@
+<#assign title="店铺收藏" /> 
+<#include 'member_header.html' />
+
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>
+
+<!-- 获取会员收藏列表标签 -->
+<#assign storeCollectTag = newTag("storeCollectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign storeCollect = storeCollectTag()!''>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class=""><a href="favorite.html"><span>收藏的商品</span></a></li>
+			<li class="selected"><a href="collect_store.html"><span>收藏的店铺</span></a></li>
+		</ul>
+	</div>
+	<!-- 店铺收藏列表 -->
+	<div class="collect_list">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="2">店铺</th>
+					<th><!--所在地--></th>
+					<th>收藏时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list storeCollect.storelist.result as sl>
+					<tr>
+						<td>
+							<a target="_blank" href="${ctx}/home.html?show_c=1&store_id=${sl.store_id!0}" title="${sl.store_name!''}" class="img"> 
+								<@image src="${sl.store_logo!''}" alt="${sl.store_name!''}" height="80" width="80" /> 
+							</a>
+						</td>
+						<td class="collect_name">
+							<a target="_blank" href="${ctx}/home.html?show_c=1&store_id=${sl.store_id!0}">${sl.store_name!''}</a>
+							<!--span>${sl.tel!''}</span-->
+						</td>	
+						<td>
+							<span>${sl.store_province!''}&nbsp;${sl.store_city!''}&nbsp;${sl.store_region!''}</span>
+						</td>
+						<td>
+							<@dateformat time='${(sl.create_time)!0}' pattern='yyyy-MM-dd' />
+						</td>
+						<td>
+							<a class="del_collect" href="javascript:void(0);" collect_id="${sl.id!0}" store_id="${sl.store_id}"  ></a>
+						</td>
+					</tr>
+				</#list>
+			</tbody>
+		</table>
+		<@pager pageno="${storeCollect.page!'1'}" pagesize="${storeCollect.pageSize}" totalcount="${storeCollect.totalCount}" />
+	</div>
+</div>
+
+<script>
+	$(function() {
+		$(".del_collect").click(function() {
+			if(confirm("确定要删除此店铺收藏吗？")){
+				var collect_id = $(this).attr("collect_id");
+				var store_id = $(this).attr("store_id");
+				$.post("${ctx}/api/b2b2c/storeCollect!del.do", {
+				"collect_id" : collect_id,"store_id":store_id
+				}, function(result) {
+					if (result.result == 1) {
+						alert("删除收藏成功");
+						location.href = "collect_store.html";
+					} else {
+						alert(result.message);
+					}
+				}, "json");
+			}
+
+		})
+	})
+</script>
+
+</div>
+<#include '../common/footer.html'/>

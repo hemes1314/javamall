@@ -1,0 +1,52 @@
+<#assign  title="我的众筹" />
+<#include 'member_header.html' />
+<!-- 获取会员众筹列表标签 -->
+<#assign memberCfListTag = newTag("memberCfListTag")>
+<#assign memberCfPage = memberCfListTag()>
+<div class="user_order">
+	<div class="order_title_nav">
+		<ul>
+			<li <#if memberCfPage.status=='1'>class="selected"</#if>><a href="crowdfunding.html?status=1"><span>众筹进行中</span></a></li>
+			<li <#if memberCfPage.status=='2'>class="selected"</#if>><a href="crowdfunding.html?status=2"><span>众筹成功</span></a></li>
+			<li <#if memberCfPage.status=='3'>class="selected"</#if>><a href="crowdfunding.html?status=3"><span>众筹失败</span></a></li>
+		</ul>
+	</div>
+	<div class="order_list">
+		<#if memberCfPage.totalCount gt 0 >
+			<table cellpadding="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th>参加时间</th>
+						<th>众筹活动</th>
+						<th>支持金额</th>
+						<th>状态</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list memberCfPage.cfList as cf>
+					<tr>
+						<td>${cf.message_time!''}</td>
+						<td>${cf.title}</td>
+						<td>${cf.price?string('currency')}</td>
+						<td>${cf.status}</td>
+					</tr>
+					</#list>
+				</tbody>
+			</table>
+		<#else>
+			<div class="empty" >尚无众筹</div>
+		</#if>
+		<@pager pageno="${memberCfPage.pageNo}" pagesize="20" totalcount="${memberCfPage.totalCount}" />
+	</div>
+	
+</div>
+<script>
+
+$(function(){	
+	
+});
+</script>
+<!-- 会员中心公用底部 -->
+</div>
+<#include '../common/footer.html'/>
+		

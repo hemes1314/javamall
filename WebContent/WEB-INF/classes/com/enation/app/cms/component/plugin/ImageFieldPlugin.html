@@ -1,0 +1,53 @@
+<div class="uploadWrapper${fieldname}">
+	<input type="button" class="button" value="上传" id="uploadBtn_${fieldname}" style="float: left" />
+	<input type="hidden" name="${fieldname}" id="${fieldname}" value="${value!''}" />
+	<div style="width: 150px; height: 150px; overflow: hidden; float: left">
+		<img id="img_${fieldname}" style="width: 150px; height: 150px;"	<#if !value?? || value==""> src="images/transparent.gif"  <#else> src="${value}" </#if> />
+	</div>
+	<div style="display: none; float: left; margin: 130px 0 0 5px;"	id="divdelbtn_${fieldname}">
+		<a href="javascript:;" id="delBtn_${fieldname}" title="删除此图片">
+			<img class="delete" src="images/transparent.gif" />
+		</a>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+			
+		$("#uploadBtn_${fieldname}").click(function(){
+			$("#photoDiv").dialog({
+				title : "上传图片",
+				top : 130,
+				width : 500,
+				height : 200,
+				closed : false,
+				cache : false,
+				href : "${ctx}/eop/upload.do?subFolder=spec",
+				modal : true,
+				buttons : [ {
+					text : '保存',
+					handler : function() {
+						var path="";
+						var options ={
+								url:"${ctx}/eop/upload!upload.do?ajax=1",
+								dataType:"json",
+								success:function(data){
+									${fieldname}getPath(data.path);
+								},
+								error:function(){
+									alert("上传错误，请重试");
+								}
+							};
+							$('#uploadForm').ajaxSubmit(options);
+						$("#photoDiv").dialog('close');
+					}
+				}]
+			});
+		});
+	})
+function ${fieldname}getPath(path){    
+	$("#img_${fieldname}").attr("src",path);
+	$("#${fieldname}").val(path);
+}
+</script>
+
+

@@ -1,0 +1,92 @@
+<#assign title="我的评论" />
+<#include 'member_header.html' />
+<!-- 获取会员等待评论商品标签 -->
+<#assign memberWaitCommontListTag = newTag("memberWaitCommontListTag")>
+<!-- 调用会员等待评论商品标签 -->
+<#assign memberWaitCommontList = memberWaitCommontListTag()>
+
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class=""><a href="comments.html"><span>我的评论</span></a></li>
+			<li class="selected"><a href="waitcommont.html" ><span>待评论的商品</span></a></li>
+		</ul>
+	</div>
+	<!-- 待评论的商品 -->
+	<div class="wait_comment favorite_list">
+		<h1 style="text-align:center;">等待评论的商品</h1>
+			<#if memberWaitCommontList?size gt 0 >
+		<ul class="f_list">
+			<#list memberWaitCommontList.waitcommentsList as goods>
+				<li>
+					<div class="favorite_img">
+						<a href="${ctx}/goods-${goods.goods_id}.html"  title="${goods.name}" class="img">
+							<@image src="${goods.thumbnail!''}" alt="${goods.name}" height="55" width="55" />
+						</a>
+					</div>
+					<div class="favorite_intro">
+						<dl>
+							<dt>
+                            <!-- add by lxl start -->
+                            <#if goods.disabled == 1>
+                                <a href="javascript:alert('此商品已删除')">${goods.name}</a>
+                            <#elseif goods.market_enable == 0>
+                                <a href="javascript:alert('此商品已下架')">${goods.name}</a>
+                            <#else>
+                                <a target="_blank" href="${ctx}/goods-${goods.goods_id}.html">${goods.name}</a>
+                            </#if>
+                            <!-- end -->
+							<!--a href="${ctx}/goods-${goods.goods_id}.html">${goods.name}</a-->
+							</dt>
+							<dd>
+								<span>商品编号：${goods.sn}</span>
+							</dd>
+							<dd>
+								销售价：<strong>￥${goods.price?string("0.##")}</strong>
+							</dd>
+							<dd>
+								<a goodsid="${goods.goods_id}"  class="favorite"  href="javascript:;" onclick="collect_goods(${goods.goods_id});">加入收藏</a>
+							</dd>
+						</dl>
+					</div>
+				</li>
+			</#list>
+		</ul>
+		<@pager pageno="${page!'1'}" pagesize="${memberWaitCommontList.pageSize}" totalcount="${memberWaitCommontList.totalCount}" />
+		<#else>
+			<p class="no_commont">暂无等待评论的商品</p>
+		</#if>
+	</div>
+</div>	
+<script>
+	$(function() {
+		Favorite.init();
+		$(".waitcomment").click(function() {
+			$(".tab ul li").removeClass("selected");
+			$(this).parent().addClass("selected");
+			$(".commontwait").load("waitcommont.html", function() {
+				$(".commontlist").hide();
+				$(".commontwait").show();
+				Favorite.init();
+			})
+		})
+		
+		
+		$(".f_list li div").hover(function() {
+			$(this).animate({
+				"top": "-40px"
+			},
+			400, "swing");
+		},
+		function() {
+			$(this).stop(true, false).animate({
+				"top": "0"
+			},
+			400, "swing");
+		});
+	})
+</script>
+</div>
+<#include '../common/footer.html'/>
+
+

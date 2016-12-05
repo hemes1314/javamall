@@ -1,0 +1,24 @@
+<!--会员中心圆形头部-->
+<div class="round_header"></div>
+<!--会员中心圆形头部结束-->
+<h1>
+	<a href="member.html">会员中心首页</a>
+</h1>
+<!--会员中心左侧会员缩略图-->
+<div class="breviary">
+	<#if member?exists> <#if member.face?exists && member.face != ''> <img
+		src="<@imgurl pic='${member.face}'/>" alt="会员头像缩略图" /> <#else>
+	<@image src="${ctx}/themes/default/images/hutx.jpg" alt="会员头像缩略图" /> </#if>
+	<div>
+		<h2>${member.name!''}</h2>
+		<p>会员等级：${member.lvname!''}</p>
+	</div>
+	</#if>
+</div>
+<!--会员中心左侧会员缩略图结束-->
+<!--会员中心左侧列表-->
+<div class="inner_wrapper"><#include '/member/menu.html' /></div>
+<!--会员中心左侧列表结束-->
+<!--会员中心圆形底部-->
+<div class="round_bottom"></div>
+<!--会员中心圆形底部结束-->

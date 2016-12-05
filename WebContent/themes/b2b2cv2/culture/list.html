@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>culture</title>
+<!-- 文章列表 -->
+<#assign cmsCatListTag = newTag("cmsCatListTag")/>
+<#assign cmslist = cmsCatListTag()/>
+<link href="${ctx}/themes/b2b2cv2/culture/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<script>
+
+</script>
+
+<body>
+   <div class="Header">
+      <div class="Header-text">
+         <div class="Header-logo"><img src="${ctx}/themes/b2b2cv2/culture/images/logo.png" width="355" height="110" alt=""/></div>
+        <div class="Header-shop"></div>
+      </div>
+     <div class="Header-menu">
+        <ul>
+          <li class="left" style="letter-spacing:1px;">GOME Cellar和您一起了解酒文化 <!--<a href="#"> GOME Cellar</a> [ <a href="#">登录</a> ]--><span></span><span></span></li>
+          <li class="right">
+             <a href="index.html">首页</a>
+             <a href="list.html?cat_id=canjiudapei">餐酒搭配</a>
+             <a href="list.html?cat_id=jiuzhuanglishi">酒庄历史</a>
+             <a href="list.html?cat_id=chuanqirenwu">传奇人物</a>
+       		 <a href="list.html?cat_id=gedijiuling">各地酒令</a>
+             <!-- <a href="list.html?cat_id=jingxuancanba">精选餐吧</a> -->
+             <a href="list.html?cat_id=chanqufengqing">产区风情</a>
+             <!-- <a href="list.html?cat_id=zaixianjiangjiu">在线讲酒</a> -->
+             <!-- <a href="list.html?cat_id=shijiuliyi">侍酒礼仪</a> -->
+          </li>
+        </ul>
+     </div>
+   </div> 
+   <div class="List">
+    <#list cmslist.result as cmsCat>
+     <#if (cmsCat_index=0)>
+     <h1>${cmsCat.name!''}<p><a href="index.html">首页</a> > <a href="#">${cmsCat.name!''}</a><p></h1>
+     <ul>
+     </#if>
+       <li>
+         <h2><@substring title="${cmsCat.page_title!''}" length="40" dot="..." /> </h2> 
+         <a href="list_inner.html?cat_id=${cmsCat.cat_id}&id=${cmsCat.id}"><img src="${cmsCat.image!''}" width="360" height="230" alt=""/></a>
+         <p><@substring title="${cmsCat.page_keywords!''}" length="50" dot="..." /></p>
+         <a class="btn" href="list_inner.html?cat_id=${cmsCat.cat_id}&id=${cmsCat.id}">READ MORE</a>
+       </li>
+     <#assign var ="${cmsCat.cat_id}">  
+    </#list>
+       <li class="page">  
+       <#if cmslist.totalPageCount!=0>
+       		<#if cmslist.currentPageNo!=1>
+				<a href="list.html?cat_id=${var}&page=${cmslist.currentPageNo-1}">上一页</a> 
+			</#if>
+       		    <a href="list.html?cat_id=${var}&page=${cmslist.currentPageNo}">第${cmslist.currentPageNo}页</a> 
+       		 <#if cmslist.currentPageNo!=cmslist.totalPageCount>   
+       		    <a href="list.html?cat_id=${var}&page=${cmslist.currentPageNo+1}">下一页</a> 
+       		</#if>
+       	</#if>
+       </li>
+     </ul>
+    <input  id="pagecount" type="hidden" value="${cmslist.totalPageCount}"/>
+   </div>
+<div class="Footer">Copyright © 2015-2016 GOME Cellar 版权所有</div> 
+
+
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<tr>
+	 <th>商户号MCHID ：</th>
+	 <td>
+ 	 <input type="text" id="mchid" name="mchid" value="${mchid!''}" class="input_text easyui-validatebox"   />
+	</td>
+</tr>
+<tr>
+	 <th> APPID：</th>
+	 <td>
+ 	 <input type="text" id="appid" name="appid"  value="${appid!''}" class="input_text easyui-validatebox"    />
+	</td>
+</tr>
+<tr>
+	 <th>API密钥(api key)：</th>
+	 <td>
+ 	 <input type="text" id="key" name="key"  value="${key!''}" class="input_text easyui-validatebox"   />
+	</td>
+</tr>
+<script type="text/javascript">
+$(function(){
+	$('#mchid').validatebox({ 
+		required:true 
+		}); 
+	$('#appid').validatebox({ 
+		required:true 
+		}); 
+	$('#key').validatebox({ 
+		required:true 
+		});
+})
+</script>

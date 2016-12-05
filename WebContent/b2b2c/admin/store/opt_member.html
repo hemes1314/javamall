@@ -1,0 +1,36 @@
+<style>
+.input_text{
+	width: 150px;
+}
+</style>
+<div class="main" style="background-color: white;" >
+	<div class="easyui-panel" style="border-style: none;">
+		<div style="padding: 10px 0 10px 10px">
+			<form id="optForm" method="post" class="validate">
+				<table>
+					<tr>
+						<td>用户名：</td>
+						<td><input class="input_text easyui-validatebox" type="text" 
+							name="uname" data-options="required:true"></input>
+						</td>
+						<td>
+							<p style="margin-left: 30px;color:#9D9D9D;font-size: 12px;">请输入要开店的用户名</p>
+						</td>
+					</tr>
+					<tr>
+						<td>密码：</td>
+						<td><input class="input_text easyui-validatebox" type="password"
+							name="password" ></input>
+						</td>
+						<td>
+							<p style="margin-left: 30px;color:#9D9D9D;font-size: 12px;">
+								<input type="checkbox" name="assign_password" value="1">
+								需要验证密码
+							</p>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>

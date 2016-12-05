@@ -1,0 +1,49 @@
+<#assign dataformat="com.enation.framework.directive.DateformateDirective"?new()/>
+<style>
+.input_text{
+	width: 200px;
+}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form method="post" class="validate" id="billAcountFormId">
+			<table>
+				<tr>
+					<th><label class="text">开户名：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true,validType:['string','length[0,20]','englishCheckSub']" type="text"
+						name="billAccount.person_name" maxlength="60" 
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">流水号：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text"
+						name="billAccount.trade_no" maxlength="60" 
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">银行账号：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text"
+						name="billAccount.account" dataType="float" maxlength="60" isrequired="true" />
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">银行名称：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true,validType:['string','length[0,20]','englishCheckSub']" type="text"
+						name="billAccount.bank_name" maxlength="60" 
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">金额：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true,validType:['string','length[0,20]','englishCheckSub']" type="text"
+						name="billAccount.money" dataType="float" maxlength="60" isrequired="true" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

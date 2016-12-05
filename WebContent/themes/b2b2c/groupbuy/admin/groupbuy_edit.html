@@ -1,0 +1,355 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+
+<#assign groupBuyTag=newTag("groupBuyTag")> 
+<#assign groupBuy=groupBuyTag("{'is_groupbuy':1,'goodsid':${goodsid}}")>
+
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<style>
+#deleteCheck{
+	margin-right: 8%;
+}
+#revert{
+margin-right: 8%;
+}
+</style>
+<div class="layout">
+	<#include '/left_menu.html'/>
+	<div class="right-content">
+		<div class="main">
+ 			<div class="wrap">
+  <div class="tabmenu">
+    <ul class="tab pngFix">
+  <li class="normal"><a href="groupbuy_list.html">闪购列表</a></li><li class="active"><a href="javascript:void(0);">新增闪购</a></li></ul>
+  </div>
+  <div class="user-form-style">
+    <form id="gb_form" method="post" enctype="multipart/form-data" class="validate">
+      <input name="gb_id" type="hidden" value="${groupBuy.gb_id}">
+      <dl>
+        <dt class="required"><em class="pngFix"></em>闪购活动：</dt>
+        <dd>
+          <p>
+		<#assign groupBuyActListTag=newTag("groupBuyActListTag")> 
+		<#assign actList=groupBuyActListTag()>
+            <select  name="act_id" class="valid"  isrequired="true">
+            	<#list actList as act>
+                   <option value="${act.act_id}" <#if groupBuy.act_id=act.act_id >selected='selected'</#if> >${act.act_name} <@dateformat time="${act.start_time}" pattern="yyyy-MM-dd"/>-
+				<@dateformat time="${act.end_time}" pattern="yyyy-MM-dd"/></option>
+                </#list>   
+            </select>
+            
+            <span></span>
+           </p>
+          <p class="hint">选择要参加的闪购活动及时间段</p>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="required"><em class="pngFix"></em>闪购名称：</dt>
+        <dd>
+          <p>
+            <input class="w400 text" name="gb_name" type="text"  value="${groupBuy.gb_name!''}" maxlength="30" isrequired="true" datatype="string" />
+            <span></span> </p>
+          <span></span>
+          <p class="hint">闪购标题名称长度最多可输入30个字符</p>
+        </dd>
+      </dl>
+      <dl>
+        <dt>闪购副标题：</dt>
+        <dd>
+          <p>
+            <input class="w400 text" name="gb_title" type="text"   value="${groupBuy.gb_title!''}" maxlength="30" datatype="string" />
+            <span></span> </p>
+          <span></span>
+          <p class="hint">闪购副标题针对闪购特殊说明</p>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="required"><em class="pngFix"></em>闪购商品：</dt>
+        <dd>
+          <p>
+            <input class="w400 text" style=" cursor: pointer;" id="goods_name_ipt" name="goods_name"   type="text" value="${groupBuy.goods.name}" readonly="" autocomplete="off"  isrequired="true">
+           <input type="hidden" name="goods_id" id="goods_id_ipt" value="${groupBuy.goods.goods_id}"/>
+            <span></span></p>
+          <p class="hint">点击上方输入框从已发布商品中选择要参加闪购的商品<br>如没有找到您想要参加闪购的商品，请重新发布该商品后再选择。</p>
+        </dd>
+      </dl>
+      <dl class="groupbuy_goods_info" >
+        <dt>店铺价格：</dt>
+        <dd> ¥ <span id="goods_store_price">${groupBuy.goods.price}</span> </dd>
+      </dl>
+      <dl>
+        <dt class="required"><em class="pngFix"></em>闪购价格：</dt>
+        <dd>
+          <p>
+            <input class="w60 text"  name="price" type="text" value="${groupBuy.price}"  isrequired="true">
+            <span></span> </p>
+          <p class="hint">闪购价格为该商品参加活动时的促销价格<br>必须是0.01~1000000之间的数字(单位：元)<br></p>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="required"><em class="pngFix"></em>闪购图片：</dt>
+        <dd> 
+        <img width="480" height="300" nc_type="group_pic" onload="javascript:DrawImage(this,680,350);" src="<@imgurl pic="${groupBuy.img_url!''}" />">
+          <p>
+            <input type="file" id="image_ipt" name="image"    >
+            <span></span> </p>
+          <p class="hint">用于闪购活动页面展示的图片,支持jpg、jpeg、gif、png格式上传<br>建议选择尺寸640x300、大小1M内的图片</p>
+        </dd>
+      </dl>
+      <dl class="groupbuy_goods_info" >
+        <dt>商品库存数：</dt>
+        <dd> <span id="goods_storage">${groupBuy.goods.store}</span>
+        </dd>
+      </dl>
+      
+      <dl class="groupbuy_goods_info">
+        <dt>可用库存数：</dt>
+        <dd> <span id="enable_store">${groupBuy.goods.enable_store!0}</span>
+        </dd>
+      </dl>
+      
+      
+      <dl>
+        <dt class="required"><em class="pngFix"></em>商品总数：</dt>
+        <dd>
+          <p>
+            <input class="w60 text"  name="goods_num" type="text" value="${groupBuy.goods_num}"  isrequired="true">
+            <span></span></p>
+          <p class="hint">闪购商品总数应等于或小于该商品库存数量<br>请提前确认要参与活动的商品库存数量足够充足</p>
+        </dd>
+      </dl>
+      <dl>
+        <dt>闪购类别：</dt>
+        <dd>
+          <p>
+        <#assign groupBuyCatListTag=newTag("groupBuyCatListTag")> 
+		<#assign catList=groupBuyCatListTag()>
+          
+            <select   name="cat_id">
+              <option value="0">不限</option>
+              <#list catList as cat>
+              <option value="${cat.catid}" <#if cat.catid=groupBuy.cat_id>selected="selected"</#if>  >${cat.cat_name}</option>
+              </#list>
+           </select>
+           
+            <span></span></p>
+          <p class="hint">请选择闪购商品的所属类别</p>
+        </dd>
+      </dl>
+      <dl>
+        <dt>所属区域：</dt>
+        <dd>
+          <p>
+        <#assign groupBuyAreaListTag=newTag("groupBuyAreaListTag")> 
+		<#assign areaList=groupBuyAreaListTag()>
+            <select  name="area_id">
+              <option value="0">不限</option>
+              <#list areaList as area>
+              <option value="${area.area_id}"  <#if area.area_id=groupBuy.area_id>selected="selected"</#if> >${area.area_name}</option>
+              </#list>
+             </select>
+            <span></span> </p>
+        </dd>
+      </dl>
+      <dl>
+        <dt>虚拟数量：</dt>
+        <dd>
+          <p>
+            <input class="w60 text"  name="visual_num" type="text" value="${groupBuy.visual_num}">
+            <span></span></p>
+          <p class="hint">虚拟购买数量，只用于前台显示，不影响成交记录</p>
+        </dd>
+      </dl>
+      <dl>
+        <dt>限购数量：</dt>
+        <dd>
+          <p>
+            <input class="w60 text"  name="limit_num" type="text" value="${groupBuy.limit_num}">
+            <span></span></p>
+          <p class="hint">每个买家ID可闪购的最大数量，不限数量请填 "0"</p>
+        </dd>
+      </dl>
+      <dl>
+        <dt>本团介绍：</dt>
+        <dd>
+          <p>
+            <textarea name="remark" cols="100" rows="8" id="intro" style="resize: none;">${groupBuy.remark}</textarea>
+	          </p>
+   
+          <p id="des_demo" style="width:640px;display:none;"></p>
+        </dd>
+      </dl>
+      <dl class="bottom">
+        <dt>&nbsp;</dt>
+        <dd>
+          <p>
+            <input id="groupbuy_agreement" type="checkbox" id="groupbuy_agreement" checked="checked">
+            <label for="groupbuy_agreement" class="ml5">我已阅读 <a href="javascript:;" target="_blank" class="agreement">闪购服务协议</a> 并同意</label>
+            <span></span></p>
+          <p class="mt10">
+            <input type="button" class="submit" id="okBtn" value="提交">
+          </p>
+        </dd>
+      </dl>
+    </form>
+  </div>
+</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+<!--
+var dialog ;
+var goods_enable_store;
+/**
+ * 搜索商品
+ */
+function searchGoods(){
+	
+	//搜索事件
+	$("#goods_search_btn").click(function(){
+		var form= $("#goods_search_form");
+		form.ajaxSubmit({
+			url:"${ctx}/api/b2b2c/goods!search.do?is_groupbuy=1",
+			type:"post",
+			dataType:"json",
+			success:function(json){
+				if(json.result==1){
+					fillSelect(json.data);
+				}else{
+					alert(json.message);
+				}
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	});
+	
+	//选择事件
+	$("#select_btn").click(function(){
+		
+		var option = $("#goods_id>option:selected");
+		if(option.size()==0){
+			alert("请选择商品");
+			return false;
+		}
+		
+		var goodsid  = option.val();
+		if(goodsid=="0"){
+			alert("请先搜索商品，然后选择相应的商品");
+			return false;
+		}
+		var price  = option.attr("goods_price");
+		$("#goods_store_price").html(price);
+		
+		var store  = option.attr("goods_store");
+		$("#goods_storage").html(store);
+		
+		var enable_store  = option.attr("enable_store");
+		$("#enable_store").html(enable_store);
+		goods_enable_store=enable_store;
+		$("#goods_id_ipt").val(goodsid);
+		
+		
+		var goods_name  = option.attr("goods_name");
+		$("#goods_name_ipt").val(goods_name);
+		
+		
+		$(".groupbuy_goods_info").show();
+		dialog.close();
+	});
+}
+
+/**
+ * 将搜索到的商品填充到select
+ */
+function fillSelect(goodsList){
+	
+	var select = $("#goods_id");
+	select.empty();
+	
+	for ( var i = 0; i < goodsList.length; i++) {
+		
+		var goods = goodsList[i];
+		var str ="";
+		str+="<option value='"+ goods.goods_id +"'" ;
+		str+=" goods_name='"+goods.name+"'";
+		str+=" goods_price='"+goods.price+"'";
+		str+=" goods_store='"+goods.store+"'";
+		str+=" enable_store='"+goods.enable_store+"'>";
+		str+=goods.name +"(￥"+goods.price+")</option>";
+		select.append(str);
+		
+	}
+}
+
+
+
+
+
+$(function(){
+	
+	
+	$('#intro').ckeditor();
+	
+	$("#goods_name_ipt").click(function(){
+		dialog = $.dialog({ title:"商品搜索", width:500, height:300,lock:true,min:false,max:false});
+		
+		$.ajax({
+		    url:"${ctx}/goods/goods_search.html",
+		    success:function(html){
+		    	dialog.content(html);
+		    	searchGoods();
+		    },
+		    error:function(){
+		    	$.alert("页面获取出错");
+		    }
+		    ,
+		    cache:false
+		});
+	});
+	
+	
+	$("#okBtn").click(function(){
+		if(!$("#gb_form").checkall())
+			return false;
+		if($("#goods_name_ipt").val()==""){
+			alert("必须选择商品");
+			return false;
+		}
+		if($("input[name='goods_num']").val()<1||$("input[name='goods_num']").val()>goods_enable_store){
+			alert("闪购数量必须大于等于1，并且不能超过商品数量");
+			return false;
+		}
+		if( $("#groupbuy_agreement:checked").size()==0 ){
+			alert("您必须同意协议才能保存");
+			return false;
+		}
+		
+		$.Loading.show("正在保存，请稍候...");	
+		$("#gb_form").ajaxSubmit({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/b2b2c/groupBuy!update.do",
+			success:function(json){
+				$.Loading.hide();
+				if(json.result==1){
+					alert("修改成功")
+					location.href="groupbuy_list.html";
+				}else{
+					alert(json.message);
+				}
+			},
+			error:function(){
+				$.Loading.hide();
+				alert("出现意外错误");
+			}
+			
+		});
+	});
+});
+//-->
+</script>
+<#include '/common/footer.html' />

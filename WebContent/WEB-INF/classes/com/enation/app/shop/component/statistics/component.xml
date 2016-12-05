@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="统计组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+		<plugin name="订单统计插件" id="orderMoneyStatisticsPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>	
+		<plugin name="下单量统计插件" id="orderNumStatisticsPlugin">
+			<bundle id="orderPluginBundle"></bundle>
+		</plugin>	
+	</plugins>
+</component>

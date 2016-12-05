@@ -1,0 +1,295 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+.selectgoods
+{
+  float:left;position:absolute;
+  top:10px;
+  display:none;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="auctionform">
+		<div style="height: auto">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="append()">添加</a> <a
+				href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="del()">删除</a>
+		</div>
+		<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+							data-options="url:'auction!list_auction.do',pageSize:${pageSize},fitColumns:'true'"
+							pagination="true" id="auctiondata" >
+				<thead>
+				<tr>
+				    <th data-options="field:'id',checkbox:true"></th>
+					<th data-options="field:'title',width:150,sortable:'true'">卖品</th>
+					<th data-options="field:'start_time',width:138,sortable:'true'">开始时间</th>
+					<th data-options="field:'time',width:138,sortable:'true'">截止时间</th>
+					<th data-options="field:'sprice',width:50,sortable:'true'">起始价</th>
+					<th data-options="field:'cprice',width:50,sortable:'true'">当前价</th>
+					<th data-options="field:'status',width:50,sortable:'true'">状态</th>
+				    <th data-options="field:'action',width:100,align:'center'"
+							formatter="formatOperation">
+							操作</th>					
+				</tr>
+				</thead>
+			</table>		
+		</div>
+		<div id="divdiad" style="display: none;"></div>
+		<div id="divdia" style="display: none;"></div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "auction!add_auction.do";
+			map["formId"] = "#addForm"; 
+			map["starttime"] = "#starttime";
+			map["endtime"] = "#endtime";
+			map["url"] = "auction!saveAddAuction.do?ajax=yes";
+			map["title"] = "添加拍卖";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "auction!edit_auction.do?auctionId=" + id;
+			map["formId"] = "#editForm";
+			map["url"] = "auction!saveEditAuction.do?ajax=yes";
+			map["title"] = "修改拍卖";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#auctiondata";
+		addDialog(map);
+	}
+
+	
+	function detail(id){
+		var map = {}; // Map map = new HashMap();
+		map["title"] = "拍卖详情"
+		map["href"] = "auction!detail_auction.do?auctionId=" + id;
+		map["divDialog"] = "#divdiad";
+		map["gridreload"] = "#auctiondata";
+		showDialog(map);
+	}
+	
+	function addDialog(map) {
+		var width = self.parent.$(window).width();
+		var height = self.parent.$(window).height();
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			top : 0,
+			left : 0,
+			title : map["title"],
+			width: width,
+			height : height,
+			maximizable:true,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			onClose : function() {
+				  window.location.reload();
+	        },
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);//获取按钮本身
+					//时间判断
+					var now = getNowFormatDate();
+					var end = $("[name='starttime']").val();
+					if(now>end)
+				    {
+						alert("开始时间不能在当天或者当天时间之前！");
+						return;
+				    }
+					
+					var s = $("[name='starttime']").val();
+					var e = $("[name='sauctiontime']").val();
+					if(s>e)
+				    {
+						alert("开始时间不能在结束时间之后");
+						return;
+				    }
+					savebtn.linkbutton("disable"); //禁用	
+					map["btn"]=savebtn;
+					submitForm(map);
+				}
+			}, {
+				text : '清空',
+				handler : function() {
+					clearForm(map);
+				}
+			} ]
+		});
+	}
+	
+	function showDialog(map) {
+		var width = self.parent.$(window).width();
+		var height = self.parent.$(window).height();		
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			top : 0,
+			left : 0,
+			title : map["title"],
+			width: width,
+			height : height,
+			maximizable:true,
+			href : map["href"],
+			modal : true
+		});
+	}
+	
+	function submitForm(map) {
+		//alert($("#safeguard").val().length);
+		if($("#safeguard").val().length >1000)
+		{
+			alert("服务保障大于500字，请减少字数");
+			map["btn"].linkbutton("enable");
+			return false;
+		}
+		if($("#auctioncontent").val().length >1000)
+		{
+			alert("拍卖介绍大于500字，请减少字数");
+			map["btn"].linkbutton("enable");
+			return false;
+		}
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.show(result.message);
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+						map["btn"].linkbutton("enable");
+						alert(result.message);
+					}
+					$.Loading.hide();
+				},
+				error : function(e) {
+					map["btn"].linkbutton("enable"); 
+					alert("出现错误 ，请重试");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}else{
+			map["btn"].linkbutton("enable"); 
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append("
+				+ row.id + ")' ></a>";
+		val += "<a class='detail' title='查看' href='javascript:void(0);' onclick='detail("
+					+ row.id + ")' ></a>";
+		return val;
+	}
+
+	function formatDefault_lv(value, row, index) {
+		var val;
+		if (value == 1) {
+			val = "是";
+		} else {
+			val = "否";
+		}
+		return val;
+	}
+	function del() {
+		var rows = $('#auctiondata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择删除的拍卖");
+			return;
+		}
+		if (!confirm("确认要删除拍卖吗？")) {
+			return;
+		}
+		var options = {
+			url : "auction!deleteAuction.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				$.Loading.success(result.message);
+				if (result.result == 1) {
+					var rows = $('#auctiondata').datagrid("getSelections");
+					for ( var i = 0; i < rows.length; i++) {
+						var index = $('#auctiondata').datagrid('getRowIndex',
+								rows[i]);
+						$('#auctiondata').datagrid('deleteRow', index);
+					}
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+		$('#auctionform').ajaxSubmit(options);
+	}
+
+	$.extend($.fn.validatebox.defaults.rules, {
+		maxnum : {
+			validator : function(value, param) {
+				return value < param[0];
+			},
+			message : '最大数字为100'
+		}
+	});
+	function getNowFormatDate() 
+	{ 
+	var day = new Date(); 
+	var Year = 0; 
+	var Month = 0; 
+	var Day = 0; 
+	var CurrentDate = ""; 
+	//初始化时间 
+	//Year= day.getYear();//有火狐下2008年显示108的bug 
+	Year= day.getFullYear();//ie火狐下都可以 
+	Month= day.getMonth()+1; 
+	Day = day.getDate(); 
+	//Hour = day.getHours(); 
+	// Minute = day.getMinutes(); 
+	// Second = day.getSeconds(); 
+	CurrentDate += Year + "-"; 
+	if (Month >= 10 ) 
+	{ 
+	CurrentDate += Month + "-"; 
+	} 
+	else 
+	{ 
+	CurrentDate += "0" + Month + "-"; 
+	} 
+	if (Day >= 10 ) 
+	{ 
+	CurrentDate += Day ; 
+	} 
+	else 
+	{ 
+	CurrentDate += "0" + Day ; 
+	} 
+	return CurrentDate; 
+	} 
+</script>
+<#include '/admin/footer.html' >

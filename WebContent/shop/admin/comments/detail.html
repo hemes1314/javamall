@@ -1,0 +1,147 @@
+<#include '/admin/header.html' > <#assign dateformat=
+"com.enation.framework.directive.DateformateDirective"?new()>
+<script type="text/javascript" src="js/Comments.js"></script>
+
+<script type="text/javascript">
+
+$(function(){
+	
+$("#comments_commit").click(function(){
+	var comment_id=$(this).attr("comment_id");
+	if( $.trim( $("#recomment").val())=='' ){alert("请输入回复内容"); return false;}
+	$("#comments_commit").attr("disabled",true); 
+	$.Loading.show('正在回复留言，请稍侯...');
+	var options = { 
+		url : "comments!add.do?ajax=yes&commentId="+comment_id,
+		type : "POST",
+		dataType : 'json',
+		success : function(date) {
+			$.Loading.hide();				
+			if(date.result==1){
+				$("#comments_commit").attr("disabled",false); 
+				$("#commentscontent").html("");
+				location.reload();
+	 		}else{
+		 		alert(result.message);
+		 		$("#comments_commit").attr("disabled",false); 
+		 	}
+		},
+		error : function(e) {
+			$.Loading.hide();
+			alert("出现错误 ，请重试");
+			$("#comments_commit").attr("disabled",false); 
+		}
+	};
+	$('#addcomment').ajaxSubmit(options);	
+});
+
+
+$("#chide").click(function(){
+	var comment_id = $(this).attr("comment_id");
+	$.ajax({
+		url:'comments!hide.do?ajax=yes&comment_id='+comment_id,
+		dataType:'json',
+		success:function(result){
+			if(result.result==0){
+				alert("操作成功");
+				parent.ShortMsg.checkNewMsg();
+				location.reload();
+			}
+			
+		}
+	});
+});
+
+
+$("#cshow").click(function(){
+	var comment_id = $(this).attr("comment_id");
+	$.ajax({
+		url:'comments!show.do?ajax=yes&commentId='+comment_id,
+		dataType:'json',
+		success:function(result){
+			if(result.result==0){
+				alert("操作成功");
+				parent.ShortMsg.checkNewMsg();
+				location.reload();
+			}
+		}
+	});
+});
+
+$(".deleteLink").click(function(){
+	var comment_id = $(this).attr("comment_id");
+	$.ajax({
+		url:'comments!deletealone.do?commentId='+comment_id,
+		dataType:'html',
+		success:function(result){
+			parent.ShortMsg.checkNewMsg();
+				location.reload();
+		}
+	});
+});
+});
+</script>
+
+<div class="main">
+	<div class="shadowBoxWhite  whiteBox">
+		<div style="padding: 10px 10px 10px 10px">
+			<table>
+				<tr>
+					<td>
+						<h3>评论人： <#if member??>${member.uname}<#else>游客</#if></h3>
+						<h3>发表时间：[<@dateformat time='${memberComment.dateline}'
+							pattern='yyyy-MM-dd'/>]</h3>
+						<h3>当前状态： <#if memberComment.status == 0>未审核</#if> <#if
+							memberComment.status == 1>审核通过</#if> <#if memberComment.status ==
+							2>审核拒绝</#if></h3>
+						<h3>
+							<#if memberComment.status == 0> <a href="javascript:;" id="chide"
+								comment_id="${memberComment.comment_id }"
+								class="easyui-linkbutton">拒绝</a> <a href="javascript:;"
+								id="cshow" comment_id="${memberComment.comment_id }"
+								class="easyui-linkbutton">通过</a> </#if> </span>
+						</h3>
+						
+						<br />
+						<h3>咨询问题:</h3>
+						<div class="division" style="border:1px solid #BEBEBE;">
+							&nbsp;&nbsp;${memberComment.content } <#if memberComment.img?? &&
+							memberComment.img!=''> <br /> <a
+								href="${memberComment.imgPath!''}" target="_blank"><img
+								src="${memberComment.imgPath!''}" width="500" /> </a> <#else>
+							</#if>
+						</div> <#if memberComment.replystatus==0 >
+						<br/>
+						<div class="division">
+							<form method="post" action="comments!add.do" class="validate"
+								id="addcomment">
+								<table>
+									<tr>
+										<th><input type="hidden" name="comment_id"
+											value="${memberComment.comment_id }" />
+											<h3>回复用户评论：</h3> <textarea rows="7" cols="70" id="recomment"
+												name="reply" style="border: solid #069 1px;"
+												id="commentscontent"></textarea></th>
+									</tr>
+								</table>
+								<div class="submitlist" align="center">
+									<table>
+										<tr>
+											<td><a href="javascript:;" comment_id="${memberComment.comment_id }" id="comments_commit">回复</a></td>
+										</tr>
+									</table>
+								</div>
+							</form>
+						</div> </#if> <#if memberComment.replystatus==1 >
+						<div class="tableform">
+							<h3>管理员于[<@dateformat time='${memberComment.replytime}'
+								pattern='yyyy-MM-dd'/>]回复：</h3>
+							<div class="division">${memberComment.reply}</div>
+						</div> </#if></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<#include '/admin/footer.html' >

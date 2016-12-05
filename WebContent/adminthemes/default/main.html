@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>${site.title!'' }</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="image/x-icon" href="${site.icofile!''}" rel="icon" />
+<link type="image/x-icon" href="${site.icofile!''}" rel="bookmark" />
+<script type="text/javascript" src="backendUi!menuJson.do"></script>
+
+<script type="text/javascript" src="${staticserver }/js/common/common.js"></script>
+<script type="text/javascript" src="${staticserver }/js/admin/jquery.timers-1.2.js"></script>
+<script type="text/javascript" src="${staticserver }/js/admin/short-msg.js"></script>
+<script type="text/javascript" src="${staticserver }/js/admin/jquery.loading.js"></script>
+<link href="../adminthemes/default/css/style.css" rel="stylesheet" type="text/css" />
+<link href="../adminthemes/default/css/global.css" rel="stylesheet" type="text/css" />
+<link href="../adminthemes/default/css/grid.css" rel="stylesheet" type="text/css" />
+<link href="../adminthemes/default/css/input.css" rel="stylesheet" type="text/css" />
+<link href="../adminthemes/default/css/validate.css" rel="stylesheet" type="text/css" />
+<link href="../adminthemes/default/css/dialog.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="../adminthemes/default/js/index.js"></script>
+
+<script>
+var referer = undefined;
+<#if referer?exists >
+referere='${referer}';
+</#if>
+</script> 
+
+</head>
+<body>
+	<div id="head">
+		<div class="logo"><a href="#"><img src="${site.bklogofile}" style="width:100px"/></a><span class="version">v${version!''}</span></div>
+		<div id="short_msg"  >
+			您好${user.username }, <span>您没有新短消息</span>
+			 <div class="msglist">
+			 	 <ul></ul>
+			 </div>
+		</div>
+		<div class="top">
+			
+			<div class="sysmenu">
+				
+				<ul><!-- li><a href='javascript:;' id='check_new_btn'>检查更新</a></li
+					<li><a href='javascript:;' id='cache_btn'></a></li>-->
+					<li><a href='javascript:;' id='logout_btn'>退出</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="appmenu">
+			<ul>
+			</ul>
+
+			<div class="desktop"><a href="../core/admin/index.do">桌面</a></div>
+
+		</div>
+	</div>
+	<div id="leftMenus" >
+		<dl></dl>	
+		
+	</div>
+	<div id="right_content" ></div>
+</body>
+</html>

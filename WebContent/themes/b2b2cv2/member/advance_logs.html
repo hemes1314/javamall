@@ -1,0 +1,93 @@
+<#assign  title="充值记录" />
+<#include 'member_header.html' />
+
+<#assign memberAdvanceLogTag= newTag("memberAdvanceLogTag") >          
+<#assign advanceLogPage = memberAdvanceLogTag()>	
+<#assign memberInfoTag = newTag("memberInfoTag") >             
+<#assign member = memberInfoTag()>
+<div class="member_center">
+	<div class="address">
+		<ul>
+			<li class="selected"><a href="advance_logs.html"><span>收支明细</span></a></li>
+		</ul>
+		<!--<a href="javascript:;" class="add_address topup"><span>充值</span></a>-->
+	</div>
+	<div class="alert_address" style="text-align:center">
+		<b>现金余额：</b>
+		<span>${member.advance?string('currency')}</span>
+		<!-- &nbsp;&nbsp;&nbsp;&nbsp;
+		<b>虚拟余额：</b>
+		<span>${member.virtual?string('currency')}</span> -->
+	</div>
+	<div class="address_list">
+	<#if advanceLogPage.totalCount gt 0 >
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th>交易时间</th>
+					<th>业务摘要</th>
+					<th style="text-align:right">存入</th>
+					<th style="text-align:right">支出</th>
+					<th style="text-align:right">现金余额</th>
+					<!--<th style="text-align:right">存入</th>
+					<th style="text-align:right">支出</th>
+					<th style="text-align:right">虚拟余额</th> -->
+					<!--th>支付方式</th-->
+					<!--th>订单号</th-->
+					<th>备注</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list advanceLogPage.logList as log>
+				<tr>
+					<td><@dateformat time="${log.mtime?c}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+					<td>${log.memo!''}</td>
+					<td style="text-align:right;color:#59c"><#if log.import_advance==0>-<#else>${log.import_advance?string('currency')}</#if></td>
+					<td style="text-align:right;color:#59c"><#if log.export_advance==0>-<#else>${log.export_advance?string('currency')}</#if></td>
+					<td style="text-align:right;color:#59c">${log.member_advance?string('currency')}</td>
+					
+					<!--<td style="text-align:right;color:#c93"><#if log.import_virtual==0>-<#else>${log.import_virtual?string('currency')}</#if></td>
+					<td style="text-align:right;color:#c93"><#if log.export_virtual==0>-<#else>${log.export_virtual?string('currency')}</#if></td>
+					<td style="text-align:right;color:#c93">${log.member_virtual?string('currency')}</td>-->
+					<!--td>${log.paymethod!''}</td-->
+					<!--td>${log.order_id!''}</td-->
+					<td>${log.message!''}</td>					
+				</tr>
+				</#list>
+			</tbody>	
+		</table>
+	<#else>
+		<div class="empty" >尚无充值记录</div>
+	</#if>
+		<@pager pageno="${advanceLogPage.pageNo}" pagesize="${advanceLogPage.pageSize}" totalcount="${advanceLogPage.totalCount}" />
+	</div>
+	<!--添加会员地址。使用js load方法调用member/address_add.html页面  -->
+	<div class="topup-box" style="overflow:hidden;">
+	</div>
+	<!-- 修改会员地址 。使用js load方法调用member/address_edit.html页面 -->
+	<div class="withdraw-box" style="overflow:hidden;">
+	</div>
+	
+</div>
+
+
+
+
+
+<script>
+$(function(){
+	$(".topup").click(function(){
+		$(".topup-box").load("topup.html",function(){
+			$(".address_list").hide();
+			$(".withdraw-box").hide();
+			$(".grey_top").hide();
+			$(this).show();
+		});
+	});
+});		
+</script>
+	<!--会员中心首页右侧结束-->
+
+
+</div>
+<#include '../common/footer.html'/>

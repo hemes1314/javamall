@@ -1,0 +1,105 @@
+<#include '/store/store_header.html' />
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>
+<!--退货申请标签 -->
+<#assign storeSellBackTag=newTag("storeSellBackTag")>
+<#assign storeSellBack=storeSellBackTag("{'id': ${id} }")>
+<!-- 退货申请 -->
+<#assign sellBack=storeSellBack.sellBack>
+<!-- 退货订单 -->
+<#assign orderinfo=storeSellBack.orderInfo>
+<!-- 退货商品列表 -->
+<#assign goodsList=storeSellBack.goodsList>
+<style>
+.detail_goodslist table tbody tr td{
+	text-align:center;border-bottom:1px solid #e7e7e7;height: 40px;
+}
+</style>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			交易管理<span>></span>订单详细
+		</div>
+		<div class="store_right_main">
+			<div class="order_detail">
+				<div class="order_intro">
+					<h1>订单信息</h1>
+					<div class="detail_list">
+						<input type="hidden" value="${sellBack.id}" name="id"/>
+						<dl>
+                            <dt>退货单号：${sellBack.tradeno }</dt>
+                            <dt>关联订单：${orderinfo.sn }</dt>
+                            <!-- <dt>订单金额：${orderinfo.order_amount?string("currency")}</dt> -->
+                            <#assign zfPay = orderinfo.order_amount-orderinfo.bonus_pay>
+                            <dt>支付金额：${zfPay?string.currency!''}</dt>
+                            <dt>退&nbsp;&nbsp;货&nbsp;人：${orderinfo.ship_name }</dt>
+                            <dt>退货状态：
+                            <#if sellBack.tradestatus==2>
+                                已审核
+                            <#elseif sellBack.tradestatus==3>
+                                已完成
+                            <#elseif sellBack.tradestatus==4>
+                                已取消
+                            </#if>
+                            </dt>
+						</dl>
+					</div>
+				</div>
+				<div class="intro_staus">
+					<ul>
+						<li>申请时间：<@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></li>
+					 	<li>退货原因：${sellBack.remark!''}</li>
+					 	<#if sellBack.return_address??>
+					 	<li>退货地址：${sellBack.return_address!''}</li>
+					 	</#if>
+					 	<li>退款金额：${sellBack.return_price!''}元</li>
+					 	<#if sellBack.kddh??>
+					 	<li>快递单号：${sellBack.kddh!''}</li>
+					 	<li>物流公司：${sellBack.wlgs!''}</li>
+					 	</#if>
+		          		<li>审核备注：${sellBack.seller_remark!'' }</li>
+					</ul>
+				</div>
+			</div>
+			<div class="detail_goodslist">
+				<table cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th>商品名称</th>
+							<th>金额</th>
+							<th>购买数量</th>
+							<th>退货数量</th>
+						</tr>
+					</thead>
+					<tbody>
+		       			<#list goodsList as data>
+							<tr class="bd-line">				
+								<td>
+									${data.name }
+								</td>
+								<td>
+									${data.price?string.currency}
+								</td>
+								<td>
+									${data.num }
+								</td>
+								<td>${data.ship_num!0}</td>
+							</tr>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+	<script>
+		$(function(){
+				selectMenu(4);
+		})
+	</script>
+
+
+
+<#include '/common/footer.html'/>

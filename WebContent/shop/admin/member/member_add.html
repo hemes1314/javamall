@@ -1,0 +1,204 @@
+<#include '/admin/header.html' > 
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+
+<div class="main" style="background-color: white;">
+	<form id="addForm">
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<th>用户名：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					id="m_name" name="member.uname" maxlength="20" data-options="required:true"></input>
+				</td>
+				<th>密码：</th>
+				<td><input id="m_password" class="input_text easyui-validatebox" minlength="6" maxlength="21"
+					type="password" name="member.password" data-options="required:true,validType:'minLength[6]'"></input>
+				</td>
+			</tr>
+			<tr>
+				<th>姓名：</th>
+				<td><input class="input_text" type="text" name="member.name" maxlength="30" id="username"></input>
+				</td>
+				<th>性别：</th>
+				<td valign="middle"><select class="easyui-validatebox"
+					name="member.sex">
+						<option value="1">&nbsp;男&nbsp;</option>
+						<option value="0">&nbsp;女&nbsp;</option>
+				</select></td>
+			</tr>
+			<tr>
+				<th>出生日期：</th>
+				<td><input class="input_text easyui-datebox" name="birthday"
+					data-options="required:true" id="birthday" style="height: 28px;" />
+				</td>
+				<th>Email：</th>
+				<td><input class="input_text easyui-validatebox" type="text" name="member.email"
+					data-options="required:true,validType:'email'"></input>
+				</td>
+			</tr>
+			<tr>
+				<th>固定电话：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					id="name" validType="tel" name="member.tel"
+					data-options="required:false" maxlength="15"></input>
+				</td>
+				<th>移动电话：</th>
+				<td><input class="input_text easyui-validatebox" type="text"
+					id="mobilename" validType="mobile" name="member.mobile"
+					data-options="required:false"  onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="11"></input>
+				</td>
+			</tr>
+			<tr>
+				<th>会员等级：</th>
+				<td><select name="member.lv_id">
+						<option value="0">--请选择等级--</option> <#if lvlist??> <#list lvlist
+						as lv>
+						<option value="${lv.lv_id }">${lv.name }</option> </#list> </#if>
+				</select></input>
+				</td>
+			</tr>
+			<tr>
+				<th>地区：</th>
+				<td><@regionSelectDirective /></td>
+				<th>邮编：</th>
+				<td><input class="input_text" id="zip" name="member.zip" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength="6">
+				</td>
+			</tr>
+
+			<tr>
+				<th>地址：</th>
+				<td><input class="input_text" type="text" name="member.address" maxlength="61" id="member_add"></input>
+				</td>
+			</tr>
+
+			<tr>
+				<th>安全问题：</th>
+				<td><input class="input_text" type="text" id="member_question"
+					name="member.pw_question" data-options="required:true"
+					value="我的宠物名字是？"  maxlength="58"></input>
+				</td>
+				<th>回答：</th>
+				<td><input class="input_text" type="text" id="member_answer"
+					name="member.pw_answer" maxlength="58" data-options="required:true,validType:'maxLength[58]"></input></td>
+			</tr>
+		</table>
+	</form>
+	<div class="buttonWrap fixed">
+		<a id="searchAdvance" class="easyui-linkbutton" onclick="submitForm()"
+			href="javascript:;">保存</a>
+	</div>
+</div>
+<script>
+	function submitForm() {
+		
+		//用户名字数限制
+		if($("#m_name").val().length > 16){
+		  alert("用户名字数不能超过16位");
+		  return false; 	
+		}
+		
+		//密码数限制
+		if($("#m_password").val().length < 6 || $("#m_name").val().length > 20){
+		  alert("密码字数要求6-20位");
+		  return false; 	
+		}
+		
+		//判断手机号为空
+		 if($("#mobilename").val() == ""){
+			 alert("请填写手机号");
+			 return false;
+		 }
+		
+		//姓名中数字判断和字数限制
+		var str= $("#username").val();
+		if(str.match(/\d+/g)) {
+		    alert("姓名中有数字");
+		    return false;
+		}
+		
+		if(str.length > 20){
+		  alert("姓名超过最大字数20限制");
+		  return false; 	
+		}
+		
+		//安全问题字数限制
+		if($("#member_question").val().length > 20){
+		  alert("安全问题超出20个字数限制");
+		  return false; 	
+		}
+		
+		//安全问题回答字数限制
+		if($("#member_answer").val().length > 20){
+		  alert("回答超出20个字数限制");
+		  return false; 	
+		}
+		
+		//地址栏字数限制
+		if($("#member_add").val().length > 60){
+		  alert("地址超出60个字数限制");
+		  return false; 	
+		}
+
+		var formflag = $("#addForm").form().form('validate');
+		if($("#zip").val().length>0){
+			if($("#zip").val().length<6){
+				alert("请输入正确的邮编！");
+				return;
+			}
+		}
+		
+		var bir = $("input[name='birthday']").val();
+		var now = getNowFormatDate();
+		//alert(bir);
+		//alert(now);
+		if(bir > now)
+		{
+			alert("还未出生，不能注册");	
+			return false;
+		}
+		
+		if (formflag) {
+			$.Loading.show("正在添加......");
+			var options = {
+				url : "member!saveMember.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						newTab($("#m_name").val() + "—会员修改",
+								"${ctx}/shop/admin/member!detail.do?memberId="
+										+ result.id);
+						parent.CloseTabByTitle("会员添加");
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$("#addForm").ajaxSubmit(options);
+		}
+	}
+	
+	function getNowFormatDate() {
+	    var date = new Date();
+	    var seperator1 = "-";
+	    var seperator2 = ":";
+	    var month = date.getMonth() + 1;
+	    var strDate = date.getDate();
+	    if (month >= 1 && month <= 9) {
+	        month = "0" + month;
+	    }
+	    if (strDate >= 0 && strDate <= 9) {
+	        strDate = "0" + strDate;
+	    }
+	    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+	            + " " + date.getHours() + seperator2 + date.getMinutes()
+	            + seperator2 + date.getSeconds();
+	    return currentdate;
+	} 
+</script>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,44 @@
+<#include '/common/header.html' />
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2c/css/store_member.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member_store.css" />
+
+<div class="layout">
+	
+	<div class="right-content">
+		<div class="main">
+			<div class="wrap">
+				<div class="open-store">
+					<h1>欢迎来到JavaShop商城系统演示站商家中心</h1>
+						<#if storeMember.is_store==0>
+							<h3>您现在还没有店铺，无法对商家中心功能进行操作，您可以：</h3>
+							<div>
+								<em></em>
+								<dl>
+									<dt>
+										<a href="${ctx}/apply.html" class="" >马上开店</a>
+									</dt>
+									<dd>选择店铺等级并填写相关信息，即可开设您的店铺。</dd>
+								</dl>
+								<div class="clear"></div>
+							</div>
+						<#else>
+							<#if myStoreDetail.disabled==0>	
+								<p style="width:100%;height:30px;line-height:30px;margin-top:20px;font-weight:bold;font-size:16px;">您的申请正在审核中，请耐心等待...</p>
+							<#elseif myStoreDetail.disabled==2>
+								<p style="width:100%;height:30px;line-height:30px;margin-top:20px;font-weight:bold;font-size:16px;">店铺已经禁用，请联系管理员...</p>
+							<#elseif myStoreDetail.disabled==-1>
+								<p style="width:100%;height:30px;line-height:30px;margin-top:20px;font-weight:bold;font-size:16px;">抱歉，您的申请未通过.......</p>
+								<p style="width:100%;height:30px;line-height:30px;margin-top:20px;font-weight:bold;font-size:16px;"><a href="${ctx}/reApply.html">点击再次提交申请</a></p>
+							</#if>
+						</#if>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+<#include '/common/footer.html' />
+

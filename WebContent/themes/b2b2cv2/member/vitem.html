@@ -1,0 +1,88 @@
+<#assign title="我的虚拟物品" /> <#include 'member_header.html' />
+
+<!-- 获得会员虚拟物品列表标签 -->
+<#assign b2b2cMemberVitemListTag = newTag("b2b2cMemberVitemListTag")>
+<#assign vresult = b2b2cMemberVitemListTag()> 
+<#assign vlist = vresult.vlist>
+
+<#assign memberInfoTag = newTag("memberInfoTag") >             
+<#assign member = memberInfoTag()>
+
+<div class="member_center">
+	<div class="address">
+		<ul>
+			<li class="selected"><a href="vitem.html"><span>我的虚拟物品</span></a></li>
+		</ul>
+		<a href="javascript:;" class="add_address buy"><span>购买虚拟物品</span></a>
+	</div>
+	<div class="alert_address" style="text-align:center">
+		<b>现金余额：</b>
+		<span>${member.advance?string('currency')}</span>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<b>虚拟余额：</b>
+		<span>${member.virtual?string('currency')}</span>
+	</div>
+	<!-- 虚拟物品明细 -->
+	<div class="address_list">
+		<#if vlist?size gt 0 >
+		<table style="width: 100%" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="title">虚拟物品</th>
+				<th class="money">单价</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<#list vlist as vitem>
+			<tr>
+				<td>${vitem.type_name} x ${vitem.num}</td>
+				<td>${vitem.price?string('currency')}</td>
+				<td style="text-align:right"><button class="exchange" xid="${vitem.type_id}" xname="${vitem.type_name}" xnum="${vitem.num}">兑换</button></td>
+			</tr>
+			</#list>
+		</tbody>
+		</table>
+		<#else>
+		<div class="empty">您还没有虚拟物品</div>
+		</#if>
+	</div>
+	
+	<div class="buy-box" style="overflow:hidden;">
+	</div>
+</div>
+
+</div>
+
+<script>
+$(function(){
+	$(".buy").click(function(){
+		$(".buy-box").load("buy-vitem.html",function(){
+			$(".address_list").hide();
+			$(".grey_top").hide();
+			$(this).show();
+		});
+	});
+	
+	$('button.exchange').click(function() {
+		var xid = $(this).attr('xid');
+		var xname = $(this).attr('xname');
+		var xnum = parseInt($(this).attr('xnum'));
+		var num = window._prompt('请输入要兑换的'+xname+'数量(1-'+xnum+'):','1');
+		if (num == null) return;
+		num = parseInt(num);
+		if(isNaN(num)){
+			return;
+		}
+		if (num < 1 || num > xnum) {
+			$.alert('请输入正确的兑换数量');
+			return;
+		}
+		$.post('/api/b2b2c/exchangeVitemApi.do', {type_id:xid, num:num}, function() {
+			window.location.reload();
+		});
+	});
+});		
+</script>
+<#include '../common/footer.html'/>
+

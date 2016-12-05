@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+    
+    <!-- OpenApi调用相关 -->	
+ 	<bean id="openApiConfigManager" class="com.enation.app.shop.core.openapi.service.impl.OpenApiConfigManager" />
+ 	<bean id="wareOpenApiManager" class="com.enation.app.shop.core.openapi.service.impl.WareOpenApiManager" />
+ 	<bean id="shopOpenApiManager" class="com.enation.app.shop.core.openapi.service.impl.ShopOpenApiManager" />
+ 	<bean id="commentOpenApiManager" class="com.enation.app.shop.core.openapi.service.impl.CommentOpenApiManager" />
+
+	<bean id="shop" class="com.enation.app.shop.ShopApp"></bean>	
+	<bean id="goodsManager" class="com.enation.app.shop.core.service.impl.GoodsManager"  parent="baseSupport" />
+	<bean id="orderAllocationManager" class="com.enation.app.shop.core.service.impl.OrderAllocationManager"  parent="baseSupport" />
+	<!-- 商品分类管理 -->
+	<bean id="goodsCatManagerImpl" class="com.enation.app.shop.core.service.impl.GoodsCatManager"  parent="baseSupport"/>
+	
+	<!-- 商品分类缓存代理 -->
+	<bean id="goodsCatManager" class="com.enation.app.shop.core.service.impl.cache.GoodsCatCacheProxy"  >
+		<constructor-arg><ref bean="goodsCatManagerImpl"/></constructor-arg>
+	</bean>
+	
+	<bean id="goodsTypeManager" class="com.enation.app.shop.core.service.impl.GoodsTypeManager"  parent="baseSupport"  />
+	<bean id="brandManager" class="com.enation.app.shop.core.service.impl.BrandManager"   parent="baseSupport" />
+	<bean id="tagManager" class="com.enation.app.shop.core.service.impl.TagManager"  parent="baseSupport"  />
+	<bean id="cartManager" class="com.enation.app.shop.core.service.impl.CartManager"  parent="baseSupport" />
+	<bean id="orderReportManager" class="com.enation.app.shop.core.service.impl.OrderReportManager" parent="baseSupport"></bean>
+	<bean id="printTmplManager" class="com.enation.app.shop.core.service.impl.PrintTmplManager" parent="baseSupport"></bean>
+	
+	<!-- 营销推广相关bean -->
+ 	<bean id="promotionManager" class="com.enation.app.shop.core.service.impl.PromotionManager" parent="baseSupport"></bean>
+ 	<bean id="promotionActivityManager" class="com.enation.app.shop.core.service.impl.PromotionActivityManager" parent="baseSupport"></bean>
+ 	<bean id="giveGift" class="com.enation.app.shop.core.service.impl.promotion.GiveGiftMethod" parent="baseSupport"></bean>
+ 	<bean id="discount" class="com.enation.app.shop.core.service.impl.promotion.DiscountMethod" ></bean>
+ 	<bean id="reducePrice" class="com.enation.app.shop.core.service.impl.promotion.ReducePriceMethod" ></bean>
+ 	<bean id="timesPoint" class="com.enation.app.shop.core.service.impl.promotion.TimesPointMethod" ></bean>
+ 	<bean id="freeFreight" class="com.enation.app.shop.core.service.impl.promotion.FreeFreightMethod" ></bean>
+ 
+    <bean id="memberManager" class="com.enation.app.shop.core.service.impl.MemberManager"   parent="baseSupport"  />
+    
+    <!-- 会员和货物的评论关系表 -->
+    <bean id="memberOrderItemManager" class="com.enation.app.shop.core.service.impl.MemberOrderItemManager"  parent="baseSupport"  />
+    
+    <!-- 会员等级管理 -->
+    <bean id="memberLvManagerImpl" class="com.enation.app.shop.core.service.impl.MemberLvManager"  parent="baseSupport" />
+    
+    <!-- 会员等级缓存代理 -->
+	<bean id="memberLvManager" class="com.enation.app.shop.core.service.impl.cache.MemberLvCacheProxy"  >
+		<constructor-arg><ref bean="memberLvManagerImpl"/></constructor-arg>
+	</bean>
+    
+    <bean id="memberAddressManager" class="com.enation.app.shop.core.service.impl.MemberAddressManager"   parent="baseSupport" />
+    <bean id="dlyTypeManager" class="com.enation.app.shop.core.service.impl.DlyTypeManager"   parent="baseSupport" />
+      <bean id="dlyTypeAreaManager" class="com.enation.app.shop.core.service.impl.DlyTypeAreaManager"   parent="baseSupport" />
+    <bean id="areaManager" class="com.enation.app.shop.core.service.impl.AreaManager"  parent="baseSupport"  />
+    <bean id="logiManager" class="com.enation.app.shop.core.service.impl.LogiManager"   parent="baseSupport" />
+	<bean id="goodsComplexManager" class="com.enation.app.shop.core.service.impl.GoodsComplexManager"  parent="baseSupport" />
+	
+	<!--赠品 -->
+	<bean id="freeOfferManager" class="com.enation.app.shop.core.service.impl.FreeOfferManager"  parent="baseSupport" />
+	<bean id="freeOfferCategoryManager" class="com.enation.app.shop.core.service.impl.FreeOfferCategoryManager"  parent="baseSupport" />
+	
+	<!-- 新的会员评论 -->
+	<bean id="memberCommentManager" class="com.enation.app.shop.core.service.impl.MemberCommentManager" parent="baseSupport"></bean>
+	
+	
+    <bean id="productManager" class="com.enation.app.shop.core.service.impl.ProductManager" parent="baseSupport"></bean>
+ 	<bean id="memberPriceManager" class="com.enation.app.shop.core.service.impl.MemberPriceManager" parent="baseSupport"></bean>
+	<bean id="statisticsManager" class="com.enation.app.shop.core.service.impl.StatisticsManager" parent="baseSupport"></bean>
+	<bean id="rankManager" class="com.enation.app.shop.core.service.impl.RankManager" parent="baseSupport"></bean>
+	<bean id="memberOrderManager" class="com.enation.app.shop.core.service.impl.MemberOrderManager" parent="baseSupport"></bean>
+	<bean id="messageManager" class="com.enation.app.shop.core.service.impl.MessageManager" parent="baseSupport"></bean>
+	<bean id="gnotifyManager" class="com.enation.app.shop.core.service.impl.GnotifyManager" parent="baseSupport"></bean>
+	<bean id="pointHistoryManager" class="com.enation.app.shop.core.service.impl.PointHistoryManager" parent="baseSupport"></bean>
+   
+    <bean id="favoriteManager" class="com.enation.app.shop.core.service.impl.FavoriteManager" parent="baseSupport"></bean>
+    <bean id="welcomeInfoManager" class="com.enation.app.shop.core.service.impl.WelcomeInfoManager" parent="baseSupport"></bean>
+    <bean id="advanceLogsManager" class="com.enation.app.shop.core.service.impl.AdvanceLogsManager" parent="baseSupport"></bean>
+    <bean id="paymentManager" class="com.enation.app.shop.core.service.impl.PaymentManager" parent="baseSupport"></bean>
+    <bean id="orderManager" class="com.enation.app.shop.core.service.impl.OrderManager" parent="baseSupport"></bean>
+    
+    
+    <bean id="orderMetaManager" class="com.enation.app.shop.core.service.impl.OrderMetaManager" parent="baseSupport"></bean>
+    
+    <bean id="orderFlowManager" class="com.enation.app.shop.core.service.impl.OrderFlowManager" parent="baseSupport"></bean>
+    <bean id="articleManager" class="com.enation.app.shop.core.service.impl.ArticleManager" parent="baseSupport"></bean>
+    <bean id="articleCatManagerImpl" class="com.enation.app.shop.core.service.impl.ArticleCatManager" parent="baseSupport"></bean>
+    <bean id="articleCatManager" class="com.enation.app.shop.core.service.impl.cache.ArticleCatCacheProxy">
+    <constructor-arg><ref bean="articleCatManagerImpl"/></constructor-arg>
+    </bean>
+    <bean id="dlyCenterManager" class="com.enation.app.shop.core.service.impl.DlyCenterManager" parent="baseSupport"></bean>
+     
+
+
+    <bean id="memberPointManger" class="com.enation.app.shop.core.service.impl.MemberPointManger" parent="baseSupport"></bean>
+    <bean id="goodsSearchManager" class="com.enation.app.shop.core.service.impl.GoodsSearchManager" parent="baseSupport"></bean>
+ 
+	<!-- 限时抢购 -->
+	<bean id="limitBuyManager" class="com.enation.app.shop.core.service.impl.LimitBuyManager" parent="baseSupport"></bean>
+	
+	<!-- 商品库存管理 -->
+	<bean id="goodsStoreManager" class="com.enation.app.shop.core.service.impl.GoodsStoreManager" parent="baseSupport"></bean>
+	
+	<!-- 商品批量导入-->	
+ 	<bean id="goodsDataBatchManager" class="com.enation.app.shop.core.service.impl.batchimport.GoodsDataBatchManager" ></bean>
+ 	<!-- 商品名称导入器-->	
+ 	<bean id="goodsFieldImporter" class="com.enation.app.shop.core.service.impl.batchimport.GoodsFieldImporter" ></bean>
+ 	<!-- 商品品牌导入器-->
+ 	<bean id="goodsBrandImporter" class="com.enation.app.shop.core.service.impl.batchimport.GoodsBrandImporter" ></bean>
+ 	<!-- 商品属性导入器-->
+ 	<bean id="goodsPropImporter" class="com.enation.app.shop.core.service.impl.batchimport.GoodsPropImporter" ></bean>
+ 	<!-- 商品价格导入器-->
+ 	<bean id="goodsPriceImporter" class="com.enation.app.shop.core.service.impl.batchimport.GoodsPriceImporter" ></bean>
+ 	<!-- 商品图片读取器-->
+ 	<bean id="goodsImageReader" class="com.enation.app.shop.core.service.impl.batchimport.util.GoodsImageReader" ></bean> 
+ 	<!-- 商品图片导入器-->
+ 	<bean id="goodsImageImporter" class="com.enation.app.shop.core.service.impl.batchimport.GoodsImageImporter" ></bean> 
+ 	<!-- 商品描述读取器-->
+ 	<bean id="goodsDescReader" class="com.enation.app.shop.core.service.impl.batchimport.util.GoodsDescReader" ></bean> 
+ 	<!-- 商品描述导入器-->
+ 	<bean id="goodsDescImporter" class="com.enation.app.shop.core.service.impl.batchimport.GoodsDescImporter" ></bean> 	
+ 	<!-- 商品规格导入器-->
+ 	<bean id="goodsSpecImporter" class="com.enation.app.shop.core.service.impl.batchimport.GoodsSpecImporter" ></bean> 	
+ 	<!-- 首页显示管理 -->
+ 	<bean id="goodsTagManager" class="com.enation.app.shop.core.service.impl.GoodsTagManager" ></bean> 	
+ 	<!-- 仓库监控 -->
+ 	<bean id="depotMonitorManager" class="com.enation.app.shop.core.service.impl.DepotMonitorManager" ></bean> 
+ 	<!-- 库存日志 -->
+ 	<bean id="storeLogManager" class="com.enation.app.shop.core.service.impl.StoreLogManager" ></bean> 		
+	<bean id="warnTaskManager" class="com.enation.app.shop.core.service.impl.WarnTaskManager"></bean>
+	
+	<!-- 库房管理 -->
+	<bean id="depotManager" class="com.enation.app.shop.core.service.impl.DepotManager" parent="baseSupport"></bean>
+	
+	<!-- 库管员管理 -->
+	<bean id="depotUserManager" class="com.enation.app.shop.core.service.impl.DepotUserManager" parent="baseSupport"></bean>
+	 
+	<!-- 退货管理 -->
+	<bean id="sellBackManager" class="com.enation.app.shop.core.service.impl.SellBackManager" parent="baseSupport"></bean>
+	 	
+	<!-- 代发货订单 管理-->
+	<bean id="orderPrintManager" class="com.enation.app.shop.core.service.impl.OrderPrintManager"></bean>
+	<bean id="standardOrderPaySuccessProcessor" class="com.enation.app.shop.core.service.impl.StandardOrderPaySuccessProcessor"></bean>
+	<bean id="productStoreManager" class="com.enation.app.shop.core.service.impl.ProductStoreManager"></bean>
+	
+	<bean id="expressManager" class="com.enation.app.shop.core.service.impl.ExpressManager" parent="baseSupport"></bean>
+	
+	<!-- 促销活动管理-->
+	<bean id="activityManager" class="com.enation.app.shop.core.service.impl.ActivityManager" parent="baseSupport"></bean>
+    <!-- 约沫管理-->
+	<bean id="yuemoManager" class="com.enation.app.shop.core.service.impl.YuemoManager" parent="baseSupport"></bean>
+	<!-- 众筹管理-->
+	<bean id="cfManager" class="com.enation.app.shop.core.service.impl.CfManager" parent="baseSupport"></bean>
+	<!-- 众筹记录管理-->
+	<bean id="cfRecordManager" class="com.enation.app.shop.core.service.impl.CfRecordManager" parent="baseSupport"></bean>
+	<!-- 拍卖管理-->
+	<bean id="auctionManager" class="com.enation.app.shop.core.service.impl.AuctionManager" parent="baseSupport"></bean>
+	<!-- 拍卖记录管理-->
+	<bean id="auctionRecordManager" class="com.enation.app.shop.core.service.impl.AuctionRecordManager" parent="baseSupport"></bean>
+	<!-- 评酒师管理-->
+	<bean id="sommelierManager" class="com.enation.app.shop.core.service.impl.SommelierManager" parent="baseSupport"></bean>
+	<!-- 评酒师预约管理-->
+	<bean id="sommelierOrderManager" class="com.enation.app.shop.core.service.impl.SommelierOrderManager" parent="baseSupport"></bean>
+	<bean id="sommelierOrderTypeManager" class="com.enation.app.shop.core.service.impl.SommelierOrderTypeManager" parent="baseSupport"></bean>
+	<!-- 评酒师中酒评管理-->
+	<bean id="stastingNoteManager" class="com.enation.app.shop.core.service.impl.StastingNoteManager" parent="baseSupport"></bean>
+	<bean id="kuaidi100BackManager" class="com.enation.app.shop.core.service.impl.Kuaidi100BackManager" parent="baseSupport"></bean>
+	<!-- 虚拟商品管理-->
+	<bean id="virtualProductManager" class="com.enation.app.shop.core.service.impl.VirtualProductManager" parent="baseSupport"></bean>
+	<bean id="keySelectWinesManager" class="com.enation.app.shop.core.service.impl.KeySelectWinesManager" parent="baseSupport"></bean>
+	<!-- 礼品卡管理-->
+	<bean id="giftcardTypeManager" class="com.enation.app.shop.component.giftcard.service.impl.GiftcardTypeManager" parent="baseSupport"></bean>
+	<bean id="memberGiftcardManager" class="com.enation.app.shop.core.service.impl.MemberGiftcardManager" parent="baseSupport"></bean>
+	<bean id="memberVitemManager" class="com.enation.app.shop.core.service.impl.MemberVitemManager" parent="baseSupport"></bean>
+	<bean id="giftcardPaySuccessProcessor" class="com.enation.app.shop.component.giftcard.service.GiftcardPaySuccessProcessor"></bean>
+	<bean id="topupPaySuccessProcessor" class="com.enation.app.shop.core.service.TopupPaySuccessProcessor"></bean>
+	<bean id="cfPaySuccessProcessor" class="com.enation.app.shop.core.service.CfPaySuccessProcessor"></bean>
+	<bean id="memberCfManager" class="com.enation.app.shop.core.service.impl.MemberCfManager" parent="baseSupport"></bean>
+</beans>

@@ -1,0 +1,103 @@
+<#assign goodsCatListTag=newTag("goodsCatListTag") /> <#assign catList
+=goodsCatListTag() /> <#assign brandListTag=newTag("brandListTag") />
+<#assign brandList=brandListTag() />
+
+<div class="tableform">
+	<div class="division">
+		<select id="catid">
+			<option value="0">所有分类</option> <#assign children=catList /> <#assign
+			level=1 /> <#include 'select_children.html' />
+		</select> &nbsp;&nbsp;&nbsp;&nbsp; <select id="brandid">
+			<option value="">所有品牌</option> <#list brandList as brand>
+			<option value="${brand.brand_id}">${brand.name}</option> </#list>
+		</select> &nbsp;&nbsp;&nbsp;&nbsp; <input type="text" id="keyword"
+			class="input_text" /> <a class="easyui-linkbutton"
+			id="goodsSearchBtn" class="submitBtn">搜索</a>
+	</div>
+	<div class="division">
+		<table class="form-table" width="100%">
+			<tr>
+				<th style="text-align: center; width: 20%;">商品列表</th>
+				<th style="text-align: center; width: 10%;">操作</th>
+				<th style="text-align: center; width: 20px;">已选择的商品列表</th>
+				<th style="text-align: center; width: 50%"></th>
+			</tr>
+			<tr>
+				<td><select id="goodslist" size="15" style="width: 360px"
+					multiple="multiple">
+				</select>
+				</td>
+				<td style="text-align: center;">
+					
+					<p>
+						<a class="easyui-linkbutton" id="addGoodsBtn">&gt;</a>
+					</p>
+					<p>
+						<a class="easyui-linkbutton" id="delGoodsBtn">&lt;</a>
+					</p>
+				</td>
+				<td><select name="${fieldname}" id="goodsids" size="15"
+					style="width: 360px" multiple="multiple">
+				</select>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<script>
+$(function(){
+	$("#goodsSearchBtn").click(function(){
+		var keyword = $("#keyword").val();
+		var brandid =$("#brandid").val();
+		var catid =$("#catid").val();
+		
+		$.ajax({
+			url:"../../api/shop/goods!search.do",
+			type:"post",
+			data:"keyword="+keyword+"&brandid="+brandid+"&catid="+catid,
+			dataType:"json",
+			success:function(res){
+				if(res.result==1){
+					var goodsList =res.data;
+					var goodsListSel= $("#goodslist");
+					goodsListSel.empty();
+					for( i in goodsList){
+						var goods= goodsList[i];
+						goodsListSel.append("<option value='"+goods.goods_id+"'>"+goods.name+"</option>");	
+					}
+				}else{
+					alert(res.message);
+				}
+			},error:function(){
+				alert("商品搜索失败");
+			}
+		});
+	});
+
+	$("#addGoodsBtn").click(function(){
+		$("#goodslist option:selected").each(function(i,v){
+			var $this = $(this);
+			var goodsid  = $(this).val();
+			var exist=false;
+			$("#goodsids option").each(function(){
+				if( goodsid== $(this).val() ){
+					exist=true;
+					return ;
+				}
+			});
+			
+			if(!exist){
+				$(this).clone().appendTo($("#goodsids"))
+			}
+			
+		});
+	});
+	
+	$("#delGoodsBtn").click(function(){
+		$("#goodsids option:selected").each(function(i,v){
+			 $(this).remove();
+		});
+	});
+});
+</script>
+

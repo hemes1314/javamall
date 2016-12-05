@@ -1,0 +1,29 @@
+body,h1,h2,h3,h4,h5,h6,ul,li,ol,dl,dt,dd,form,p,div,span,img,table,tr,td,th{margin:0;padding:0;border:0;}
+
+
+img,input,select{vertical-align:middle;}
+html{height:100%;}
+ul{margin:0;padding:0;} 
+ul li{margin:0;padding:0;height:auto; } 
+ul li span{float:left; display: inline}  
+img,input,select{vertical-align:middle;}
+
+.main{width:auto;height:auto;}
+.header{width:100%;height:31px;background:#eeeeee;margin-left:auto;margin-right:auto;border-bottom:solid #dddddd 1px;text-align:center;}
+.headerey{width:1188px;height:170px;text-align:center;margin-left:auto;margin-right:auto;}
+.headersy{width:100%;height:399px;text-align:center;background-color:#2b2532;margin-left:auto;margin-right:auto;}
+.headerwy{width:100%;height:40px;text-align:center;background-color:#dddddd;margin-left:auto;margin-right:auto;}
+.jrsx{width:1188px;height:40px;text-align:center;background-color:#dddddd;margin-left:auto;margin-right:auto;}
+.jrsx ul li{list-style-type:none;float:left;}
+.bottomyy{width:100%;height:399px;text-align:center;background-color:#f1f1f1;margin-left:auto;margin-right:auto;border-top:solid #bbbbbb 1px;}
+.mainbody{width:100%;height:1320px;text-align:center;background-color:#f1f1f1;margin-left:auto;margin-right:auto;padding-top:16px;}
+.mainbodyyy{width:1188px;height:300px;margin-left:auto;margin-right:auto;padding-top:20px;}
+.ljqg{width:290px;height:300px;float:left;font-family:"微软雅黑","\5FAE\8F6F\96C5\9ED1","Mircosoft YaHei","黑体";background:#FFF;text-align:left;font-size:12px;}
+.ljqg ul li{list-style-type:none;line-height:22px;}
+.zhutu{width:600px;height:300px;float:left;margin-right:17px;}
+.xianliang{width:280px;height:300px;float:left;}
+.divLine{background-color :#f1f1f1;width:100%;height:1px;}
+.bottomey{width:100%;height:213px;background:url(../images/sgpde_60.gif);margin-left:auto;margin-right:auto;}
+.frbodr{color:"#060001";font-size:12px;width:290px;height:63px;}
+.buyer{width:90px;height:30px;text-align:left;padding-left:15px;}
+.mainbtn{width:90px;height:30px;text-align:left;}

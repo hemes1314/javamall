@@ -1,0 +1,82 @@
+/* 列表*/
+.right-content .white_box .box {top:0;}
+.right-content .white_box .box .top{background:url(../../images/hybs.jpg) no-repeat left top;height:8px;}
+.right-content .box{float:left;position: relative;z-index:1;top:-1px;}
+.right-content .box .body{ border-left: 1px solid #DBDBDB;   border-right: 1px solid #DBDBDB; width: 751px;} 
+.right-content .box .top{width:753px;height:8px;background:url(../../images/hylyt.jpg) no-repeat left top;overflow:hidden;}
+.right-content .box h1{background-color: #EEEEEE;  height: 30px; font-size:14px;  line-height: 30px;padding-left:20px}
+.right-content .box .bottom{width:753px;height:8px;background:url(../../images/hybx.jpg) no-repeat left top;}
+.right-content table th{height:31px;line-height:31px;border-bottom:1px solid #dbdbdb;text-align:center;font-weight: bold;} 
+.right-content table td{border-bottom:1px solid #dbdbdb;height:31px;line-height:31px;text-align:center;background-color:#fff}
+
+/*****************************************************************
+会员中心-订单详细
+*******************************************************************/
+.right-content .order_detail_wrapper{border-left: 1px solid #DBDBDB; border-right: 1px solid #DBDBDB;background-color: #FFFFFF; width: 751px;}
+.right-content .order_detail_wrapper hr{ background-color: #DBDBDB; border: 0 none;  height: 1px;  margin: 10px;}
+.right-content .order_detail_wrapper h1{color:#333;height:38px;line-height:38px;background-color:#fff;padding-left:15px; padding-left: 0;}
+/**
+标题
+**/
+.right-content .order_detail_wrapper .title{height:36px;background-color:#eee;border-bottom:1px solid #d2dcdb;overflow:hidden;}
+.right-content .order_detail_wrapper .title h1{background-color: transparent;float:left;display:inline;margin:0px 15px 0px 10px;height:36px;line-height:36px;font-size:14px;font-weight:normal;color:#6C6C6C;}
+.right-content .order_detail_wrapper .title h1 span{margin:0px 5px;font-weight:bold;color:#000;}
+.right-content .order_detail_wrapper .title h2{float:left;display:inline;height:36px;line-height:36px;font-size:14px;font-weight:normal;color:#6C6C6C;}
+.right-content .order_detail_wrapper .title h2 span{margin:0px 5px;font-weight:bold;color:#000;}
+.right-content .order_detail_wrapper .title .button{float:right;margin-right:10px;}
+/**
+订单日志
+**/
+.right-content .order_detail_wrapper .log ol{overflow:hidden;background-color:#fff;padding-left:67px;}
+.right-content .order_detail_wrapper .log ol li{float:left;display:inline;width:686px;line-height:25px;}
+/**
+收货人信息
+**/
+.right-content .order_detail_wrapper .receiver{overflow:hidden;padding:30px 0px;background-color:#fff;}
+.right-content .order_detail_wrapper .receiver table{border:0px none;}
+.right-content .order_detail_wrapper .receiver table tr th{padding:5px 0px;width:18%;background-color:#fff;text-align:right;border:0px none;vertical-align:top;}
+.right-content .order_detail_wrapper .receiver table tr td{padding:5px 0px 5px 26px;border:0px none;text-align:left;}
+.right-content .order_detail_wrapper .receiver table tr td ul{width:100%;}
+.right-content .order_detail_wrapper .receiver table tr td ul li{line-height:25px;height:25px;}
+.right-content .order_detail_wrapper .receiver table tr td ul li label{margin-right:10px;}
+/**
+*商品信息
+*/
+.right-content .order_detail_wrapper  .goodslist{padding: 0 10px;}
+.right-content .order_detail_wrapper  .goodslist td{  border-bottom: 1px dotted #DBDBDB;}
+/**
+价格信息
+**/
+.right-content .order_detail_wrapper .total{clear:both;overflow:hidden;background-color:#fff;}
+.right-content .order_detail_wrapper .total table{width:210px;float:right;border:0px none;}
+.right-content .order_detail_wrapper .total table tr th{height:25px;line-height:25px;border:0px none;width:100px;text-align:right;padding-right:10px;background-color:#fff;font-weight:normal;}
+.right-content .order_detail_wrapper .total table tr  td{text-align:left;border:0px none;height:25px;line-height:25px;}
+.right-content .order_detail_wrapper .total table tr .discount_green{color:#13BA2C}
+.right-content .order_detail_wrapper .total table tr .already_money{color:#dd5d3a;font-size:16px;}
+
+/****订单列表****/
+#search_wrapper{margin-top:10px}
+#search_wrapper table {margin-left:20px}
+#search_wrapper table tr td{border-bottom:0;background-color:transparent}
+
+#search_wrapper .tip .top{width:753px;height:8px;background:url(../images/wxtss.jpg) no-repeat left top;overflow:hidden;}
+#search_wrapper .tip .body{overflow:hidden;width:751px;background-color:#fffcf3;border-left:1px solid #dbdbdb;border-right:1px solid #dbdbdb;}
+#search_wrapper .tip .body img{width:93px;height:105px;float:left;display:inline;}
+#search_wrapper .tip .body div{float:left;width:658px;display:inline;}
+#search_wrapper .tip .body div h2{color:#ed7108;height:39px;line-height:39px;font-weight:bold;font-size:14px;}
+#search_wrapper .tip .body div p{line-height:24px;color:#7c7b76;}
+#search_wrapper .tip .bottom{width:753px;height:8px;background:url(../images/wxtsx.jpg) no-repeat left top;}
+
+/*************************************************************************
+选项卡及 box
+***************************************************************************/
+#order_wrapper .tab{width:751px;padding-left:22px;margin-top:9px;position: relative;z-index:2;}
+#order_wrapper .tab ul{width:751px;height:30px;}
+#order_wrapper .tab ul li{border-top:1px solid #dbdbdb;background-color:#fff;height:30px;line-height:30px;float:left;display:inline;margin-right:10px;text-align:center;}
+#order_wrapper .tab ul li a{margin-left:-5px;display:block;height:30px;padding-left:15px;background:url(../images/xxkz.jpg) no-repeat left top;text-decoration: none;}
+#order_wrapper .tab ul li a span{color:#000;margin-right:-5px;display:block;height:30px;padding-right:15px;background:url(../images/xxky.jpg) no-repeat right top;}
+#order_wrapper .tab ul li a:hover{height:29px;line-height:29px;background:url(../images/xxkxtz.jpg) no-repeat left top #eee;margin-top:1px;}
+#order_wrapper .tab ul li a span:hover{color:#000;height:29px;line-height:29px;background:url(../images/xxkxty.jpg) no-repeat right top #eee;margin-top:1px;}
+#order_wrapper .tab ul .selected a{height:29px;line-height:29px;background:url(../images/xxkxtz.jpg) no-repeat left top #eee;margin-top:1px;}
+#order_wrapper .tab ul .selected a span{color:#000;height:29px;line-height:29px;background:url(../images/xxkxty.jpg) no-repeat right top #eee;margin-top:1px;}
+

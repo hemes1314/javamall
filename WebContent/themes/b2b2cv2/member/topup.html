@@ -1,0 +1,108 @@
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/checkout.css" />
+
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag()>
+
+<div class="form_wrap">
+	<form id="topupForm"  class="validate"   action="/api/b2b2c/advanceTopupApi.do" method="post" target="_blank">
+		<table cellspacing="0" cellpadding="0" border="0" >
+			<tbody>
+				<tr>
+					<th>支付方式：</th>
+					<td>
+						<div class="list">
+							<ul>
+								<#list paymentList as payment  >
+									<#if payment.type!="cod" && payment.type!="alipayMobilePlugin">
+									<li>
+										<label>
+											<input type="radio"  autocomplete="off" value="${payment.id}"  payment_name="${payment.name}"  name="paymentId"  style="cursor: pointer;" <#if payment.type=='alipayDirectPlugin'>checked</#if>>${payment.name}
+										</label>
+									</li>
+									</#if>	
+								</#list>
+									<!-- <li>
+										<label>
+											<input type="radio"  autocomplete="off" value="9999"  payment_name="礼品卡充值"  name="paymentId"  style="cursor: pointer;">礼品卡充值
+										</label>
+									</li> -->
+							</ul>
+						</div>
+					</td>
+				</tr>
+				<tr class="money">
+					<th>充值金额：</th>
+					<td><input type="text" class="input_text" name="money" id="money" autocomplete="off"></td>
+				</tr>	
+				<tr class="giftcard" style="display:none">
+					<th>礼品卡号：</th>
+					<td><input type="text" class="input_text" name="card_sn" id="card_sn" autocomplete="off"></td>
+				</tr>
+				<tr class="password" style="display:none">
+					<th>礼品卡密码：</th>
+					<td><input type="password" class="input_text" name="card_pw" id="card_pw" autocomplete="new-password"></td>
+				</tr>	
+				<tr>
+					<th></th>	
+					<td>
+						<div class="btn"><input type="submit"  class="yellow_btn" value="去充值"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+
+<script>
+$('input[name=paymentId]').change(function() {
+	if ($(this).val() == 9999) {
+		$('tr.money').hide();
+		$('tr.giftcard').show();
+		$('tr.password').show();
+	} else {
+		$('tr.money').show();
+		$('tr.giftcard').hide();
+		$('tr.password').hide();
+	}
+});
+
+$("#topupForm").submit(function(){
+	var paymentId = $('input[name=paymentId]:checked').val();
+	if (paymentId == 9999) {
+		var card_sn = $.trim($('#card_sn').val());
+		if (card_sn.length < 14) {
+			alert("请确保输入正确的礼品卡卡号");
+			return false;
+		}
+		var card_pw = $.trim($('#card_pw').val());
+		if (card_pw.length == 0) {
+			alert("请输入礼品卡密码");
+			return false;
+		}
+		$("#topupForm").ajaxSubmit({
+			url:'${ctx}/api/b2b2c/advanceTopupApi.do',
+			dataType:"json",
+			success:function(json){
+				if(json.result==1){
+					alert("礼品卡充值成功");
+					window.location.href = "advance_logs.html";
+				}else{
+					alert(json.message);
+				}
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+		return false;
+	} else {
+		var money = parseFloat($("#money").val());
+		if(isNaN(money) || money <= 0 || money > 10000){
+			alert("请确保充值金额正确并小于1万元");
+			return false;
+		}
+	}
+	return true;
+});
+</script>		

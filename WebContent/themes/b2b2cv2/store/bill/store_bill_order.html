@@ -1,0 +1,71 @@
+<#assign storeBillOrderListTag=newTag("storeBillOrderListTag")>
+<#assign storeOrderList=storeBillOrderListTag()>
+<#assign orderItemListTag = newTag("orderItemListTag")>
+
+<!-- 订单列表详细 -->
+<table class="s_orderlist"  cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="s_orderlist_title">
+			<th >订单编号</th>
+			<th >下单时间</th>
+			<th >佣金</th>
+			<th >红包</th>
+			<th >订单金额(不含红包)</th>
+			<th >妥投时间</th>
+			<th >操作</th>
+		</tr>
+	</thead>
+ 	<#if storeOrderList.totalCount != 0 >
+ 		<tbody>
+ 		<#list storeOrderList.storeOrder.result as order>
+  		<tr>
+			<td>
+				${order.sn}
+			</td>
+			<td>
+				<@dateformat time="${order.create_time?c}" pattern="yyyy-MM-dd HH:mm"/>
+			</td>
+			<td>
+				<#assign orderItemList = orderItemListTag("{'orderid':${order.order_id}}") />
+				<#assign sum=0>
+				<#list orderItemList as item>
+						<#if item.commission??>
+						<#assign sum=sum +item.commission>
+						</#if>
+				</#list>
+				${sum?string.currency}
+			</td>
+
+			<td>
+				<#assign orderItemList = orderItemListTag("{'orderid':${order.order_id}}") />
+				<#assign sum_red_packets_proportion=0>
+					<#list orderItemList as item>
+						<#if item.commission??>
+							<#assign sum_red_packets_proportion=sum_red_packets_proportion +item.red_packets_proportion>
+						</#if>
+					</#list>
+					${sum_red_packets_proportion?string.currency}
+			</td>
+
+			<td>
+				${order.order_amount-order.bonus_pay}
+			</td>
+			<td>
+				<#if order.signing_time?c != '0'>
+					<@dateformat time="${order.signing_time?c}" pattern="yyyy-MM-dd HH:mm"/>
+				</#if>
+			</td>
+			<td>
+				<a href="${ctx}/store/order/order_detail.html?ordersn=${order.sn}&menu=transaction">查看</a>
+			</td>
+		</tr>
+		</#list>
+		<tr>
+		</tr>		  		
+		</tbody>
+	</table>
+	<@ajaxpager pageno="${storeOrderList.page!'1'}" pagesize="${storeOrderList.pageSize}" totalcount="${storeOrderList.totalCount}" />
+	<#else>	
+	</table>
+	<p class="no_blank">暂无符合条件的数据记录</p>
+</#if> 

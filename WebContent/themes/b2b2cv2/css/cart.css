@@ -1,0 +1,209 @@
+.flow_path{   
+	display: block;
+    height: 100px;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 1000px;
+}
+.flow_path .cart_logo{
+	 float: left;
+    height: 100px;
+    margin: 0;
+    width: 240px;
+}
+.flow_path .cart_logo img{
+	 max-height: 100px;
+    max-width: 240px;
+}
+.flow_path .flow_pathlist{
+	float: right;
+    font-size: 0;
+    height: 70px;
+    margin: 15px 0;
+    width: 640px;
+}
+.flow_path .flow_pathlist ul li{
+	display: inline-block;
+    font-size: 12px;
+    height: 70px;
+    letter-spacing: normal;
+    position: relative;
+    vertical-align: top;
+    width: 25%;
+    word-spacing: normal;
+    z-index: 1;
+    text-align:center;
+    width:180px;
+}
+.flow_path .flow_pathlist ul li i{
+	background: url("../images/clt.jpg") no-repeat -15px -4px;
+    height: 36px;
+    width: 36px;
+    display:block;
+    margin:0px 0px 0px 70px;
+}
+.flow_path .flow_pathlist ul li span{
+	width:180px;height:1px;display:block;background:#ccc;margin:5px 0px;
+}
+.flow_path .flow_pathlist ul li strong{display:block;position:absolute;width:5px;height:5px;border:1px solid #ccc;border-radius:5px;left:86px;;top:38px;background:#fff;}
+.flow_path .flow_pathlist ul li .process1{
+	background: url("../images/clt.jpg") no-repeat -15px -4px;
+}
+.flow_path .flow_pathlist ul li .process2{
+	background: url("../images/clt.jpg") no-repeat -56px -4px;
+}
+
+.flow_path .flow_pathlist ul li .process3{
+	background: url("../images/clt.jpg") no-repeat -102px -4px;
+}
+.flow_path .flow_pathlist ul .selected .process1{
+	background: url("../images/clt.jpg") no-repeat -10px -43px;
+}
+.flow_path .flow_pathlist ul .selected .process2{
+	background: url("../images/clt.jpg") no-repeat -53px -43px;
+}
+.flow_path .flow_pathlist ul .selected .process3{
+	background: url("../images/clt.jpg") no-repeat -101px -43px;
+}
+.flow_path .flow_pathlist ul .selected span{background:#27a9e3;}
+.flow_path .flow_pathlist ul .selected p{color:#27a9e3;}
+.flow_path .flow_pathlist ul .selected strong{ background-color: #27a9e3;border-color: #27a9e3;box-shadow: 0 0 0 2px rgba(0, 153, 204, 0.15);}
+.cart_wrapper{margin: 0 auto;width: 1000px;}
+.cart_wrapper .cart_pointout{width:1000px;height:50px;padding:15px 0px;border-top:1px solid #f7f7f7;}
+.cart_wrapper .cart_pointout h1{color: #555;font: lighter 24px/30px arial,"microsoft yahei";}
+.cart_wrapper .cart_pointout h2{color: #aaa;font: 12px/20px arial,"microsoft yahei";}
+.cart_wrapper .goods_list{width:1000px;overflow:hidden;}
+.storelist{
+	  border-collapse: collapse;
+   	border-top:2px solid #aaa;border-right:1px solid #ddd;border-left:1px solid #ddd;
+    width: 100%;
+}
+.storelist thead tr th{
+	 background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    color: #666;
+    height: 20px;
+    line-height: 20px;
+    padding: 8px 0;
+    text-align: center;
+}
+.storelist tbody tr th{
+	 background-color: #daf0fe;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding: 8px;
+}
+.storelist tbody tr td{
+	border-bottom: 1px solid #ddd;
+    padding: 8px 0;
+    text-align: center;
+    background:#fffdee;
+}
+.storelist tbody tr  .cart_goodsname{font: 12px/20px arial,"microsoft yahei";text-align:left;}
+.storelist tbody tr  .cart_goodsname a{color:#333;}
+.storelist tbody tr .cart_quantity div span{padding:1px 6px;border:1px solid #ccc;background:#f9f9f9;cursor: pointer}
+.storelist tbody tr .cart_quantity div input{text-align:center;}
+/*促销图标样式*/
+.storelist .full-icon {position: relative; display: inline-block;vertical-align: middle; background: #e10414; border: 1px solid #e10414; color: #fff; padding: 1px 10px; height: 16px; line-height: 16px; margin: 0 10px 0 5px; font-family:"microsoft yahei";}
+.storelist .full-icon b {display: block; position: absolute; width: 5px; height: 6px; left: -1px; bottom: -5px; background: url(../images/cart-line-02.png) 0 0 no-repeat; overflow: hidden;}
+.storelist .line-circle {display: block; position: absolute; z-index: 2; top: 22px; left: -4px; height: 30px; width: 7px; background: url(../images/cart-line-02.png) 0 -17px no-repeat;}
+
+.total_wrapper{
+	background: none repeat scroll 0 0 #f9f9f9;
+    height: 30px;
+    padding: 10px 30px 10px 0px;
+    text-align: right;
+   	border-bottom:2px solid #aaa;border-right:1px solid #ddd;border-left:1px solid #ddd;
+   	font: 16px/32px "microsoft yahei",Arial;
+}
+.total_wrapper em{
+	color: #d93600;
+    font-size: 22px;
+    margin: 0 5px;
+    font-style:normal;
+}
+.button_wrapper{
+	 overflow: hidden;
+    padding: 20px 0;
+    width: 100%;
+}
+.button_wrapper .btn{float:right;diaply:inline;margin-left:10px;padding:10px;}
+.button_wrapper .btn i{width:20px;height:20px;background:url(../images/anniu2.png) no-repeat left top;display:block;float:left;margin-right:5px;}
+.button_wrapper .btn input{font: 14px/20px arial,"microsoft yahei";cursor:pointer;height: 20px;line-height:20px;margin:0px;padding:0px;float:left;display:inline;color:#fff;border:0px none;background:none; border:0;}
+
+.button_wrapper input.btn01{float:right; font:14px/20px arial,"microsoft yahei";cursor:pointer;display:inline;color:#fff;border:0; background:#49afcd url(../images/anniu01.png) no-repeat 15px center; margin-left:10px;padding:10px 15px 10px 35px;}
+
+.button_wrapper input.btn02{float:right; font:14px/20px arial,"microsoft yahei";cursor:pointer;display:inline;color:#fff;border:0; background:#fd6760 url(../images/anniu02.png) no-repeat 15px center; margin-left:10px;padding:10px 15px 10px 35px;}
+
+.button_wrapper input.btn03{float:right; font:14px/20px arial,"microsoft yahei";cursor:pointer;display:inline;color:#fff;border:0; background:#f60 url(../images/anniu03.png) no-repeat 15px center; margin-left:10px;padding:10px 15px 10px 35px;}
+
+.button_wrapper .btn1{background:#49afcd}
+.button_wrapper .btn2{background:#fd6760}
+.button_wrapper .btn3{background:#f60}
+.button_wrapper .btn .cleanbtn{background:url(../images/anniu2.png) no-repeat -23px 0px;}
+.button_wrapper .btn .returnbuybtn{background:url(../images/anniu2.png) no-repeat -47px 0px;}
+.button_wrapper .btn .checkoutbtn{background:url(../images/anniu2.png) no-repeat 0px 0px;}
+.shop_rec{
+	border: 1px solid #eee;
+    margin: 0 auto 20px;
+    width:998px;
+    overflow:hidden;
+}
+.shop_rec h1{
+	   border-bottom: 1px solid #eee;
+    color: #666;
+    font: bold 14px/20px "microsoft yahei";
+    padding: 8px 19px;
+}
+.shop_rec .shop_cargo{width:998px; height:auto; float:left; padding-top:15px;}
+.shop_rec .shop_cargo ul{width:990px;height:auto; float:left; padding:0 4px;}
+.shop_rec .shop_cargo ul li{width:198px;height:auto; float:left; padding-bottom:30px;}
+.shop_rec .shop_cargo ul li img{width:150px;height:150px;}
+.shop_rec .shop_cargo ul li h1{width:150px;height:45px;font-weight:normal;line-height:22px;color:#333;padding:0px 25px;border:0px none;text-align:left; overflow:hidden;}
+.shop_rec .shop_cargo ul li p{font-size: 14px;font-weight: 600;margin: 0 4px;color:#c00;margin:0px; padding:0 25px;}
+.cartno{
+    height: 300px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    width: 380px;
+    z-index: 1;
+    padding:50px 0px 20px 280px;
+    background:url(../images/cartno.jpg) no-repeat left 40px;
+    }
+.cartno h1{
+	    color: #777;
+    	font: lighter 22px/30px "microsoft yahei";
+    	width:380px;line-height:30px;margin:55px 0px 10px 0px;
+}
+.cartno a{width:100px;height:25px;line-height:25px;float:left;text-align:center;margin-right:10px;border:1px solid #dcdcdc;background:#f5f5f5;font-size:12px;}
+
+
+
+/********购物车游客对话框样式**************/
+.cart_tourist{width:350px;}
+.cart_tourist .cart_message{
+	   color: #333;
+    font: lighter 16px/20px "Microsoft Yahei";
+    margin: 0 0 10px;
+    text-align: center;
+    width: 100%;
+    height:25px;
+    line-height:25px;
+}
+.cart_tourist .button_wrapper{padding:0px;}
+.cart_tourist .tourist_btn{
+	 border: 0 none;
+    color: #fff;
+    cursor: pointer;
+    line-height: 30px;
+    margin-right: 20px;
+    padding: 0 30px;
+    background-color: #5bb75b;
+font-family: 微软雅黑;
+font-size:14px;
+}
+

@@ -1,0 +1,49 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueBlue"
+			data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="storeform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/store!store_listJson.do?disabled=2',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="auditdata">
+				<thead>
+					<tr>
+						<th  data-options="field:'store_id',checkbox:true,width:100"></th>
+				   	 	<th  data-options="field:'store_name',width:100">店铺名称</th>
+				   	 	<th  data-options="field:'member_name',width:100">会员名称</th>
+				   	 	<th  data-options="field:'store_region',width:100">所在地</th>
+				   	 	<th  data-options="field:'disabled',width:100">店铺状态</th>
+				   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+function formatAction (value,row,index){
+	var val="<a href='javascript:void;'class='edit' onclick='if(confirm(\"恢复店铺？\")){use("+row.store_id+");}' title='禁用店铺'></a>"
+	return val;
+}
+function use(storeId){
+	$("#storeform").ajaxSubmit({
+		url:"${ctx}/b2b2c/admin/store!useStore.do?storeId="+storeId,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				alert(data.message);
+				location.reload();
+			}
+			else{
+				alert(data.message);
+			}
+		}
+	});
+}
+</script>
+<#include '/admin/footer.html' >

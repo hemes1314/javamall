@@ -1,0 +1,278 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<!-- 引入幻灯片JS --> 
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.flexslider-min.js"></script>
+
+<!--[if lt IE 9]><script src="${ctx}/themes/b2b2c/js/html5.js"></script><![endif]-->
+<script type='text/javascript' src='${ctx}/themes/b2b2cv2/js/store_common.js'></script>
+<script type='text/javascript' src='${ctx}/themes/b2b2cv2/js/slider.js'></script>
+<!-- 绑定幻灯片事件 --> 
+<script type="text/javascript">
+$(window).load(function() {
+	$('.flexslider').flexslider();
+});
+</script>
+<!-- 右侧 -->
+<div class="store_goods_main">
+	<#assign storeSlideListTag= newTag("storeSlideListTag") > 
+	<#assign storeSlideList=storeSlideListTag("{'storeid':${store_id!0}}")!''>
+	<div class="flexslider">
+		<ul class="slides">
+			<#list storeSlideList as sl>
+				<#if sl.img??>
+				<li>
+					<a target="_blank" href="${sl.silde_url!''}"><@image src="${sl.img!'http://demo.javamall.com.cn:80/version4/statics/attachment/adv/1.jpg'}" /></a>
+				</li>
+				</#if>
+			</#list>
+			<#if storeSlideList?size==0>
+				<li>
+					<a><img src="http://demo.javamall.com.cn:80/version4/statics/attachment/adv/1.jpg"></a>
+				</li>
+			</#if>
+		</ul>
+	</div>
+
+	<#-- 创建标签商品标签 --> 
+	<#assign storeSlideListTag= newTag("storeSlideListTag") > 
+	<#-- 查询标签商品列表 --> 
+	<#assign storeSlideList=storeSlideListTag("{'storeid':${store_id!0}}")!''>
+
+	<div class="store_index_intro">
+		<div class="store_index_left index_edge">
+			<h1>${store.member_name}</h1>
+			<h2>
+				<span>认证信息：</span>
+				<#if store.name_auth==1 >
+					<img alt="身份已认证" title="身份已认证" src="${ctx}/themes/b2b2cv2/images/cert_autonym.gif">
+				<#else>
+					<img alt="身份未认证或认证失败" title="身份未认证或认证失败" src="${ctx}/themes/b2b2cv2/images/cert_autonym_no.gif">
+				</#if>
+				
+				<#if store.store_auth==1 >
+					<img alt="店铺已认证" title="店铺已认证" src="${ctx}/themes/b2b2cv2/images/cert_material.gif">	
+				<#else>
+					<img alt="尚未认证或认证失败" title="尚未认证或认证失败" src="${ctx}/themes/b2b2cv2/images/cert_material_no.gif">
+				</#if>
+			</h2>
+			<ul>
+				<li>创店时间：<@dateformat time='${store.create_time!0}' pattern='yyyy-MM-dd'/> </li>
+				<li>所&nbsp;在&nbsp;地：${store.store_province!''} ${store.store_city!''} ${store.store_region!''}</li>
+				<li><span>商品数量：${store.goods_num!0}件商品</span><span style="margin-left:20px;">店铺收藏：${store.store_collect!0}</span></li>
+			</ul>
+		</div>
+		<div class="store_logo">
+			<@image src="${store.store_logo!''}" title="${store.store_name}" class="pngFix" />
+		</div>
+		<div class="store_index_right index_edge">
+			<h1>动态评价</h1>
+			<h2><span style="width:310px;*width:290px;text-align:right;margin:0px;line-height:40px;">联系电话：${store.tel!''}</span></h2>
+			<ul>
+				<li>
+					<b style="float:left;margin:0px 10px 0px 60px;">描述相符：</b>
+					<span style="float:left;">
+					<#if store.store_desccredit==0>
+						<#list 1..5 as t>
+							<@image src="${ctx}/themes/b2b2cv2/images/star-on.png" alt="1" style="display: inline-block;" />
+						</#list>
+						<#else>
+							<#list 1..store.store_desccredit as t>
+								<@image src="${ctx}/themes/b2b2cv2/images/star-on.png" alt="1" style="display: inline-block;" />
+							</#list>
+					</#if>
+					</span>
+				</li>
+				<li>
+					<b style="float:left;margin:0px 10px 0px 60px;">服务态度：</b>
+					<span style="float:left;">
+					<#if store.store_desccredit==0>
+						<#list 1..5 as t>
+							<@image src="${ctx}/themes/b2b2cv2/images/star-on.png" alt="1" style="display: inline-block;" />
+						</#list>
+						<#else>
+							<#list 1..store.store_servicecredit as t>
+								<@image src="${ctx}/themes/b2b2cv2/images/star-on.png" alt="1" style="display: inline-block;" />
+							</#list>
+					</#if>
+					</span>
+				</li>
+				<li>
+					<b style="float:left;margin:0px 10px 0px 60px;">发货速度：</b>
+					<span style="float:left;">
+					<#if store.store_deliverycredit==0>
+						<#list 1..5 as t>
+							<@image src="${ctx}/themes/b2b2cv2/images/star-on.png" alt="1" style="display: inline-block;" />
+						</#list>
+						<#else>
+							<#list 1..store.store_deliverycredit as t>
+								<@image src="${ctx}/themes/b2b2cv2/images/star-on.png" alt="1" style="display: inline-block;" />
+							</#list>
+					</#if>
+					</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- 首页的工具 -->
+	<div class="store_tools">
+		<ul>
+			<!-- 搜索 -->
+			<li class="store_tools_s">
+				<div class="content">
+					<form id="" name="searchShop" method="get" action="#">
+						<input type="hidden" name="act" value="show_store" /> 
+						<input type="hidden" name="op" value="goods_all" /> 
+						<input type="hidden" name="id" value="4" />
+						<span>关键字：</span>
+						<input type="text" class="w90" name="goods_keyword" id="goods_keyword" value="${keyword!''}">
+						<span>价格：</span>
+						<input type="text" class="w30" name="s_price" id="s_price" value="${start_price!''}" >
+						<span>-</span>
+						<input type="text" class="w30" name="e_price" id="e_price" value="${end_price!''}" >
+						<a href="javascript:void(0);" onclick="searchGoods();">搜索</a>
+					</form>
+				</div>
+			</li>
+			<!-- 客服 -->
+			<li>
+				<a href="${ctx}/home.html?show_c=4&store_id=${store_id!0}" style="background:#84cfb0">查看本店其他商品</a>
+			</li>
+			<li>
+				<#if store.qq??>
+						<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=${store.qq!''}&amp;site=qq&amp;menu=yes" style="background:#ff798a">联系客服^_^</a>
+				<#else>
+						<a href="#" style="background:#ff798a">暂无客服</a>
+				</#if>
+			</li>
+			<!-- 收藏本店 -->
+			<li>
+				<a href="javascript:void(0);" onclick="collect_store(${store_id!0},this,'store_collect');" class="btn" style="background:#fab34b">
+				收藏(${store.store_collect!0})</a>
+			</li>
+			<!-- 查看其他商品 -->
+		</ul>
+	</div>
+</div>
+	<!-- 新品 -->
+	<div class="store_goods_top index_goods">
+		<div class="store_title">
+			<h1>新品推荐</h1>
+			<h2>NEW-GOODS</h2>
+			<h5><a href="${ctx}/home.html?show_c=4&store_id=${store_id!0}">More</a></h5>
+		</div>
+		<#-- 创建标签商品标签 --> 
+		<#assign storeTagsGoodsTag=newTag("storeTagsGoodsTag") > 
+		<#-- 查询标签商品列表 --> 
+		<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'new','storeid':${store_id!0},'num':9}")!''>
+		<ul>
+			<#if storeTagsGoods?size!=0>
+				<#list storeTagsGoods.list as st>
+					<li>
+						<a href="goods-${st.goods_id}.html" target="_blank" class="store_thumb">
+							<@image src="${st.small!''}"  alt="${st.name}" title="${st.name}" />
+							<div class="store_point" style="display:none"></div>
+						</a>
+						<h4><@substring	title="${st.name}" length="40" dot="..." /></h4>
+						<h3>RMB：<span>${st.price?string.currency!0.00}</span><i>已销售：${st.buy_num!0}件</i></h3>
+						<p><a href="goods-${st.goods_id}.html">立即购买</a></p>
+					</li>
+				</#list>
+			</#if>	
+		</ul>
+	</div>
+	<!-- 热卖商品 -->
+	<div class="store_goods_hot index_goods">
+		<div class="store_title">
+			<h1>热卖排行</h1>
+			<h2>BEST-SELLERS</h2>
+			<h5><a href="${ctx}/home.html?show_c=4&store_id=${store_id!0}">More</a></h5>
+		</div>
+		<div class="hot_goods_store">
+		<br>
+			<#-- 创建标签商品标签 --> 
+			<#assign storeTagsGoodsTag=newTag("storeTagsGoodsTag") > 
+			<#-- 查询标签商品列表 --> 
+			<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'hot','storeid':${store_id!0},'num':6}")!''>
+			<div class="header-content">
+				<div class="slider parallax-bg" id="slider"> 
+					<#if storeTagsGoods?size!=0>
+						<#list storeTagsGoods.list as st>
+							<section class="<#if st_index == 0>first</#if>"> 
+									<@image src="${st.small!''}" width="160" height="160" alt="${st.name}" title="${st.name}" />
+								<div class="text">
+									<h4 class="t-frame-element"><a href="goods-${st.goods_id}.html"><@substring	title="${st.name}" length="40" dot="..." /></a></h4>
+									<h3 class="t-frame-element"><a href="goods-${st.goods_id}.html">RMB：<span>${st.price?string.currency!0.00}</span><i>已销售：${st.buy_num!0}件</i></a></h3> 
+									<a href="goods-${st.goods_id}.html" target="_blank" class="store_buy_now t-frame-element"><i>立即购买</i><span>Buy-Now</span></a>
+								</div> 
+							</section>
+						</#list>
+					</#if>	
+				</div>
+				<a class="slider-prev" href="javascript: void(0)"></a> 
+				<a class="slider-next" href="javascript: void(0)"></a>
+			</div>	
+
+		</div>
+	</div>
+	<!-- 推荐商品 -->
+	<div class="index_goods store_goods_recommend">
+		<div class="store_title">
+			<h1>推荐商品</h1>
+			<h2>RECOMMENDS</h2>
+			<h5><a href="${ctx}/home.html?show_c=4&store_id=${store_id!0}">More</a></h5>
+		</div>
+		<#-- 创建标签商品标签 --> 
+		<#assign storeTagsGoodsTag=newTag("storeTagsGoodsTag") > 
+		<#-- 查询标签商品列表 --> 
+		<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'recommend','storeid':${store_id!0},'num':9}")!''>
+		<ul>
+			<#if storeTagsGoods?size!=0>
+				<#list storeTagsGoods.list as st>
+					<li>
+						<a href="goods-${st.goods_id}.html" target="_blank" class="store_thumb">
+							<@image src="${st.small!''}"  alt="${st.name}" title="${st.name}" />
+						</a>
+
+						<div class="goodslist_backgorund"><a href="goods-${st.goods_id}.html"></a></div>
+						<h4><a href="goods-${st.goods_id}.html"><@substring	title="${st.name}" length="40" dot="..." /></a></h4>
+						<h3><a href="goods-${st.goods_id}.html">RMB：<span>${st.price?string.currency!0.00}</span><i>已销售：${st.buy_num!0}件</i></a></h3>
+
+					</li>
+				</#list>
+			</#if>	
+		</ul>
+	</div>
+<script>
+	$(function(){
+		
+		$(".slider-nav").hide();
+		
+		$(".store_goods_top ul li .store_thumb").mouseover(function(){
+			$(".store_goods_top ul li .store_thumb .store_point").hide();
+			$(this).find(".store_point").show();
+		})
+		$(".store_goods_top ul li .store_thumb").mouseleave(function(){
+			$(".store_goods_top ul li .store_thumb .store_point").hide();
+		})
+		
+		$(".store_goods_recommend ul li").mouseover(function(){
+			$(".store_goods_recommend ul li").css("border","1px solid #dfdfdf");
+			$(this).css("border","1px solid #b22d00");
+		})
+		$(".store_goods_recommend ul li .store_thumb").mouseleave(function(){
+			$(".store_goods_recommend ul li").css("border","1px solid #dfdfdf");
+		})
+
+	})
+</script>
+<script>
+function searchGoods(){
+	var goods_keyword = $("input[name='goods_keyword']").val();
+	var start_price = $("input[name='s_price']").val();
+	var end_price = $("input[name='e_price']").val();
+	
+	window.location.href = "home.html?show_c=4&store_id=${store_id}&keyword="+goods_keyword+"&start_price="+start_price+"&end_price="+end_price;
+}
+</script>
+
+</aside>

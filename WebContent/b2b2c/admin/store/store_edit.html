@@ -1,0 +1,323 @@
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<div style="padding: 10px 0 10px 20px">
+			<form id="editForm" method="post" class="validate">
+				<table>
+					<tr>
+						<td>会员账号：</td>
+						<td><input class="input_text easyui-validatebox" type="text" id="member_name"
+							name="member_name" value="${store.member_name!''}" disabled="disabled" ></input>
+						</td>
+						<td style="padding-left: 30px;">身份证号：</td>
+						<td><input class="input_text easyui-validatebox" type="text"
+							name="id_number" data-options="required:true"
+							value="${store.id_number!''}"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>店铺名称：</td>
+						<td><input class="input_text easyui-validatebox" type="text"
+							data-options="required:true" name="store_name"
+							value="${store.store_name}"></input>
+						</td>
+
+						<td>分类:
+							<select name="store_type" data-options="required:true">
+								<option value="1" <#if store.store_type==1>selected</#if>>第三方店</option>
+								<option value="0" <#if store.store_type==0>selected</#if>>自营店</option>
+							</select>
+						</td>
+						<td>状态：
+							<#if store.disabled==-1>
+								未通过审核
+								<input type="hidden" name="disabled" value="-1"/>
+								<#elseif store.disabled==0>
+									待审核
+									<input type="hidden" name="disabled" value="0"/>
+									<#else>
+										<select name="disabled" data-options="required:true">
+											<option value="1" <#if store.disabled==1>selected</#if>>开启</option>
+											<option value="2" <#if store.disabled==2>selected</#if>>关闭</option>
+										</select>
+							</#if>
+						</td>
+
+
+
+					</tr>
+					<tr>
+						<td>所在地：</td>
+						<td width="250px;">
+							<@regionSelectDirective province_name='store_province' city_name='store_city' region_name='store_region' province_id="${store.store_provinceid!''}" city_id="${store.store_cityid!''}" region_id="${store.store_regionid!''}" />
+						</td>
+
+						<td style="padding-left: 30px;">详细地址：</td>
+						<td><input class="input_text easyui-validatebox" type="text" data-options="required:true"
+							name="attr" value="${store.attr!''}"></input></td>
+					</tr>
+					<tr>
+						<td>邮编：</td>
+						<td><input class="input_text easyui-validatebox" type="text" dataType="post_code" data-options="required:true"
+							name="zip" value="${store.zip!''}"></input></td>
+						<td style="padding-left: 30px;">联系电话：</td>
+						<td><input class="input_text easyui-validatebox" type="text" dataType="mobile" data-options="required:true"
+							name="tel" value="${store.tel!''}"></input></td>
+					</tr>
+					<tr>
+						
+					</tr>
+					<tr>
+						<td>店铺认证：</td>
+						<td>
+							<#if store.store_auth==1>通过&nbsp;&nbsp;<a target="_blank" href="${store.license_img!''}">查看图片</a></#if>
+							<#if store.store_auth==0>未申请</#if>
+							<#if store.store_auth==2>审核中</#if>
+							<input type="hidden" value="${store.store_auth!''}" name="store_auth"/> 
+						</td>
+						<td style="padding-left: 30px;">店主认证：</td>
+						<td> 
+							<#if store.name_auth==1>通过&nbsp;&nbsp;<a target="_blank" href="${store.id_img!''}">查看图片</a></#if>
+							<#if store.name_auth==0>未申请</#if>
+							<#if store.name_auth==2>审核中</#if>
+							<input type="hidden" value="${store.name_auth!''}" name="name_auth"/> 
+						</td>
+					</tr>
+					<!--<tr>-->
+						<!--<td>店铺佣金比例：</td>-->
+						<!--<td>-->
+							<input id="commission_3" class="easyui-numberbox input_text" data-options="required:true" value="${store.commission!'0'}" type="hidden" name="commission" onblur="commission_add()" maxlength="4" />
+						<!--</td>-->
+						<!--<td colspan="2"><div id="default_lvTip">如果输入10.平台佣金为订单价格的百分之10</div></td>-->
+                        <!--<script type="text/javascript">-->
+							<!--function commission_add()-->
+							<!--{-->
+								<!--if($("#commission_3").val().length > 3){-->
+									<!--alert("比例输入错误，请重新输入");-->
+									<!--$("#commission_3").val("");-->
+									<!--$("#commission_3").focus();-->
+									<!--return false;-->
+								<!--}-->
+							<!--}-->
+						<!--</script> -->
+					<!--</tr>-->
+
+					<tr>
+						<td>葡萄酒佣金比例：</td>
+						<td>
+							<input id="wine_commission" class="easyui-numberbox input_text" data-options="required:true" value="${store.wine_commission!'0'}" type="text" name="wine_commission" onblur="wine_commission_add()" maxlength="4" />
+						</td>
+						<td colspan="2"><div id="default_lvTip">如果输入10.平台佣金为订单价格的百分之10</div></td>
+						<script type="text/javascript">
+							function wine_commission_add()
+							{
+								if($("#wine_commission").val().length > 3){
+									alert("比例输入错误，请重新输入");
+									$("#wine_commission").val("");
+									$("#wine_commission").focus();
+									return false;
+								}
+							}
+						</script>
+					</tr>
+					<tr>
+						<td>白酒佣金比例：</td>
+						<td>
+							<input id="chinese_spirits_commission" class="easyui-numberbox input_text" data-options="required:true" value="${store.chinese_spirits_commission!'0'}" type="text" name="chinese_spirits_commission" onblur="chinese_spirits_commission_add()" maxlength="4" />
+						</td>
+						<td colspan="2"><div id="default_lvTip">如果输入10.平台佣金为订单价格的百分之10</div></td>
+						<script type="text/javascript">
+							function chinese_spirits_commission_add()
+							{
+								if($("#chinese_spirits_commission").val().length > 3){
+									alert("比例输入错误，请重新输入");
+									$("#chinese_spirits_commission").val("");
+									$("#chinese_spirits_commission").focus();
+									return false;
+								}
+							}
+						</script>
+					</tr>
+					<tr>
+						<td>洋酒佣金比例：</td>
+						<td>
+							<input id="foreign_spirits_commission" class="easyui-numberbox input_text" data-options="required:true" value="${store.foreign_spirits_commission!'0'}" type="text" name="foreign_spirits_commission" onblur="foreign_spirits_commission_add()" maxlength="4" />
+						</td>
+						<td colspan="2"><div id="default_lvTip">如果输入10.平台佣金为订单价格的百分之10</div></td>
+						<script type="text/javascript">
+							function foreign_spirits_commission_add()
+							{
+								if($("#foreign_spirits_commission").val().length > 3){
+									alert("比例输入错误，请重新输入");
+									$("#foreign_spirits_commission").val("");
+									$("#foreign_spirits_commission").focus();
+									return false;
+								}
+							}
+						</script>
+					</tr>
+
+
+					<tr>
+						<td>啤酒佣金比例：</td>
+						<td>
+							<input id="beer_commission" class="easyui-numberbox input_text" data-options="required:true" value="${store.beer_commission!'0'}" type="text" name="beer_commission" onblur="beer_commission_add()" maxlength="4" />
+						</td>
+						<td colspan="2"><div id="default_lvTip">如果输入10.平台佣金为订单价格的百分之10</div></td>
+						<script type="text/javascript">
+							function beer_commission_add()
+							{
+								if($("#beer_commission").val().length > 3){
+									alert("比例输入错误，请重新输入");
+									$("#beer_commission").val("");
+									$("#beer_commission").focus();
+									return false;
+								}
+							}
+						</script>
+					</tr>
+
+					<tr>
+						<td>黄酒/养生酒佣金比例：</td>
+						<td>
+							<input id="other_spirits_commission" class="easyui-numberbox input_text" data-options="required:true" value="${store.other_spirits_commission!'0'}" type="text" name="other_spirits_commission" onblur="other_spirits_commission_add()" maxlength="4" />
+						</td>
+						<td colspan="2"><div id="default_lvTip">如果输入10.平台佣金为订单价格的百分之10</div></td>
+						<script type="text/javascript">
+							function other_spirits_commission_add()
+							{
+								if($("#other_spirits_commission").val().length > 3){
+									alert("比例输入错误，请重新输入");
+									$("#other_spirits_commission").val("");
+									$("#other_spirits_commission").focus();
+									return false;
+								}
+							}
+						</script>
+					</tr>
+					
+					
+					<tr>
+						<td>酒周边佣金比例：</td>
+						<td>
+							<input id="around_commission" class="easyui-numberbox input_text" data-options="required:true" value="${store.around_commission!'0'}" type="text" name="around_commission" onblur="around_commission_add()" maxlength="4" />
+						</td>
+						<td colspan="2"><div id="default_lvTip">如果输入10.平台佣金为订单价格的百分之10</div></td>
+						<script type="text/javascript">
+							function around_commission_add()
+							{
+								if($("#around_commission").val().length > 3){
+									alert("比例输入错误，请重新输入");
+									$("#around_commission").val("");
+									$("#around_commission").focus();
+									return false;
+								}
+							}
+						</script>
+					</tr>
+
+
+					<tr>
+						<td>上传身份证照片：</td>
+						<td colspan="3">
+			        		<input type="hidden" name="id_img" id="id_img"/>
+			        		 <span
+								class="specImage"> <a href="javascript:;"
+									class="sysbtn upload" onclick="openImgDlg(getImgPath1);">上传图片</a> <span id="fileUploadMsg1">(请上传gif,jpg,bmp,png格式,2M以内的图片)</span>
+							<div style="width:100px; height:100px;">
+								<img id="img1" src="${store.id_img!'${ctx}/themes/b2b2cv2/images/default_goods_image_tiny.gif'}" style="width:100px; height:100px;cursor:pointer;" onclick="openImageWindow(this)">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>上传执照照片：</td>
+						<td colspan="3">
+			        		<input type="hidden" name="license_img" id="license_img"/>
+			        		 <span
+								class="specImage"> <a href="javascript:;"
+									class="sysbtn upload" onclick="openImgDlg(getImgPath2);">上传图片</a> <span id="fileUploadMsg2">(请上传gif,jpg,bmp,png格式,2M以内的图片)</span>
+							<div style="width:100px; height:100px;">
+								<img id="img2" src="${store.license_img!'${ctx}/themes/b2b2cv2/images/default_goods_image_tiny.gif'}" style="width:100px; height:100px;cursor:pointer;" onclick="openImageWindow(this)">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>银行开户名：</td>
+						<td colspan="3">
+							<input class=" easyui-validatebox input_text" data-options="required:true" type="text" name="bank_account_name" value="${store.bank_account_name!''}"/>
+						</td>
+					</tr>
+					<tr>
+						<td>公司银行账号：</td>
+						<td colspan="3">
+							<input class="easyui-numberbox input_text" data-options="required:true" type="text" id ="bank_account_number" name="bank_account_number" value="${store.bank_account_number!''}"/>
+						</td>
+					</tr>
+					<tr>
+						<td>开户银行支行名称：</td>
+						<td colspan="3">
+							<input class="easyui-validatebox input_text" data-options="required:true" type="text" name="bank_name" value="${store.bank_name!''}"/>
+						</td>
+					</tr>
+					<tr>
+						<td>支行联行号：</td>
+						<td colspan="3">
+							<input class="easyui-numberbox input_text" data-options="required:true" type="text" id ="bank_code" name="bank_code" value="${store.bank_code!''}"/>
+						</td>
+					</tr>
+					<tr>
+						<td>开户银行地址：</td>
+						<td colspan="3">
+						<#if store.bank_provinceid??>
+							<@regionSelectDirective province_id='${store.bank_provinceid}' city_id='${store.bank_cityid}' region_id='${store.bank_regionid}'  province_name='bank_province' city_name='bank_city' region_name='bank_region'/>
+						<#else>
+							<@regionSelectDirective  province_name='bank_province' city_name='bank_city' region_name='bank_region'/>
+						</#if>
+						</td>
+					</tr>
+				</table>
+				<input type="hidden" name="storeId" value="${store.store_id}" id = "storeId">
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- 
+<td style="padding-left: 30px;">推荐：</td>
+<td>
+	<select name="store_recommend">
+		<option value="1" <#if store.store_recommend==1>selected</#if>>是</option>
+		<option value="0" <#if store.store_recommend==0>selected</#if>>否</option>
+	</select>
+</td>
+ -->	
+ <!-- 
+						<td>所属等级：</td>
+						<td>
+							<select name="store_level" class="easyui-validatebox">
+								<#if level_list??> 
+									<#list level_list as lv>
+										<option value="${lv.level_id }" <#if store.store_level==lv.level_id>selected="selected"</#if> >${lv.level_name }</option> 
+									</#list> 
+								</#if>
+							</select>
+						</td>
+						<td style="padding-left: 30px;">有效期至：</td>
+						<td><input class="input_text easyui-datebox" type="text"
+							name="end_time"
+							value="<@dateformat time='${(store.end_time)!0}' pattern='yyyy-MM-dd'/>"
+							style="height: 28px;"></input></td>
+						 -->
+						 <!-- 下个版本开发店铺分类
+						<td style="padding-left: 30px;">所属分类：</td>
+						<td><input class="input_text easyui-combotree combo"
+							value="${store.store_type!''}" name="store_type"
+							data-options="url:'',method:'get',height:28">
+						</td>
+						 -->

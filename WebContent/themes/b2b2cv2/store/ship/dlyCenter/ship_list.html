@@ -1,0 +1,202 @@
+<#include '/common/header.html' />
+<#include '/store/center_header.html' />
+
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/member.css" />
+
+<div class="layout">
+	<#include '/store/left_menu.html' />
+	
+	<div class="right-content">
+		<div class="path">
+			<div>
+				<a href="${ctx}/store/business_center.html">商家中心</a> <span>&gt;</span> 
+				<a href="javascript:void(0);">发货设置  </a>
+			</div>
+		</div>
+		
+		<#-- 创建店铺发货地址标签 --> 
+		<#assign storeDlyCenterListTag= newTag("storeDlyCenterListTag") > 
+		<#-- 查询商品发货列表 --> 
+		<#assign storeDlyCenterList = storeDlyCenterListTag()!''>
+		
+		<div class="main">
+			<div class="wrap">
+				<div class="tabmenu">
+					<ul class="tab pngFix">
+						<li class="active">
+							<a href="javascript:void(0);">地址库</a>
+						</li>
+					</ul>
+					<a title="新增地址" class="ncu-btn3" href="javascript:void(0);" onclick="saveOrUpdate();" >新增地址</a>
+				</div>
+				<div></div>
+				
+				<table class="table-style">
+					<thead>
+						<tr>
+							<th class="w70">发货地址</th>
+							<th class="w90">联系人</th>
+							<th class="w150">所在地区</th>
+							<th class="tl">街道地址</th>
+							<th class="w90">邮编</th>
+							<th class="w150">电话/手机</th>
+							<th class="w90">操作</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<#list storeDlyCenterList as sl>
+						<tr class="bd-line">
+							<td>
+								<input type="radio" name="address" value="${sl.dly_center_id!''}" class="is_default" <#if sl.disabled=='true'> checked </#if> >默认
+							</td>
+							<td>${sl.uname!''}</td>
+							<td>${sl.province!''}—${sl.city!''}—${sl.region!''}</td>
+							<td>${sl.address!''}</td>
+							<td>${sl.zip!''}</td>
+							<td>${sl.cellphone!''}</td>
+							<td>
+								<p>
+									<a onclick="saveOrUpdate(${sl.dly_center_id!''});" dialog_title="编辑地址"  href="javascript:void(0);">编辑地址</a>
+								</p>
+								<p>
+									<a class="ncu-btn2 mt5" onclick="del(${sl.dly_center_id!''})"href="javascript:void(0)">删&nbsp;除</a>
+								</p>
+							</td>
+						</tr>
+						</#list>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="20">&nbsp;</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+
+var dialog;
+
+function saveOrUpdate(dly_id){
+	var map = {}; 				// 相当于Map map = new HashMap();
+	if (!dly_id) {
+		map["title"] = "添加地址";
+		map["html"] = "ship_add.html";
+		map["url"] = "${ctx}/api/b2b2c/dlyCenter!add.do";
+		map["form"] = "#add_form";
+	} else {
+		map["title"] = "修改地址";
+		map["html"] = "ship_edit.html?dly_id="+dly_id;
+		map["url"] = "${ctx}/api/b2b2c/dlyCenter!edit.do";
+		map["form"] = "#edit_form";
+	}
+	openDialog(map);
+}
+
+function openDialog(map){
+	dialog = $.dialog({
+		title : map["title"],
+		width : 500,
+		height : 240,
+		lock : true,
+		min : false,
+		max : false
+	});
+
+	$.ajax({
+		url : map["html"],
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([{
+				name : '保存',
+				callback : function() {
+					formSubmit(dialog,map);
+					return false;
+				}
+			}, {
+				name : '取消'
+			}]);
+		},
+		error : function() {
+			$.alert("出现错误,请重试！");
+		},
+		cache : false
+	});
+}
+
+function formSubmit(dialog,map){
+	var options = {
+			url : map["url"],
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					dialog.title('保存成功，1秒后关闭此窗口。').time(2);
+					dialog.reload();
+				}
+				if (result.result == 0) {
+					alert(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误，请重试");
+			}
+		};
+		$(map["form"]).ajaxSubmit(options);
+		return false;
+}
+
+
+function del(dlyid){
+	if(window.confirm('你确定要取消地址吗？')){
+		$.ajax({
+			url : "${ctx}/api/b2b2c/dlyCenter!delete.do?dly_center_id="+dlyid,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.reload();
+				}
+				if (result.result == 0) {
+					alert(result.message);
+				}
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			},
+			cache : false
+		});
+	}else{
+		return false;
+	}
+}
+
+$(function(){
+	$(".is_default").click(function(){
+		$.ajax({
+			url : "${ctx}/api/b2b2c/dlyCenter!siteDefault.do?dly_center_id="+$(this).val(),
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					location.reload();
+				}
+				if (result.result == 0) {
+					alert(result.message);
+				}
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			},
+			cache : false
+		});
+	});
+})
+</script>
+
+<#include '/common/footer.html' />

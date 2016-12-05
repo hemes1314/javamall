@@ -1,0 +1,75 @@
+<#include '../common/header.html' />
+<#assign memberIsLoginTag=newTag("storeMemberIsLoginTag")>
+<#assign isLogin=memberIsLoginTag()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/common.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2c/css/member_02.css" />
+
+<script>
+$(function(){
+	$("#logout").click(function(){
+		$.ajax({
+			url:"../api/shop/member!logout.do?ajax=yes",
+			dataType:"json",
+			cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+			success:function(result){
+				if(result.result==1){
+					$.alert(result.message);
+					location.href="${ctx}/index.html";
+				}else{
+					$.alert(result.message);
+				}	
+				$.Loading.hide();
+			},
+			error:function(){
+				$.Loading.hide();
+				$.alert("出错了:(");
+			}
+		});
+		return false;
+	})	
+})
+</script>	
+
+	<!--正文-->
+<!-- 获取会员基本信息 -->
+<#assign memberInfoTag=newTag("memberInfoTag")>
+<!-- 调用会员基本信息 并传递mustlogin的参数，如果没登录，直接跳转到index.html页 -->
+<#assign member=memberInfoTag("{'mustlogin':'yes'}")>
+
+<div id="memeber_wrapper">
+	<!--会员中心首页左侧-->
+	<div id="menu_wrapper">
+		<!--会员中心圆形头部-->
+		<div class="round_header"></div>
+		<!--会员中心圆形头部结束-->
+		<h1><a href="member.html">会员中心首页</a></h1>
+		<!--会员中心左侧会员缩略图-->
+		<div class="breviary">
+			<#if member?exists>
+				<#if member.face?exists && member.face != ''>
+				<img src="<@imgurl pic='${member.face}'/>"  alt="会员头像缩略图" />
+				<#else>
+				<@image src="${ctx}/themes/b2b2c/images/hutx.jpg" alt="会员头像缩略图" />
+				</#if>
+			<div>
+				<h2>${member.name!''}</h2>
+				<p>会员等级：${member.lvname!''}</p>
+			</div>
+		 </#if>
+		</div>
+		<!--会员中心左侧会员缩略图结束-->
+		<!--会员中心左侧列表-->
+		<div class="inner_wrapper">
+			<#include 'menu.html' />	 
+		</div>
+		<!--会员中心左侧列表结束-->
+		<!--会员中心圆形底部-->
+		<div class="round_bottom"></div>
+		<!--会员中心圆形底部结束-->
+	</div>	
+		<!--会员中心首页左侧结束-->
+		<!--会员中心首页右侧-->
+	<div id="content_wrapper">
+		<div class="crew_right">
+			<div class="rr_header"></div>
+			<div class="conInner">

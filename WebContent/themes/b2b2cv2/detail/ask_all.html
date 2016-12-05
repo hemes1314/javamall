@@ -1,0 +1,54 @@
+<!-- 获取商品评论标签 -->
+<#assign askListTag = newTag("commentListTag")>
+<!--调取"评论"标签，并传递参数,获取Page对象-->
+<#assign askPage = askListTag("{'goods_id':${goodsid},'type':2,'grade':0}")>
+<div  class="grade_list">
+	<div class="ask_list">
+		<#if askPage.totalCount != 0 >
+			<ul>
+				<#list askPage.result as comment>  
+					<li <#if !comment_has_next >class="last"</#if>>
+						<div class="problem_pic">
+							<span class="name">
+								商品咨询网友：
+							     <#if comment.member_id != 0>
+					            	${comment.uname!''}
+					            <#else>
+					            	匿名
+					            </#if>
+					        </span>
+							<#if comment.levelname?exists>
+         						<h2>
+         							<#if comment.levelname?exists>
+            							<span class="lv">
+           									(${comment.levelname!''})
+            							</span>
+         							</#if>
+         						</h2>
+            				</#if>
+            				<div class="problem_time">
+								<span><@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+							</div>
+						</div>
+						<div class="ask_problem">
+							<h2>商品咨询问题：</h2>
+							<p>${comment.content!''}</p>
+						</div>
+						<div class="ask_answer">
+							 <#if comment.replystatus==1>
+								<h2>商家回复问题：</h2>
+								<p>${comment.reply}</p>
+							</#if>
+						</div>
+					</li>
+				</#list>
+			</ul>
+		<#else>
+			 暂无评论，抢沙发，赢取更多积分。 
+		</#if>
+	</div>
+	<!-- 此处为锚点需要，点击到这里，否则浮动表填会挡住发表form -->
+	<div id="anchor">
+		<@ajaxpager pageno="${page!'1'}" pagesize="${askPage.pageSize}" totalcount="${askPage.totalCount}" />
+	</div>
+</div>

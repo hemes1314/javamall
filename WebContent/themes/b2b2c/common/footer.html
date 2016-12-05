@@ -1,0 +1,108 @@
+<div class="footer">
+	<div class="wrapper">
+	<!-- 
+	<div id="footer-top">
+		<ul>
+			<li class="one"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="two"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="three"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="four"><strong>正品行货<em>100%正品保证</em></strong></li>
+			<li class="five"><strong>正品行货<em>100%正品保证</em></strong></li>
+		</ul>
+	</div>
+	 -->
+	</div>
+	<!--帮助中心-->
+	  <div id="faq">
+	  <div class="wrapper">
+	    <ul>
+	        <li>
+		        <dl class="s1">
+		          	<dt>新手上路 </dt>
+		          	<#assign dataSearchTag=newTag("dataSearchTag") />
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":17}') />
+					<#list webPage.result as articlea>
+		          		<dd><i></i>
+		          			<a href="${ctx}/help.html?articleid=${articlea.id}" title="${articlea.title!''}">${articlea.title!''}</a>
+		          		</dd>
+					</#list>
+		       </dl>
+	      	</li>
+	        <li>
+	        	<dl class="s2">
+	          		<dt>支付</dt>
+	                <#assign dataSearchTag=newTag("dataSearchTag") />
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":19}') />
+					<#list webPage.result as articlea>
+		          		<dd><i></i>
+		          			<a href="${ctx}/help.html?articleid=${articlea.id}" title="${articlea.title!''}">${articlea.title!''}</a>
+		          		</dd>
+					</#list>
+	            </dl>
+	      </li>
+	      <li>
+	    		<dl class="s3">
+			        <dt>配送</dt>
+			      	<#assign dataSearchTag=newTag("dataSearchTag") />
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":22}') />
+					<#list webPage.result as articlea>
+		          		<dd><i></i>
+		          			<a href="${ctx}/help.html?articleid=${articlea.id}" title="${articlea.title!''}">${articlea.title!''}</a>
+		          		</dd>
+					</#list>
+	          	</dl>
+	      </li>
+	      <li>
+	        	<dl class="s4">
+	          		<dt>服务</dt>
+	                <#assign dataSearchTag=newTag("dataSearchTag") />
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":23}') />
+					<#list webPage.result as articlea>
+		          		<dd><i></i>
+		          			<a href="${ctx}/help.html?articleid=${articlea.id}" title="${articlea.title!''}">${articlea.title!''}</a>
+		          		</dd>
+					</#list>
+	           </dl>
+	      </li>
+	      <li>
+	        	<dl class="s5">
+	          		<dt>帮助</dt>
+	                <#assign dataSearchTag=newTag("dataSearchTag") />
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":24}') />
+					<#list webPage.result as articlea>
+		          		<dd><i></i>
+		          			<a href="${ctx}/help.html?articleid=${articlea.id}" title="${articlea.title!''}">${articlea.title!''}</a>
+		          		</dd>
+					</#list>
+		        </dl>
+	      </li>
+	      <li>
+	        	<dl class="s6">
+	          		<dt>关于我们 </dt>
+	          		<#assign dataSearchTag=newTag("dataSearchTag") />
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":25}') />
+					<#list webPage.result as articlea>
+		          		<dd><i></i>
+		          			<a href="${ctx}/help.html?articleid=${articlea.id}" title="${articlea.title!''}">${articlea.title!''}</a>
+		          		</dd>
+					</#list>
+	            </dl>
+	      </li>
+	      <div class="clear"></div>
+	    </ul>
+	  </div>
+	</div>
+	<!--底部版权，调用footer.php-->
+	<div id="footer" >
+		<div class="wrapper">
+		  <p><a href="javascript:void(0);">首页</a>
+             | <a  href="javascript:void(0);">招聘英才</a>
+             | <a  href="javascript:void(0);">广告合作</a>
+             | <a  href="javascript:void(0);">联系我们</a>
+             | <a  href="javascript:void(0);">关于我们</a>
+          </p>
+		</div>
+	</div>
+	</div>
+</body>
+</html>

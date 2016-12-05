@@ -1,0 +1,234 @@
+<#include '/common/header.html' /> 
+<#include '/store/center_header.html' />
+
+<!-- 店铺其他信息标签 test -->
+<#assign myStoreDetailOtherTag=newTag("myStoreDetailOtherTag")>
+<#assign myStoreDetailOther=myStoreDetailOtherTag()>
+<!-- 文章 -->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+<style>
+#storeLogo {
+	opacity:0;
+	position: absolute;
+	z-index: 10;
+	width:80px;
+	left: 0px;
+}
+</style>
+<div class="layout">
+	<#include 'left_menu.html'/>
+	<div class="right-content">
+		<div class="path">
+			<div>
+				<a href="business_center.html">商家中心</a> <span>></span> 账户概览
+			</div>
+		</div>
+		<div class="main">
+			<div id="home">
+				<div class="intro">
+					<div class="left">
+						<div class="store-pic">
+							<span class="thumb size80">
+								<@image src="${myStoreDetail.store_logo!''}" id="logo" width="80" height="80" />
+							</span>
+							<em>
+								<form id="storeLogoForm">
+									<a href="javascript:void(0);" id="editStoreLogo">更改店标</a>
+									<input type="file" id="storeLogo" name="image" />
+								</form>
+							</em>
+						</div>
+						<dl class="basic">
+							<dd class="member-name">${storeMember.name}</dd>
+							<dd class="cert">
+								<#if myStoreDetail.name_auth==1>
+									<@image src="${ctx}/themes/b2b2c/images/cert_autonym.gif" />
+									<#else>
+									<@image src="${ctx}/themes/b2b2c/images/cert_autonym_no.gif" alt="身份未认证或认证失败" title="身份未认证或认证失败" />
+								</#if>
+								<#if myStoreDetail.store_auth==1>
+									<@image src="${ctx}/themes/b2b2c/images/cert_material.gif" />
+									<#else>
+									<@image src="${ctx}/themes/b2b2c/images/cert_material_no.gif" alt="尚未认证或认证失败" title="尚未认证或认证失败" />
+								</#if>
+							</dd>
+							<dd class="credit">
+								<span> 卖家信用：${myStoreDetail.store_credit!0}</span>
+							</dd>
+						</dl>
+						<dl>
+							<dt>店铺名称：</dt>
+							<dd>
+								<a target="_blank" href="${ctx}/home.html?show_c=1&store_id=${storeMember.store_id!0}" >${myStoreDetail.store_name}</a>
+							</dd>
+							<dd>${myStoreDetail.store_province}&nbsp;${myStoreDetail.store_city}&nbsp;${myStoreDetail.store_region}</dd>
+						</dl>
+					</div>
+					<div class="right seller-rate">
+						<h2>店铺动态评分：</h2>
+						<dl>
+							<dt>描述相符：</dt>
+							<dd class="rate-star">
+								<em><i style="width: ${myStoreDetail.store_desccredit*20}%;"></i>
+								</em>
+							</dd>
+							<dd>${myStoreDetail.store_desccredit!'5'}分</dd>
+						</dl>
+						<dl>
+							<dt>服务态度：</dt>
+							<dd class="rate-star">
+								<em><i style="width: ${myStoreDetail.store_servicecredit*20}%;"></i>
+								</em>
+							</dd>
+							<dd>${myStoreDetail.store_servicecredit!'5'}分</dd>
+						</dl>
+						<dl>
+							<dt>发货速度：</dt>
+							<dd class="rate-star">
+								<em><i style="width: ${myStoreDetail.store_deliverycredit*20}%;"></i>
+								</em>
+							</dd>
+							<dd>${myStoreDetail.store_deliverycredit!'5'}分</dd>
+						</dl>
+					</div>
+				</div>
+				<div class="seller-cont">
+					<div class="l">
+						<div class="stroe-info container">
+							<div class="hd">
+								<div class="shop-level">
+									<span>店铺等级：系统默认</span> <span>有效期：不限制</span> <span>可传商品：不限制</span>
+									<span>可传图片：不限制</span>
+								</div>
+								<h2>店铺提示</h2>
+							</div>
+							<div class="content">
+								<dl class="focus">
+									<h2>您需要关注的店铺情况：</h2>
+									<dt>商品提示：</dt>
+									<dd>
+										<a href="${ctx}/goods/store_goods_list.html?market_enable=0">仓库待上架商品
+											(<strong id="tj_goods_storage">${myStoreDetailOther.notMarket!'0'}</strong>)</a>
+									</dd>
+									<dt>咨询提示：</dt>
+									<dd>
+										<a
+											href="${ctx}/store/StoreConsultList.html?replyStatus=0">买家的留言
+											(<strong id="tj_consult">${myStoreDetailOther.notReply!'0'}</strong>)</a>
+									</dd>
+								</dl>
+								<ul>
+									<li><a href="${ctx}/goods/store_goods_list.html?market_enable=1">出售中的商品
+											(<strong id="tj_goods_selling">${myStoreDetail.goods_num!'0'}</strong>)</a>
+									</li>
+								</ul>
+
+							</div>
+						</div>
+						<div class="business-info container">
+							<div class="hd">
+								<h2>交易提示</h2>
+							</div>
+							<div class="content">
+								<dl class="focus">
+									<h2>您需要立即处理的交易订单：</h2>
+									<dt>近期售出：</dt>
+									<dd>
+										<a href="${ctx}/order/StoreOrder.html?order_state=1">交易中的订单 
+											(<strong id="tj_progressing">${myStoreDetailOther.orderPay!'0'}</strong>)</a>
+									</dd>
+								</dl>
+								<ul>
+									<li><a
+										href="${ctx}/order/StoreOrder.html?order_state=0">待付款
+											(<strong id="tj_pending">${myStoreDetailOther.orderNotPay!'0'}</strong>)</a>
+									</li>
+									<li><a
+										href="${ctx}/order/StoreOrder.html?order_state=2">待发货
+											(<strong id="tj_shipped">${myStoreDetailOther.orderNotShip!'0'}</strong>)</a>
+									</li>
+									<li><a
+										href="${ctx}/order/StoreOrder.html?order_state=5">待收货
+											(<strong id="tj_shipping">${myStoreDetailOther.orderNotRog!'0'}</strong>)</a>
+									</li>
+								</ul>
+
+							</div>
+						</div>
+					</div>
+					<div class="r">
+						<div class="news container">
+							<div class="hd">
+								<h2>商城公告</h2>
+							</div>
+							<div class="content">
+								<ul>
+									<#assign webPage = dataSearchTag('{"modelid":2,"catid":26}') />
+									<#list webPage.result as articlea>
+										<li> 
+											<a target="_blank" title="${articlea.title!''}" href="${ctx}/help.html?articleid=${articlea.id}">
+												<#if (articlea.title?length gt 8) >
+													${articlea.title?substring(0,7)}...
+												<#else>
+													${articlea.title!''}&nbsp;
+												</#if>
+												(<@dateformat time="${articlea.add_time}" pattern="yyyy-MM-dd"/>)
+											</a> 
+										</li> 
+									</#list>
+								</ul>
+							</div>
+						</div>
+						<div class="contact container">
+							<div class="hd">
+								<h2>平台联系方式</h2>
+							</div>
+							<div class="content">
+								<ul>
+									<#assign webPage = dataSearchTag('{"modelid":3,"catid":28}') />
+									<#list webPage.result as articlea>
+										<li style="width: 100%;"> ${articlea.name!''}：${articlea.context!''}</li> 
+									</#list>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#storeLogo").change(function(){
+		var options = {
+			url : "${ctx}/api/base/upload-image.do?subFolder=storeLogo",
+			type : "POST",
+			dataType:"json",
+			success : function(data) {
+				$.ajax({
+			    	type:"POST",
+			    	url:"${ctx}/api/b2b2c/storeApi!editStoreLogo.do?logo="+data.fsimg ,
+			        dataType: "json",
+			        success: function(result){
+			        	if(result.result==1){
+							$("#logo").attr("src",data.img);
+			        	}else{
+			        		alert(result.message);
+			        	}
+			        },error:function(e){
+						alert("出现错误请重试");        	
+			        }
+			    });
+		 	},
+		 	error : function(e) {
+		 		alert('出现错误，请重试');
+			}
+		};
+		$("#storeLogoForm").ajaxSubmit(options);	
+	});
+})
+</script>
+<#include '/common/footer.html' />
+
+

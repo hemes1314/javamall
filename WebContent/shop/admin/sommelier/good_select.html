@@ -1,0 +1,158 @@
+<style>
+.close_css {color:#999; font-size:20px; width:20px; height:20px; line-height:20px; display:block; text-align:center; background:url(../images/close3.png) #f1f1f1; float:right; margin-top:15px; margin-right:10px;}
+.close_css:hover {background:#000; color:#FFF;}
+</style>
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+		
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		<table class="easyui-datagrid"  url="../admin/goods!listJson.do?market_enable=1" data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata" sortName="goods_id" sortOrder="desc">
+				<thead>
+				    <tr>
+                    <div class='buttonArea' style="width:500px; float:right; padding-top:10px;">
+                      <a href="javascript:void(0)" class="button b_fr" onclick="searchGoods()">搜索</a>
+                      <input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30"	placeholder="请输入模糊关键字" name="searchKeyWord"> 
+                    </div>
+                    <a href="#" id="close" class="close_css">×</a>
+                    </tr>
+					<tr>
+						<th data-options="field:'goods_id',width:200,sortable:'true'" >商品编号</th>
+						<th data-options="field:'name',width:500" formatter="formatName">商品名称</th>
+						<th data-options="field:'cat_name',sortable:'true',width:100">分类</th>
+						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">销售价格</th>
+						<th data-options="field:'market_enable',sortable:'true',width:50" formatter="market_enable">上架</th>
+						<th data-options="field:'brand_name',sortable:'true',width:200">品牌</th>
+						<th data-options="field:'last_modify',sortable:'true',width:200" formatter="formatTime">上架时间</th>
+						<th data-options="field:'id',align:'center',width:100" formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function formatName(value,row,index){
+	var val="<a href=\"../../goods-"+row.goods_id+".html\"target=\"_blank\">"+row.name+"</a>";
+	return val;
+}
+
+function market_enable(value,row,index){
+	var val;
+	if(value==1){val="是";}else if(value==0){val="否";}
+	return val;
+}
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+
+function formatTime(value,row,index){	
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+
+function formatAction(value,row,index){
+    goodname = row.name.replace(/\ +/g,"");
+    goodname = goodname.replace(/[ ]/g,"");
+    goodname = goodname.replace(/[\r\n]/g,"");
+    goodname=goodname.replace(/\r\n/g,"");
+    goodname=goodname.replace(/\n/g,"");
+    goodname=goodname.replace(/\'/g,"");
+    goodname=goodname.replace(/\"/g,"");
+    goodname=goodname.substring(0,11)
+    //alert(goodname);   
+	var val="<a title='选择' href='#' onclick=select('"+row.goods_id+"','"+goodname+"','"+row.price+"')>选择</a>";
+	return val;
+}
+
+function select(goodid,goodname,goodprice){
+  goodname = goodname.replace(/\ +/g,"");
+  goodname = goodname.replace(/[ ]/g,"");
+  goodname = goodname.replace(/[\r\n]/g,"");
+  
+  $(window.parent.$("#goodsn").val(goodid));  
+  $(window.parent.$("#auctiontitle").val(goodname)); 
+  $(window.parent.$("#auctionsprice").val(goodprice));
+  $(window.parent.$(".selectgoods").css('top','-1000px')); 
+}
+
+function del(){ 
+	var rows = $('#goodsdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择删除商品");
+		return;
+	}
+	if(!confirm("确认要将这些商品放入回收站吗？")){	
+		return ;
+	}
+	$.Loading.show("正在删除......");
+ 	var options = {
+			url : "goods!delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+		 			$('#goodsdata').datagrid("reload");      
+				}
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);	
+}
+	
+function append(){
+		location.href="goods!selectCat.do";
+}
+
+$(function(){
+	
+	$("#close").click(function(){
+		 $(window.parent.$(".selectgoods").css('top','-1000px')); 
+	})
+	
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+    $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    });
+})		
+
+//搜索
+function searchGoods(){
+	var searchtype = $("#Advanced").val();
+	var keyword = $.trim($("#searchKeyword").val());
+	//var name = $.trim($("#name").val());
+	//var sn = $.trim($("#sn").val());
+	//var catid = $("#catid").combo('getValue');
+	$('#goodsdata').datagrid('load', {
+		 stype:searchtype,
+		 keyword:keyword,
+		 //name:name,
+		 //sn:sn,
+		 //catid:catid,
+		 page:1
+    }); 
+}
+</script>
+
+<#include '/admin/footer.html' >

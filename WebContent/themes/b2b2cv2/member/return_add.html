@@ -1,0 +1,172 @@
+<#include 'member_header.html' />
+<!-- 退货申请标签 -->
+<#assign sellBackTag=newTag("sellBackTag")>
+<#assign sellBack=sellBackTag("{'id':${id} }")>
+<!-- 退货商品 标签 -->
+<#assign sellBackGoodsListTag=newTag("sellBackGoodsListTag")>
+<#assign sellBackGoodsList=sellBackGoodsListTag("{'id':${id},'sn':${sn} }")>
+<#assign goodsList = sellBackGoodsList.goodsList>
+<#assign childGoodsList = sellBackGoodsList.childGoodsList>
+<script type="text/javascript">
+$(function(){
+	$("#submit").click(function(){
+		if($("#kddh").val() == ""){
+			alert("请输入快递单号!");
+			return false;
+		}
+		if($("#wlgs").val() == ""){
+			alert("请输入物流公司!");
+			return false;
+		}
+		var options = {
+				url : "${ctx}/api/store/storeSellBack!saveKdgs.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result){
+					alert("保存成功!");
+					if(result.result==1){
+						location.href="${ctx}/member/return_list.html";
+					}
+				},
+				error : function(e) {
+					$.Loading.hide();
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#theForm").ajaxSubmit(options);
+	})
+})
+</script>
+<style>
+.order_detail .order_intro {width:100%;}
+</style>
+<div class="user_order">
+<form id="theForm">
+    <input type="hidden" value="${sellBack.id}" name="id"/>
+	<div class="order_detail">
+		<div class="order_intro">
+			<h1>订单信息</h1>
+			<div class="detail_list">
+				<dl>
+					<dt>订单编号：</dt>
+					<dd>${sellBack.ordersn}</dd>
+				</dl>
+				<dl class="online">
+					<dt>申请时间：</dt>
+					<dd><@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></dd>
+				</dl>
+				<dl>
+					<dt>状态：</dt>
+					<dd>
+					  	<#if sellBack.tradestatus  == 0 || sellBack.tradestatus== -1>
+					    		<span>申请退货审核中</span>
+						<#elseif sellBack.tradestatus  == 1||sellBack.tradestatus==2>
+							<span>审核通过</span>
+						<#elseif sellBack.tradestatus  == 3>
+							<span>已完成</span>
+						<#elseif sellBack.tradestatus  == 4>
+							<span>已拒绝</span>
+						<#elseif sellBack.tradestatus  == 5>
+							<span>部分入库</span>
+						</#if>
+					</dd>
+				</dl>
+				<dl>
+					<dt>退货原因：</dt>
+					<dd>${sellBack.remark!''}</dd>
+				</dl>
+				<#if sellBack.return_address??> 
+				<dl>
+					<dt>回寄地址：</dt>
+					<dd>${sellBack.return_address!''}</dd>
+				</dl>
+				</#if>
+				<#if sellBack.seller_remark??> 
+					<dl>
+						<dt>客服回复：</dt>
+						<dd>${sellBack.seller_remark!''}</dd>
+					</dl>
+				</#if>
+				<dl>
+					<dt>快递单号：</dt>
+					<dd><input type="text"  id="kddh" name="kddh"  value="${sellBack.kddh!''}"/></dd>
+				</dl>
+				<dl>
+					<dt>物流公司：</dt>
+					<dd>
+						<input type="text"  id="wlgs" name="wlgs"  value="${sellBack.wlgs!''}"/>
+						&nbsp;<input type="button"  id="submit"  value="保存" />
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="detail_goodslist">
+		<table>
+			<thead>
+				<tr>
+					<th>图片</th>
+					<th>商品名称</th>
+					<th>单价</th>
+					<th>购买数量</th>
+					<th>退货数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list goodsList as data>
+				<tr>
+					<td><a target="_blank" href="../goods-${data.goods_id}.html"> <span
+							style="display: block; height: 50px;" class="cart-product-img">
+								<img height="50" src="${data.image!''}"
+								style="cursor: pointer;" />
+						</span>
+					</a></td>
+					<td><a href="${ctx}/goods-${data.goods_id}.html">${data.name}</a></td>
+					<td>${data.price?string.currency}</td>
+					<td>${data.num }</td> 
+					<#if data.is_pack == 1>
+						<#if data.return_type == 0>
+							<td>${data.return_num!0}</td> 
+						<#else>
+							<td>部分退货，无法统计套餐数量</td> 
+						</#if>
+					<#else>
+						<td>${data.return_num!0}</td>
+					</#if>
+
+				</tr>
+				<#if data.is_pack == 1>
+				<tr class="detail_${data.goods_id }">
+					<td></td>
+					<td style="background: none repeat scroll 0 0 #FFFDEE;" colspan="6">
+						<div>
+							<table width="100%" style="border: none;">
+								<tr>
+									<th
+										style="background: none repeat scroll 0 0 #FFFDEE; border: none;">商品名称</th>
+									<th
+										style="background: none repeat scroll 0 0 #FFFDEE; border: none;">购买数量</th>
+									<th
+										style="background: none repeat scroll 0 0 #FFFDEE; border: none;">退货数量</th>
+								</tr>
+								<#list childGoodsList as childData> <#if data.goodsId ==
+								childData.parent_id>
+								<tr>
+									<td style="border: none;">${childData.name}</td>
+									<td style="border: none;">${(childData.num)!0}</td>
+									<td style="border: none;">${(childData.return_num)!0 }</td>
+								</tr>
+								</#if> </#list>
+							</table>
+						</div>
+
+					</td>
+				</tr>
+				</#if> </#list>
+			</tbody>
+		</table>
+	</div>
+</div>
+</div>
+</div>
+<#include '/common/footer.html'/>

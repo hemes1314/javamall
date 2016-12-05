@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+	<!-- 定义此应用的组件扫描包 -->
+	<context:component-scan base-package="com.enation.app.shop.mobile" />
+	
+	<!-- BaiduApi接口处理 -->
+	<bean id="baiduApiManager" class="com.enation.app.shop.mobile.util.bmapapi.service.impl.BaiduApiManager"></bean>
+	<!-- GFS图片转储接口处理 -->
+	<bean id="gfsManager" class="com.enation.app.shop.mobile.util.gfs.service.impl.GFSManager"></bean>
+	
+	<!--会员登录接口-->
+ 	<bean id="memberManager" class="com.enation.app.shop.core.service.impl.MemberManager"   parent="baseSupport"></bean>
+ 	<bean id="goodsCatManager" class="com.enation.app.shop.core.service.impl.GoodsCatManager"   parent="baseSupport"></bean>
+	<!--2015/9/17 liuxinglin add start -->
+	<!-- 购物车管理 -->
+	<bean id="cartManager" class="com.enation.app.shop.core.service.impl.CartManager"  parent="baseSupport"></bean>
+	
+<!-- 	<bean id="memberAddressManager" class="com.enation.app.shop.core.service.impl.MemberAddressManager"   parent="baseSupport" /> -->
+<!--  <bean id="areaManager" class="com.enation.app.shop.core.service.impl.AreaManager"  parent="baseSupport"  /> -->
+<!--  <bean id="logiManager" class="com.enation.app.shop.core.service.impl.LogiManager"   parent="baseSupport" /> -->
+<!-- 	<bean id="goodsComplexManager" class="com.enation.app.shop.core.service.impl.GoodsComplexManager"  parent="baseSupport" /> -->
+
+	<!-- 新的会员评论 -->
+	<bean id="memberCommentManager" class="com.enation.app.shop.core.service.impl.MemberCommentManager" parent="baseSupport"></bean>
+  	<bean id="productManager" class="com.enation.app.shop.core.service.impl.ProductManager" parent="baseSupport"></bean>
+ 	<bean id="memberPriceManager" class="com.enation.app.shop.core.service.impl.MemberPriceManager" parent="baseSupport"></bean>
+	<!-- 收藏管理 -->
+  	<bean id="favoriteManager" class="com.enation.app.shop.core.service.impl.FavoriteManager" parent="baseSupport"></bean>
+	<!-- 商品搜索 -->
+    <bean id="goodsSearchManager" class="com.enation.app.shop.core.service.impl.GoodsSearchManager" parent="baseSupport"></bean>
+ 	<!-- 2015/9/17 liuxinglin add end -->
+	<!-- 	<bean id="quickbuyManager" class = "com.enation.app.shop.mobile.service.impl.ApiQuickbuy" parent ="baseSupport"></bean> -->
+	<!-- 首页显示管理 -->
+ 	<bean id="goodsTagManager" class="com.enation.app.shop.core.service.impl.GoodsTagManager" ></bean> 	
+ 	<bean id="activityManager" class="com.enation.app.shop.core.service.impl.ActivityManager" parent="baseSupport"></bean> 	
+	<bean id ="activityGoodsManager" class="com.enation.app.shop.core.service.impl.ActivityGoodsManager" parent="baseSupport"></bean>
+	<bean id ="activityGiftManager" class="com.enation.app.shop.core.service.impl.ActivityGiftManager" parent="baseSupport"></bean>
+    <!-- 拍卖 -->
+    <bean id ="apiAuctionRecordManager" class="com.enation.app.shop.mobile.service.impl.ApiAuctionRecordManager" parent="baseSupport"></bean>
+</beans>

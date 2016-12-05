@@ -1,0 +1,240 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueBlue" data-options="iconCls:'icon-add',plain:true" onclick="openAddDlg()">新增</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="gridform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/groupBuyAct!listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="actdata">
+				<thead>
+					<tr>
+						<th data-options="field:'act_id',checkbox:true,width:100"></th>
+				   	 	<th  data-options="field:'act_name',width:100">活动名称</th>
+				   	 	<th  data-options="field:'start_time_str',width:100">开始时间</th>
+				   	 	<th  data-options="field:'end_time_str',width:100">结束时间</th>
+				   	 	<th  data-options="field:'act_status_text',width:100">状态</th>
+				   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+	</div>
+</div>
+
+<div id="divdia"></div>
+
+<script type="text/javascript">
+
+function formatAction (value,row,index){
+	var name=row.act_name;
+	var actid= row.act_id;
+	var val="<a href='javascript:;' title='管理' onclick='javascript:openGroupBuyTag(\""+ name +"\","+actid+")'>管理</a>"
+	<!--val+="<a href='javascript:void(0);' class='edit'   title='修改' onclick='openEditDlg("+actid+")'></a>"; -->
+	val+="<a href='javascript:void(0);' class='delete' onclick='javascript:deleteAct("+row.act_id+")'  title='删除'></a>  "
+	val+="<a href='javascript:void(0);' title='添加闪购商品' class='add' onclick=\"newTab('添加闪购','${ctx}/shop/admin/groupBuy!add.do?actid="+row.act_id+"')\"></a>"
+	return val;
+}
+
+function openGroupBuyTag(name,actid){
+	name+="的闪购";
+	newTab(name,"${ctx}/shop/admin/groupBuy!list.do?actid="+actid)
+}
+//onclick='newTab(\""+(row.name).substring(0,11)+"..\",\"${ctx}/shop/admin/goods!edit.do?goodsId="+row.goods_id+"\")'
+
+function batchDel(actid){
+	
+	var rows = $('#actdata').datagrid("getSelections");
+	if (rows.length < 1) {
+		$.Loading.error('请选择要删除的活动');
+		return;
+	}
+	
+	if(!confirm("确认删除吗？")){
+		return ;
+	}
+	
+	$.Loading.show("正在删除请稍后...");
+	$("#gridform").ajaxSubmit({
+		url:"${ctx}/shop/admin/groupBuyAct!batchDelete.do",
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				$.Loading.success("删除成功");
+				$("#actdata").datagrid('reload');
+			}
+			else{
+				$.Loading.error(data.message);
+			}
+		},error:function(){
+			$.Loading.error("删除出现意外错误");
+		}
+	});
+}
+
+
+function deleteAct(actid){
+	if(!confirm("确认删除吗？")){
+		return ;
+	}
+	
+	$.Loading.show("正在删除请稍后...");
+	$.ajax({
+		url:"${ctx}/shop/admin/groupBuyAct!delete.do?act_id="+actid,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				$.Loading.success("删除成功");
+				$("#actdata").datagrid('reload');
+			}
+			else{
+				$.Loading.error(data.message);
+			}
+		},error:function(){
+			$.Loading.error("删除出现意外错误");
+		}
+	});
+}
+
+function openAddDlg() {
+	$("#divdia").dialog({
+		title : "添加活动",
+		width : 500,
+		height : 280,
+		closed : false,
+		cache : false,
+		href : "groupBuyAct!add.do",
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					saveAdd(savebtn);
+				}
+			}
+		}]
+	});
+}
+
+function saveAdd(savebtn){
+	
+	var formflag = $("#actForm").form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");
+		var options = {
+			url :  "groupBuyAct!saveAdd.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success("添加成功");
+					$("#divdia").dialog('close');
+					$("#actdata").datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$("#actForm").ajaxSubmit(options);
+	}
+}
+
+ 
+function submitForm(map,savebtn) {
+	var formflag = $(map["formId"]).form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");
+		var options = {
+			url : map["url"],
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					$(map["divDialog"]).dialog('close');
+					$(map["gridreload"]).datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$(map["formId"]).ajaxSubmit(options);
+	}
+}
+function openEditDlg(act_id) {
+	$("#divdia").dialog({
+		title : "修改活动",
+		width : 500,
+		height : 280,
+		closed : false,
+		cache : false,
+		href : "groupBuyAct!edit.do?act_id="+act_id,
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					saveEdit(savebtn);
+				}
+			}
+		}]
+	});
+}
+function saveEdit(savebtn){
+	
+	var formflag = $("#actForm").form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");
+		var options = {
+			url :  "groupBuyAct!saveEdit.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success("添加成功");
+					$("#divdia").dialog('close');
+					$("#actdata").datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$("#actForm").ajaxSubmit(options);
+	}
+}
+//清空
+function clearForm(map) {
+	$(map["formId"]).form('clear');
+}
+
+</script>
+<#include '/admin/footer.html' >

@@ -1,0 +1,27 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="shadowBoxWhite tableDiv">
+		<table class="easyui-datagrid"
+			data-options="url:'${ctx}/b2b2c/admin/b2b2cTag!listJson.do',fitColumns:'true',fitColumns:'true',pageList: [5,10,15,20],pageSize:${pageSize}" pagination="true" width="width">
+			<thead>
+			    <tr>
+			   	 	<th  data-options="field:'tag_name',width:100">标签</th>
+			   	 	<th  data-options="field:'action',width:100" formatter="formatAction">商品设置</th>
+			   	 	
+			   	 </tr>
+			</thead>
+		 </table>
+	</div>
+</div>
+<script type="text/javascript">
+ function formatAction(value,row,index){
+	 var val="";
+	 if(row.is_groupbuy!=null){
+		 val="<a href='#' onclick=\"newTab('设置','${ctx}/shop/admin/groupBuyActTag!list.do?tagid="+row.tag_id+"&actid="+row.is_groupbuy+"')\">设置</a>";
+	 }else{
+		 val="<a href='#' onclick=\"newTab('设置','${ctx}/shop/admin/goodsShow.do?tagid="+row.tag_id+"')\">设置</a>";
+	 }
+	return val;
+}
+</script>

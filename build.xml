@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<project name="gomecellar" default="war" basedir="./">
+	<!--
+	<property file="build.properties" />
+	-->
+
+	<!--要编译的类目录-->
+	<property name="build.dir" value="WebContent/WEB-INF/classes" />
+	<property name="web.name" value="pcweb" />
+
+	<!--classpath-->
+	<path id="buildpath">
+		<fileset dir="WebContent/WEB-INF/lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="lib-test">
+			<include name="**/*.jar" />
+		</fileset>
+		<dirset dir="${build.dir}">
+		</dirset>
+	</path>
+	
+	<!--使用ecj，和eclipse编译模式一致，并且尽量不影响eclipse里面项目的编译和刷新-->
+	<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+	<componentdef name="ecj" classname="org.eclipse.jdt.core.JDTCompilerAdapter" classpath="lib-test/ecj-4.4.2.jar" />
+
+	<tstamp>
+		<format property="NOW_CN" pattern="yyyyMMddHHmmss" locale="zh"/>
+	</tstamp>
+
+
+	<target name="clean">
+		<delete dir="${build.dir}" failonerror="false"/>
+		<delete dir="build" failonerror="false"/>
+		<mkdir dir="${build.dir}"/>
+	</target>
+	
+	<!--编译-->
+	<target name="compile" depends="clean" >
+
+		<!--创建编译目录-->
+		<mkdir dir="${build.dir}" />
+
+		<!--编译src目录下的类文件-->
+		<javac srcdir="." destdir="${build.dir}/" source="1.7" target="1.7" nowarn="true" debug="true" includeantruntime="on" encoding="utf-8">
+			<ecj/>
+			<classpath refid="buildpath">
+			</classpath>
+			<include name="eop/**" />
+			<include name="base/**" />
+			<include name="shop/**" />
+			<include name="goods-index/**" />
+			<include name="page-creator/**" />
+			<include name="api/**" />
+			<include name="cms/**" />
+			<include name="b2b2c/**" />
+			<include name="groupbuy/**" />
+			<include name="b2b2c-groupbuy/**" />
+			<include name="flashbuy/**" />
+			<include name="b2b2c-flashbuy/**" />
+			<include name="secbuy/**" />
+			<include name="b2b2c-secbuy/**" />
+			<include name="advbuy/**" />
+			<include name="b2b2c-advbuy/**" />
+			<include name="b2b2c-workflow/**" />
+			<include name="b2b2c-fake/**" />
+			<include name="b2b2c-costdown/**" />
+		</javac>
+		
+		<!--copy资源文件-->
+		<copy todir="${build.dir}/">
+		    <fileset dir="eop" excludes="**/*.java"/>
+		    <fileset dir="base" excludes="**/*.java"/>
+		    <fileset dir="shop" excludes="**/*.java"/>
+		    <fileset dir="goods-index" excludes="**/*.java"/>
+		    <fileset dir="page-creator" excludes="**/*.java"/>
+		    <fileset dir="api" excludes="**/*.java"/>
+		    <fileset dir="cms" excludes="**/*.java"/>
+		    <fileset dir="b2b2c" excludes="**/*.java"/>
+		    <fileset dir="groupbuy" excludes="**/*.java"/>
+		    <fileset dir="b2b2c-groupbuy" excludes="**/*.java"/>
+		    <fileset dir="flashbuy" excludes="**/*.java"/>
+		    <fileset dir="b2b2c-flashbuy" excludes="**/*.java"/>
+		    <fileset dir="secbuy" excludes="**/*.java"/>
+		    <fileset dir="b2b2c-secbuy" excludes="**/*.java"/>
+		    <fileset dir="advbuy" excludes="**/*.java"/>
+		    <fileset dir="b2b2c-advbuy" excludes="**/*.java"/>
+			<fileset dir="b2b2c-workflow" excludes="**/*.java"/>
+			<fileset dir="resource" excludes="**/*.java"/>
+			<fileset dir="b2b2c-fake" excludes="**/*.java"/>
+			<fileset dir="b2b2c-costdown" excludes="**/*.java"/>
+
+		</copy>
+	</target>
+
+	<!--独立版打war包-->
+	<target name="war" depends="compile">
+		<mkdir dir="build" />
+		<war destfile="build/${web.name}-${NOW_CN}.war" webxml="WebContent/WEB-INF/web.xml">
+			<fileset dir="WebContent">
+			</fileset>
+			<!-- 这个如果不和WebContent在一个目录下，才需要引用，否则会在war里面出现两份相同文件。
+			<classes dir="${build.dir}" />
+			-->
+		</war>
+		<delete file="build/${web.name}.war" failonerror="false"/>
+		<copyfile src="build/${web.name}-${NOW_CN}.war" dest="build/${web.name}.war"/>
+		<delete file="build/${web.name}-${NOW_CN}.war" failonerror="false"/>
+	</target>
+
+	<target name="war1">
+		<mkdir dir="build" />
+		<war destfile="build/javamall-${NOW_CN}.war" webxml="WebContent/WEB-INF/web.xml">
+			<fileset dir="WebContent">
+			</fileset>
+			<!-- 这个如果不和WebContent在一个目录下，才需要引用，否则会在war里面出现两份相同文件。
+			<classes dir="${build.dir}" />
+			-->
+		</war>
+		<delete file="build/javamall.war" failonerror="false"/>
+		<copyfile src="build/javamall-${NOW_CN}.war" dest="build/javamall.war"/>
+	</target>
+
+	
+	<!-- 数据库部分 -->
+	<property name="mysql.driver" value="com.mysql.jdbc.Driver" />
+	<property name="mysql.url" value="jdbc:mysql://localhost:3306/gomeshop?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true" />
+	<property name="mysql.username" value="gomeshop" />
+	<property name="mysql.password" value="gomeshop" />
+	<target name="mysql">
+		<sql driver="${mysql.driver}" url="${mysql.url}" userid="${mysql.username}" password="${mysql.password}" src="resource/sql/mysql/es_activity.sql" encoding="utf-8" onerror="continue">
+			<classpath refid="buildpath" />
+		</sql>
+		<sql driver="${mysql.driver}" url="${mysql.url}" userid="${mysql.username}" password="${mysql.password}" src="resource/sql/mysql/es_cart.sql" encoding="utf-8" onerror="continue">
+			<classpath refid="buildpath" />
+		</sql>
+	</target>
+	
+	<property name="oracle.driver" value="oracle.jdbc.driver.OracleDriver" />
+	<property name="oracle.url" value="jdbc:oracle:thin:@192.168.0.246:1521:myorcl" />
+	<property name="oracle.username" value="gomeshop" />
+	<property name="oracle.password" value="gomeshop" />
+	<target name="oracle">
+		<sql driver="${oracle.driver}" url="${oracle.url}" userid="${oracle.username}" password="${oracle.password}" src="resource/sql/oracle/es_activity.sql" encoding="utf-8" onerror="continue">
+			<classpath refid="buildpath" />
+		</sql>
+		<sql driver="${oracle.driver}" url="${oracle.url}" userid="${oracle.username}" password="${oracle.password}" src="resource/sql/oracle/es_cart.sql" encoding="utf-8" onerror="continue">
+			<classpath refid="buildpath" />
+		</sql>
+	</target>
+</project>

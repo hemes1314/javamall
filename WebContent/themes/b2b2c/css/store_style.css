@@ -1,0 +1,106 @@
+
+/* ============== */
+/* 店铺模板简洁风格 */
+/* @kivenhan      */
+/* www.yzvlife.com */
+/* Apr-14-2012    */
+/* ============== */
+
+body { background: #F7F7F7 url(../images/body_bg.png) scroll repeat-y 50% 0;}
+a { color: #333; }
+a:hover { text-decoration: none; color: #0085CF;}
+.wrapper{width:1000px;margin:0 auto;}
+.store-c-s2 {}
+.store-c-s2 .title { height: 20px; background-color: #FFF;padding: 5px 10px;border-bottom: solid 2px #D93600;}
+.store-c-s2 .title h4 { font-family: "微软雅黑"; font-size: 14px; color:#000; line-height: 14px; margin: 4px 0 12px 0; display: inline-block;  padding-left: 7px;}
+.store-c-s2 .title h4 { *display: inline;}
+.store-c-s2 .title span {}
+.store-c-s2 .content { background:#FFF; }
+
+.nc-s-c-s3 {}
+.nc-s-c-s3 .title { height: 30px; border-bottom: solid 1px #E7E7E7;}
+.nc-s-c-s3 .title h4 { font-family: "微软雅黑"; font-size: 14px; color:#000; line-height: 14px; margin: 4px 0 12px 0; display: inline-block;  border-left: solid 3px #C00; padding-left: 7px;}
+.nc-s-c-s3 .title h4 { *display: inline;}
+.nc-s-c-s3 .title span { float:right; margin: 4px 12px 0 0; line-height: 24px;}
+.nc-s-c-s3 .title span {  font-size: 12px; display: inline-block; float:right; line-height: 16px; color: #777;}
+.nc-s-c-s3 .title span { *display: inline;}
+.nc-s-c-s3 .content { background:#FFF; border-bottom: solid #CCC 1px;}
+
+.store-c-s4 {}
+.store-c-s4 .title {background-color: #FCFCFC;border-style: solid;border-color: #D93600 #D7D7D7 #F5F5F5 #D7D7D7;border-width: 2px 1px 1px 1px; padding: 20px 0 6px 0;}
+.store-c-s4 .title h4 { font-size: 14px; color: #555; display: block; text-shadow: none; margin: 4px 0 4px 16px;}
+.store-c-s4 .content { background-color: #FFF; border: solid #E7E7E7; border-width: 0 1px 1px 1px; padding: 0 0 10px 0; overflow: hidden; margin-bottom: 20px;}
+
+
+
+
+
+/* =====================
+ * 独立类样式
+ * ===================== */
+/* 列表翻页 */
+.pagination{ padding: 2px; margin-right: 16px;}
+.pagination ul li span{ line-height: 20px; color: #999; list-style-type: none; padding: 0px 5px; margin: 0px 2px; border: 1px solid #CCC;}
+.pagination ul li a span , .pagination li a:visited span{ color: #6C92AD; text-decoration: none; border-color: #AEB9B9;}
+.pagination ul li a:hover span, .pagination li a:active span{ color: #DB7C1E; background-color: #FFEFCE; border-color: #DB7C1E;}
+.pagination ul li span.currentpage{color: #AAA;
+font-weight: bold;
+background-color: #FAFAFA;
+border-color: #E6E6E6;
+position: relative;
+z-index: 2;}
+
+
+/* ============================== */
+/* 头部店铺介绍与搜索 -> header.php */
+/* ============================== */
+/* 导航区域布局控制 */
+.ncsl-nav {  } 
+/* 导航上部图片控制 */
+.ncsl-nav .banner a img { width: 1000px;height:250px; }
+.ncs-default-banner { margin:0 auto; display: block; width: 1000px; height: 325px;}
+/* 店铺导航 */
+#nav { width: 1000px;margin: 0 auto; height: 58px; border-top: solid 1px #FFF; border-bottom: solid 1px #CCC;}
+#nav ul { white-space: nowrap; display: block; width: 100%; height: 24px; padding: 14px 0 20px; margin:0px 0px 0px -1px; }
+#nav li { font-family: "微软雅黑"; font-size: 16px; float: left;}
+#nav li a { background-color: #E7E7E7; height: 24px; float: left;}
+#nav li a span { line-height: 24px; color: #555; background-color: #FFF; white-space: nowrap; text-overflow : ellipsis; max-width:160px; height: 24px; float:left; padding: 0px 20px 0px 19px; margin-left: 1px; position: relative; z-index: auto;}
+#nav li.normal a:hover span { color: #333;}
+#nav li.active a span, #nav li.active a:hover span { font-weight: 600;  color: #000; }
+#nav li a span i { position: absolute; z-index: 1; left: 50%; bottom: -10px; margin-left: -5px; font-size: 0px; line-height: 0; width: 0px; height: 0px; border: 5px solid; border-color: transparent transparent #333 transparent; display: none;}
+#nav li.normal a:hover span i { border-color: transparent transparent #ccc transparent; display: block;}
+#nav li.active a span i { display: block;}
+
+
+/* ========================================= */
+/* 商品列表类页面 -> index.php, goods_list.php */
+/* ========================================= */
+
+/* 列表排序 */
+.store-goodslist-bar { background: #FFF; border-right: solid 1px #FFF;  border-left: solide 1px #FFF; padding:6px 0;}
+/* 商品列表 */
+.goods-list .content { width: 778px; overflow:hidden;  padding-top:20px; clear:both; padding-bottom:10px;}
+.goods-list .content ul { width: 792px; overflow:hidden; margin-left:-2px; margin-top: -21px; }
+.goods-list .content ul li dl { width: 180px; margin: 0px auto; padding-top: 180px; position: relative; display: block; line-height: 16px;text-align: center;}
+.goods-list .content ul li dd.ncg-pic { background:#FFF; width: 160px; height: 160px; margin: 0; position: absolute; top: 0px; left: 0px; border:none;}
+.goods-list .content ul li dd.ncg-pic .thumb { width: 160px; height: 160px;}
+.goods-list .content ul li dt { height: 32px; width: 170px; overflow:hidden; margin: 8px 0;}
+.goods-list .content ul li dd { margin: 4px 0; top: 0px; left: 0px;}
+.goods-list .content .pagination { margin-top: 40px;}
+
+/* 侧边栏店铺分类控制标签 */
+.ico-none, .ico-block, .ico-sub { color:#CCC; background-color: #FFF; display: inline-block; float:left; cursor: default;}
+.ico-none, .ico-block { font-family: Arial; font-size: 12px; line-height: 10px; text-align: center; width: 10px; height:10px; margin: 5px 10px 5px 0; border: solid 1px #CCC;}
+.ico-sub { background-color: #CCC; font-size: 0px; line-height:2px; text-align:center; width: 3px; height:3px; margin: 10px 6px 0 0; border-radius: 0px;}
+.ico-none em {}
+.ico-block em {}
+
+/***************
+新增修改样式
+****************/
+.pagination{width:95%;height:30px;line-height:30px;text-align:right;padding-right:5%;}
+.pagination .page{float:right;}
+.pagination .page span{float:left;display:inline;   border: 1px solid #ccc;color: #999;line-height: 20px;margin: 0 2px;padding: 0 5px;}
+.pagination .page ul{float:left;display:inline;width:auto;overflow:hidden;margin:0px;}
+.pagination .page ul li{border: 1px solid #ccc;color: #999;line-height: 20px;margin: 0 2px;padding: 0 7px 0px 5px;}
+
